@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project name="VFR_Landmarks_3d_ru" basedir="." default="full_build"> 
 
-  <property name="buildpath"      location=".\Release\VFR_LANDMARKS_3D_RU" />
+  <property name="buildpath"      location=".\..\Release\VFR_LANDMARKS_3D_RU" />
   <property name="deploypath"     location="O:\X-Plane 11\Custom Scenery\VFR_LANDMARKS_3D_RU" />
 
   <property name="dsftool"        location="d:\tools\xplane_tools\tools\dsftool"/>  
