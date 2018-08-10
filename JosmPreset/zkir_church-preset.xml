@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<presets>
+  <item name="Church extended attributes" type="relation,closedway" icon="3d_simple_icon_green_32.png" >
+    <combo  key="building" text="Building outline" default="yes" delete_if_empty="true" match="key">
+      <list_entry value="yes" icon="yes_32.png"  />
+    </combo>
+    
+    <space/>
+    <label text="&lt;html&gt;&lt;b&gt;Name and IDs&lt;/b&gt;&lt;/html&gt;"/>
+    <text  key="name"           text="Name"  default="" />
+    <text  key="ref:temples.ru" text="temples.ru ID"  default="" />
+    
+    <space/>
+    <label text="&lt;html&gt;&lt;b&gt;Style&lt;/b&gt;&lt;/html&gt;"/>
+    <text  key="start_date" text="Build Date"  default="" />
+    <combo key="building:architecture" text="Architecture"  default="" >
+      <list_entry value="baroque"		    />
+      <list_entry value="neoclassicism"		    />
+      <list_entry value="pseudo-russian"            />
+      <list_entry value="eclectic"		    />
+
+    </combo>
+    
+    <space/>
+    <label text="&lt;html&gt;&lt;b&gt;Colors and materials&lt;/b&gt;&lt;/html&gt;"/>
+    <text  key="building:colour"    text="Wall colour"  default="" />
+    <combo  key="building:material" text="Wall material"  default="" >
+    	<list_entry value="plaster"		    />
+		<list_entry value="concrete"	    />
+		<list_entry value="brick"		    />
+		<list_entry value="wood"		    />
+		<list_entry value="stone"			/>
+		<list_entry value="glass"			/>
+		<list_entry value="timber_framing"	/>
+		<list_entry value="metal"			/>
+	</combo>
+    <check key="ruins" text="Ruined" default="off" /> 
+    <check key="abandoned" text="Abandoned" default="off" /> 
+    
+    
+  </item>
+</presets>
