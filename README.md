@@ -19,4 +19,4 @@ It merely compiles binary DSF files from DSF-TXT and copies them as well as OBJs
 
 ## References ##
 1) xplane2blender: https://xplane2blender.anzui.de/
-2 X-plane tools: https://developer.x-plane.com/tools/xptools/
+2) X-plane tools: https://developer.x-plane.com/tools/xptools/
