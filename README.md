@@ -14,7 +14,7 @@ Note that the build process is NOT fully automated. some steps should be done ma
 It merely compiles binary DSF files from DSF-TXT and copies them as well as OBJs and other files to the build directory.
 
 ### What does the ant-build do NOT? ###
-1)	It does not create dsf-txt. Those file(s) should be created via manually execution of VBA macro in **osm-parser.xlsm**
+1)	It does not create dsf-txt. Those file(s) should be created via manual execution of VBA macro in **osm-parser.xlsm**
 2)	It does not convert blender models (*.blend) to X-plane format (obj). It should be done manually via blender plug-in (xplane2blender)
 
 ## References ##
