@@ -38,7 +38,7 @@
     
     <exec executable="${dsftool}" failonerror="true"> 
       <arg value="--text2dsf"/> 
-      <arg value="+56+038.dsf.txt"/> 
+      <arg value="Earth nav data\+56+038.dsf.txt"/> 
       <arg value="${buildpath}\Earth nav data\+50+030\+56+038.dsf"/> 
     </exec> 
   </target> 
