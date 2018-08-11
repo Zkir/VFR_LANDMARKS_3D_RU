@@ -1,3 +1,3 @@
-DSF files will be created in this folder. Run VBA macro in osm-parser.xlsm
+п»їDSF files will be created in this folder. Run VBA macro in osm-parser.xlsm
 **
-Сюда будут складываться файлы DSF. Нужно запустить макрос в osm-parser.xlsm
+РЎСЋРґР° Р±СѓРґСѓС‚ СЃРєР»Р°РґС‹РІР°С‚СЊСЃСЏ С„Р°Р№Р»С‹ DSF. РќСѓР¶РЅРѕ Р·Р°РїСѓСЃС‚РёС‚СЊ РјР°РєСЂРѕСЃ РІ osm-parser.xlsm
