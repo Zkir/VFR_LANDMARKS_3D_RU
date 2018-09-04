@@ -19,6 +19,9 @@ ts_lavra_church01         | W:277544965     | 56.310165   | 38.131830   | 35 | O
 #Церковь Сошествия Святого Духа Троице-Сергиевой  лавры, Сергиев Посад
 ts_lavra_church02         | R:7926015       | 56.309923   | 38.130188   | 32 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH
 
+#Церковь Сергия Радонежского Троице-Сергиевой  лавры, Сергиев Посад
+ts_lavra_church03         | R:6642589       | 56.30952265 | 38.1306209  | 32 | ORANGE | PLASTER | RUSSIAN ORTHODOX CHURCH
+
 #Церковь Церковь Параскевы (Пятницы) Великомученицы, Сергиев Посад
 church_old_russian_01     | R:7944700       | 56.308627   | 38.132786   | 19 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH
 
