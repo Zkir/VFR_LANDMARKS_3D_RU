@@ -14,7 +14,8 @@
   <target name="init" depends="clean">
     <echo>Creating the build directory</echo>
     <mkdir dir="${buildpath}"/>
-    <mkdir dir="${buildpath}\Objects"/>
+    <mkdir dir="${buildpath}\Objects"/> 
+    <mkdir dir="${buildpath}\Objects-osm"/>  
     <mkdir dir="${buildpath}\Facades"/>
     <mkdir dir="${buildpath}\Earth nav data"/>
     <mkdir dir="${buildpath}\Earth nav data\+50+030"/>
@@ -26,6 +27,10 @@
     <copy todir="${buildpath}\Objects" includeEmptyDirs="false" >
         <fileset file="Custom_models\*.obj"  />
         <fileset file="Custom_models\*.png"  />
+    </copy>
+    <copy todir="${buildpath}\Objects-osm" includeEmptyDirs="false" >
+        <fileset file="d:\models-osm\*.obj"  />
+        <fileset file="d:\models-osm\*.png"  />
     </copy>
     <copy todir="${buildpath}\Facades" includeEmptyDirs="false" >
         <fileset file="Facades\*.fac"  />
