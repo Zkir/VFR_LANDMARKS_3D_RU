@@ -1,0 +1,19 @@
+I
+800
+FACADE
+
+TEXTURE Defensive_Wall_01.png
+NO_BLEND 0.39
+
+RING 1
+#TWO_SIDED 1
+DOUBLED 0
+
+LOD 0 4000
+  ROOF 1 1
+  WALL 0 1000
+    SCALE 10 9
+    ROOF_SLOPE 45 SLANT 
+    MIDDLE 0     0.85
+    TOP    0.85  1 
+    CENTER 0     1
