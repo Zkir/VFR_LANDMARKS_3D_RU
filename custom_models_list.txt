@@ -72,6 +72,13 @@ ts_lavra_fortress_tower06 | W:36128102      | 56.311358  | 38.132112    | 25 | W
 ts_lavra_fortress_tower07 | W:36129618      | 56.309405  | 38.128719    | 30 | WHITE | PLASTER | DEFENSIVE TOWER
 
 #
+# Водонапорные башни
+#
+
+#Водонапорная башня, вокзал, Сергиев посад
+water_tower_01            | W:621316415     | 56.302487  | 38.139847    | 25 | RED   | BRICK   | WATER TOWER
+
+#
 #Радиобашни
 #
 
