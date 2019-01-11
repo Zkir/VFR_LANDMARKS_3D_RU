@@ -1,0 +1,13 @@
+#Список кастомных Фасадов
+
+#Формат файла
+#имя_объекта            | Ring | color   | Material | Building_type  | Style  
+#-------------------------------------------------------------------------------
+
+Defensive_Wall_01       |  1   | WHITE   | PLASTER  | DEFENSIVE WALL |
+
+Monastery_Wall_01       |  0   | RED     | BRICK    | HISTORIC WALL  |
+
+Church_Fence_01         |  1   | BLUE    |          | CHURCH FENCE   |
+
+Church_Fence_02         |  1   | ORANGE  |          | CHURCH FENCE   |
