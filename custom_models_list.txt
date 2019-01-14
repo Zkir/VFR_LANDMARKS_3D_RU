@@ -38,6 +38,9 @@ church_neoclassical_01    | R:7932909       | 56.315409   | 38.131185   | 25 | B
 #Церковь Успения Пресвятой Богородицы (Сергиев Посад)
 church_baroque_01         | R:6648138       | 56.29965305 | 38.1247471  | 30 | ORANGERED | PLASTER | RUSSIAN ORTHODOX CHURCH
 
+#Церковь Лазаря праведного (Сергиев Посад)
+church_contemp_01         | R:8794693       | 56.3344087  | 38.0993541  | 18  | ORANGE  | PLASTER | RUSSIAN ORTHODOX CHURCH
+
 
 #
 # Часовни
