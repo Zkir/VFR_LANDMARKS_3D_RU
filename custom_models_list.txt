@@ -28,7 +28,6 @@ ts_lavra_church04         | R:8635484       | 56.30968785 | 38.12946975 | 21 | W
 #Никоновский придел cобора Троицы Живоначальной  Троице-Сергиевой  лавры, Сергиев Посад
 ts_lavra_church05         | R:8635531       | 56.30960255 | 38.12954135 | 15 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH
 
-
 #Церковь Церковь Параскевы (Пятницы) Великомученицы, Сергиев Посад
 church_old_russian_01     | R:7944700       | 56.308627   | 38.132786   | 19 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH
 
@@ -41,6 +40,17 @@ church_baroque_01         | R:6648138       | 56.29965305 | 38.1247471  | 30 | O
 #Церковь Лазаря праведного (Сергиев Посад)
 church_contemp_01         | R:8794693       | 56.3344087  | 38.0993541  | 18  | ORANGE  | PLASTER | RUSSIAN ORTHODOX CHURCH
 
+#Церковь Георгия Победоносца(Сергиев Посад/Семхоз)
+church_contemp_02         | R:8906499      | 56.28505145  | 38.0602983  | 19  | RED | PLASTER | RUSSIAN ORTHODOX CHURCH
+
+#Церковь Марии Магдалины (Лоза) 
+church_pseudo-russian_01  | R:9226586      | 56.2576892 |  38.21574415   | 24  | RED | BRICK | RUSSIAN ORTHODOX CHURCH
+
+#Собор Иконы Божией Матери Черниговская-Гефсиманская, Черниговский скит, Сергиев Посад 
+church_pseudo-russian_02  | R:7948571     | 56.3071288	| 38.17890055    | 34  | RED | BRICK | RUSSIAN ORTHODOX CHURCH
+
+#Колокольня Черниговского скита, Черниговский скит, Сергиев Посад 
+belltower_pseudo-russian_01  | R:8775879     | 56.30688105	| 38.18003065    | 75  | RED | BRICK | CAMPANILE 
 
 #
 # Часовни
