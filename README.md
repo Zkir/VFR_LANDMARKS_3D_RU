@@ -18,5 +18,6 @@ It merely compiles binary DSF files from DSF-TXT and copies them as well as OBJs
 2)	It does not convert blender models (*.blend) to X-plane format (obj). It should be done manually via blender plug-in (xplane2blender)
 
 ## References ##
-1) xplane2blender: https://xplane2blender.anzui.de/
-2) X-plane tools: https://developer.x-plane.com/tools/xptools/
+1) X-plane tools: https://developer.x-plane.com/tools/xptools/
+2) xplane2blender: https://xplane2blender.anzui.de/
+3) blender-osm plugin by vvoovv: https://gumroad.com/l/blender-osm
