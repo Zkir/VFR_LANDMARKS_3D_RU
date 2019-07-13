@@ -1,0 +1,3067 @@
+<html>
+<head>
+<title>Валидатор 3D: церкви и другие здания</title>
+<script src="/sorttable.js" type="Text/javascript"></script>
+<style>
+table {border: 1px solid grey;}
+th {border: 1px solid grey; }
+td {border: 1px solid grey; padding:5px}
+</style>
+</head>
+<body>
+<h1>Валидатор 3D: Церкви и другие здания</h1>
+<p>Данный валидатор проверяет <b>наличие</b> 3d-моделей для церквей и некоторых других исторических зданий.
+Почему церкви? Потому что это наиболее заметные объекты и для их моделирования есть фотографии на temples.ru.</p>
+<p>На данный момент в валидацию включены отдельные районы Московской, Владимирской и Ярославской областей, т.е. то, что попадает в квадратный градус [56&deg;, 38&deg;]</p>
+<h2>Сводная статистика</h2>
+<table class="sortable">
+<tr><th>Область</th><th>Район</th><th>Всего объектов</th> <th>С 3D моделью</th> <th>% </th></tr>
+<tr><td>Владимирская область</td><td>Александровский район</td><td>48</td><td>0</td><td> 0 </td></tr>
+<tr><td>Владимирская область</td><td>Киржачский район</td><td>15</td><td>0</td><td> 0 </td></tr>
+<tr><td>Московская область</td><td>Пушкинский район</td><td>4</td><td>0</td><td> 0 </td></tr>
+<tr><td>Московская область</td><td>Сергиево-Посадский район</td><td>91</td><td>32</td><td> 35 </td></tr>
+<tr><td>Московская область</td><td>Щёлковский район</td><td>12</td><td>0</td><td> 0 </td></tr>
+<tr><td>Московская область</td><td>городской округ Черноголовка</td><td>4</td><td>0</td><td> 0 </td></tr>
+<tr><td>Ярославская область</td><td>городской округ Переславль-Залесский</td><td>53</td><td>2</td><td> 3 </td></tr>
+<tr><td>Другое</td><td></td><td>6</td><td>0</td><td> 0 </td></tr>
+<tr><td>Всего в валидаторе</td><td></td><td>233</td><td>34</td><td> 14 </td></tr>
+</table>
+<h2>Объекты</h2>
+<p><small>Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</small><p>
+<table class="sortable">
+<tr><th>OSM ID</th><th>Описание</th><th>Temples.ru</th><th>Размер, м</th><th>Высота, м</th><th>Цвет</th><th>Материал</th><th>Стиль</th><th>Город</th> <th>Район</th> <th>Область</th><th>OSM 3D </th><th>J</th></tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/way/35447048">W:35447048</a></td>
+<td width="350px">Пятницкая башня</td>
+<td></td>
+<td>18</td>
+<td>30</td>
+<td>white</td><td>plaster</td><td></td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3094756&lon=38.1324731&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w35447048&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/35447050">W:35447050</a></td>
+<td width="350px">Плотничья башня</td>
+<td></td>
+<td>15</td>
+<td>23</td>
+<td>white</td><td>plaster</td><td></td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.31105305&lon=38.1278522&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w35447050&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/way/35447051">W:35447051</a></td>
+<td width="350px">Уточья башня</td>
+<td></td>
+<td>16</td>
+<td>47</td>
+<td>white</td><td>plaster</td><td></td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.31265885&lon=38.1319602&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w35447051&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/way/35546654">W:35546654</a></td>
+<td width="350px">Водяная башня</td>
+<td></td>
+<td>13</td>
+<td>28</td>
+<td>white</td><td>plaster</td><td></td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3087767&lon=38.12938605&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w35546654&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/35551876">W:35551876</a></td>
+<td width="350px">Звонковая башня</td>
+<td></td>
+<td>11</td>
+<td>20</td>
+<td>white</td><td>plaster</td><td></td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.312047&lon=38.1297118&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w35551876&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/35551878">W:35551878</a></td>
+<td width="350px">Луковая башня</td>
+<td></td>
+<td>10</td>
+<td>25</td>
+<td>white</td><td>plaster</td><td></td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.30920795&lon=38.1309661&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w35551878&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/way/36128100">W:36128100</a></td>
+<td width="350px">Каличья башня</td>
+<td></td>
+<td>18</td>
+<td>26</td>
+<td>white</td><td>plaster</td><td></td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3113277&lon=38.12854635&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w36128100&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/36128102">W:36128102</a></td>
+<td width="350px">Сушильная башня</td>
+<td></td>
+<td>13</td>
+<td>25</td>
+<td>white</td><td>plaster</td><td></td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.31135845&lon=38.1321115&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w36128102&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/36129618">W:36129618</a></td>
+<td width="350px">Пивная башня</td>
+<td></td>
+<td>18</td>
+<td>30</td>
+<td>white</td><td>plaster</td><td></td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3094047&lon=38.1287186&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w36129618&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/way/36866037">W:36866037</a></td>
+<td width="350px">Колокольня</td>
+<td></td>
+<td>29</td>
+<td>86</td>
+<td>white</td><td>plaster</td><td>baroque</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.31050685&lon=38.1295743&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w36866037&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/36888077">W:36888077</a></td>
+<td width="350px">Церковь Смоленской иконы Божией Матери</td>
+<td><a href="http://temples.ru/card.php?ID=4832" target="_blank">4832</a></td>
+<td>17</td>
+<td>24</td>
+<td>sienna</td><td>plaster</td><td>baroque</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.31082325&lon=38.12909295&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w36888077&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/40314758">W:40314758</a></td>
+<td width="350px">Церковь Пантелеимона Целителя</td>
+<td><a href="http://temples.ru/card.php?ID=2237" target="_blank">2237</a></td>
+<td>9</td>
+<td>?</td>
+<td></td><td>wood</td><td>~contemporary</td>
+<td>Черноголовка</td>
+<td>го Черноголовка</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.0148297&lon=38.38094245&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w40314758&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/40483633">W:40483633</a></td>
+<td width="350px">Церковь Усекновения Главы Иоанна Предтечи</td>
+<td><a href="http://temples.ru/card.php?ID=2280" target="_blank">2280</a></td>
+<td>25</td>
+<td>?</td>
+<td>red</td><td>brick</td><td>~pseudo-russian</td>
+<td>Ивановское</td>
+<td>го Черноголовка</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.02714245&lon=38.29221855&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w40483633&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/41279806">W:41279806</a></td>
+<td width="350px">Часовня Иконы Божией Матери Иверская</td>
+<td><a href="http://temples.ru/card.php?ID=2238" target="_blank">2238</a></td>
+<td>3</td>
+<td>?</td>
+<td>lightgray</td><td>brick</td><td>~contemporary</td>
+<td>Черноголовка</td>
+<td>го Черноголовка</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.0027085&lon=38.36864565&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w41279806&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/45507948">W:45507948</a></td>
+<td width="350px">Церковь Пантелеймона Целителя</td>
+<td><a href="http://temples.ru/card.php?ID=4877" target="_blank">4877</a></td>
+<td>20</td>
+<td>?</td>
+<td></td><td>wood</td><td>~contemporary</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3352968&lon=38.13210655&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w45507948&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/70698975">W:70698975</a></td>
+<td width="350px">Церковь Николая Чудотворца Уцелел только кирпичный четверик без перекрытий</td>
+<td><a href="http://temples.ru/card.php?ID=1344" target="_blank">1344</a></td>
+<td>11</td>
+<td>?</td>
+<td>red</td><td>brick</td><td>~baroque</td>
+<td>Полиносово</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.4159807&lon=38.426199&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w70698975&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/85523961">W:85523961</a></td>
+<td width="350px">Церковь Симеона Столпника</td>
+<td><a href="http://temples.ru/card.php?ID=5416" target="_blank">5416</a></td>
+<td>19</td>
+<td>?</td>
+<td>red;white</td><td>plaster</td><td>~baroque</td>
+<td>Борисоглебская Слобода</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7404604&lon=38.8567232&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w85523961&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/86056118">W:86056118</a></td>
+<td width="350px">Владимирский собор</td>
+<td><a href="http://temples.ru/card.php?ID=5157" target="_blank">5157</a></td>
+<td>30</td>
+<td>?</td>
+<td>red;white</td><td>plaster</td><td>~baroque</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.73534115&lon=38.8519636&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w86056118&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/86056119">W:86056119</a></td>
+<td width="350px">Церковь Петра Митрополита</td>
+<td><a href="http://temples.ru/card.php?ID=5299" target="_blank">5299</a></td>
+<td>16</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~old_russian</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7354817&lon=38.85136625&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w86056119&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/86056120">W:86056120</a></td>
+<td width="350px">Церковь Александра Невского</td>
+<td><a href="http://temples.ru/card.php?ID=5426" target="_blank">5426</a></td>
+<td>21</td>
+<td>?</td>
+<td>red;white</td><td>plaster</td><td>~baroque</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7356044&lon=38.8524734&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w86056120&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/86537254">W:86537254</a></td>
+<td width="350px">Покровская церковь</td>
+<td><a href="http://temples.ru/card.php?ID=7261" target="_blank">7261</a></td>
+<td>18</td>
+<td>?</td>
+<td>red</td><td>plaster</td><td>~baroque</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.73833805&lon=38.848939&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w86537254&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87567579">W:87567579</a></td>
+<td width="350px">Знаменская церковь</td>
+<td><a href="http://temples.ru/card.php?ID=7256" target="_blank">7256</a></td>
+<td>17</td>
+<td>?</td>
+<td>lightgray</td><td>plaster</td><td>~contemporary</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.73553175&lon=38.843624&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87567579&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87567582">W:87567582</a></td>
+<td width="350px">Смоленско-Корнилиевская церковь</td>
+<td><a href="http://temples.ru/card.php?ID=5151" target="_blank">5151</a></td>
+<td>26</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7310502&lon=38.8399569&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87567582&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87803779">W:87803779</a></td>
+<td width="350px">Черниговская часовня</td>
+<td><a href="http://temples.ru/card.php?ID=10558" target="_blank">10558</a></td>
+<td>7</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>baroque</td>
+<td>Приозерный</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7536036&lon=38.8628428&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87803779&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87827025">W:87827025</a></td>
+<td width="350px">Собор Николая Чудотворца По архитектуре близок к соборным храмам XVI в.</td>
+<td><a href="http://temples.ru/card.php?ID=5428" target="_blank">5428</a></td>
+<td>24</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.73184225&lon=38.8380576&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87827025&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87827039">W:87827039</a></td>
+<td width="350px">Церковь Петра и Павла надвратная церковь</td>
+<td><a href="http://temples.ru/card.php?ID=5430" target="_blank">5430</a></td>
+<td>17</td>
+<td>?</td>
+<td>yellow</td><td>plaster</td><td>~baroque</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.73217475&lon=38.83882975&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87827039&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87885572">W:87885572</a></td>
+<td width="350px">Церковь Всех Святых с Трапезной палатой.</td>
+<td><a href="http://temples.ru/card.php?ID=5282" target="_blank">5282</a></td>
+<td>38</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~uzorochye</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.72160695&lon=38.8238095&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87885572&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87885590">W:87885590</a></td>
+<td width="350px">Собор Успения Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=5281" target="_blank">5281</a></td>
+<td>32</td>
+<td>?</td>
+<td>burlywood</td><td>plaster</td><td>~baroque</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.721472&lon=38.8248057&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87885590&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87965538">W:87965538</a></td>
+<td width="350px">Церковь Всех Святых</td>
+<td><a href="http://temples.ru/card.php?ID=5154" target="_blank">5154</a></td>
+<td>16</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~uzorochye</td>
+<td>Луговая Слобода</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7203746&lon=38.83909725&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87965538&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87965546">W:87965546</a></td>
+<td width="350px">Троицкий собор 1530-1532 гг с Даниловским приделом и колокольней XVII в.</td>
+<td><a href="http://temples.ru/card.php?ID=5153" target="_blank">5153</a></td>
+<td>24</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~old_russian</td>
+<td>Луговая Слобода</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7202947&lon=38.83852125&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87965546&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87965554">W:87965554</a></td>
+<td width="350px">Корпус братских келий</td>
+<td></td>
+<td>29</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Луговая Слобода</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.71951135&lon=38.8378068&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87965554&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87965555">W:87965555</a></td>
+<td width="350px">Церковь Похвалы Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=5155" target="_blank">5155</a></td>
+<td>15</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Луговая Слобода</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7197215&lon=38.8386016&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87965555&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87993338">W:87993338</a></td>
+<td width="350px">Церковь Благовещения Пресвятой Богородицы Церковь Благовещения с трапезной и колокольней XI-XII вв.</td>
+<td><a href="http://temples.ru/card.php?ID=5124" target="_blank">5124</a></td>
+<td>34</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~uzorochye</td>
+<td>Никитская Слобода</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.76093155&lon=38.85879365&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87993338&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87993354">W:87993354</a></td>
+<td width="350px">Собор Никиты Великомученика</td>
+<td><a href="http://temples.ru/card.php?ID=5123" target="_blank">5123</a></td>
+<td>24</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~old_russian</td>
+<td>Никитская Слобода</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7612887&lon=38.858918&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87993354&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87993398">W:87993398</a></td>
+<td width="350px">Церковь Гавриила Архангела</td>
+<td><a href="http://temples.ru/card.php?ID=5292" target="_blank">5292</a></td>
+<td>10</td>
+<td>?</td>
+<td>white;blue</td><td>plaster</td><td>neoclassicism</td>
+<td>Никитская Слобода</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.76096455&lon=38.8596205&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87993398&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/87993431">W:87993431</a></td>
+<td width="350px">Часовня «Столп»</td>
+<td><a href="http://temples.ru/card.php?ID=5125" target="_blank">5125</a></td>
+<td>7</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Никитская Слобода</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7612025&lon=38.8585731&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w87993431&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/89480196">W:89480196</a></td>
+<td width="350px">Часовня Георгия Победоносца Часовня из дерева Фонинское. Конец XIX в.</td>
+<td><a href="http://temples.ru/card.php?ID=8291" target="_blank">8291</a></td>
+<td>5</td>
+<td>?</td>
+<td>darkslategray</td><td>wood</td><td>~neoclassicism</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.72114825&lon=38.82332015&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w89480196&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/101310768">W:101310768</a></td>
+<td width="350px">Церковь Николая Чудотворца</td>
+<td><a href="http://temples.ru/card.php?ID=13213" target="_blank">13213</a></td>
+<td>21</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Киржач</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.1722589&lon=38.885284&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w101310768&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/110388380">W:110388380</a></td>
+<td width="350px">Церковь Воздвижения Честного Креста Господня</td>
+<td><a href="http://temples.ru/card.php?ID=4920" target="_blank">4920</a></td>
+<td>20</td>
+<td>?</td>
+<td>khaki</td><td>plaster</td><td>~neoclassicism</td>
+<td>Воздвиженское</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.19620765&lon=38.05549395&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w110388380&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/110660379">W:110660379</a></td>
+<td width="350px">Церковь Сретения Господня</td>
+<td><a href="http://temples.ru/card.php?ID=5298" target="_blank">5298</a></td>
+<td>18</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>neoclassicism</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.72045955&lon=38.8311674&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w110660379&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/121794867">W:121794867</a></td>
+<td width="350px">Церковь Вознесения Господня</td>
+<td><a href="http://temples.ru/card.php?ID=2718" target="_blank">2718</a></td>
+<td>14</td>
+<td>?</td>
+<td>brown</td><td>wood</td><td>~contemporary</td>
+<td>Лепешки</td>
+<td>Пушкинский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.1013653&lon=38.1234771&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w121794867&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/122362085">W:122362085</a></td>
+<td width="350px">Церковь Спаса Нерукотворного Образа</td>
+<td><a href="http://temples.ru/card.php?ID=7953" target="_blank">7953</a></td>
+<td>18</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Петровское</td>
+<td>Щёлковский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.0868451&lon=38.227324&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w122362085&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/123307398">W:123307398</a></td>
+<td width="350px">Церковь Николая Чудотворца</td>
+<td><a href="http://temples.ru/card.php?ID=2789" target="_blank">2789</a></td>
+<td>33</td>
+<td>?</td>
+<td>red</td><td>plaster</td><td>russian_gothic</td>
+<td>Царёво</td>
+<td>Пушкинский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.0853362&lon=38.0895175&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w123307398&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/128393961">W:128393961</a></td>
+<td width="350px">Церковь Собора Иоанна Предтечи</td>
+<td><a href="http://temples.ru/card.php?ID=7961" target="_blank">7961</a></td>
+<td>27</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>neoclassicism</td>
+<td>Фряново</td>
+<td>Щёлковский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.1343304&lon=38.44456015&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w128393961&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/129197292">W:129197292</a></td>
+<td width="350px">Церковь Николая Чудотворца</td>
+<td><a href="http://temples.ru/card.php?ID=7924" target="_blank">7924</a></td>
+<td>23</td>
+<td>?</td>
+<td>khaki</td><td>plaster</td><td>neoclassicism</td>
+<td>Здехово</td>
+<td>Щёлковский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.0024009&lon=38.15952775&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w129197292&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/139956654">W:139956654</a></td>
+<td width="350px">Трапезная и настоятельские покои</td>
+<td></td>
+<td>34</td>
+<td>?</td>
+<td></td><td></td><td>~baroque</td>
+<td>Луговая Слобода</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7198698&lon=38.83824835&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w139956654&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/167288787">W:167288787</a></td>
+<td width="350px">Часовня Варвары Великомученицы</td>
+<td><a href="http://temples.ru/card.php?ID=3936" target="_blank">3936</a></td>
+<td>5</td>
+<td>?</td>
+<td></td><td>wood</td><td>~contemporary</td>
+<td>Купань</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.83236255&lon=38.72845735&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w167288787&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/167288881">W:167288881</a></td>
+<td width="350px">Храм Иоанна Богослова</td>
+<td><a href="http://temples.ru/card.php?ID=3935" target="_blank">3935</a></td>
+<td>20</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Купань</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.840358&lon=38.7166521&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w167288881&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/167290560">W:167290560</a></td>
+<td width="350px">Часовня</td>
+<td></td>
+<td>5</td>
+<td>?</td>
+<td></td><td>wood</td><td></td>
+<td>Веслево</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7255605&lon=38.7332579&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w167290560&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/167482775">W:167482775</a></td>
+<td width="350px">храм Преображения Господня</td>
+<td><a href="http://temples.ru/card.php?ID=4641" target="_blank">4641</a></td>
+<td>24</td>
+<td>?</td>
+<td>red;white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Купанское</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.8234133&lon=38.6633354&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w167482775&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/168519020">W:168519020</a></td>
+<td width="350px">Церковь Иконы Божией Матери Казанская Ремонтируется</td>
+<td><a href="http://temples.ru/card.php?ID=7918" target="_blank">7918</a></td>
+<td>19</td>
+<td>?</td>
+<td></td><td></td><td>neoclassicism</td>
+<td>Богослово</td>
+<td>Щёлковский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.01736695&lon=38.0742502&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w168519020&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/168944075">W:168944075</a></td>
+<td width="350px">Церковь Иконы Божией Матери Боголюбская</td>
+<td><a href="http://temples.ru/card.php?ID=1254" target="_blank">1254</a></td>
+<td>23</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Александров</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3935854&lon=38.7163754&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w168944075&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/169028263">W:169028263</a></td>
+<td width="350px">Церковь Покрова Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=4363" target="_blank">4363</a></td>
+<td>23</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Соломидино</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7421817&lon=38.70456805&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w169028263&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/169592483">W:169592483</a></td>
+<td width="350px">Церковь Серафима Саровского</td>
+<td><a href="http://temples.ru/card.php?ID=1256" target="_blank">1256</a></td>
+<td>19</td>
+<td>?</td>
+<td>red</td><td>brick</td><td>pseudo-russian</td>
+<td>Александров</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3982382&lon=38.70569625&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w169592483&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/171746574">W:171746574</a></td>
+<td width="350px">Церковь Бориса и Глеба</td>
+<td><a href="http://temples.ru/card.php?ID=13215" target="_blank">13215</a></td>
+<td>10</td>
+<td>?</td>
+<td></td><td></td><td>~contemporary</td>
+<td>Федоровское</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.1099434&lon=38.8817397&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w171746574&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/171750412">W:171750412</a></td>
+<td width="350px">Часовня в Илейкино</td>
+<td><a href="http://temples.ru/card.php?ID=13230" target="_blank">13230</a></td>
+<td>5</td>
+<td>?</td>
+<td>lightgray</td><td>brick</td><td>~contemporary</td>
+<td>Илейкино</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.0722183&lon=38.85323475&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w171750412&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/172183012">W:172183012</a></td>
+<td width="350px">Часовня</td>
+<td></td>
+<td>8</td>
+<td>?</td>
+<td></td><td></td><td></td>
+<td>Прокино</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.51618125&lon=38.4021419&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w172183012&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/172230815">W:172230815</a></td>
+<td width="350px">Часовня Серафима Саровского</td>
+<td><a href="http://temples.ru/card.php?ID=4968" target="_blank">4968</a></td>
+<td>4</td>
+<td>?</td>
+<td></td><td>wood</td><td>~contemporary</td>
+<td>Сущёво</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.5113709&lon=38.3433449&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w172230815&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/173028792">W:173028792</a></td>
+<td width="350px">Церковь Николая Чудотворца</td>
+<td><a href="http://temples.ru/card.php?ID=22116" target="_blank">22116</a></td>
+<td>14</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Кубринск</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.72944695&lon=38.3587787&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w173028792&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/173516101">W:173516101</a></td>
+<td width="350px">Церковь Успения Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=2311" target="_blank">2311</a></td>
+<td>29</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>neoclassicism</td>
+<td>Стромынь</td>
+<td>Ногинский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.0423728&lon=38.48006455&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w173516101&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/174696499">W:174696499</a></td>
+<td width="350px">Церковь Распятия Христова</td>
+<td><a href="http://temples.ru/card.php?ID=1263" target="_blank">1263</a></td>
+<td>17</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~old_russian</td>
+<td>Красная Роща</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.40011345&lon=38.73984025&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w174696499&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/174696500">W:174696500</a></td>
+<td width="350px">Собор Троицы Живоначальной</td>
+<td><a href="http://temples.ru/card.php?ID=1260" target="_blank">1260</a></td>
+<td>35</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~old_russian</td>
+<td>Красная Роща</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.40050605&lon=38.7394188&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w174696500&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/174696501">W:174696501</a></td>
+<td width="350px">Церковь Покрова Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=1261" target="_blank">1261</a></td>
+<td>37</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~old_russian</td>
+<td>Красная Роща</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.40090045&lon=38.74048935&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w174696501&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/174696502">W:174696502</a></td>
+<td width="350px">Часовня надкладезная</td>
+<td><a href="http://temples.ru/card.php?ID=1266" target="_blank">1266</a></td>
+<td>7</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Красная Роща</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.40026705&lon=38.7410682&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w174696502&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/174697310">W:174697310</a></td>
+<td width="350px">Церковь Сретения Господня</td>
+<td><a href="http://temples.ru/card.php?ID=1265" target="_blank">1265</a></td>
+<td>15</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~uzorochye</td>
+<td>Красная Роща</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.4003715&lon=38.742055&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w174697310&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/174697600">W:174697600</a></td>
+<td width="350px">Церковь Успения Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=1262" target="_blank">1262</a></td>
+<td>30</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~old_russian</td>
+<td>Красная Роща</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.400069&lon=38.74178265&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w174697600&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/174700054">W:174700054</a></td>
+<td width="350px">Церковь Преображения Господня</td>
+<td><a href="http://temples.ru/card.php?ID=1255" target="_blank">1255</a></td>
+<td>21</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Красная Роща</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.40160995&lon=38.7381245&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w174700054&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/176273120">W:176273120</a></td>
+<td width="350px">Церковь Бориса и Глеба сейчас в процессе реставрации</td>
+<td><a href="http://temples.ru/card.php?ID=1287" target="_blank">1287</a></td>
+<td>23</td>
+<td>?</td>
+<td></td><td></td><td>neoclassicism</td>
+<td>Волохово</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.39189395&lon=38.5171086&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w176273120&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/179006892">W:179006892</a></td>
+<td width="350px">Церковь Иконы Божией Матери Казанская</td>
+<td><a href="http://temples.ru/card.php?ID=5487" target="_blank">5487</a></td>
+<td>27</td>
+<td>?</td>
+<td>rosybrown;white</td><td>plaster</td><td>~pseudo-russian</td>
+<td>Ново</td>
+<td>Ногинский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.00554385&lon=38.59952535&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w179006892&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/179341741">W:179341741</a></td>
+<td width="350px">Церковь Николая Чудотворца</td>
+<td><a href="http://temples.ru/card.php?ID=4796" target="_blank">4796</a></td>
+<td>29</td>
+<td>?</td>
+<td>sandybrown</td><td>plaster</td><td>pseudo-russian</td>
+<td>Киржач</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.15413505&lon=38.8612907&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w179341741&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/180839957">W:180839957</a></td>
+<td width="350px">Церковь Покрова Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=1333" target="_blank">1333</a></td>
+<td>18</td>
+<td>?</td>
+<td></td><td></td><td>~neoclassicism</td>
+<td>Мошнино</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.4618239&lon=38.83776995&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w180839957&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/180840007">W:180840007</a></td>
+<td width="350px">Церковь Иконы Божией Матери Казанская</td>
+<td><a href="http://temples.ru/card.php?ID=1360" target="_blank">1360</a></td>
+<td>20</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Степаниха</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.466617&lon=38.90188935&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w180840007&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/181205357">W:181205357</a></td>
+<td width="350px">Церковь Преображения Господня Оригинальная конструкция: восьмерик по высоте равен колокольне</td>
+<td><a href="http://temples.ru/card.php?ID=10491" target="_blank">10491</a></td>
+<td>28</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Смольнево</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.2741971&lon=38.97184975&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w181205357&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/181419572">W:181419572</a></td>
+<td width="350px">Церковь Николая Чудотворца</td>
+<td><a href="http://temples.ru/card.php?ID=4640" target="_blank">4640</a></td>
+<td>25</td>
+<td>?</td>
+<td>wheat</td><td>plaster</td><td>~neoclassicism</td>
+<td>Копнино</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.88026275&lon=38.4761603&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w181419572&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/181675547">W:181675547</a></td>
+<td width="350px">Церковь Михаила Архангела</td>
+<td><a href="http://temples.ru/card.php?ID=1334" target="_blank">1334</a></td>
+<td>16</td>
+<td>?</td>
+<td>darkkhaki</td><td>plaster</td><td>~contemporary</td>
+<td>Мякишево</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.5035047&lon=38.54790245&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w181675547&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/182809170">W:182809170</a></td>
+<td width="350px">Церковь Троицы Живоначальной</td>
+<td><a href="http://temples.ru/card.php?ID=1310" target="_blank">1310</a></td>
+<td>26</td>
+<td>?</td>
+<td>red</td><td>plaster</td><td>~contemporary</td>
+<td>Степково</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.31783525&lon=38.71568525&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w182809170&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/187377957">W:187377957</a></td>
+<td width="350px">Церковь Явления Пресвятой Богородицы Сергию и Михею Радонежским</td>
+<td><a href="http://temples.ru/card.php?ID=4873" target="_blank">4873</a></td>
+<td>28</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3394248&lon=38.1386829&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w187377957&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/188188546">W:188188546</a></td>
+<td width="350px">Церковь Сошествия Святого Духа</td>
+<td><a href="http://temples.ru/card.php?ID=4864" target="_blank">4864</a></td>
+<td>16</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.29744735&lon=38.1155909&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w188188546&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/193003450">W:193003450</a></td>
+<td width="350px">Церковь Троицы Живоначальной</td>
+<td><a href="http://temples.ru/card.php?ID=7954" target="_blank">7954</a></td>
+<td>19</td>
+<td>?</td>
+<td></td><td></td><td>~baroque</td>
+<td>Рязанцы</td>
+<td>Щёлковский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.15537515&lon=38.5074803&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w193003450&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/193468132">W:193468132</a></td>
+<td width="350px">Церковь Иконы Божией Матери Казанская</td>
+<td><a href="http://temples.ru/card.php?ID=1357" target="_blank">1357</a></td>
+<td>21</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Старая Слобода</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.43441345&lon=38.783487&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w193468132&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/202905760">W:202905760</a></td>
+<td width="350px">&lt;&lt;RUSSIAN ORTHODOX CHAPEL&gt;&gt;</td>
+<td></td>
+<td>5</td>
+<td>?</td>
+<td></td><td></td><td></td>
+<td>Наумово</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.4142858&lon=38.6687118&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w202905760&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/203189719">W:203189719</a></td>
+<td width="350px">Церковь Иоанна Богослова</td>
+<td><a href="http://temples.ru/card.php?ID=1278" target="_blank">1278</a></td>
+<td>20</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>neoclassicism</td>
+<td>Афанасьево</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.4230283&lon=38.6859583&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w203189719&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/206132345">W:206132345</a></td>
+<td width="350px">Церковь Иконы Божией Матери Неупиваемая Чаша</td>
+<td><a href="http://temples.ru/card.php?ID=17611" target="_blank">17611</a></td>
+<td>17</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Литвиново</td>
+<td>Щёлковский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.00749235&lon=38.1383381&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w206132345&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/206132346">W:206132346</a></td>
+<td width="350px">Церковь Спаса Нерукотворного Образа</td>
+<td><a href="http://temples.ru/card.php?ID=7927" target="_blank">7927</a></td>
+<td>17</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Каблуково</td>
+<td>Щёлковский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.01954055&lon=38.1673115&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w206132346&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/206132347">W:206132347</a></td>
+<td width="350px">Часовня Иконы Божией Матери Неупиваемая Чаша и Иконы Божией Матери Живоносный Источник</td>
+<td><a href="http://temples.ru/card.php?ID=7930" target="_blank">7930</a></td>
+<td>4</td>
+<td>?</td>
+<td></td><td>wood</td><td>~contemporary</td>
+<td>Каблуково</td>
+<td>Щёлковский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.01982565&lon=38.1668268&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w206132347&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/206151674">W:206151674</a></td>
+<td width="350px">Церковь Илии Пророка</td>
+<td><a href="http://temples.ru/card.php?ID=2726" target="_blank">2726</a></td>
+<td>21</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Барково</td>
+<td>Пушкинский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.15780635&lon=38.0950992&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w206151674&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/206151680">W:206151680</a></td>
+<td width="350px">Церковь Николая Чудотворца</td>
+<td><a href="http://temples.ru/card.php?ID=2769" target="_blank">2769</a></td>
+<td>30</td>
+<td>?</td>
+<td></td><td></td><td>~neoclassicism</td>
+<td>Красноармейск</td>
+<td>го Красноармейск</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.11126795&lon=38.17160085&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w206151680&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/206151689">W:206151689</a></td>
+<td width="350px">Церковь Сергия Радонежского</td>
+<td><a href="http://temples.ru/card.php?ID=2727" target="_blank">2727</a></td>
+<td>7</td>
+<td>?</td>
+<td>gray</td><td>plaster</td><td>~contemporary</td>
+<td>Нагорное</td>
+<td>Пушкинский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.0660347&lon=38.0150104&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w206151689&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/way/206288038">W:206288038</a></td>
+<td width="350px">Часовня в Иудино</td>
+<td><a href="http://temples.ru/card.php?ID=4952" target="_blank">4952</a></td>
+<td>5</td>
+<td>9.46</td>
+<td>red;white</td><td>plaster</td><td>~contemporary</td>
+<td>Иудино</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.45138025&lon=38.09973135&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w206288038&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/207841293">W:207841293</a></td>
+<td width="350px">Церковь Покрова Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=17615" target="_blank">17615</a></td>
+<td>20</td>
+<td>?</td>
+<td>lightgray</td><td>plaster</td><td>~contemporary</td>
+<td>Воря-Богородское</td>
+<td>Щёлковский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.0521044&lon=38.16566735&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w207841293&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/213860413">W:213860413</a></td>
+<td width="350px">Церковь Сергия Радонежского</td>
+<td><a href="http://temples.ru/card.php?ID=4963" target="_blank">4963</a></td>
+<td>23</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Мергусово</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.5721264&lon=38.1256887&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w213860413&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/215184795">W:215184795</a></td>
+<td width="350px">Церковь Сорока мучеников Севастийских</td>
+<td><a href="http://temples.ru/card.php?ID=5285" target="_blank">5285</a></td>
+<td>19</td>
+<td>?</td>
+<td>rosybrown;white</td><td>plaster</td><td>baroque</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.73523345&lon=38.82854185&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w215184795&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/215302044">W:215302044</a></td>
+<td width="350px">Часовня Спаса Преображения</td>
+<td></td>
+<td>6</td>
+<td>?</td>
+<td></td><td></td><td>~contemporary</td>
+<td>Соколово</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.38503025&lon=38.57543085&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w215302044&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/215646382">W:215646382</a></td>
+<td width="350px">Церковь Иоанна Воина</td>
+<td><a href="http://temples.ru/card.php?ID=12162" target="_blank">12162</a></td>
+<td>13</td>
+<td>?</td>
+<td></td><td>wood</td><td>~contemporary</td>
+<td>Пересвет</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.41042045&lon=38.167164&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w215646382&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/218401394">W:218401394</a></td>
+<td width="350px">Собор Рождества Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=1323" target="_blank">1323</a></td>
+<td>26</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Лукьянцево</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.5036015&lon=38.71254595&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w218401394&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/218401396">W:218401396</a></td>
+<td width="350px">Церковь Богоявления Господня</td>
+<td><a href="http://temples.ru/card.php?ID=1324" target="_blank">1324</a></td>
+<td>25</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~uzorochye</td>
+<td>Лукьянцево</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.50410015&lon=38.71257045&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w218401396&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/222565232">W:222565232</a></td>
+<td width="350px">Храм Рождества Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=11054" target="_blank">11054</a></td>
+<td>17</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Глебовское</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.6546962&lon=38.70064615&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w222565232&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/223222090">W:223222090</a></td>
+<td width="350px">Церковь Успения Пресвятой Богородицы</td>
+<td></td>
+<td>13</td>
+<td>?</td>
+<td></td><td></td><td></td>
+<td>Струнино</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3843885&lon=38.58421905&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w223222090&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/224055349">W:224055349</a></td>
+<td width="350px">Церковь Успения Пресвятой Богородицы Построена в 2004 по образцу церкви соседнего села Семёновского, разрушенной в 1930-х.</td>
+<td><a href="http://temples.ru/card.php?ID=10497" target="_blank">10497</a></td>
+<td>14</td>
+<td>?</td>
+<td>red</td><td>brick</td><td>neoclassicism</td>
+<td>Бельково</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.25023925&lon=38.7963338&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w224055349&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/231493212">W:231493212</a></td>
+<td width="350px">Церковь Георгия Победоносца</td>
+<td><a href="http://temples.ru/card.php?ID=9078" target="_blank">9078</a></td>
+<td>25</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Ильинское</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.0349561&lon=38.94273945&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w231493212&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/231602411">W:231602411</a></td>
+<td width="350px">Церковь Черниговской Божией Матери</td>
+<td><a href="http://temples.ru/card.php?ID=6778" target="_blank">6778</a></td>
+<td>20</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>pseudo-russian</td>
+<td>Санинского ДОКа</td>
+<td>Петушинский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.0017899&lon=38.9286454&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w231602411&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/236152997">W:236152997</a></td>
+<td width="350px">Церковь Николая II Царя-страстотерпца</td>
+<td><a href="http://temples.ru/card.php?ID=13221" target="_blank">13221</a></td>
+<td>8</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Василёво</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.22062125&lon=38.7589773&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w236152997&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/238909939">W:238909939</a></td>
+<td width="350px">Храм Смоленской иконы Божией Матери</td>
+<td><a href="http://temples.ru/card.php?ID=11304" target="_blank">11304</a></td>
+<td>23</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Ям</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.70424105&lon=38.82708825&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w238909939&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/238945322">W:238945322</a></td>
+<td width="350px">Церковь святого Георгия</td>
+<td><a href="http://temples.ru/card.php?ID=4642" target="_blank">4642</a></td>
+<td>19</td>
+<td>?</td>
+<td>red</td><td>plaster</td><td>~neoclassicism</td>
+<td>Веськово</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7219917&lon=38.78126235&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w238945322&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/246056432">W:246056432</a></td>
+<td width="350px">Церковь Введения Пресвятой Богородицы ремонтируется, состояние здания тяжелое</td>
+<td><a href="http://temples.ru/card.php?ID=4896" target="_blank">4896</a></td>
+<td>22</td>
+<td>?</td>
+<td></td><td></td><td>neoclassicism</td>
+<td>Аким-Анна</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.5294894&lon=38.02919635&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w246056432&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/252051070">W:252051070</a></td>
+<td width="350px">Церковь Покрова Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=13225" target="_blank">13225</a></td>
+<td>22</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Ельцы</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.1721861&lon=38.7729171&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w252051070&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/255947708">W:255947708</a></td>
+<td width="350px">Церковь Сретения Господня</td>
+<td><a href="http://temples.ru/card.php?ID=4954" target="_blank">4954</a></td>
+<td>30</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Константиново</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.5547591&lon=38.0268547&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w255947708&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/256100772">W:256100772</a></td>
+<td width="350px">Церковь Усекновения Главы Иоанна Предтечи Трёхпролетная звонница сооружена в духе ростовских звонниц XVI в.</td>
+<td><a href="http://temples.ru/card.php?ID=5429" target="_blank">5429</a></td>
+<td>12</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7316608&lon=38.8387576&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w256100772&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/260266920">W:260266920</a></td>
+<td width="350px">Церковь Успения Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=4911" target="_blank">4911</a></td>
+<td>21</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Богородское</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.49484415&lon=38.17948185&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w260266920&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/260713943">W:260713943</a></td>
+<td width="350px">Церковь Илии Пророка заброшена, в тяжёлом состоянии</td>
+<td><a href="http://temples.ru/card.php?ID=11072" target="_blank">11072</a></td>
+<td>18</td>
+<td>?</td>
+<td></td><td></td><td>~neoclassicism</td>
+<td>Гора Новоселка</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.89433855&lon=38.63008785&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w260713943&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/261706519">W:261706519</a></td>
+<td width="350px">Церковь Покрова Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=4990" target="_blank">4990</a></td>
+<td>22</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Сватково</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.39350975&lon=38.22024555&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w261706519&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/270300861">W:270300861</a></td>
+<td width="350px">Церковь Георгия Победоносца</td>
+<td><a href="http://temples.ru/card.php?ID=17629" target="_blank">17629</a></td>
+<td>18</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Клюквенный</td>
+<td>Щёлковский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.0237827&lon=38.18987115&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w270300861&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/274667401">W:274667401</a></td>
+<td width="350px">Церковь Иоанна Богослова</td>
+<td><a href="http://temples.ru/card.php?ID=4993" target="_blank">4993</a></td>
+<td>21</td>
+<td>?</td>
+<td>yellow</td><td>plaster</td><td>neoclassicism</td>
+<td>Слотино</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3078569&lon=38.3810207&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w274667401&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/274789572">W:274789572</a></td>
+<td width="350px">Церковь Николая Чудотворца</td>
+<td><a href="http://temples.ru/card.php?ID=2289" target="_blank">2289</a></td>
+<td>19</td>
+<td>?</td>
+<td></td><td></td><td>~pseudo-russian</td>
+<td>Макарово</td>
+<td>го Черноголовка</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.01130755&lon=38.3043674&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w274789572&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/way/277544964">W:277544964</a></td>
+<td width="350px">Церковь Явления Пресвятой Богородицы Сергию и Михею Радонежским</td>
+<td><a href="http://temples.ru/card.php?ID=4831" target="_blank">4831</a></td>
+<td>11</td>
+<td>11</td>
+<td>motley</td><td>plaster</td><td>baroque</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.30967905&lon=38.1300947&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w277544964&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/way/277544965">W:277544965</a></td>
+<td width="350px">Церковь Рождества Иоанна Предтечи</td>
+<td><a href="http://temples.ru/card.php?ID=4830" target="_blank">4830</a></td>
+<td>18</td>
+<td>35</td>
+<td>orange</td><td>plaster</td><td>baroque</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3101647&lon=38.13182955&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w277544965&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/way/277544966">W:277544966</a></td>
+<td width="350px">Успенский кладезь с часовней</td>
+<td><a href="http://temples.ru/card.php?ID=4838" target="_blank">4838</a></td>
+<td>7</td>
+<td>21.5</td>
+<td>white</td><td>plaster</td><td>baroque</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3102212&lon=38.13010705&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w277544966&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/280790880">W:280790880</a></td>
+<td width="350px">Церковь Благовещения Пресвятой Богородицы заброшена, большая часть сводов и перекрытий утрачена.</td>
+<td><a href="http://temples.ru/card.php?ID=9365" target="_blank">9365</a></td>
+<td>27</td>
+<td>?</td>
+<td></td><td></td><td>~neoclassicism</td>
+<td>Будимирово</td>
+<td>Калязинский р-н</td>
+<td>Тверская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.91501425&lon=38.14185345&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w280790880&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/281521668">W:281521668</a></td>
+<td width="350px">Церковь Феодора Стратилата</td>
+<td><a href="http://temples.ru/card.php?ID=1264" target="_blank">1264</a></td>
+<td>13</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~uzorochye</td>
+<td>Красная Роща</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.40030465&lon=38.73843&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w281521668&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/282199866">W:282199866</a></td>
+<td width="350px">Церковь Спаса Нерукотворного Образа</td>
+<td><a href="http://temples.ru/card.php?ID=4935" target="_blank">4935</a></td>
+<td>17</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>eclectic</td>
+<td>Деулино</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.35429545&lon=38.1152125&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w282199866&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/282205967">W:282205967</a></td>
+<td width="350px">Церковь Рождества Пресвятой Богородицы оригинальная конструкция: высокий четверик с апсидальными алтарем и притвором + колокольня</td>
+<td><a href="http://temples.ru/card.php?ID=4964" target="_blank">4964</a></td>
+<td>16</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Крапивино</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.39113505&lon=38.1026728&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w282205967&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294497784">W:294497784</a></td>
+<td width="350px">Собор Рождества Христова</td>
+<td><a href="http://temples.ru/card.php?ID=1253" target="_blank">1253</a></td>
+<td>38</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>pseudo-russian</td>
+<td>Александров</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.39616095&lon=38.72863575&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294497784&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294499503">W:294499503</a></td>
+<td width="350px">Церковь Троицы Живоначальной</td>
+<td><a href="http://temples.ru/card.php?ID=1291" target="_blank">1291</a></td>
+<td>16</td>
+<td>?</td>
+<td>red</td><td>brick</td><td>neoclassicism</td>
+<td>Горки</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.44314545&lon=38.96059425&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294499503&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294500219">W:294500219</a></td>
+<td width="350px">Церковь Иконы Божией Матери Тихвинская</td>
+<td><a href="http://temples.ru/card.php?ID=1350" target="_blank">1350</a></td>
+<td>24</td>
+<td>?</td>
+<td></td><td></td><td>~neoclassicism</td>
+<td>Рюминское</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.5210541&lon=38.7815544&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294500219&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294513633">W:294513633</a></td>
+<td width="350px">Церковь Николая Чудотворца</td>
+<td><a href="http://temples.ru/card.php?ID=10494" target="_blank">10494</a></td>
+<td>36</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Филипповское</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.0986369&lon=38.6169372&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294513633&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294519938">W:294519938</a></td>
+<td width="350px">Собор Иконы Божией Матери Смоленская</td>
+<td><a href="http://temples.ru/card.php?ID=1273" target="_blank">1273</a></td>
+<td>24</td>
+<td>?</td>
+<td>red</td><td>brick</td><td>pseudo-russian</td>
+<td>Старинки</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.35908685&lon=38.42813445&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294519938&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294519939">W:294519939</a></td>
+<td width="350px">Церковь Всех Святых оригинальная конструкция: надвратное здание увенчано высокой шатровой кровлей и фланкировано башенками</td>
+<td><a href="http://temples.ru/card.php?ID=1275" target="_blank">1275</a></td>
+<td>15</td>
+<td>?</td>
+<td>red</td><td>brick</td><td>~pseudo-russian</td>
+<td>Старинки</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.35954345&lon=38.42839845&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294519939&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294519940">W:294519940</a></td>
+<td width="350px">Церковь Сергия Радонежского Венчание сломано</td>
+<td><a href="http://temples.ru/card.php?ID=1274" target="_blank">1274</a></td>
+<td>22</td>
+<td>?</td>
+<td>red</td><td>plaster</td><td>pseudo-russian</td>
+<td>Старинки</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.35838425&lon=38.42819005&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294519940&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294520072">W:294520072</a></td>
+<td width="350px">Церковь Введения Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=1308" target="_blank">1308</a></td>
+<td>21</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>pseudo-russian</td>
+<td>Ирково</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.37894745&lon=38.9726976&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294520072&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294521817">W:294521817</a></td>
+<td width="350px">Церковь Илии Пророка</td>
+<td><a href="http://temples.ru/card.php?ID=1292" target="_blank">1292</a></td>
+<td>16</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>eclectic</td>
+<td>Каменка</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3094302&lon=38.4723231&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294521817&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294542682">W:294542682</a></td>
+<td width="350px">Церковь Вознесения Господня</td>
+<td><a href="http://temples.ru/card.php?ID=9079" target="_blank">9079</a></td>
+<td>26</td>
+<td>?</td>
+<td>lightblue;white</td><td>plaster</td><td>neoclassicism</td>
+<td>Дворищи</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.09597945&lon=38.8671263&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294542682&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294565422">W:294565422</a></td>
+<td width="350px">Церковь Николая Чудотворца</td>
+<td><a href="http://temples.ru/card.php?ID=1337" target="_blank">1337</a></td>
+<td>15</td>
+<td>?</td>
+<td>red</td><td>brick</td><td>pseudo-russian</td>
+<td>Никольское</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.41305935&lon=38.9399366&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294565422&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294637887">W:294637887</a></td>
+<td width="350px">Церковь Покрова Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=1285" target="_blank">1285</a></td>
+<td>17</td>
+<td>?</td>
+<td></td><td></td><td>~baroque</td>
+<td>Бунаково</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.4101945&lon=38.84203335&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294637887&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294711941">W:294711941</a></td>
+<td width="350px">Церковь Сорока мучеников Севастийских</td>
+<td><a href="http://temples.ru/card.php?ID=23868" target="_blank">23868</a></td>
+<td>14</td>
+<td>?</td>
+<td></td><td>wood</td><td>~contemporary</td>
+<td>Взгляднево</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.26905235&lon=38.34500175&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294711941&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294711942">W:294711942</a></td>
+<td width="350px">Церковь Сергия Радонежского</td>
+<td><a href="http://temples.ru/card.php?ID=4919" target="_blank">4919</a></td>
+<td>14</td>
+<td>?</td>
+<td></td><td>wood</td><td>~contemporary</td>
+<td>Взгляднево</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.2719604&lon=38.34150765&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294711942&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/294711943">W:294711943</a></td>
+<td width="350px">&lt;&lt;RUSSIAN ORTHODOX CHURCH&gt;&gt;</td>
+<td></td>
+<td>18</td>
+<td>?</td>
+<td></td><td>wood</td><td></td>
+<td>Взгляднево</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.2705196&lon=38.3436684&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w294711943&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/312333731">W:312333731</a></td>
+<td width="350px">Церковь Покрова Пресвятой Богородицы Здание сильно разрушено, трапезная сломана</td>
+<td><a href="http://temples.ru/card.php?ID=4942" target="_blank">4942</a></td>
+<td>16</td>
+<td>?</td>
+<td></td><td></td><td>~baroque</td>
+<td>Заболотье</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.67229765&lon=38.0959022&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w312333731&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/312969574">W:312969574</a></td>
+<td width="350px">Часовня Луки Апостола</td>
+<td><a href="http://temples.ru/card.php?ID=11294" target="_blank">11294</a></td>
+<td>10</td>
+<td>?</td>
+<td>cream</td><td>plaster</td><td>pseudo-russian</td>
+<td>Скоморохово</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.98879415&lon=38.73311035&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w312969574&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/312983816">W:312983816</a></td>
+<td width="350px">Церковь Иконы Божией Матери Владимирская</td>
+<td><a href="http://temples.ru/card.php?ID=7936" target="_blank">7936</a></td>
+<td>21</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Маврино</td>
+<td>Щёлковский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.1378849&lon=38.36384625&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w312983816&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/313103431">W:313103431</a></td>
+<td width="350px">Церковь Иконы Божией Матери Тихвинская</td>
+<td><a href="http://temples.ru/card.php?ID=7921" target="_blank">7921</a></td>
+<td>22</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>neoclassicism</td>
+<td>Душоново</td>
+<td>Щёлковский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.0596604&lon=38.29719425&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w313103431&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/325810380">W:325810380</a></td>
+<td width="350px">Церковь Иконы Божией Матери Казанская</td>
+<td><a href="http://temples.ru/card.php?ID=4927" target="_blank">4927</a></td>
+<td>21</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Гагино</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3495799&lon=38.36681145&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w325810380&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/325810383">W:325810383</a></td>
+<td width="350px">Церковь Николая Чудотворца</td>
+<td><a href="http://temples.ru/card.php?ID=4934" target="_blank">4934</a></td>
+<td>26</td>
+<td>?</td>
+<td></td><td></td><td>~neoclassicism</td>
+<td>Дерюзино</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3054018&lon=38.26945765&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w325810383&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/325810384">W:325810384</a></td>
+<td width="350px">Церковь Николая Чудотворца</td>
+<td><a href="http://temples.ru/card.php?ID=4913" target="_blank">4913</a></td>
+<td>18</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Бужаниново</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3884126&lon=38.2952181&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w325810384&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/325810385">W:325810385</a></td>
+<td width="350px">Церковь Преображения Господня</td>
+<td><a href="http://temples.ru/card.php?ID=4986" target="_blank">4986</a></td>
+<td>19</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>neoclassicism</td>
+<td>Радонеж</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.20857875&lon=38.0392438&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w325810385&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/326305136">W:326305136</a></td>
+<td width="350px">Церковь Спаса Нерукотворного Образа</td>
+<td><a href="http://temples.ru/card.php?ID=4995" target="_blank">4995</a></td>
+<td>18</td>
+<td>?</td>
+<td>orange</td><td>plaster</td><td>eclectic</td>
+<td>Спас-Торбеево</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.18567345&lon=38.16792205&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w326305136&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/327327818">W:327327818</a></td>
+<td width="350px">Церковь Троицы Живоначальной</td>
+<td><a href="http://temples.ru/card.php?ID=8655" target="_blank">8655</a></td>
+<td>23</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Большая Брембола</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.74488355&lon=38.91342915&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w327327818&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/327339337">W:327339337</a></td>
+<td width="350px">Церковь Димитрия Солунского</td>
+<td><a href="http://temples.ru/card.php?ID=1280" target="_blank">1280</a></td>
+<td>23</td>
+<td>?</td>
+<td>gray</td><td>brick</td><td>~contemporary</td>
+<td>Бакшеево</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.44835625&lon=38.7024806&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w327339337&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/327339338">W:327339338</a></td>
+<td width="350px">Церковь Екатерины Великомученицы</td>
+<td><a href="http://temples.ru/card.php?ID=1325" target="_blank">1325</a></td>
+<td>14</td>
+<td>?</td>
+<td></td><td></td><td>~baroque</td>
+<td>Лукьянцево</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.5044385&lon=38.7117097&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w327339338&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/327339342">W:327339342</a></td>
+<td width="350px">Церковь Преображения Господня</td>
+<td><a href="http://temples.ru/card.php?ID=1361" target="_blank">1361</a></td>
+<td>28</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>eclectic</td>
+<td>Струнино</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.377227&lon=38.58555665&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w327339342&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/327339343">W:327339343</a></td>
+<td width="350px">Церковь Сергия Радонежского</td>
+<td><a href="http://temples.ru/card.php?ID=1330" target="_blank">1330</a></td>
+<td>16</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Махра</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.27022805&lon=38.68075775&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w327339343&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/327339344">W:327339344</a></td>
+<td width="350px">Церковь Стефана Махрищского</td>
+<td><a href="http://temples.ru/card.php?ID=1329" target="_blank">1329</a></td>
+<td>19</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Махра</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.27007975&lon=38.67933755&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w327339344&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/327339345">W:327339345</a></td>
+<td width="350px">Церковь Троицы Живоначальной</td>
+<td><a href="http://temples.ru/card.php?ID=1332" target="_blank">1332</a></td>
+<td>29</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Махра</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.26993235&lon=38.68174285&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w327339345&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/327877621">W:327877621</a></td>
+<td width="350px">Собор Благовещения Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=8471" target="_blank">8471</a></td>
+<td>25</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~old_russian</td>
+<td>Киржач</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.1619201&lon=38.86932785&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w327877621&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/327877622">W:327877622</a></td>
+<td width="350px">Церковь Всех Святых</td>
+<td><a href="http://temples.ru/card.php?ID=8474" target="_blank">8474</a></td>
+<td>26</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>eclectic</td>
+<td>Киржач</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.1617972&lon=38.87002755&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w327877622&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/327877623">W:327877623</a></td>
+<td width="350px">Церковь Происхождения Честных Древ Креста Господня</td>
+<td><a href="http://temples.ru/card.php?ID=8472" target="_blank">8472</a></td>
+<td>16</td>
+<td>?</td>
+<td>light_orange</td><td>plaster</td><td>~uzorochye</td>
+<td>Киржач</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.16205285&lon=38.8695206&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w327877623&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/327877624">W:327877624</a></td>
+<td width="350px">Часовня надкладезная</td>
+<td><a href="http://temples.ru/card.php?ID=8475" target="_blank">8475</a></td>
+<td>6</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>neoclassicism</td>
+<td>Киржач</td>
+<td>Киржачский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.16253915&lon=38.86891285&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w327877624&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/340734385">W:340734385</a></td>
+<td width="350px">Церковь Введения Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=4853" target="_blank">4853</a></td>
+<td>15</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~old_russian</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.30840955&lon=38.13281905&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w340734385&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/353756754">W:353756754</a></td>
+<td width="350px">Церковь Благовещения Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=4903" target="_blank">4903</a></td>
+<td>16</td>
+<td>?</td>
+<td></td><td>wood</td><td>~contemporary</td>
+<td>Благовещенье</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3233554&lon=38.0817203&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w353756754&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/355256139">W:355256139</a></td>
+<td width="350px">Церковь Николая Чудотворца</td>
+<td><a href="http://temples.ru/card.php?ID=4997" target="_blank">4997</a></td>
+<td>16</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>neoclassicism</td>
+<td>Малинники</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.29387075&lon=38.39994305&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w355256139&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/363733997">W:363733997</a></td>
+<td width="350px">часовня</td>
+<td></td>
+<td>10</td>
+<td>?</td>
+<td></td><td></td><td></td>
+<td>Романовское</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.29123895&lon=38.8611043&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w363733997&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/367109241">W:367109241</a></td>
+<td width="350px">Церковь Покрова Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=4970" target="_blank">4970</a></td>
+<td>14</td>
+<td>?</td>
+<td>peru</td><td>wood</td><td>~contemporary</td>
+<td>Никульское</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.360575&lon=38.3921428&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w367109241&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/367168144">W:367168144</a></td>
+<td width="350px">Церковь Рождества Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=9366" target="_blank">9366</a></td>
+<td>14</td>
+<td>?</td>
+<td></td><td></td><td>~baroque</td>
+<td>Гора Пневиц</td>
+<td>Калязинский р-н</td>
+<td>Тверская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.8010793&lon=38.17323065&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w367168144&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/367350229">W:367350229</a></td>
+<td width="350px">Церковь Преображения Господня</td>
+<td><a href="http://temples.ru/card.php?ID=4840" target="_blank">4840</a></td>
+<td>15</td>
+<td>?</td>
+<td>orangered</td><td>plaster</td><td>neoclassicism</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.28741455&lon=38.17748655&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w367350229&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/367350230">W:367350230</a></td>
+<td width="350px">Церковь Алексия, митрополита Московского</td>
+<td><a href="http://temples.ru/card.php?ID=5001" target="_blank">5001</a></td>
+<td>21</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Топорково</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3379233&lon=38.2103507&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w367350230&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/367350232">W:367350232</a></td>
+<td width="350px">Церковь Воскресения Словущего</td>
+<td><a href="http://temples.ru/card.php?ID=4945" target="_blank">4945</a></td>
+<td>14</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Захарьино</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3605486&lon=38.02536365&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w367350232&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/367350237">W:367350237</a></td>
+<td width="350px">Церковь Иконы Божией Матери Казанская крестильный храм внешне не выделен</td>
+<td><a href="http://temples.ru/card.php?ID=4861" target="_blank">4861</a></td>
+<td>17</td>
+<td>?</td>
+<td>red</td><td>plaster</td><td>~contemporary</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3072435&lon=38.1248047&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w367350237&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/367350241">W:367350241</a></td>
+<td width="350px">Церковь Михаила Архангела</td>
+<td><a href="http://temples.ru/card.php?ID=4871" target="_blank">4871</a></td>
+<td>20</td>
+<td>?</td>
+<td>red</td><td>brick</td><td>~pseudo-russian</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3101446&lon=38.14913795&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w367350241&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/367350244">W:367350244</a></td>
+<td width="350px">надвратная колокольня</td>
+<td><a href="http://temples.ru/card.php?ID=4839" target="_blank">4839</a></td>
+<td>9</td>
+<td>?</td>
+<td>orangered</td><td>plaster</td><td>pseudo-russian</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.2876253&lon=38.17718535&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w367350244&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/367874174">W:367874174</a></td>
+<td width="350px">Церковь Иконы Божией Матери Корсунская</td>
+<td><a href="http://temples.ru/card.php?ID=4930" target="_blank">4930</a></td>
+<td>18</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>neoclassicism</td>
+<td>Глинково</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.29710975&lon=38.1842445&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w367874174&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/370065111">W:370065111</a></td>
+<td width="350px">Церковь Успения Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=4655" target="_blank">4655</a></td>
+<td>24</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Сольба</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.9979254&lon=38.41647725&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w370065111&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/370075933">W:370075933</a></td>
+<td width="350px">Церковь Святого Духа Утешителя</td>
+<td><a href="http://temples.ru/card.php?ID=4979" target="_blank">4979</a></td>
+<td>16</td>
+<td>?</td>
+<td>yellow</td><td>plaster</td><td>~neoclassicism</td>
+<td>Смена</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3182218&lon=38.2371454&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w370075933&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/371132835">W:371132835</a></td>
+<td width="350px">Церковь Рождества Христова</td>
+<td><a href="http://temples.ru/card.php?ID=11053" target="_blank">11053</a></td>
+<td>22</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Гагаринская Новоселка</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.58975985&lon=38.59595295&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w371132835&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/372209437">W:372209437</a></td>
+<td width="350px">Церковь Рождества Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=4962" target="_blank">4962</a></td>
+<td>23</td>
+<td>?</td>
+<td></td><td>plaster</td><td>neoclassicism</td>
+<td>Махра</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.52125395&lon=38.1496696&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w372209437&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/373059963">W:373059963</a></td>
+<td width="350px">Церковь Покрова Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=11161" target="_blank">11161</a></td>
+<td>20</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Малая Брембола</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.74169545&lon=38.99494305&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w373059963&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/375720029">W:375720029</a></td>
+<td width="350px">Церковь Троицы Живоначальной</td>
+<td><a href="http://temples.ru/card.php?ID=9186" target="_blank">9186</a></td>
+<td>17</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Троицкое</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.88538595&lon=38.86790815&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w375720029&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/395444669">W:395444669</a></td>
+<td width="350px">Церковь Иконы Божией Матери Казанская</td>
+<td><a href="http://temples.ru/card.php?ID=5012" target="_blank">5012</a></td>
+<td>23</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>baroque</td>
+<td>Шеметово</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.5229695&lon=38.07427385&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w395444669&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/403330347">W:403330347</a></td>
+<td width="350px">Церковь Екатерины Великомученицы</td>
+<td><a href="http://temples.ru/card.php?ID=5017" target="_blank">5017</a></td>
+<td>17</td>
+<td>?</td>
+<td>red</td><td>brick</td><td>~neoclassicism</td>
+<td>Яковлево</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.34331295&lon=38.3743906&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w403330347&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/403337970">W:403337970</a></td>
+<td width="350px">Церковь Спаса Всемилостивого</td>
+<td><a href="http://temples.ru/card.php?ID=4926" target="_blank">4926</a></td>
+<td>15</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~baroque</td>
+<td>Гагино</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3493177&lon=38.36726845&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w403337970&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/414931432">W:414931432</a></td>
+<td width="350px">колокольня</td>
+<td></td>
+<td>10</td>
+<td>?</td>
+<td>red</td><td>plaster</td><td>pseudo-russian</td>
+<td>Смена</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3180425&lon=38.2367902&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w414931432&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/414936453">W:414936453</a></td>
+<td width="350px">&lt;&lt;RUSSIAN ORTHODOX CHURCH&gt;&gt;</td>
+<td></td>
+<td>20</td>
+<td>?</td>
+<td></td><td>wood</td><td></td>
+<td>Ляпино</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.2692734&lon=38.32096115&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w414936453&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/414937349">W:414937349</a></td>
+<td width="350px">&lt;&lt;CAMPANILE&gt;&gt;</td>
+<td></td>
+<td>5</td>
+<td>?</td>
+<td></td><td>wood</td><td></td>
+<td>Взгляднево</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.2687643&lon=38.3420611&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w414937349&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/422888864">W:422888864</a></td>
+<td width="350px">&lt;&lt;RUSSIAN ORTHODOX CHAPEL&gt;&gt;</td>
+<td></td>
+<td>5</td>
+<td>?</td>
+<td></td><td></td><td></td>
+<td>Антонка</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.640398&lon=38.42214015&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w422888864&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/425095583">W:425095583</a></td>
+<td width="350px">Церковь Успения Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=1316" target="_blank">1316</a></td>
+<td>8</td>
+<td>?</td>
+<td></td><td>wood</td><td>~contemporary</td>
+<td>Крутец</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.35981625&lon=38.7303687&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w425095583&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/431702338">W:431702338</a></td>
+<td width="350px">Часовня-купальня</td>
+<td></td>
+<td>3</td>
+<td>?</td>
+<td></td><td>wood</td><td></td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.30670855&lon=38.1775357&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w431702338&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/432982049">W:432982049</a></td>
+<td width="350px">Часовня св. Николая</td>
+<td><a href="http://temples.ru/card.php?ID=9472" target="_blank">9472</a></td>
+<td>9</td>
+<td>?</td>
+<td>red</td><td>brick</td><td>~contemporary</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.30732725&lon=38.1527249&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w432982049&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/433006511">W:433006511</a></td>
+<td width="350px">&lt;&lt;CHAPEL&gt;&gt;</td>
+<td></td>
+<td>2</td>
+<td>?</td>
+<td></td><td></td><td></td>
+<td>Борисоглебская Слобода</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.75089485&lon=38.85136955&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w433006511&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/438389144">W:438389144</a></td>
+<td width="350px">Церковь-часовня Усекновения Главы Иоанна Предтечи</td>
+<td><a href="http://temples.ru/card.php?ID=4119" target="_blank">4119</a></td>
+<td>7</td>
+<td>?</td>
+<td></td><td></td><td>~contemporary</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.28249905&lon=38.0831417&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w438389144&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/447098306">W:447098306</a></td>
+<td width="350px">Церковь Михаила Архангела</td>
+<td><a href="http://temples.ru/card.php?ID=5010" target="_blank">5010</a></td>
+<td>24</td>
+<td>?</td>
+<td>red</td><td>brick</td><td>eclectic</td>
+<td>Шарапово</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.25271205&lon=38.2531993&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w447098306&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/453538438">W:453538438</a></td>
+<td width="350px">Храм прп. Алексия Человека Божия</td>
+<td></td>
+<td>19</td>
+<td>?</td>
+<td></td><td></td><td></td>
+<td>Новоалексеевка</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.6121725&lon=38.6729439&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w453538438&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/497266713">W:497266713</a></td>
+<td width="350px">Церковь Рождества Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=1281" target="_blank">1281</a></td>
+<td>15</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Балакирево</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.5067185&lon=38.8365981&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w497266713&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/521162819">W:521162819</a></td>
+<td width="350px">Церковь Никона Радонежского</td>
+<td><a href="http://temples.ru/card.php?ID=4961" target="_blank">4961</a></td>
+<td>10</td>
+<td>?</td>
+<td></td><td>wood</td><td>~contemporary</td>
+<td>Марино</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3057906&lon=38.4077061&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w521162819&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/526938291">W:526938291</a></td>
+<td width="350px">Церковь Ксении Петербургской</td>
+<td><a href="http://temples.ru/card.php?ID=4654" target="_blank">4654</a></td>
+<td>27</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Сольба</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.9983402&lon=38.41619585&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w526938291&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/526938298">W:526938298</a></td>
+<td width="350px">Церковь Николая Чудотворца</td>
+<td><a href="http://temples.ru/card.php?ID=4653" target="_blank">4653</a></td>
+<td>27</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Сольба</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.9983961&lon=38.4147583&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w526938298&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/533945305">W:533945305</a></td>
+<td width="350px">Церковь Преображения Господня</td>
+<td><a href="http://temples.ru/card.php?ID=7103" target="_blank">7103</a></td>
+<td>31</td>
+<td>?</td>
+<td>red</td><td>plaster</td><td>~baroque</td>
+<td>Нагорье</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.91829555&lon=38.26190285&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w533945305&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/533945521">W:533945521</a></td>
+<td width="350px">Церковь иконы Божией Матери "Взыскание погибших"</td>
+<td></td>
+<td>13</td>
+<td>?</td>
+<td></td><td>wood</td><td></td>
+<td>Камышево</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.91056125&lon=38.3629846&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w533945521&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/way/555198500">W:555198500</a></td>
+<td width="350px">Часовня Пятницкого Колодца</td>
+<td><a href="http://temples.ru/card.php?ID=4855" target="_blank">4855</a></td>
+<td>8</td>
+<td>14.5</td>
+<td>white</td><td>plaster</td><td>baroque</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.30839745&lon=38.1336498&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w555198500&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/560953140">W:560953140</a></td>
+<td width="350px">Купель</td>
+<td></td>
+<td>5</td>
+<td>?</td>
+<td></td><td></td><td></td>
+<td>Радонеж</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.20695925&lon=38.0388363&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w560953140&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/561350494">W:561350494</a></td>
+<td width="350px">Часовня Димитрия Прилуцкого</td>
+<td><a href="http://temples.ru/card.php?ID=11051" target="_blank">11051</a></td>
+<td>8</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Веслево</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.73165805&lon=38.73073405&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w561350494&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/561632132">W:561632132</a></td>
+<td width="350px">Церковь Благовещения Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=5431" target="_blank">5431</a></td>
+<td>11</td>
+<td>?</td>
+<td>yellow</td><td>plaster</td><td>~baroque</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.7320859&lon=38.83736155&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w561632132&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/562956561">W:562956561</a></td>
+<td width="350px">Колокольня</td>
+<td><a href="http://temples.ru/card.php?ID=4942" target="_blank">4942</a></td>
+<td>7</td>
+<td>?</td>
+<td>red</td><td>brick</td><td>~neoclassicism</td>
+<td>Заболотье</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.6723909&lon=38.0952518&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w562956561&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/566870728">W:566870728</a></td>
+<td width="350px">Церковь Воскресения Словущего</td>
+<td><a href="http://temples.ru/card.php?ID=5007" target="_blank">5007</a></td>
+<td>23</td>
+<td>?</td>
+<td>gray</td><td>plaster</td><td>neoclassicism</td>
+<td>Хребтово</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.5907227&lon=38.27413975&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w566870728&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/571277625">W:571277625</a></td>
+<td width="350px">Церковь Иконы Божией Матери Тихвинская</td>
+<td><a href="http://temples.ru/card.php?ID=4924" target="_blank">4924</a></td>
+<td>25</td>
+<td>?</td>
+<td>bisque</td><td>plaster</td><td>neoclassicism</td>
+<td>Выпуково</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.48189075&lon=38.20490145&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w571277625&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/586059532">W:586059532</a></td>
+<td width="350px">&lt;&lt;CHAPEL&gt;&gt;</td>
+<td></td>
+<td>7</td>
+<td>?</td>
+<td></td><td></td><td></td>
+<td>Бакино</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3373134&lon=38.99930225&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w586059532&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/620682774">W:620682774</a></td>
+<td width="350px">&lt;&lt;CHURCH&gt;&gt;</td>
+<td></td>
+<td>14</td>
+<td>?</td>
+<td></td><td></td><td></td>
+<td>Симак</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.76384995&lon=38.7202077&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w620682774&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/way/693062932">W:693062932</a></td>
+<td width="350px">&lt;&lt;CHURCH&gt;&gt;</td>
+<td></td>
+<td>14</td>
+<td>?</td>
+<td></td><td></td><td></td>
+<td>Скоропусковский</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.36697345&lon=38.1439961&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=w693062932&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/relation/2772026">R:2772026</a></td>
+<td width="350px">Церковь Рождества Христова</td>
+<td><a href="http://temples.ru/card.php?ID=4951" target="_blank">4951</a></td>
+<td>20</td>
+<td>?</td>
+<td>red</td><td>plaster</td><td>~baroque</td>
+<td>Реммаш</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.45126295&lon=38.0993511&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r2772026&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/relation/2880779">R:2880779</a></td>
+<td width="350px">Церковь Собора Зосимовских Святых</td>
+<td><a href="http://temples.ru/card.php?ID=14416" target="_blank">14416</a></td>
+<td>11</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Конюхово</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.4613682&lon=38.4345079&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r2880779&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/relation/3554902">R:3554902</a></td>
+<td width="350px">Церковь Всех Святых, в Земле Российской Просиявших</td>
+<td><a href="http://temples.ru/card.php?ID=4890" target="_blank">4890</a></td>
+<td>16</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Краснозаводск</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.43700115&lon=38.25196885&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r3554902&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr>
+<td><a href="https://www.openstreetmap.org/relation/4436425">R:4436425</a></td>
+<td width="350px">Церковь Вознесения Господня</td>
+<td><a href="http://temples.ru/card.php?ID=1341" target="_blank">1341</a></td>
+<td>18</td>
+<td>?</td>
+<td>white</td><td>plaster</td><td>~neoclassicism</td>
+<td>Нововоскресенское</td>
+<td>Александровский р-н</td>
+<td>Владимирская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.2875659&lon=38.4680455&zoom=17">False</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r4436425&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/6637079">R:6637079</a></td>
+<td width="350px">Собор Успения Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=4827" target="_blank">4827</a></td>
+<td>35</td>
+<td>50</td>
+<td>white</td><td>plaster</td><td>~old_russian</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.31033575&lon=38.13060525&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r6637079&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/6642589">R:6642589</a></td>
+<td width="350px">Церковь Сергия Радонежского</td>
+<td><a href="http://temples.ru/card.php?ID=4829" target="_blank">4829</a></td>
+<td>42</td>
+<td>32</td>
+<td>motley</td><td>plaster</td><td>~uzorochye</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.30952225&lon=38.1306215&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r6642589&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/6648137">R:6648137</a></td>
+<td width="350px">Церковь Иконы Божией Матери Живоносный Источник</td>
+<td><a href="http://temples.ru/card.php?ID=4867" target="_blank">4867</a></td>
+<td>13</td>
+<td>16</td>
+<td>bisque</td><td>plaster</td><td>~contemporary</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.29943205&lon=38.1244625&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r6648137&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/6648138">R:6648138</a></td>
+<td width="350px">Церковь Успения Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=4866" target="_blank">4866</a></td>
+<td>27</td>
+<td>29</td>
+<td>bisque</td><td>plaster</td><td>baroque</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.29965305&lon=38.1247471&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r6648138&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/6650308">R:6650308</a></td>
+<td width="350px">Успенские ворота</td>
+<td></td>
+<td>15</td>
+<td>32</td>
+<td>white</td><td>plaster</td><td></td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.31020225&lon=38.1323316&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r6650308&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/7926015">R:7926015</a></td>
+<td width="350px">Церковь Сошествия Святого Духа</td>
+<td><a href="http://temples.ru/card.php?ID=4828" target="_blank">4828</a></td>
+<td>16</td>
+<td>32</td>
+<td>white</td><td>plaster</td><td>~old_russian</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3099232&lon=38.13018785&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r7926015&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/7932909">R:7932909</a></td>
+<td width="350px">Церковь Воскресения Словущего</td>
+<td><a href="http://temples.ru/card.php?ID=4858" target="_blank">4858</a></td>
+<td>17</td>
+<td>25</td>
+<td>cadetblue</td><td>plaster</td><td>~neoclassicism</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3154323&lon=38.13119825&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r7932909&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/7944700">R:7944700</a></td>
+<td width="350px">Церковь Параскевы (Пятницы) Великомученицы</td>
+<td><a href="http://temples.ru/card.php?ID=4854" target="_blank">4854</a></td>
+<td>17</td>
+<td>18.5</td>
+<td>white</td><td>plaster</td><td>~uzorochye</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.30862725&lon=38.1327861&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r7944700&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/7948571">R:7948571</a></td>
+<td width="350px">Собор Иконы Божией Матери Черниговская-Гефсиманская</td>
+<td><a href="http://temples.ru/card.php?ID=4849" target="_blank">4849</a></td>
+<td>28</td>
+<td>34</td>
+<td>red</td><td>brick</td><td>pseudo-russian</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3071288&lon=38.17890055&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r7948571&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/7974036">R:7974036</a></td>
+<td width="350px">Церковь Сошествия Святого Духа</td>
+<td><a href="http://temples.ru/card.php?ID=3438" target="_blank">3438</a></td>
+<td>32</td>
+<td>32</td>
+<td>white</td><td>plaster</td><td>neoclassicism</td>
+<td>Новое</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.60154575&lon=38.62979475&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r7974036&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/8635484">R:8635484</a></td>
+<td width="350px">Собор Троицы Живоначальной</td>
+<td><a href="http://temples.ru/card.php?ID=4826" target="_blank">4826</a></td>
+<td>16</td>
+<td>20</td>
+<td>white</td><td>plaster</td><td>~old_russian</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.30968785&lon=38.12946975&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r8635484&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/8635531">R:8635531</a></td>
+<td width="350px">Никоновский придел</td>
+<td></td>
+<td>12</td>
+<td>15</td>
+<td>white</td><td>plaster</td><td>~old_russian</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.30960255&lon=38.12954135&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r8635531&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/8649588">R:8649588</a></td>
+<td width="350px">Церковь Вознесения Господня</td>
+<td><a href="http://temples.ru/card.php?ID=4857" target="_blank">4857</a></td>
+<td>26</td>
+<td>26</td>
+<td>lightblue</td><td>plaster</td><td>baroque</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.30346715&lon=38.13112175&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r8649588&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/8753969">R:8753969</a></td>
+<td width="350px">Церковь Всех Святых</td>
+<td><a href="http://temples.ru/card.php?ID=4859" target="_blank">4859</a></td>
+<td>18</td>
+<td>22</td>
+<td>yellow</td><td>plaster</td><td>neoclassicism</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.32046545&lon=38.123091&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r8753969&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/8755333">R:8755333</a></td>
+<td width="350px">Спасо-Преображенский собор</td>
+<td><a href="http://temples.ru/card.php?ID=3437" target="_blank">3437</a></td>
+<td>18</td>
+<td>31.54</td>
+<td>white</td><td>plaster</td><td>~pre-mongolian</td>
+<td>Переславль-Залесский</td>
+<td>го Переславль-Залесский</td>
+<td>Ярославская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.73671795&lon=38.8520374&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r8755333&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/8769647">R:8769647</a></td>
+<td width="350px">Церковь Успения Пресвятой Богородицы</td>
+<td><a href="http://temples.ru/card.php?ID=4982" target="_blank">4982</a></td>
+<td>25</td>
+<td>25</td>
+<td>white</td><td>plaster</td><td>neoclassicism</td>
+<td>Подсосино</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.24967595&lon=38.197861&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r8769647&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/8775879">R:8775879</a></td>
+<td width="350px">Колокольня Черниговского скита</td>
+<td></td>
+<td>23</td>
+<td>75</td>
+<td>red</td><td>brick</td><td>pseudo-russian</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.30688105&lon=38.18003065&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r8775879&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/8787202">R:8787202</a></td>
+<td width="350px">Церковь Иконы Божией Матери Боголюбская</td>
+<td><a href="http://temples.ru/card.php?ID=4852" target="_blank">4852</a></td>
+<td>22</td>
+<td>27</td>
+<td>yellow</td><td>plaster</td><td>~neoclassicism</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.3073982&lon=38.1704187&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r8787202&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/8794693">R:8794693</a></td>
+<td width="350px">Церковь Лазаря Праведного оригинальная конструкция: звонницы в боковых куполах</td>
+<td><a href="http://temples.ru/card.php?ID=4905" target="_blank">4905</a></td>
+<td>14</td>
+<td>18</td>
+<td>orange</td><td>plaster</td><td>~contemporary</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.33440865&lon=38.0993541&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r8794693&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/8894529">R:8894529</a></td>
+<td width="350px">Красногорская часовня</td>
+<td><a href="http://temples.ru/card.php?ID=4874" target="_blank">4874</a></td>
+<td>7</td>
+<td>16</td>
+<td></td><td></td><td>baroque</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.31044405&lon=38.13389595&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r8894529&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/8894692">R:8894692</a></td>
+<td width="350px">Церковь Сергия Радонежского</td>
+<td><a href="http://temples.ru/card.php?ID=4120" target="_blank">4120</a></td>
+<td>15</td>
+<td>24</td>
+<td>white</td><td>plaster</td><td>~contemporary</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.28246975&lon=38.08371095&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r8894692&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/8906315">R:8906315</a></td>
+<td width="350px">Церковь Илии Пророка</td>
+<td><a href="http://temples.ru/card.php?ID=4860" target="_blank">4860</a></td>
+<td>26</td>
+<td>32</td>
+<td>red;white</td><td>plaster</td><td>baroque</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.30690225&lon=38.12501685&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r8906315&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/8906499">R:8906499</a></td>
+<td width="350px">Церковь Георгия Победоносца</td>
+<td><a href="http://temples.ru/card.php?ID=4881" target="_blank">4881</a></td>
+<td>17</td>
+<td>19</td>
+<td>red</td><td>plaster</td><td>~contemporary</td>
+<td>Сергиев Посад</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.28505145&lon=38.0602983&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r8906499&referrers=false" target = "josm" >J</a></td>
+</tr>
+<tr style="background: #DDFFCC" > 
+<td><a href="https://www.openstreetmap.org/relation/9226586">R:9226586</a></td>
+<td width="350px">Церковь Марии Магдалины</td>
+<td><a href="http://temples.ru/card.php?ID=4958" target="_blank">4958</a></td>
+<td>28</td>
+<td>24</td>
+<td>red</td><td>brick</td><td>~pseudo-russian</td>
+<td>Лоза</td>
+<td>Сергиево-Посадский р-н</td>
+<td>Московская обл</td>
+<td><a href="http://demo.f4map.com/#lat=56.2576892&lon=38.21574415&zoom=17">True</a></td>
+<td><a href="http://localhost:8111/load_object?objects=r9226586&referrers=false" target = "josm" >J</a></td>
+</tr>
+</table>
+<hr />
+Дата формирования страницы: 13.07.2019 17:13:32
+<div style="display: none;"><iframe name="josm"></iframe></div>
+</body>
+<html>
