@@ -5,3 +5,7 @@
 /Custom_models/*.obj
 Earth nav data/+56+038.dsf.mp.bak
 ~$osm-parser.xlsm
+
+/3dcheck/*.*
+/3dcheck/models/*.*
+3dcheck/index.html
