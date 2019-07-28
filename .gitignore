@@ -1,11 +1,11 @@
-/Earth nav data/*.dsf.txt.bak
-
-/Earth nav data/*.mp
 /Custom_models/*.blend1
 /Custom_models/*.obj
-Earth nav data/+56+038.dsf.mp.bak
+
 ~$osm-parser.xlsm
 
 /3dcheck/*.*
 /3dcheck/models/*.*
-3dcheck/index.html
+/3dcheck/index.html
+
+/osmupdate_temp
+/work_folder
