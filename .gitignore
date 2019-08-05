@@ -9,3 +9,5 @@
 
 /osmupdate_temp
 /work_folder
+/OsmParser/.idea/*.*
+/OsmParser/__pycache__/*.*
