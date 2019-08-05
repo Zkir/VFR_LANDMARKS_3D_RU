@@ -3,7 +3,7 @@ set WORK_FOLDER=d:\_VFR_LANDMARKS_3D_RU\work_folder
 
 rem SET QUADRANT=+56+038
 rem SET QUADRANT=+52+041
-SET QUADRANT=+56+038
+SET QUADRANT=+55+037
 
 set WORK_FOLDER=%WORK_FOLDER%\%QUADRANT%\osm_data
 
@@ -31,4 +31,3 @@ osmfilter %SOURCE_FILE% --keep="boundary=administrative"   >%WORK_FOLDER%\geocod
 
 call osmosis --rx %WORK_FOLDER%\churches.osm --rx %WORK_FOLDER%\towers.osm --rx %WORK_FOLDER%\water_tower.osm --rx %WORK_FOLDER%\walls.osm --rx %WORK_FOLDER%\walls2.osm --rx %WORK_FOLDER%\church_fences.osm --merge --merge --merge --merge --merge --wx %WORK_FOLDER%\objects-all.osm
 call osmosis --rx %WORK_FOLDER%\objects-all.osm --rx %WORK_FOLDER%\building_parts.osm  --merge --wx %WORK_FOLDER%\objects-with-parts.osm
-pause
