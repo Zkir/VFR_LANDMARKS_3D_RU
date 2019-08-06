@@ -16,7 +16,8 @@ class TSummaryRec:
 
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
-def GetSummary(Sheet1):
+
+def GetSummary(cells):
     summary = [] 
     sumrec= TSummaryRec()
     sumrec.DistrictName = ""
@@ -24,6 +25,30 @@ def GetSummary(Sheet1):
     sumrec.TotalObjects = 0
     sumrec.ObjectsWith3d= 0
     summary.append (sumrec) 
+    for i in range(len(cells)):
+        #find existing record
+        blnFound=False
+        for j in range(len(summary)):  
+            if summary[j].DistrictName == "" and summary[j].RegionName == cells[i][21] :
+                sumrec = summary[j]  
+                blnFound = True
+                break  
+        if not blnFound:
+            sumrec= TSummaryRec()
+            sumrec.DistrictName = ""
+            sumrec.RegionName= cells[i][21]
+            sumrec.TotalObjects = 0
+            sumrec.ObjectsWith3d = 0
+            summary.append (sumrec) 
+          
+        sumrec.TotalObjects=sumrec.TotalObjects+1
+        summary[0].TotalObjects=summary[0].TotalObjects+1
+
+        if cells[i][22] == "True": 
+            sumrec.ObjectsWith3D=sumrec.ObjectsWith3D+1
+            summary[0].ObjectsWith3D=summary[0].ObjectsWith3D+1
+
+
     return summary
 
 
@@ -45,7 +70,7 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
     dblPercentage = 0
     strQuadrantName = composeQuadrantName(dsfLat, dsfLon)
 
-    strInputFile="d:\_VFR_LANDMARKS_3D_RU\work_folder\+56+038\+56+038.dat"
+    strInputFile="d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\" + strQuadrantName +"\\" + strQuadrantName + ".dat"
     
     cells=[]  
     filehandle = open(strInputFile, 'r' )
@@ -59,7 +84,7 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
 
 
 
-    arrSummary = GetSummary(None)
+    arrSummary = GetSummary(cells)
 
     strHTMLPage = BUILD_PATH + '\\3dcheck\\' + strQuadrantName + '.html'
     fo=open(strHTMLPage, 'w', encoding="utf-8")
@@ -90,7 +115,7 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
             dblPercentage = 0
         fo.write( '<tr><td>' + IIf(arrSummary[i].RegionName != '', arrSummary[i].RegionName, '???') + '</td>'+ '\n')
         fo.write( '<td>' + arrSummary[i].DistrictName + '</td>'+ '\n')
-        fo.write( '<td>' + arrSummary[i].TotalObjects + '</td><td>' + arrSummary[i].ObjectsWith3D + '</td><td> ' + Int(dblPercentage) + ' </td></tr>'+ '\n')
+        fo.write( '<td>' + str(arrSummary[i].TotalObjects) + '</td><td>' + str(arrSummary[i].ObjectsWith3D) + '</td><td> ' + str(Round(dblPercentage)) + ' </td></tr>'+ '\n')
     if arrSummary[0].TotalObjects > 0:
         dblPercentage = arrSummary[0].ObjectsWith3D / arrSummary[0].TotalObjects * 100
     else:
@@ -120,7 +145,7 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
             if strTemplesID !="":
                 strTemplesUrl = "http://temples.ru/card.php?ID=" + strTemplesID
 
-            strJOSMurl = "http://localhost:8080/load_and_zoom?left="+ cells[i][4] + "&right="+ cells[i][6] + "&top="+ cells[i][5] +"&bottom="+ cells[i][3] #"&select=object"
+            strJOSMurl = "http://localhost:8111/load_and_zoom?left="+ cells[i][4] + "&right="+ cells[i][6] + "&top="+ cells[i][5] +"&bottom="+ cells[i][3] #"&select=object"
             strDescription = Trim(cells[i][7])
             if strDescription == '':
                 strDescription = '&lt;&lt;' + cells[i][10] + '&gt;&gt;'
@@ -146,16 +171,16 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
             #Size
             fo.write( '<td>' + IIf(cells[i][11] != 0, cells[i][11], '???') + '</td>'+ '\n')
             #height
-            fo.write( '<td>' + IIf(cells[i][12] != 0, cells[i][12], '?') + '</td>'+ '\n')
+            fo.write( '<td>' + IIf(cells[i][12] != "0", cells[i][12], '?') + '</td>'+ '\n')
             #Materials
             fo.write( '<td>' + cells[i][13] + '</td><td>' + cells[i][14] + '</td><td>' + cells[i][15] + '</td>'+ '\n')
             #Address: city-district-region
             fo.write( '<td>' + cells[i][20] + '</td>'+ '\n')
-            strDistrict = cells[i][21]
+            strDistrict = "" #cells[i][21]
             strDistrict = strDistrict.replace('район', 'р-н')
             strDistrict = strDistrict.replace('городской округ', 'го')
             fo.write('<td>' + strDistrict + '</td>'+ '\n')
-            fo.write('<td>' + cells[i][22].replace('область', 'обл') + '</td>'+ '\n')
+            fo.write('<td>' + cells[i][21].replace('область', 'обл') + '</td>'+ '\n')
             fo.write('<td><a href="' + strF4url + '">' + cells[i][22] + '</a></td>'+ '\n')
             fo.write('<td><a href="' + strJOSMurl + '" target = "josm" >' + 'J' + '</a></td>'+ '\n')
             fo.write('</tr>'+ '\n')
