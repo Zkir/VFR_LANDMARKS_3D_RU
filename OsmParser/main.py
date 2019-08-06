@@ -2,6 +2,7 @@
 from osmGeometry import *
 from mdlMisc import *
 from vbFunctions import *
+import time
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 
@@ -580,6 +581,7 @@ def DeleteUnnecessaryModels(Sheet1):
                     Kill(strOutputOsmFileName)
 
 def ProcessQuadrant(intLat, intLon):
+    t1=time.time()
     strQuadrantName = ""
 
     objOsmGeom = clsOsmGeometry()
@@ -589,7 +591,8 @@ def ProcessQuadrant(intLat, intLon):
     strWorkingFolder = BUILD_PATH + '\\work_folder\\' + strQuadrantName
 
     objOsmGeom = ReadOsmXml(strWorkingFolder + '\\osm_data\\objects-all.osm', strWorkingFolder + '\\osm_data\\objects-with-parts.osm', strWorkingFolder + '\\' + strQuadrantName + '.dat', strWorkingFolder + '\\osm_3dmodels')
-
+    t2=time.time()
+    print ("Quadrant " + strQuadrantName + " processed in "+str(t2-t1)+" seconds")
 
 def main():
 

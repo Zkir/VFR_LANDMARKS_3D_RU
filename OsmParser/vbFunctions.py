@@ -52,6 +52,11 @@ def IsNumeric(s):
 def Kill(s):
     remove(s)
 
+def IIf(a,b,c):
+    if a:
+        return b
+    else:
+        return c
 
 class RegExp:
     Pattern=""

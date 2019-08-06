@@ -2,7 +2,9 @@ from osmXMLparcer import *
 from osmGeometry import *
 from vbFunctions import *
 from mdlMisc import *
-from main import *
+from mdlSite import *
+import time
+
 
 #***********************************************************************************************************************
 # Main part
@@ -18,14 +20,17 @@ class clsOsmObject:
     NodeRefs = [] # array of nodes for ways
 
 
+CreateRegionSummaryPage(None, 56, 38)
+
 objXML = clsXMLparser()
 objOsmGeom = clsOsmGeometry()
 
 print ( Right("12345678",2))
 print(Sqr(4))
 print(GetColourName("#aaaaaa"))
-print(ParseHeightValue("41'"))
+#print(ParseHeightValue("41'"))
 
+t1=time.time()
 
 objXML.OpenFile("d:\_VFR_LANDMARKS_3D_RU\work_folder\+56+038\osm_data\objects-with-parts.osm")
 while not objXML.bEOF:
@@ -50,5 +55,6 @@ while not objXML.bEOF:
 
 
 objXML.CloseFile()
-
+t2=time.time()
+print ("Finished in "+str(t2-t1)+" seconds")
 print ("Done!")

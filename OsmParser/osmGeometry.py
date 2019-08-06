@@ -34,8 +34,10 @@ class clsOsmGeometry():
 
 
     def __init__(self):
-        self.nodes=[]
-        self.ways=[]
+        self.nodes = []
+        self.nodehash = {}
+        self.ways = []
+        self.wayhash = {}
         self.max_node = -1
         self.max_way = -1
 
@@ -46,20 +48,23 @@ class clsOsmGeometry():
         aNode.lat = float(lat)
         aNode.lon = float(lon)
         self.nodes.append(aNode)
+
         self.max_node = self.max_node + 1
+        self.nodehash[id]=self.max_node
 
     def FindNode(self, id):
-        i = 0
-
-        blnFound = False
-        for i in range(0, self.max_node+1):
-            if self.nodes[i].id == id:
-                fn_return_value = i
-                blnFound = True
-                break
-        if not blnFound:
-            fn_return_value = - 1
-        return fn_return_value
+        #i = 0
+        #blnFound = False
+        #for i in range(0, self.max_node+1):
+        #    if self.nodes[i].id == id:
+        #        fn_return_value = i
+        #        blnFound = True
+        #        break
+        #if not blnFound:
+        #    #print("node id " + id + "not found!") 
+        #    fn_return_value = - 1
+        #return fn_return_value
+        return self.nodehash.get(id,-1)
 
     def GetNodeID(self, intNodeNo):
         fn_return_value = self.nodes[intNodeNo].id
@@ -87,8 +92,8 @@ class clsOsmGeometry():
         self.ways.append(aWay)
         self.max_way = self.max_way + 1
         self.ways[self.max_way].id = id
+        self.wayhash[id] = self.max_way
         #save node refs
-        # VB2PY (CheckNeeded) Dim of dotted objects (NodeRefs) is experimental. Please check
         self.ways[self.max_way].NodeRefs = []
         for i in range(node_count):
             self.ways[self.max_way].NodeRefs.append( NodeRefs[i])
@@ -129,18 +134,17 @@ class clsOsmGeometry():
         return fn_return_value
 
     def FindWay(self, id):
-        i = 0
-
-        blnFound = False
-        blnFound = False
-        for i in range(self.max_way+1):
-            if self.ways[i].id == id:
-                fn_return_value = i
-                blnFound = True
-                break
-        if not blnFound:
-            fn_return_value = - 1
-        return fn_return_value
+        #i = 0
+        #blnFound = False
+        #for i in range(self.max_way+1):
+        #    if self.ways[i].id == id:
+        #        fn_return_value = i
+        #        blnFound = True
+        #        break
+        #if not blnFound:
+        #    fn_return_value = - 1
+        #return fn_return_value
+        return self.wayhash.get(id,-1)
 
     def GetWayID(self, intWayNo):
         fn_return_value = self.ways[intWayNo].id
@@ -297,4 +301,3 @@ class clsOsmGeometry():
             print('empty relation. Probably outer role is missing ')
         return fn_return_value
 
-    # VB2PY (UntranslatedCode) Option Explicit
