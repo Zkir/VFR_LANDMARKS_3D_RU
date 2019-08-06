@@ -1,6 +1,7 @@
 ﻿from osmXMLparcer import *
 from osmGeometry import *
 from mdlMisc import *
+from vbFunctions import *
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 
@@ -271,6 +272,10 @@ def ParseHeightValue(str):
         str = Left(str, Len(str) - 2)
     if str == 'high' or str == 'low':
         str = '0'
+    if Right(str,1) == "'":
+        str=Trim(Left(str, Len(str) - 1))
+        
+        str=float(str)*0.3048 
     if not IsNumeric(str):
         #print str
         str = '0'
@@ -589,8 +594,8 @@ def ProcessQuadrant(intLat, intLon):
 def main():
 
     #ProcessQuadrant(52, 41)
-    ProcessQuadrant( 56, 38)
-    #Call ProcessQuadrant(55, 37)
+    #ProcessQuadrant( 56, 38)
+    ProcessQuadrant(55, 37)
     print('Thats all, folks!')
 
 

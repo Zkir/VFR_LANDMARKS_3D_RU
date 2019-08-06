@@ -2,6 +2,7 @@ from osmXMLparcer import *
 from osmGeometry import *
 from vbFunctions import *
 from mdlMisc import *
+from main import *
 
 #***********************************************************************************************************************
 # Main part
@@ -23,6 +24,8 @@ objOsmGeom = clsOsmGeometry()
 print ( Right("12345678",2))
 print(Sqr(4))
 print(GetColourName("#aaaaaa"))
+print(ParseHeightValue("41'"))
+
 
 objXML.OpenFile("d:\_VFR_LANDMARKS_3D_RU\work_folder\+56+038\osm_data\objects-with-parts.osm")
 while not objXML.bEOF:

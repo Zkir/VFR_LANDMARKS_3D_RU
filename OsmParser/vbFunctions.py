@@ -24,6 +24,9 @@ def LCase(s):
 def Trim(s):
     return s.strip()
 
+def Len(s):
+    return len(s)
+
 
 def Sqr(x):
     return (x**0.5)

@@ -36,5 +36,6 @@ class clsXMLparser:
             i = txt.find ("\"")
             txt = txt[0:i]
             txt = txt.replace("&quot;", "\"")
+            txt = txt.replace("&apos;", "'")
             txt = txt.replace("&#34;", "\"")
         return(txt)
