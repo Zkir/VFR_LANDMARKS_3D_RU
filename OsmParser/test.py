@@ -2,6 +2,7 @@ from osmXMLparcer import *
 from osmGeometry import *
 from vbFunctions import *
 from mdlMisc import *
+import time
 
 #***********************************************************************************************************************
 # Main part
@@ -23,6 +24,7 @@ objOsmGeom = clsOsmGeometry()
 print ( Right("12345678",2))
 print(Sqr(4))
 print(GetColourName("#aaaaaa"))
+t1=time.time()
 
 objXML.OpenFile("d:\_VFR_LANDMARKS_3D_RU\work_folder\+56+038\osm_data\objects-with-parts.osm")
 while not objXML.bEOF:
@@ -47,5 +49,6 @@ while not objXML.bEOF:
 
 
 objXML.CloseFile()
-
+t2=time.time()
+print ("Finished in "+str(t2-t1)+" seconds")
 print ("Done!")
