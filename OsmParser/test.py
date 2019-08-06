@@ -2,6 +2,7 @@ from osmXMLparcer import *
 from osmGeometry import *
 from vbFunctions import *
 from mdlMisc import *
+from mdlSite import *
 import time
 
 #***********************************************************************************************************************
@@ -17,6 +18,8 @@ class clsOsmObject:
     tags = {} # osm tags
     NodeRefs = [] # array of nodes for ways
 
+
+CreateRegionSummaryPage(None, 56, 38)
 
 objXML = clsXMLparser()
 objOsmGeom = clsOsmGeometry()
