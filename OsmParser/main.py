@@ -33,6 +33,7 @@ class T3DObject:
         self.tagAddrStreet = ""
         self.tagAddrHouseNumber = ""
         self.tagAddrCity = ""
+        self.tagAddrDistrict = ""
         self.tagAddrRegion = ""
         self.material = ""
         self.colour = ""
@@ -115,6 +116,7 @@ def ReadOsmXml(strSrcOsmFile, strObjectsWithPartsFileName, strOutputFile, OSM_3D
             osmObject.tagAddrStreet = ''
             osmObject.tagAddrHouseNumber = ''
             osmObject.tagAddrCity = ''
+            osmObject.tagAddrDistrict= ''
             osmObject.tagAddrRegion = ''
             osmObject.tag_count = 0
         if strTag == 'node':
@@ -192,6 +194,8 @@ def ReadOsmXml(strSrcOsmFile, strObjectsWithPartsFileName, strOutputFile, OSM_3D
                 osmObject.tagAddrHouseNumber = strValue
             if StrKey == 'addr:city':
                 osmObject.tagAddrCity = strValue
+            if StrKey == 'addr:district':
+                osmObject.tagAddrDistrict = strValue
             if StrKey == 'addr:region':
                 osmObject.tagAddrRegion = strValue
             #ref_temples_ru
@@ -254,7 +258,7 @@ def ReadOsmXml(strSrcOsmFile, strObjectsWithPartsFileName, strOutputFile, OSM_3D
                     #fill report
                     strBuildingType = CalculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType, osmObject.tagAmenity, osmObject.tagDenomination, osmObject.tagBarrier, osmObject.size, osmObject.tagRuins)
                     j = j + 1
-                    fo.write( str(j) + '|' + osmObject.type + '|' + osmObject.id + '|' + str(osmObject.bbox.minLat) + '|' + str(osmObject.bbox.minLon) + '|' + str(osmObject.bbox.maxLat) + '|' + str(osmObject.bbox.maxLon) + '|' + osmObject.name + '|' + osmObject.descr + '|' + ref_temples_ru + '|' + strBuildingType + '|' + str(Round(osmObject.size)) + '|' + str(Round(osmObject.dblHeight)) + '|' + osmObject.colour + '|' + osmObject.material + '|' + GuessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate) + '|' + ParseStartDateValue(osmObject.tagStartDate) + '|' + osmObject.tagWikipedia + '|' + osmObject.tagAddrStreet + '|' + osmObject.tagAddrHouseNumber + '|' + osmObject.tagAddrCity + '|' + osmObject.tagAddrRegion + '|' + str(( osmObject.blnHasBuildingParts )  and  ( osmObject.dblHeight > 0 ))+ '\n')
+                    fo.write( str(j) + '|' + osmObject.type + '|' + osmObject.id + '|' + str(osmObject.bbox.minLat) + '|' + str(osmObject.bbox.minLon) + '|' + str(osmObject.bbox.maxLat) + '|' + str(osmObject.bbox.maxLon) + '|' + osmObject.name + '|' + osmObject.descr + '|' + ref_temples_ru + '|' + strBuildingType + '|' + str(Round(osmObject.size)) + '|' + str(Round(osmObject.dblHeight)) + '|' + osmObject.colour + '|' + osmObject.material + '|' + GuessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate) + '|' + ParseStartDateValue(osmObject.tagStartDate) + '|' + osmObject.tagWikipedia + '|' + osmObject.tagAddrStreet + '|' + osmObject.tagAddrHouseNumber + '|' + osmObject.tagAddrCity + '|' + osmObject.tagAddrDistrict + '|' + osmObject.tagAddrRegion + '|' + str(( osmObject.blnHasBuildingParts )  and  ( osmObject.dblHeight > 0 ))+ '\n')
                 else:
                     #print "Building part is skipped: " & osmObject.type & " " & osmObject.id
                     # print "not a building: " & osmObject.type & " " & osmObject.id
@@ -597,8 +601,8 @@ def ProcessQuadrant(intLat, intLon):
 def main():
 
     #ProcessQuadrant(52, 41)
-    #ProcessQuadrant( 56, 38)
-    ProcessQuadrant(55, 37)
+    ProcessQuadrant( 56, 38)
+    #ProcessQuadrant(55, 37)
     print('Thats all, folks!')
 
 
