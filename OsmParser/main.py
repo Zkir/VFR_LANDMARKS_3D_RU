@@ -44,7 +44,7 @@ class T3DObject:
         self.blnHasBuildingParts = False
 
 
-def ReadOsmXml(strSrcOsmFile, strObjectsWithPartsFileName, strOutputFile, OSM_3D_MODELS_PATH):
+def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strOutputFile, OSM_3D_MODELS_PATH):
     i = 0
     j = 0
     k = 0
@@ -72,7 +72,7 @@ def ReadOsmXml(strSrcOsmFile, strObjectsWithPartsFileName, strOutputFile, OSM_3D
     objOsmGeom = clsOsmGeometry()
     objXML = clsXMLparser()
 
-    fo=open(strOutputFile, 'w')
+    fo=open(strOutputFile, 'w', encoding="utf-8")
     objXML.OpenFile(strSrcOsmFile)
     intModelsCreated = 0
     while not objXML.bEOF:
@@ -265,7 +265,20 @@ def ReadOsmXml(strSrcOsmFile, strObjectsWithPartsFileName, strOutputFile, OSM_3D
                     pass
     objXML.CloseFile()
     print(str(j) + ' objects detected, ' + str(intModelsCreated) + ' 3d models created')
-    #print "that's all, folks"
+    
+    #miracle: update totals file
+    totals = loadDatFile("d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\Quadrants.dat")
+    #fiter by quadrant name
+    for i in range(len(totals)):
+        if totals[i][0] == strQuadrantName:
+           totals[i][2] = str(j)
+           totals[i][3] = str(intModelsCreated)
+           totals[i][4] = getTimeStamp()
+           break  
+
+    saveDatFile(totals,"d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\Quadrants.dat")
+ 
+
     fn_return_value = objOsmGeom
     fo.close()
     return fn_return_value
@@ -594,7 +607,7 @@ def ProcessQuadrant(intLat, intLon):
     strQuadrantName = composeQuadrantName(intLat, intLon)
     strWorkingFolder = BUILD_PATH + '\\work_folder\\' + strQuadrantName
 
-    objOsmGeom = ReadOsmXml(strWorkingFolder + '\\osm_data\\objects-all.osm', strWorkingFolder + '\\osm_data\\objects-with-parts.osm', strWorkingFolder + '\\' + strQuadrantName + '.dat', strWorkingFolder + '\\osm_3dmodels')
+    objOsmGeom = ReadOsmXml(strQuadrantName, strWorkingFolder + '\\osm_data\\objects-all.osm', strWorkingFolder + '\\osm_data\\objects-with-parts.osm', strWorkingFolder + '\\' + strQuadrantName + '.dat', strWorkingFolder + '\\osm_3dmodels')
     t2=time.time()
     print ("Quadrant " + strQuadrantName + " processed in "+str(t2-t1)+" seconds")
 

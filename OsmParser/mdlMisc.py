@@ -1,4 +1,7 @@
 from vbFunctions import *
+from datetime import datetime
+
+
 lstColorCodes=[
 ['aliceblue', '#F0F8FF'],
 ['antiquewhite', '#FAEBD7'],
@@ -214,19 +217,37 @@ def composeQuadrantName(dsfLat, dsfLon):
 
     return fn_return_value
 
-def RunBatchFile(strBatchFileName, strCurrentFolder):
-    strCommand = ""
 
-    lngErrorCode = 0
+def getTimeStamp():
+    dateTimeObj = datetime.now()
+    return str(dateTimeObj.year)+'.'+str(dateTimeObj.month).zfill(2)+'.'+str(dateTimeObj.day).zfill(2)+" "+str(dateTimeObj.hour).zfill(2) + ':'+ str(dateTimeObj.minute).zfill(2) + ':' + str(dateTimeObj.second).zfill(2)
 
-    wsh = WshShell()
-    wsh = WshShell()
-    #Run the batch file using the WshShell object
-    strCommand = Chr(34) + strBatchFileName + Chr(34)
-    wsh.CurrentDirectory = strCurrentFolder
-    lngErrorCode = wsh.Run(strCommand, WindowStyle= 1, WaitOnReturn= True)
-    if lngErrorCode != 0:
-        MsgBox('Uh oh! Something went wrong with the batch file!')
-        return
 
-# VB2PY (UntranslatedCode) Option Explicit
+#====================================================================================
+# home-brew relational DB interface
+# plain files pipe (|) separated
+#====================================================================================
+def loadDatFile(strInputFile):
+    cells=[]  
+    filehandle = open(strInputFile, 'r', encoding="utf-8")
+    txt = filehandle.readline().strip()
+    while len(txt) != 0:
+        row = txt.strip().split("|")
+        if len(row)>1:
+            cells.append(row)
+        txt = filehandle.readline()
+    # end of while
+    filehandle.close()
+    return cells
+
+def saveDatFile(cells,strOutputFile):
+
+    filehandle = open(strOutputFile, 'w', encoding="utf-8" )
+    for row in cells:
+        txt = "" 
+        for field in row: 
+            if txt!="":
+                txt = txt + "|"   
+            txt = txt + field
+        filehandle.write(txt+'\n') 
+    filehandle.close()   

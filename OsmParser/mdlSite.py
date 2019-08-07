@@ -1,6 +1,6 @@
 ﻿from vbFunctions import *
 from mdlMisc import *
-from datetime import datetime
+
 
 """****************************************************
  xls sheet is analysed and saved as html page
@@ -18,11 +18,12 @@ class TSummaryRec:
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 
-def getTimeStamp():
-    dateTimeObj = datetime.now()
-    return str(dateTimeObj.year)+'.'+str(dateTimeObj.month).zfill(2)+'.'+str(dateTimeObj.day).zfill(2)+" "+str(dateTimeObj.hour).zfill(2) + ':'+ str(dateTimeObj.minute).zfill(2) + ':' + str(dateTimeObj.second).zfill(2)
 
 
+
+#========================================================================
+#  Web Page for individual object, with 3d model
+#========================================================================
 def CreateObjectPage(cells, intObjectIndex):
     strHTMLPage = ""
     strOsmID = ""
@@ -169,6 +170,9 @@ def GetSummary(cells):
 
     return summary
 
+#========================================================================
+#  Web Page for Area(quadrant) summary
+#========================================================================
 
 def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
     strHTMLPage = ""
@@ -190,15 +194,8 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
 
     strInputFile="d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\" + strQuadrantName +"\\" + strQuadrantName + ".dat"
     
-    cells=[]  
-    filehandle = open(strInputFile, 'r' )
-    txt = filehandle.readline().strip()
-    while len(txt) != 0:
-        txt = filehandle.readline()
-        row = txt.strip().split("|")
-        if len(row)>1:
-            cells.append(row)
-    # end of while
+
+    cells = loadDatFile(strInputFile)
 
     #==========================================================================
     # create individual object pages
@@ -324,3 +321,52 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
     fo.write( '<html>' + '\n')
     fo.close()
 
+
+def CreateIndexPage():
+
+    strInputFile="d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\Quadrants.dat"
+    cells = loadDatFile(strInputFile)
+
+
+    strHTMLPage = BUILD_PATH + '\\3dcheck\\' + 'index' + '.html'
+    fo=open(strHTMLPage, 'w', encoding="utf-8")
+
+
+    fo.write( '<html>' + '\n')
+    fo.write( '<head>' + '\n')
+    fo.write( '  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'+ '\n')
+    fo.write( '  <title>Валидатор 3D: церкви и другие здания</title>' + '\n')
+    fo.write( '  <script src="/sorttable.js" type="Text/javascript"></script>' + '\n')
+    fo.write( '  <style>' + '\n')
+    fo.write( '    table {border: 1px solid grey;}' + '\n')
+    fo.write( '    th {border: 1px solid grey; }' + '\n')
+    fo.write( '    td {border: 1px solid grey; padding:5px}' + '\n')
+    fo.write( '  </style>' + '\n')
+    fo.write( '</head>' + '\n')
+    fo.write( '<body>' + '\n')
+    fo.write( '  <h1>Валидатор 3D: Церкви и другие здания</h1>' + '\n')
+    fo.write( '  <p>Данный валидатор проверяет <b>наличие</b> 3d-моделей для церквей и некоторых других исторических зданий.' + '\n')
+    fo.write( '     Почему церкви? Потому что это наиболее заметные объекты и для их моделирования есть фотографии на temples.ru.</p>' + '\n')
+    fo.write( '  <p>Данные нарезаются по квадратным градусам (этот валидатор таким родился)</p>' + '\n')
+    fo.write( '  <h2>Список квадратов</h2>' + '\n')
+    fo.write( '  <table class="sortable">' + '\n')
+    fo.write( '    <tr><th>Квадрат</th><th>Описание</th><th>Всего объектов</th><th>С 3D моделью</th><th>Дата последнего обновления</th></tr>' + '\n')
+    
+    for i in range(len(cells)):
+        fo.write( '    <tr><td>'+cells[i][0]+'</td><td><a href="'+cells[i][0]+'.html">'+ cells[i][1] +'</a> </td><td>'+cells[i][2]+'</td><td>' + cells[i][3]+ '</td><td>' + cells[i][4]+ '</td><tr>' + '\n')
+
+    fo.write( '  </table>' + '\n')
+    fo.write( '  <h2>Полезные ссылки</h2>' + '\n')
+    fo.write( '  <ul>' + '\n')
+    fo.write( '    <li><a href="https://www.openstreetmap.org/user/Zkir/diary/390256" >Задать вопросы по этому валидатору можно тут</a></li> ' + '\n')
+    fo.write( '    <li><a href="https://wiki.openstreetmap.org/wiki/Simple_3D_buildings" >Спецификация Simple Buildings, т.е. то, как рисовать 3D-здания в OSM</a></li>' + '\n')
+    fo.write( '    <li><a href="https://wiki.openstreetmap.org/wiki/User:Zkir">Дополнительные теги для церквей</a></li>' + '\n')
+    fo.write( '    <li><a href="https://demo.f4map.com/#lat=56.3099201&amp;lon=38.1301151&amp;zoom=18&amp;camera.theta=58.228&amp;camera.phi=-41.93">3D карта, ака F4map</a></li>' + '\n')
+    fo.write( '  </ul>' + '\n')
+    fo.write( '  <hr />' + '\n')
+    fo.write( '  <p>Дата формирования страницы: ' + getTimeStamp() + '</p>' + '\n')
+    fo.write( '  <div style="display: none;"><iframe name="josm"></iframe></div>' + '\n')
+    fo.write( '</body>' + '\n')
+    fo.write( '</html>' + '\n')
+
+    fo.close()

@@ -21,6 +21,7 @@ class clsOsmObject:
 
 
 CreateRegionSummaryPage(None, 56, 38)
+CreateIndexPage()
 
 objXML = clsXMLparser()
 objOsmGeom = clsOsmGeometry()
