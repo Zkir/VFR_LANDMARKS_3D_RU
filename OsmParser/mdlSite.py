@@ -24,7 +24,7 @@ BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 #========================================================================
 #  Web Page for individual object, with 3d model
 #========================================================================
-def CreateObjectPage(cells, intObjectIndex):
+def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
     strHTMLPage = ""
     strOsmID = ""
     strOSMurl = ""
@@ -123,7 +123,7 @@ def CreateObjectPage(cells, intObjectIndex):
     fo.write( '  <div class=\'page-footer\'>'+ '\n')
     fo.write( '  <div class=\'navigation\'>'+ '\n')
     fo.write( '<hr />'+ '\n')
-    fo.write( '  <a href=\'/\'>Главная страница</a> --> <a href=\'/' + "???" + '.html\'>' + "???" + '</a>'+ '\n')
+    fo.write( '  <a href=\'/\'>Главная страница</a> --> <a href=\'/' + strQuadrantName + '.html\'>' + strQuadrantName + '</a>'+ '\n')
     fo.write( '  </div>'+ '\n')
     #zero frame for josm links
     fo.write( '<div style="display: none;"><iframe name="josm"></iframe></div>'+ '\n')
@@ -202,7 +202,7 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
     #==========================================================================
 
     for i in range(len(cells)):
-        CreateObjectPage(cells, i)	
+        CreateObjectPage(strQuadrantName, cells, i)	
 
 
     #==========================================================================
