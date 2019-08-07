@@ -59,7 +59,8 @@ def CreateObjectPage(cells, intObjectIndex):
     fo.write( '<html>'+ '\n')
     fo.write( '<head>'+ '\n')
     fo.write( '  <title>' + cells[intObjectIndex][7] + '</title>'+ '\n')
-    fo.write( '  <meta encoding=\'windows-1251\' />'+ '\n')
+    #fo.write( '  <meta encoding=\'utf-8\' />'+ '\n')
+    fo.write( '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'+ '\n')
     #Print #4, "  <script src='http://x3dom.org/release/x3dom.js'></script>"
     #Print #4, "  <link rel='stylesheet' href='http://x3dom.org/release/x3dom.css' />"
     fo.write( '  <script src=\'/x3dom/x3dom.js\'></script>'+ '\n')
@@ -217,6 +218,9 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
     fo=open(strHTMLPage, 'w', encoding="utf-8")
     fo.write( '<html>'+ '\n')
     fo.write( '<head>'+ '\n')
+    #fo.write( '<meta charset=\'utf-8\' />'+ '\n')
+    fo.write( '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'+ '\n')
+
     fo.write( '<title>Валидатор 3D:' + strQuadrantName + '</title>'+ '\n')
     fo.write( '<script src="/sorttable.js" type="Text/javascript"></script>'+ '\n')
     fo.write( '<style>'+ '\n')
