@@ -6,6 +6,7 @@ rem SET BBOX=38,56,39,57
 SET QUADRANT=%1
 SET BBOX=%~2
 set WORK_FOLDER=%WORK_FOLDER%\%QUADRANT%\osm_data
+set PLANET= d:\_planet.osm\russia-latest.osm.pbf
 
 echo Quadrant: %QUADRANT%
 echo BBOX: %BBOX%
@@ -13,13 +14,15 @@ echo Working folder: %WORK_FOLDER%
 
 IF EXIST "%WORK_FOLDER%\%QUADRANT%_new.pbf" (
   del "%WORK_FOLDER%\%QUADRANT%.pbf"
-  ren "%WORK_FOLDER%\%QUADRANT%_new.pbf" "%QUADRANT%.pbf"
+  
 ) ELSE (
   echo %QUADRANT%_new.pbf is missing
   md "%WORK_FOLDER%"
-  goto end
+  osmconvert %PLANET% -b=%BBOX% -o="%WORK_FOLDER%\%QUADRANT%_new.pbf"
+  rem goto end
 )
 
+ren "%WORK_FOLDER%\%QUADRANT%_new.pbf" "%QUADRANT%.pbf"
 osmupd "%WORK_FOLDER%\%QUADRANT%.pbf" "%WORK_FOLDER%\%QUADRANT%_new.pbf" -b=%BBOX% -v --keep-tempfiles
 osmconvert "%WORK_FOLDER%\%QUADRANT%_new.pbf" -o="%WORK_FOLDER%\%QUADRANT%.o5m"
 

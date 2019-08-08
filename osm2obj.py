@@ -45,7 +45,10 @@ print(strMainTextureName)
 bpy.ops.object.select_all(action='SELECT')
 bpy.ops.object.delete(use_global=False)
 bpy.data.scenes["Scene"].blender_osm.osmSource = 'file'
+bpy.data.scenes["Scene"].blender_osm.highways = False
+bpy.data.scenes["Scene"].blender_osm.vegetation = False
 bpy.data.scenes["Scene"].blender_osm.osmFilepath = strInputFileName
+
 bpy.ops.blender_osm.import_data()
 
 #===============================================================

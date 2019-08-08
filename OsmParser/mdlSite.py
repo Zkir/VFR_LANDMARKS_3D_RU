@@ -80,7 +80,7 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
     fo.write( '  </div>'+ '\n')
     fo.write( '  <div class=\'page-content\'>'+ '\n')
     fo.write( '    <div class=\'scene\' style=\'height:510px; width:510px;float:left\'>'+ '\n')
-    if cells[i][13]:
+    if cells[i][23] == "True":
         fo.write( '      <div class=\'x3d-content\'>'+ '\n')
         fo.write( '        <x3d id=\'x3dElem\' x=\'0px\' y=\'0px\' width=\'500px\' height=\'500px\'>'+ '\n')
         fo.write( '          <scene>'+ '\n')
