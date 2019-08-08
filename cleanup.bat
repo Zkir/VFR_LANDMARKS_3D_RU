@@ -1,3 +1,4 @@
+@echo off
 del *.osm
 del *.blend
 del *.blend1

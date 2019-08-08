@@ -1,8 +1,11 @@
-﻿from osmXMLparcer import *
+﻿import time
+import subprocess
+
+from osmXMLparcer import *
 from osmGeometry import *
 from mdlMisc import *
 from vbFunctions import *
-import time
+
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 
@@ -217,15 +220,12 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
                     osmObject.colour = GetColourName(strValue)
             if StrKey == 'ruins':
                 osmObject.tagRuins = strValue
+
         if strTag == '/way':
-            if osmObject.id == "35211545":
-                print("35211545")
-
-
-
             intWayNo = objOsmGeom.AddWay(osmObject.id, osmObject.NodeRefs, osmObject.node_count)
             osmObject.bbox = objOsmGeom.GetWayBBox(intWayNo)
             osmObject.size = objOsmGeom.CalculateWaySize(intWayNo)
+
         if strTag == '/relation':
             if osmObject.id == "6642589":
                 print ("test")
@@ -598,18 +598,27 @@ def DeleteUnnecessaryModels(Sheet1):
                     Kill(strOutputOsmFileName)
 
 def ProcessQuadrant(intLat, intLon):
+
+
+
+
     t1=time.time()
     strQuadrantName = ""
-
-    objOsmGeom = clsOsmGeometry()
-
     strWorkingFolder = ""
     strQuadrantName = composeQuadrantName(intLat, intLon)
     strWorkingFolder = BUILD_PATH + '\\work_folder\\' + strQuadrantName
 
+    subprocess.call(BUILD_PATH + '\\cleanup.bat', cwd=strWorkingFolder + '\\osm_3dmodels')
+
     objOsmGeom = ReadOsmXml(strQuadrantName, strWorkingFolder + '\\osm_data\\objects-all.osm', strWorkingFolder + '\\osm_data\\objects-with-parts.osm', strWorkingFolder + '\\' + strQuadrantName + '.dat', strWorkingFolder + '\\osm_3dmodels')
     t2=time.time()
     print ("Quadrant " + strQuadrantName + " processed in "+str(t2-t1)+" seconds")
+
+    subprocess.call(BUILD_PATH + '\\convert-all-obj.bat', cwd=strWorkingFolder + '\\osm_3dmodels')
+    subprocess.call(BUILD_PATH + '\\convert-all-x3d.bat', cwd=strWorkingFolder + '\\osm_3dmodels')
+    subprocess.call(BUILD_PATH + '\\upload.bat', cwd=strWorkingFolder + '\\osm_3dmodels')
+    t3=time.time()
+    print ("Osm models converted to obj/x3d in " + str(t3-t2) +" seconds")
 
 def main():
 
