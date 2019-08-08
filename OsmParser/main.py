@@ -474,7 +474,7 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
     fo=open(strOutputOsmFileName, 'w',encoding="utf-8" )
     objXML.OpenFile(strObjectsWithPartsFileName)
     #Print #fo, "<?xml version='1.0' encoding='UTF-8'?>"
-    fo.write('<?xml version=\'1.0\' encoding=\'windows-1251\'?>' + '\n')
+    fo.write('<?xml version=\'1.0\' encoding=\'utf-8\'?>' + '\n')
     fo.write( '<osm version="0.6" generator="zkir manually">' + '\n')
     fo.write( '  <bounds minlat="' + str(object1.bbox.minLat) + '" minlon="' + str(object1.bbox.minLon) + '" maxlat="' + str(object1.bbox.maxLat) + '" maxlon="' + str(object1.bbox.maxLon) + '"/> ' + '\n')
     while not objXML.bEOF:
@@ -623,8 +623,9 @@ def ProcessQuadrant(intLat, intLon):
 def main():
 
     #ProcessQuadrant(52, 41)
-    ProcessQuadrant( 56, 38)
+    #ProcessQuadrant(56, 38)
     #ProcessQuadrant(55, 37)
+    ProcessQuadrant( 59, 30)
     print('Thats all, folks!')
 
 
