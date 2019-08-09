@@ -18,6 +18,7 @@ IF EXIST "%WORK_FOLDER%\%QUADRANT%_new.pbf" (
 ) ELSE (
   echo %QUADRANT%_new.pbf is missing
   md "%WORK_FOLDER%"
+  md "%WORK_FOLDER%/../osm_3dmodels"
   osmconvert %PLANET% -b=%BBOX% -o="%WORK_FOLDER%\%QUADRANT%_new.pbf"
   rem goto end
 )
