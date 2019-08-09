@@ -1,5 +1,6 @@
 ﻿import time
 import subprocess
+import sys
 
 from osmXMLparcer import *
 from osmGeometry import *
@@ -597,15 +598,12 @@ def DeleteUnnecessaryModels(Sheet1):
                 if Dir(strOutputOsmFileName) != '':
                     Kill(strOutputOsmFileName)
 
-def ProcessQuadrant(intLat, intLon):
-
-
-
+def ProcessQuadrant(strQuadrantName):
+    print("processing quadrant: "+ strQuadrantName)
 
     t1=time.time()
-    strQuadrantName = ""
     strWorkingFolder = ""
-    strQuadrantName = composeQuadrantName(intLat, intLon)
+
     strWorkingFolder = BUILD_PATH + '\\work_folder\\' + strQuadrantName
 
     subprocess.call(BUILD_PATH + '\\cleanup.bat', cwd=strWorkingFolder + '\\osm_3dmodels')
@@ -621,11 +619,14 @@ def ProcessQuadrant(intLat, intLon):
     print ("Osm models converted to obj/x3d in " + str(t3-t2) +" seconds")
 
 def main():
+    
+    if len(sys.argv)>1:
+        strQuadrantName = sys.argv[1]
+    else:
+        strQuadrantName = composeQuadrantName(56, 38)
 
-    #ProcessQuadrant(52, 41)
-    #ProcessQuadrant(56, 38)
-    #ProcessQuadrant(55, 37)
-    ProcessQuadrant( 59, 30)
+
+    ProcessQuadrant(strQuadrantName)
     print('Thats all, folks!')
 
 
