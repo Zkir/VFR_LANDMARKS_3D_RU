@@ -56,6 +56,11 @@ zakomarRoof = (
         (1.0000, 0.000)
 )
 
+crossGabledRoof = (
+        (0.0000, 0.000),
+        (0.5000, 1.000),
+        (1.0000, 0.000)
+)
 
 
 class RoofZakomar(Roof):
@@ -68,7 +73,21 @@ class RoofZakomar(Roof):
 
     """
     
-    defaultHeight = 4.
+    defaultHeight = 4.0
+    def __init__(self, strRoofType):
+
+        super().__init__()
+        self.roofType=strRoofType 
+ 
+        if strRoofType=="zakomar":        
+            self.roof_profile = zakomarRoof 
+
+        elif strRoofType=="cross_gabled":
+            self.roof_profile=crossGabledRoof
+
+        else:
+            raise Exception("unknown roof profile: " + strRoofType)
+
     def make(self, osm):
 
         # Maybe it's not exactly the way vvoovv expected it to be, but we will do it this way:
@@ -102,7 +121,7 @@ class RoofZakomar(Roof):
             print("bbox will be used for zakomar roof")  
             print("Not supported yet") 
                     
-        roof_profile=zakomarRoof
+        roof_profile=self.roof_profile #zakomarRoof
         rows=len(roof_profile)
         #z coordinates. we will use the following model 
         z0 = verts[0][2]  # bottom of the building part. Should be zero if building stands on the ground.  self.z1 ???
