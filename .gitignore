@@ -4,8 +4,9 @@
 ~$osm-parser.xlsm
 
 /3dcheck/*.*
-/3dcheck/models/*.*
 /3dcheck/index.html
+/3dcheck/models/*.*
+/3dcheck/data/*.dat
 
 /osmupdate_temp
 /work_folder

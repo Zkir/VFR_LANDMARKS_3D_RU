@@ -8,4 +8,7 @@ OsmParser\main.py %QUADRANT%
 echo main.py finished
 
 OsmParser\test.py %QUADRANT%
+
+call upload %QUADRANT%
+
 echo all done

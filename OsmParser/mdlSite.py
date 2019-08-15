@@ -54,7 +54,7 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
     if Trim(cells[intObjectIndex][17]) != '':
         strWikipediaLink = 'http://ru.wikipedia.org/wiki/' + cells[intObjectIndex][17]
 
-    strHTMLPage = BUILD_PATH + '\\3dcheck\\models\\' + strOsmID + '.html'
+    strHTMLPage = BUILD_PATH + '\\work_folder\\'+ strQuadrantName +'\\osm_3dmodels\\' + strOsmID + '.html'
     fo=open(strHTMLPage, 'w', encoding="utf-8") 
     fo.write( '<!doctype html>'+ '\n')
     fo.write( '<html>'+ '\n')
@@ -202,7 +202,8 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
     #==========================================================================
 
     for i in range(len(cells)):
-        CreateObjectPage(strQuadrantName, cells, i)	
+        if cells[i][23] == "True":
+            CreateObjectPage(strQuadrantName, cells, i)	
 
 
     #==========================================================================
