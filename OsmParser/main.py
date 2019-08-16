@@ -6,7 +6,7 @@ from osmXMLparcer import *
 from osmGeometry import *
 from mdlMisc import *
 from vbFunctions import *
-
+from mdlSite import *
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 
@@ -618,13 +618,23 @@ def ProcessQuadrant(strQuadrantName):
     t3=time.time()
     print ("Osm models converted to obj/x3d in " + str(t3-t2) +" seconds")
 
+
+    lat=int(strQuadrantName[1:3])
+    lon=int(strQuadrantName[4:7])
+
+    CreateRegionSummaryPage(None, lat, lon)
+    CreateIndexPage()
+    t4=time.time()
+    print ("Summary pages created " + str(t4-t3) +" seconds")
+    print ("Quadrant done")
+
+
 def main():
     
     if len(sys.argv)>1:
         strQuadrantName = sys.argv[1]
     else:
-        strQuadrantName = composeQuadrantName(56, 38)
-
+        strQuadrantName = composeQuadrantName(52, 41)
 
     ProcessQuadrant(strQuadrantName)
     print('Thats all, folks!')
