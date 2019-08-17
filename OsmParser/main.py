@@ -366,8 +366,12 @@ def ParseStartDateValue(strDate):
                     else:
                         strResult = Left(strDate, 3) + '5'
                 else:
-                    print('unparsed start_date value: ' + strDate)
-                    strResult = strDate
+                    myRegExp.Pattern = '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
+                    if myRegExp.Test(strDate):
+                        strResult = Left(strDate, 4)
+                    else:
+                        print('unparsed start_date value: ' + strDate)
+                        strResult = strDate
     fn_return_value = strResult
     return fn_return_value
 
