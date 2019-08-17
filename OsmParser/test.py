@@ -6,8 +6,9 @@ import time
 import sys
 import subprocess
 
+
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
-CYCLE=24*60*60
+CYCLE=24*60*60*3
 
 def sortRecordset(cells, sort_field):
     cells.sort(key=lambda row: row[sort_field])
@@ -26,12 +27,17 @@ sortRecordset(cells, 4)
 curtime=time.time()
 
 for row in cells:
-   time_diff= curtime-time.mktime(time.strptime(row[4],"%Y.%m.%d %H:%M:%S"))
-   time_diff=int(time_diff)
-   if time_diff>CYCLE:
+   if row[4].strip()!="":
+       time_diff= curtime-time.mktime(time.strptime(row[4],"%Y.%m.%d %H:%M:%S"))
+       time_diff=int(time_diff)
+       if time_diff>CYCLE:
+           past_due=True
+       else: 
+           past_due=False
+   else:
        past_due=True
-   else: 
-       past_due=False
+       time_diff=CYCLE
+
 
    print(row[0]+" " +row[4] + " " + str(time_diff) + " " + str(past_due) )
    
@@ -45,6 +51,6 @@ for row in cells:
  
        strCommand='process.bat ' + strQuadrantName +' "'+lon1+','+lat1+','+lon2+','+lat2+'"'
        print(strCommand)
-       subprocess.call(BUILD_PATH + '\\'+strCommand, cwd=BUILD_PATH)   
+       #subprocess.call(BUILD_PATH + '\\'+strCommand, cwd=BUILD_PATH)   
 
 print ("Done!")

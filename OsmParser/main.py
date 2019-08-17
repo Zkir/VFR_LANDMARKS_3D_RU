@@ -123,6 +123,9 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
             osmObject.tagAddrDistrict= ''
             osmObject.tagAddrRegion = ''
             osmObject.tag_count = 0
+
+            blnObjectIncomplete= False
+
         if strTag == 'node':
             objOsmGeom.AddNode(osmObject.id, objXML.GetAttribute('lat'), objXML.GetAttribute('lon'))
         #references to nodes in ways. we need to find coordinates
@@ -130,16 +133,18 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
             node_id = objXML.GetAttribute('ref')
             intNodeNo = objOsmGeom.FindNode(node_id)
             if intNodeNo == - 1:
-                Err.Raise(vbObjectError, 'FindNode', 'node not found! ' + node_id)
-            osmObject.NodeRefs.append( intNodeNo)
-            osmObject.node_count = osmObject.node_count + 1
+                #raise Exception('FindNode', 'node not found! ' + node_id)
+                blnObjectIncomplete=True  
+            else: 
+                osmObject.NodeRefs.append( intNodeNo)
+                osmObject.node_count = osmObject.node_count + 1
         #references to ways in relations. we need find coordinates
         if strTag == 'member':
             if objXML.GetAttribute('type') == 'way':
                 way_id = objXML.GetAttribute('ref')
                 intWayNo = objOsmGeom.FindWay(way_id)
                 if intWayNo == - 1:
-                    Err.Raise(vbObjectError, 'FindWay', 'way not found! ' + way_id)
+                    raise Exception('FindWay', 'way not found! ' + way_id)
                 waybbox = objOsmGeom.GetWayBBox(intWayNo)
                 osmObject.WayRefs.append([intWayNo, objXML.GetAttribute('role')])
                 if osmObject.way_count == 0:
@@ -228,42 +233,45 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
             osmObject.size = objOsmGeom.CalculateWaySize(intWayNo)
 
         if strTag == '/relation':
-            if osmObject.id == "6642589":
-                print ("test")
+           
 
             osmObject.size = 0
             osmObject.size = objOsmGeom.CalculateRelationSize(osmObject.WayRefs, osmObject.way_count)
             #print osmObject.size
         #Closing node
         if strTag == '/node' or strTag == '/way' or strTag == '/relation':
-            if osmObject.id == '7464383':
-                print('!!!')
+
             if not blnBuilding:
                 # fences are not buildings
                 blnFence = ( osmObject.tagBarrier == 'fence' )  or  ( osmObject.tagBarrier == 'wall' )
                 #If blnFence Then
                 #  print "barrier=fence"
                 #End If
-            if  ( osmObject.type != 'node' ) :
-                if blnBuilding or blnFence:
-                    # Rewrite osmObject as osm file!
-                    if not blnFence:
-                        heightbyparts = RewriteOsmFile(osmObject, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH)
-                        osmObject.blnHasBuildingParts = ( heightbyparts > 0 )
-                        #DoEvents()
-                        if heightbyparts > osmObject.dblHeight:
-                            osmObject.dblHeight = heightbyparts
-                        if osmObject.blnHasBuildingParts and  ( osmObject.dblHeight > 0 ) :
-                            intModelsCreated = intModelsCreated + 1
-                            print('3d model created ' + osmObject.name + ' ' + osmObject.descr)
-                    #fill report
-                    strBuildingType = CalculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType, osmObject.tagAmenity, osmObject.tagDenomination, osmObject.tagBarrier, osmObject.size, osmObject.tagRuins)
-                    j = j + 1
-                    fo.write( str(j) + '|' + osmObject.type + '|' + osmObject.id + '|' + str(osmObject.bbox.minLat) + '|' + str(osmObject.bbox.minLon) + '|' + str(osmObject.bbox.maxLat) + '|' + str(osmObject.bbox.maxLon) + '|' + osmObject.name + '|' + osmObject.descr + '|' + ref_temples_ru + '|' + strBuildingType + '|' + str(Round(osmObject.size)) + '|' + str(Round(osmObject.dblHeight)) + '|' + osmObject.colour + '|' + osmObject.material + '|' + GuessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate) + '|' + ParseStartDateValue(osmObject.tagStartDate) + '|' + osmObject.tagWikipedia + '|' + osmObject.tagAddrStreet + '|' + osmObject.tagAddrHouseNumber + '|' + osmObject.tagAddrCity + '|' + osmObject.tagAddrDistrict + '|' + osmObject.tagAddrRegion + '|' + str(( osmObject.blnHasBuildingParts )  and  ( osmObject.dblHeight > 0 ))+ '\n')
-                else:
-                    #print "Building part is skipped: " & osmObject.type & " " & osmObject.id
-                    # print "not a building: " & osmObject.type & " " & osmObject.id
-                    pass
+            if  blnObjectIncomplete != True:   
+             
+                if  ( osmObject.type != 'node' ) :
+                    if blnBuilding or blnFence:
+                        # Rewrite osmObject as osm file!
+                        if not blnFence:
+                            heightbyparts = RewriteOsmFile(osmObject, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH)
+                            osmObject.blnHasBuildingParts = ( heightbyparts > 0 )
+                 
+                            if heightbyparts > osmObject.dblHeight:
+                                osmObject.dblHeight = heightbyparts
+                            if osmObject.blnHasBuildingParts and  ( osmObject.dblHeight > 0 ) :
+                                intModelsCreated = intModelsCreated + 1
+                                print('3d model created ' + osmObject.name + ' ' + osmObject.descr)
+                        #fill report
+                        strBuildingType = CalculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType, osmObject.tagAmenity, osmObject.tagDenomination, osmObject.tagBarrier, osmObject.size, osmObject.tagRuins)
+                        j = j + 1
+                        fo.write( str(j) + '|' + osmObject.type + '|' + osmObject.id + '|' + str(osmObject.bbox.minLat) + '|' + str(osmObject.bbox.minLon) + '|' + str(osmObject.bbox.maxLat) + '|' + str(osmObject.bbox.maxLon) + '|' + osmObject.name + '|' + osmObject.descr + '|' + ref_temples_ru + '|' + strBuildingType + '|' + str(Round(osmObject.size)) + '|' + str(Round(osmObject.dblHeight)) + '|' + osmObject.colour + '|' + osmObject.material + '|' + GuessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate) + '|' + ParseStartDateValue(osmObject.tagStartDate) + '|' + osmObject.tagWikipedia + '|' + osmObject.tagAddrStreet + '|' + osmObject.tagAddrHouseNumber + '|' + osmObject.tagAddrCity + '|' + osmObject.tagAddrDistrict + '|' + osmObject.tagAddrRegion + '|' + str(( osmObject.blnHasBuildingParts )  and  ( osmObject.dblHeight > 0 ))+ '\n')
+                    else:
+                        #print "Building part is skipped: " & osmObject.type & " " & osmObject.id
+                        # print "not a building: " & osmObject.type & " " & osmObject.id
+                        pass
+            else:
+                print('Object is incomplete ' + osmObject.type +' ' +  osmObject.id) 
+
     objXML.CloseFile()
     print(str(j) + ' objects detected, ' + str(intModelsCreated) + ' 3d models created')
     
@@ -634,7 +642,7 @@ def main():
     if len(sys.argv)>1:
         strQuadrantName = sys.argv[1]
     else:
-        strQuadrantName = composeQuadrantName(52, 41)
+        strQuadrantName = composeQuadrantName(52, 13)
 
     ProcessQuadrant(strQuadrantName)
     print('Thats all, folks!')
