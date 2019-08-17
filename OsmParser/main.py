@@ -555,8 +555,7 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
                 for i in range(node_count):
                     fo.write( '  <nd ref="' + objOsmGeom.GetNodeID(NodeRefs[i]) + '" />' + '\n')
                 for tag in osmtags:
-                    if tag[0] != 'name':
-                        fo.write( '  <tag k="' + tag[0]+ '" v="' + tag[1] + '" />' + '\n')
+                    fo.write( '  <tag k="' + tag[0]+ '" v="' + tag[1] + '" />' + '\n')
                 fo.write( '</way>' + '\n')
                 if obj_is_building_part:
                     blnHasBuildingParts = True
@@ -568,8 +567,7 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
                 for way in WayRefs:
                     fo.write( '    <member type="way" ref="' + objOsmGeom.GetWayID( way[0]) + '" role="' + way[1] + '"  />' + '\n')
                 for tag  in osmtags:
-                    if tag[0] != 'name':
-                        fo.write( '  <tag k="' + tag[0] + '" v="' + tag[1] + '" />' + '\n')
+                    fo.write( '  <tag k="' + tag[0] + '" v="' + tag[1] + '" />' + '\n')
                 fo.write( '</relation>' + '\n')
                 if obj_is_building_part:
                     blnHasBuildingParts = True
