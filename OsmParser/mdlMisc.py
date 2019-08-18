@@ -222,6 +222,10 @@ def getTimeStamp():
     dateTimeObj = datetime.now()
     return str(dateTimeObj.year)+'.'+str(dateTimeObj.month).zfill(2)+'.'+str(dateTimeObj.day).zfill(2)+" "+str(dateTimeObj.hour).zfill(2) + ':'+ str(dateTimeObj.minute).zfill(2) + ':' + str(dateTimeObj.second).zfill(2)
 
+def safeString(s):
+    s=s.replace("\xab","\"") 
+    s=s.replace("\xbb","\"")
+    return s 
 
 #====================================================================================
 # home-brew relational DB interface

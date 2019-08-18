@@ -125,6 +125,7 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
             osmObject.tag_count = 0
 
             blnObjectIncomplete= False
+            blnRelationBuilding=False
 
         if strTag == 'node':
             objOsmGeom.AddNode(osmObject.id, objXML.GetAttribute('lat'), objXML.GetAttribute('lon'))
@@ -226,6 +227,8 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
                     osmObject.colour = GetColourName(strValue)
             if StrKey == 'ruins':
                 osmObject.tagRuins = strValue
+            if (StrKey == 'type') and (strValue== 'building'):
+                blnRelationBuilding=True        
 
         if strTag == '/way':
             intWayNo = objOsmGeom.AddWay(osmObject.id, osmObject.NodeRefs, osmObject.node_count)
@@ -233,7 +236,9 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
             osmObject.size = objOsmGeom.CalculateWaySize(intWayNo)
 
         if strTag == '/relation':
-           
+            # Relation building is not really a building, it's just a group of building parts.
+            if blnRelationBuilding:
+                blnBuilding=False
 
             osmObject.size = 0
             osmObject.size = objOsmGeom.CalculateRelationSize(osmObject.WayRefs, osmObject.way_count)
@@ -260,7 +265,7 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
                                 osmObject.dblHeight = heightbyparts
                             if osmObject.blnHasBuildingParts and  ( osmObject.dblHeight > 0 ) :
                                 intModelsCreated = intModelsCreated + 1
-                                print('3d model created ' + osmObject.name + ' ' + osmObject.descr)
+                                print('3d model created ' + Left(osmObject.type, 1) + ':' + osmObject.id +' ' + safeString(osmObject.name) + ' ' + safeString(osmObject.descr))
                         #fill report
                         strBuildingType = CalculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType, osmObject.tagAmenity, osmObject.tagDenomination, osmObject.tagBarrier, osmObject.size, osmObject.tagRuins)
                         j = j + 1
@@ -453,6 +458,11 @@ def CalculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
     fn_return_value = Trim(strResult)
     return fn_return_value
 
+def encodeXmlString(txt):
+    txt = txt.replace("\"","&quot;" )
+    txt = txt.replace("'","&apos;")
+    return(txt) 
+
 def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
     i = 0
 
@@ -567,13 +577,13 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
                 for i in range(node_count):
                     fo.write( '  <nd ref="' + objOsmGeom.GetNodeID(NodeRefs[i]) + '" />' + '\n')
                 for tag in osmtags:
-                    fo.write( '  <tag k="' + tag[0]+ '" v="' + tag[1] + '" />' + '\n')
+                    fo.write( '  <tag k="' + tag[0]+ '" v="' + encodeXmlString(tag[1]) + '" />' + '\n')
                 fo.write( '</way>' + '\n')
                 if obj_is_building_part:
                     blnHasBuildingParts = True
                     numberofparts = numberofparts + 1
                     if obj_height == 0:
-                        obj_height= int(obj_levels) * 3   
+                        obj_height= float(obj_levels) * 3   
                     if obj_height == 0:
                         print("Error: building part has zero heigh. W:" + str(obj_id) )
                     if obj_height > height:
@@ -584,13 +594,13 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
                 for way in WayRefs:
                     fo.write( '    <member type="way" ref="' + objOsmGeom.GetWayID( way[0]) + '" role="' + way[1] + '"  />' + '\n')
                 for tag  in osmtags:
-                    fo.write( '  <tag k="' + tag[0] + '" v="' + tag[1] + '" />' + '\n')
+                    fo.write( '  <tag k="' + tag[0] + '" v="' + encodeXmlString(tag[1]) + '" />' + '\n')
                 fo.write( '</relation>' + '\n')
                 if obj_is_building_part:
                     blnHasBuildingParts = True
                     numberofparts = numberofparts + 1 
                     if obj_height == 0:
-                        obj_height= int(obj_levels) * 3   
+                        obj_height= float(obj_levels) * 3   
                     if obj_height == 0:
                         print("Error: building part has zero heigh. R:" + str(obj_id) )
                     if obj_height > height:
@@ -666,7 +676,7 @@ def main():
     if len(sys.argv)>1:
         strQuadrantName = sys.argv[1]
     else:
-        strQuadrantName = composeQuadrantName(56, 38)
+        strQuadrantName = composeQuadrantName(52, 41)
 
     ProcessQuadrant(strQuadrantName)
     print('Thats all, folks!')
