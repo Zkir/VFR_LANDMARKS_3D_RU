@@ -196,13 +196,15 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
     
 
     cells = loadDatFile(strInputFile)
+    #sort by number of building parts
+    cells.sort(key=lambda row: int(row[24]), reverse=True)
 
     #==========================================================================
     # create individual object pages
     #==========================================================================
 
     for i in range(len(cells)):
-        if cells[i][23] == "True":
+        if (cells[i][23] == "True") or (int(cells[i][24])>0) :
             CreateObjectPage(strQuadrantName, cells, i)	
 
 
@@ -265,7 +267,12 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
             if cells[i][23]=="True":
                 fo.write( '<tr style="background: #DDFFCC" > '+ '\n')
             else:
-                fo.write( '<tr>'+ '\n')
+                if (cells[i][23] == "False") and (int(cells[i][24])>0) :
+                    #there are some building parts but they do not have height. Model cannot be created.
+                    fo.write( '<tr style="background: #FFBBBB" > '+ '\n')
+                else:
+                    #there are no building parts and a model is not created. Sad, but it's not an error
+                    fo.write( '<tr>'+ '\n')
             strOSMurl = 'https://www.openstreetmap.org/' + LCase(cells[i][1]) + '/' + cells[i][2]
             lat=(float(cells[i][3])+float(cells[i][5]))/2
             lon=(float(cells[i][4])+float(cells[i][6]))/2
@@ -284,7 +291,7 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
             fo.write( '<td><a href="' + strOSMurl + '">' + strOsmID + '</a></td>'+ '\n')
             #Print #3, "<td>" & strOsmID & "</td>"
             #Name/description
-            if cells[i][23] == "True":
+            if (cells[i][23] == "True") or (int(cells[i][24])>0):
                 #Better check here that the model exists!
                 fo.write('<td width="350px"><a href="' + strModelUrl + '">' + strDescription + '</a></td>'+ '\n')
             else:

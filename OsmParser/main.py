@@ -488,6 +488,7 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
     objXML = clsXMLparser()
     blnHasBuildingParts = False
     height = 0
+    obj_levels=0
     numberofparts = 0
     strOutputOsmFileName = OSM_3D_MODELS_PATH + '\\' + UCase(Left(object1.type, 1)) + object1.id + '.osm'
 
@@ -514,6 +515,7 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
             blnCompleteObject = True
             obj_is_building_part = False
             obj_height = 0
+            obj_levels = 0
         #get object osm tags
         if strTag == 'tag':
             StrKey = objXML.GetAttribute('k')
@@ -524,6 +526,9 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
                 obj_is_building_part = True
             if StrKey == 'height':
                 obj_height = ParseHeightValue(strValue)
+            if StrKey == 'building:levels':
+                obj_levels = strValue
+                 
         #node can be written immediately
         if strTag == 'node':
             node_lat = float(objXML.GetAttribute('lat'))
@@ -567,6 +572,10 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
                 if obj_is_building_part:
                     blnHasBuildingParts = True
                     numberofparts = numberofparts + 1
+                    if obj_height == 0:
+                        obj_height= int(obj_levels) * 3   
+                    if obj_height == 0:
+                        print("Error: building part has zero heigh. W:" + str(obj_id) )
                     if obj_height > height:
                         height = obj_height
         if strTag == '/relation':
@@ -580,6 +589,10 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
                 if obj_is_building_part:
                     blnHasBuildingParts = True
                     numberofparts = numberofparts + 1 
+                    if obj_height == 0:
+                        obj_height= int(obj_levels) * 3   
+                    if obj_height == 0:
+                        print("Error: building part has zero heigh. R:" + str(obj_id) )
                     if obj_height > height:
                         height = obj_height
     fo.write( '</osm>'+ '\n')
