@@ -257,7 +257,7 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
     fo.write( '<h2>Объекты</h2>'+ '\n')
     fo.write( '<p><small>Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</small><p>'+ '\n')
     fo.write( '<table class="sortable">'+ '\n')
-    fo.write( '<tr><th>OSM ID</th><th>Название</th><th>Год постройки</th><th>Temples.ru</th><th>Размер, м</th><th>Высота, м</th><th>Цвет</th><th>Материал</th>' + '<th>Стиль</th><th>Город</th> <th>Район</th> <th>Область</th><th>OSM 3D </th><th>J</th></tr>'+ '\n')
+    fo.write( '<tr><th>OSM ID</th><th>Название</th><th>Год постройки</th><th>Temples.ru</th><th>Размер, м</th><th>Высота, м</th><th>Цвет</th><th>Материал</th>' + '<th>Стиль</th><th>Город</th> <th>Район</th> <th>Область</th><th>OSM 3D </th><th>Число частей</th><th>J</th></tr>'+ '\n')
    
     for i in range(len(cells)):
 
@@ -311,6 +311,7 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
             fo.write('<td>' + strDistrict + '</td>'+ '\n')
             fo.write('<td>' + cells[i][22].replace('область', 'обл') + '</td>'+ '\n')
             fo.write('<td><a href="' + strF4url + '">' + cells[i][23] + '</a></td>'+ '\n')
+            fo.write('<td>' + cells[i][24] + '</td>' )
             fo.write('<td><a href="' + strJOSMurl + '" target = "josm" >' + 'J' + '</a></td>'+ '\n')
             fo.write('</tr>'+ '\n')
     fo.write( '</table>'+ '\n')

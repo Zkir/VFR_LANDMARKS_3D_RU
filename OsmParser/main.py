@@ -253,7 +253,7 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
                     if blnBuilding or blnFence:
                         # Rewrite osmObject as osm file!
                         if not blnFence:
-                            heightbyparts = RewriteOsmFile(osmObject, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH)
+                            heightbyparts, numberofparts = RewriteOsmFile(osmObject, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH)
                             osmObject.blnHasBuildingParts = ( heightbyparts > 0 )
                  
                             if heightbyparts > osmObject.dblHeight:
@@ -264,7 +264,13 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
                         #fill report
                         strBuildingType = CalculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType, osmObject.tagAmenity, osmObject.tagDenomination, osmObject.tagBarrier, osmObject.size, osmObject.tagRuins)
                         j = j + 1
-                        fo.write( str(j) + '|' + osmObject.type + '|' + osmObject.id + '|' + str(osmObject.bbox.minLat) + '|' + str(osmObject.bbox.minLon) + '|' + str(osmObject.bbox.maxLat) + '|' + str(osmObject.bbox.maxLon) + '|' + osmObject.name + '|' + osmObject.descr + '|' + ref_temples_ru + '|' + strBuildingType + '|' + str(Round(osmObject.size)) + '|' + str(Round(osmObject.dblHeight)) + '|' + osmObject.colour + '|' + osmObject.material + '|' + GuessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate) + '|' + ParseStartDateValue(osmObject.tagStartDate) + '|' + osmObject.tagWikipedia + '|' + osmObject.tagAddrStreet + '|' + osmObject.tagAddrHouseNumber + '|' + osmObject.tagAddrCity + '|' + osmObject.tagAddrDistrict + '|' + osmObject.tagAddrRegion + '|' + str(( osmObject.blnHasBuildingParts )  and  ( osmObject.dblHeight > 0 ))+ '\n')
+                        fo.write( str(j) + '|' + osmObject.type + '|' + osmObject.id + '|' + str(osmObject.bbox.minLat) + '|' + str(osmObject.bbox.minLon) + '|' + 
+                                  str(osmObject.bbox.maxLat) + '|' + str(osmObject.bbox.maxLon) + '|' + osmObject.name + '|' + osmObject.descr + '|' + ref_temples_ru + '|' + 
+                                  strBuildingType + '|' + str(Round(osmObject.size)) + '|' + str(Round(osmObject.dblHeight)) + '|' + osmObject.colour + '|' + osmObject.material + '|' +
+                                  GuessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate) + '|' + ParseStartDateValue(osmObject.tagStartDate) + '|' + osmObject.tagWikipedia + '|' +
+                                  osmObject.tagAddrStreet + '|' + osmObject.tagAddrHouseNumber + '|' + osmObject.tagAddrCity + '|' + osmObject.tagAddrDistrict + '|' + osmObject.tagAddrRegion + '|' +
+                                  str(( osmObject.blnHasBuildingParts )  and  ( osmObject.dblHeight > 0 )) + '|' + str(numberofparts) +
+                                  '\n')
                     else:
                         #print "Building part is skipped: " & osmObject.type & " " & osmObject.id
                         # print "not a building: " & osmObject.type & " " & osmObject.id
@@ -482,6 +488,7 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
     objXML = clsXMLparser()
     blnHasBuildingParts = False
     height = 0
+    numberofparts = 0
     strOutputOsmFileName = OSM_3D_MODELS_PATH + '\\' + UCase(Left(object1.type, 1)) + object1.id + '.osm'
 
     fo=open(strOutputOsmFileName, 'w',encoding="utf-8" )
@@ -559,6 +566,7 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
                 fo.write( '</way>' + '\n')
                 if obj_is_building_part:
                     blnHasBuildingParts = True
+                    numberofparts = numberofparts + 1
                     if obj_height > height:
                         height = obj_height
         if strTag == '/relation':
@@ -571,6 +579,7 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
                 fo.write( '</relation>' + '\n')
                 if obj_is_building_part:
                     blnHasBuildingParts = True
+                    numberofparts = numberofparts + 1 
                     if obj_height > height:
                         height = obj_height
     fo.write( '</osm>'+ '\n')
@@ -579,7 +588,7 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
 
     if not ( blnHasBuildingParts and  ( height > 0 ) ) :
         Kill(strOutputOsmFileName)
-    fn_return_value = height
+    fn_return_value = [height, numberofparts]
     return fn_return_value
 
 def DeleteUnnecessaryModels(Sheet1):
@@ -644,7 +653,7 @@ def main():
     if len(sys.argv)>1:
         strQuadrantName = sys.argv[1]
     else:
-        strQuadrantName = composeQuadrantName(52, 13)
+        strQuadrantName = composeQuadrantName(56, 38)
 
     ProcessQuadrant(strQuadrantName)
     print('Thats all, folks!')
