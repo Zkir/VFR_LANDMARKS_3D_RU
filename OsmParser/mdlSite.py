@@ -265,7 +265,12 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
 
         if ( cells[i][10] != 'DEFENSIVE WALL' )  and  ( cells[i][10] != 'CHURCH FENCE' )  and  ( cells[i][10] != 'WATER TOWER' )  and  ( cells[i][10] != 'HISTORIC WALL' ) :
             if cells[i][23]=="True":
-                fo.write( '<tr style="background: #DDFFCC" > '+ '\n')
+                if int(cells[i][24])>1: 
+                    #there is model, and there are more than one building part   
+                    fo.write( '<tr style="background: #DDFFCC" > '+ '\n')
+                else:
+                    #there is just one building part, which is very suspisious.   
+                    fo.write( '<tr style="background: #FFFFAA" > '+ '\n')
             else:
                 if (cells[i][23] == "False") and (int(cells[i][24])>0) :
                     #there are some building parts but they do not have height. Model cannot be created.
