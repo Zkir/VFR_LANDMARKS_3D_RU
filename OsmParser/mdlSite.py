@@ -53,6 +53,13 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
 
     if Trim(cells[intObjectIndex][17]) != '':
         strWikipediaLink = 'http://ru.wikipedia.org/wiki/' + cells[intObjectIndex][17]
+    
+    #name of wikipedia article. we need to remove object name
+    strWikipediaName=Mid(cells[intObjectIndex][17], 4)
+    
+    strObjectName=cells[intObjectIndex][7]
+    if strObjectName=="" and strWikipediaName!="":
+        strObjectName=strWikipediaName
 
     strHTMLPage = BUILD_PATH + '\\work_folder\\'+ strQuadrantName +'\\osm_3dmodels\\' + strOsmID + '.html'
     fo=open(strHTMLPage, 'w', encoding="utf-8") 
@@ -76,7 +83,7 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
     fo.write( '</head>'+ '\n')
     fo.write( '<body class=\'page\'>'+ '\n')
     fo.write( '  <div class=\'page-header\'>'+ '\n')
-    fo.write( '    <h1>' + cells[intObjectIndex][7] + ' (' + strOsmID + ')</h1>'+ '\n')
+    fo.write( '    <h1>' + strObjectName + ' (' + strOsmID + ')</h1>'+ '\n')
     fo.write( '  </div>'+ '\n')
     fo.write( '  <div class=\'page-content\'>'+ '\n')
     fo.write( '    <div class=\'scene\' style=\'height:510px; width:510px;float:left\'>'+ '\n')
@@ -287,7 +294,12 @@ def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
                 strTemplesUrl = "http://temples.ru/card.php?ID=" + strTemplesID
 
             strJOSMurl = "http://localhost:8111/load_and_zoom?left="+ cells[i][4] + "&right="+ cells[i][6] + "&top="+ cells[i][5] +"&bottom="+ cells[i][3] #"&select=object"
+            #object name, by default 
             strDescription = Trim(cells[i][7])
+
+            if strDescription == '':
+                strDescription = Mid(cells[i][17], 4) #wikipedia article name, if any
+            #last resort -- building type
             if strDescription == '':
                 strDescription = '&lt;&lt;' + cells[i][10] + '&gt;&gt;'
             #ID and link to osm site
