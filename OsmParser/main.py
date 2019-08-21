@@ -145,24 +145,26 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
                 way_id = objXML.GetAttribute('ref')
                 intWayNo = objOsmGeom.FindWay(way_id)
                 if intWayNo == - 1:
-                    raise Exception('FindWay', 'way not found! ' + way_id)
-                waybbox = objOsmGeom.GetWayBBox(intWayNo)
-                osmObject.WayRefs.append([intWayNo, objXML.GetAttribute('role')])
-                if osmObject.way_count == 0:
-                    osmObject.bbox.minLat = waybbox.minLat
-                    osmObject.bbox.minLon = waybbox.minLon
-                    osmObject.bbox.maxLat = waybbox.maxLat
-                    osmObject.bbox.maxLon = waybbox.maxLon
-                else:
-                    if waybbox.minLat < osmObject.bbox.minLat:
+                    #raise Exception('FindWay', 'way not found! ' + way_id)
+                    blnObjectIncomplete=True  
+                else: 
+                    waybbox = objOsmGeom.GetWayBBox(intWayNo)
+                    osmObject.WayRefs.append([intWayNo, objXML.GetAttribute('role')])
+                    if osmObject.way_count == 0:
                         osmObject.bbox.minLat = waybbox.minLat
-                    if waybbox.maxLat > osmObject.bbox.maxLat:
-                        osmObject.bbox.maxLat = waybbox.maxLat
-                    if waybbox.minLon < osmObject.bbox.minLon:
                         osmObject.bbox.minLon = waybbox.minLon
-                    if waybbox.maxLon > osmObject.bbox.maxLon:
+                        osmObject.bbox.maxLat = waybbox.maxLat
                         osmObject.bbox.maxLon = waybbox.maxLon
-                osmObject.way_count = osmObject.way_count + 1
+                    else:
+                        if waybbox.minLat < osmObject.bbox.minLat:
+                            osmObject.bbox.minLat = waybbox.minLat
+                        if waybbox.maxLat > osmObject.bbox.maxLat:
+                            osmObject.bbox.maxLat = waybbox.maxLat
+                        if waybbox.minLon < osmObject.bbox.minLon:
+                            osmObject.bbox.minLon = waybbox.minLon
+                        if waybbox.maxLon > osmObject.bbox.maxLon:
+                            osmObject.bbox.maxLon = waybbox.maxLon
+                    osmObject.way_count = osmObject.way_count + 1
         #get osmObject osm tags
         if strTag == 'tag':
             StrKey = objXML.GetAttribute('k')
