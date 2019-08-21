@@ -1,4 +1,6 @@
 ﻿from mdlMisc import *
+from osmGeometry import *
+from osmXMLparcer import *
 
 #===================================================================
 # Проверка принадлежности точки полигону методом испускания луча
@@ -57,6 +59,10 @@ class GeoRegion:
         self.boundary=[]
         
     def checkPointBelongs(self, lat,lon):
+
+        if lat<self.bbox.minLat or lat>self.bbox.maxLat or lon<self.bbox.minLon or lon>self.bbox.maxLon:
+            return False
+
         if checkPointInPolygon(lat,lon, self.boundary):
             return True
         else:
@@ -99,6 +105,104 @@ class Geocoder:
         region.boundary=boundary
         self.regions.append(region)
 
+        
+    def loadDataFromOsmFile(self,strSrcOsmFile):
+        objOsmGeom = clsOsmGeometry()
+        objXML = clsXMLparser()
+        objXML.OpenFile(strSrcOsmFile)
+
+        while not objXML.bEOF:
+            objXML.ReadNextNode()
+            strTag = objXML.GetTag()
+            if strTag == 'node' or strTag == 'way' or strTag == 'relation':
+                type = strTag
+                id = objXML.GetAttribute('id')
+                blnObjectIncomplete=False 
+                Tags={}
+                NodeRefs=[]
+                WayRefs=[]
+            
+            if strTag == 'node':
+                objOsmGeom.AddNode(id, objXML.GetAttribute('lat'), objXML.GetAttribute('lon'))
+                
+            #references to nodes in ways. we need to find coordinates
+            if strTag == 'nd':
+                node_id = objXML.GetAttribute('ref')
+                intNodeNo = objOsmGeom.FindNode(node_id)
+                if intNodeNo == - 1:
+                    #raise Exception('FindNode', 'node not found! ' + node_id)
+                    blnObjectIncomplete=True  
+                else: 
+                    NodeRefs.append(intNodeNo)
+                    
+            #references to ways in relations. we need find coordinates
+            if strTag == 'member':
+                if objXML.GetAttribute('type') == 'way':
+                    way_id = objXML.GetAttribute('ref')
+                    intWayNo = objOsmGeom.FindWay(way_id)
+                    if intWayNo == - 1:
+                        #raise Exception('FindWay', 'way not found! ' + way_id)
+                        blnObjectIncomplete=True  
+                    else: 
+                        waybbox = objOsmGeom.GetWayBBox(intWayNo)
+                        WayRefs.append([intWayNo, objXML.GetAttribute('role')])
+            #get osmObject osm tags
+            if strTag == 'tag':
+                strKey = objXML.GetAttribute('k')
+                strValue = objXML.GetAttribute('v')
+                Tags[strKey]=strValue
+
+            if strTag == '/way':
+                intWayNo = objOsmGeom.AddWay(id, NodeRefs, len(NodeRefs))
+                
+
+            if strTag == '/relation':
+                #Здесь-то мы и должны добавить регион в геокодинг 
+                
+                if (Tags.get("type")=="boundary") and not blnObjectIncomplete :
+                    admin_level=Tags.get("admin_level","")
+                    if admin_level=="1" or admin_level=="2" or admin_level=="3" or admin_level=="4" :
+                        print("BOUNDARY ADMINISTRATIVE ")
+                        size = objOsmGeom.CalculateRelationSize(WayRefs, len(WayRefs))
+                        print(" " + Tags.get("name",""))
+                        print(" " + admin_level)
+                        print(" " + Tags.get("addr:country",""))
+                        print(" " + "size:" + str(size))
+                        OutlineNodeRefs=objOsmGeom.ExtractCloseNodeChainFromRelation(WayRefs)
+
+                        boundary=[]
+                        bbox=Bbox()
+                        bbox.minLat=objOsmGeom.nodes[OutlineNodeRefs[0]].lat
+                        bbox.maxLat=objOsmGeom.nodes[OutlineNodeRefs[0]].lat
+                        bbox.minLon=objOsmGeom.nodes[OutlineNodeRefs[0]].lon
+                        bbox.maxLon=objOsmGeom.nodes[OutlineNodeRefs[0]].lon
+
+                        for node in OutlineNodeRefs:
+                            boundary.append([objOsmGeom.nodes[node].lat, objOsmGeom.nodes[node].lon])
+                            if objOsmGeom.nodes[node].lat<bbox.minLat:
+                                bbox.minLat=objOsmGeom.nodes[node].lat
+                            if objOsmGeom.nodes[node].lat>bbox.maxLat:
+                                bbox.maxLat=objOsmGeom.nodes[node].lat
+
+                            if objOsmGeom.nodes[node].lon<bbox.minLon:
+                                bbox.minLon=objOsmGeom.nodes[node].lon
+                            if objOsmGeom.nodes[node].lon>bbox.maxLon:
+                                bbox.maxLon=objOsmGeom.nodes[node].lon
+
+                        region = GeoRegion()
+                        region.name = "RU"
+                        region.adminlevel = 2
+                        region.boundary = boundary
+                        region.bbox=bbox
+                        self.regions.append(region)
+                          
+                
+
+             
+
+
+    
+        
     #Задача обратного геокодинга.
     #по координате найдем адрес.
     #Нас интересуют в первую очередь административные границы.
@@ -124,10 +228,14 @@ class Geocoder:
 # E 180°  / 169°01′ w. lon. 
 
 geocoder=Geocoder()
-geocoder.loadDataFromPoly()
+#geocoder.loadDataFromPoly()
+geocoder.loadDataFromOsmFile("d:\\_planet.osm\\geocoder2.osm")
+print("Geocoder loaded")
 
-print(geocoder.getGeoCodes(0,0))
+#print(geocoder.getGeoCodes(0,0))
 print(geocoder.getGeoCodes(55,37))
+print(geocoder.getGeoCodes(61.6685237, 50.8352024))
+
 
 
 fo=open("D:\\Quadrants_Ru.dat", 'w', encoding="utf-8") 

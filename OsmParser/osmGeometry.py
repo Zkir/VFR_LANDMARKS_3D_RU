@@ -201,10 +201,11 @@ class clsOsmGeometry():
         #CalculateWaySize = Round(CalculateWaySize)
         return fn_return_value
 
-    def CalculateRelationSize(self, WayRefs, way_count):
+    def ExtractCloseNodeChainFromRelation(self, WayRefs):
         fn_return_value=0.0
         i = 0
         j = 0
+        k = 0
 
         firstNodeId = 0
         lastNodeId = 0
@@ -242,10 +243,11 @@ class clsOsmGeometry():
                     PrevLastNodeId = lastNodeId
                 firstNodeId = w_NodeRefs[0]
                 lastNodeId = w_NodeRefs[w_node_count - 1]
-                if i == 0:
+                if k == 0:
                     theVeryFirstNodeId = firstNodeId
                     theVeryLastNodeId = lastNodeId
                     blnInsertIntoBeginning = False
+                    k=1 # dirty trick. We need to know that it is no longer first way.
                 else:
                     if firstNodeId == PrevLastNodeId:
                         #Debug.Print "continuation found, direct order"
@@ -292,6 +294,11 @@ class clsOsmGeometry():
                         else:
                             OutlineNodeRefs.append( w_NodeRefs[j])
                             outline_nodeCount = outline_nodeCount + 1
+        return OutlineNodeRefs
+
+    def CalculateRelationSize(self, WayRefs, way_count):
+        OutlineNodeRefs=self.ExtractCloseNodeChainFromRelation(WayRefs)
+        outline_nodeCount=len (OutlineNodeRefs)
         if outline_nodeCount > 0:
             if OutlineNodeRefs[0] == OutlineNodeRefs[outline_nodeCount - 1]:
                 fn_return_value = Sqr(self.CalculateClosedNodeChainSqure(OutlineNodeRefs, outline_nodeCount - 1))
@@ -300,4 +307,3 @@ class clsOsmGeometry():
         else:
             print('empty relation. Probably outer role is missing ')
         return fn_return_value
-
