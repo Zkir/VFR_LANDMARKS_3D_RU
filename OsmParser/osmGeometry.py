@@ -202,7 +202,7 @@ class clsOsmGeometry():
         return fn_return_value
 
     def ExtractCloseNodeChainFromRelation(self, WayRefs):
-        fn_return_value=0.0
+
         i = 0
         j = 0
         k = 0
@@ -297,6 +297,7 @@ class clsOsmGeometry():
         return OutlineNodeRefs
 
     def CalculateRelationSize(self, WayRefs, way_count):
+        fn_return_value = 0.0
         OutlineNodeRefs=self.ExtractCloseNodeChainFromRelation(WayRefs)
         outline_nodeCount=len (OutlineNodeRefs)
         if outline_nodeCount > 0:
