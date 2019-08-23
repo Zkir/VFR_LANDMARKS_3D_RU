@@ -8,7 +8,7 @@ import subprocess
 
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
-CYCLE=24*60*60*3
+CYCLE=24*60*60
 
 def sortRecordset(cells, sort_field):
     cells.sort(key=lambda row: row[sort_field])
@@ -51,6 +51,6 @@ for row in cells:
  
        strCommand='process.bat ' + strQuadrantName +' "'+lon1+','+lat1+','+lon2+','+lat2+'"'
        print(strCommand)
-       #subprocess.call(BUILD_PATH + '\\'+strCommand, cwd=BUILD_PATH)   
+       subprocess.call(BUILD_PATH + '\\'+strCommand, cwd=BUILD_PATH)   
 
 print ("Done!")
