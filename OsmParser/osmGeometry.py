@@ -221,6 +221,7 @@ class clsOsmGeometry():
         w_node_lon = 0
         OutlineNodeRefs = []
         outline_nodeCount = 0
+        Outlines=[]
         blnRelationClosed = False
         blnReverseOrder = False
         blnInsertIntoBeginning = False
@@ -273,8 +274,7 @@ class clsOsmGeometry():
                             #OutlineNodeRefs[j] = 0
                         outline_nodeCount = outline_nodeCount + w_node_count
                     else:
-                        print('broken relation')
-                        blnRelationClosed = False
+                        print('relation is broken')
                         break
                 if not blnReverseOrder:
                     for j in range(w_node_count):
@@ -294,17 +294,30 @@ class clsOsmGeometry():
                         else:
                             OutlineNodeRefs.append( w_NodeRefs[j])
                             outline_nodeCount = outline_nodeCount + 1
-        return OutlineNodeRefs
+
+            if (k>0) and (OutlineNodeRefs[0] == OutlineNodeRefs[outline_nodeCount - 1]):
+                #print("ring closed")
+                Outlines.append(OutlineNodeRefs)
+                #re-initialize
+                k=0
+                OutlineNodeRefs=[]
+                outline_nodeCount=0
+                firstNodeId = - 1
+                lastNodeId = - 1
+
+        return Outlines
 
     def CalculateRelationSize(self, WayRefs, way_count):
-        fn_return_value = 0.0
-        OutlineNodeRefs=self.ExtractCloseNodeChainFromRelation(WayRefs)
-        outline_nodeCount=len (OutlineNodeRefs)
-        if outline_nodeCount > 0:
-            if OutlineNodeRefs[0] == OutlineNodeRefs[outline_nodeCount - 1]:
-                fn_return_value = Sqr(self.CalculateClosedNodeChainSqure(OutlineNodeRefs, outline_nodeCount - 1))
-            else:
-                print('relation is not closed')
+        size = 0.0
+        Outlines=self.ExtractCloseNodeChainFromRelation(WayRefs)
+
+        if len(Outlines) > 0:
+            for OutlineNodeRefs in Outlines:
+                outline_nodeCount = len(OutlineNodeRefs)
+                if OutlineNodeRefs[0] == OutlineNodeRefs[outline_nodeCount - 1]:
+                    size =size + Sqr(self.CalculateClosedNodeChainSqure(OutlineNodeRefs, outline_nodeCount - 1))
+                else:
+                    print('Relation is not closed')
         else:
-            print('empty relation. Probably outer role is missing ')
-        return fn_return_value
+            print('Empty relation. Probably members with outer role is missing or no closed rings ')
+        return size

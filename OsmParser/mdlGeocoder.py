@@ -6,36 +6,36 @@ from osmXMLparcer import *
 # Проверка принадлежности точки полигону методом испускания луча
 # Элементарная функция
 #===================================================================
-def checkPointInPolygon(lat,lon, boundary):
-    DELTA=1e-10;
+def checkPointInPolygon(lat,lon, boundaries):
+    DELTA=1e-10
+    intrsectCount = 0
+    for boundary in boundaries:
+        N = len(boundary)
+        if (boundary[0][0]!=boundary[N-1][0]) or (boundary[0][1]!=boundary[N-1][1]):
+           #print ("Not closed way")
+           raise Exception("Not closed way")
 
-    N=len(boundary)
-    #print(N)
-    if (boundary[0][0]!=boundary[N-1][0]) or (boundary[0][1]!=boundary[N-1][1]):
-        raise Exception("Not closed way")
-   
-    intrsectCount=0;
-    for i in range(N-1):
-      #Найдем пересечения вертикального луча с данным ребром.
-      #lat0<lat<=lat0, lon>lonx
-     
-      lat0, lon0 = boundary[i]    #Начало отрезка
-      lat1, lon1 = boundary[i+1]  #Начало конец
+        for i in range(N-1):
+          #Найдем пересечения вертикального луча с данным ребром.
+          #lat0<lat<=lat0, lon>lonx
 
-      if (lon==lon0) or (lon==lon1):
-          #Попали на вершину, это П-Ц
-          #Нужно чуть чуть сдвинуть точку
-          lon=lon+DELTA;
+          lat0, lon0 = boundary[i]    #Начало отрезка
+          lat1, lon1 = boundary[i+1]  #Начало конец
 
-      if ((lon>=min(lon0,lon1) and (lon<=max(lon0,lon1)))):
-          #Найдем точку пересечения.
-          latX = lat0 + (lat1-lat0)/(lon1-lon0) * (lon-lon0);
-          if (latX>=lat):
-              intrsectCount=intrsectCount+1
+          if (lon==lon0) or (lon==lon1):
+              #Попали на вершину, это П-Ц
+              #Нужно чуть чуть сдвинуть точку
+              lon=lon+DELTA
 
-      else:
-          #Отрезок идет нафик, пересечение с ним невозможно.
-          pass   
+          if ((lon>=min(lon0,lon1) and (lon<=max(lon0,lon1)))):
+              #Найдем точку пересечения.
+              latX = lat0 + (lat1-lat0)/(lon1-lon0) * (lon-lon0)
+              if (latX>=lat):
+                  intrsectCount=intrsectCount+1
+
+          else:
+              #Отрезок идет нафик, пересечение с ним невозможно.
+              pass
 
     #print(intrsectCount)
     return (intrsectCount % 2)==1
@@ -59,10 +59,11 @@ class GeoRegion:
         self.boundary=[]
         
     def checkPointBelongs(self, lat,lon):
-
+        #Check BBOX
         if lat<self.bbox.minLat or lat>self.bbox.maxLat or lon<self.bbox.minLon or lon>self.bbox.maxLon:
             return False
 
+        #Check OUTLINE(S)
         if checkPointInPolygon(lat,lon, self.boundary):
             return True
         else:
@@ -161,58 +162,64 @@ class Geocoder:
                 
                 if (Tags.get("type")=="boundary") and not blnObjectIncomplete :
                     admin_level=Tags.get("admin_level","")
-                    if admin_level=="1" or admin_level=="2" or admin_level=="3" or admin_level=="4" :
-                        print("BOUNDARY ADMINISTRATIVE ")
+                    if admin_level=="1" or admin_level=="-2" or admin_level=="3" or admin_level=="4" or admin_level=="-5" or admin_level=="-6":
+                        #print("BOUNDARY ADMINISTRATIVE ")
                         size = objOsmGeom.CalculateRelationSize(WayRefs, len(WayRefs))
-                        print(" " + Tags.get("name",""))
-                        print(" " + admin_level)
-                        print(" " + Tags.get("addr:country",""))
-                        print(" " + "size:" + str(size))
-                        OutlineNodeRefs=objOsmGeom.ExtractCloseNodeChainFromRelation(WayRefs)
+                        #print(" " + Tags.get("name",""))
+                        #print(" " + admin_level)
+                        #print(" " + Tags.get("addr:country",""))
+                        #print(" " + "size:" + str(size))
+                        Outlines=objOsmGeom.ExtractCloseNodeChainFromRelation(WayRefs)
+                        if len(Outlines)>0:
+                            boundaries = []
+                            bbox = Bbox()
+                            bbox.minLat = objOsmGeom.nodes[Outlines[0][0]].lat
+                            bbox.maxLat = objOsmGeom.nodes[Outlines[0][0]].lat
+                            bbox.minLon = objOsmGeom.nodes[Outlines[0][0]].lon
+                            bbox.maxLon = objOsmGeom.nodes[Outlines[0][0]].lon
 
-                        boundary=[]
-                        bbox=Bbox()
-                        bbox.minLat=objOsmGeom.nodes[OutlineNodeRefs[0]].lat
-                        bbox.maxLat=objOsmGeom.nodes[OutlineNodeRefs[0]].lat
-                        bbox.minLon=objOsmGeom.nodes[OutlineNodeRefs[0]].lon
-                        bbox.maxLon=objOsmGeom.nodes[OutlineNodeRefs[0]].lon
+                            for OutlineNodeRefs in Outlines:
+                                boundary=[]
+                                for node in OutlineNodeRefs:
+                                    boundary.append([objOsmGeom.nodes[node].lat, objOsmGeom.nodes[node].lon])
+                                    if objOsmGeom.nodes[node].lat<bbox.minLat:
+                                        bbox.minLat=objOsmGeom.nodes[node].lat
+                                    if objOsmGeom.nodes[node].lat>bbox.maxLat:
+                                        bbox.maxLat=objOsmGeom.nodes[node].lat
 
-                        for node in OutlineNodeRefs:
-                            boundary.append([objOsmGeom.nodes[node].lat, objOsmGeom.nodes[node].lon])
-                            if objOsmGeom.nodes[node].lat<bbox.minLat:
-                                bbox.minLat=objOsmGeom.nodes[node].lat
-                            if objOsmGeom.nodes[node].lat>bbox.maxLat:
-                                bbox.maxLat=objOsmGeom.nodes[node].lat
-
-                            if objOsmGeom.nodes[node].lon<bbox.minLon:
-                                bbox.minLon=objOsmGeom.nodes[node].lon
-                            if objOsmGeom.nodes[node].lon>bbox.maxLon:
-                                bbox.maxLon=objOsmGeom.nodes[node].lon
-
-                        region = GeoRegion()
-                        region.name = "RU"
-                        region.adminlevel = 2
-                        region.boundary = boundary
-                        region.bbox=bbox
-                        self.regions.append(region)
-                          
-                
-
-             
+                                    if objOsmGeom.nodes[node].lon<bbox.minLon:
+                                        bbox.minLon=objOsmGeom.nodes[node].lon
+                                    if objOsmGeom.nodes[node].lon>bbox.maxLon:
+                                        bbox.maxLon=objOsmGeom.nodes[node].lon
+                                boundaries.append(boundary)
+                            region = GeoRegion()
+                            region.id=id
+                            region.name = Tags.get("name","") # "RU"
+                            region.adminlevel = admin_level
+                            region.boundary = boundaries
+                            region.bbox=bbox
+                            region.size=size
+                            self.regions.append(region)
+                        else:
+                            print("relation " + id + " is somehow broken" )
+                            print(" " + Tags.get("name", ""))
+        print(str(len(self.regions))+" relations loaded into geocoder")
+        return True
 
 
-    
-        
-    #Задача обратного геокодинга.
-    #по координате найдем адрес.
-    #Нас интересуют в первую очередь административные границы.
-    #Во вторую --населенный пункт. 
+# ===================================================================================================================
+# Задача обратного геокодинга.
+# по координате найдем адрес.
+# Нас интересуют в первую очередь административные границы.
+# Во вторую --населенный пункт. 
+# ===================================================================================================================
+
     def getGeoCodes(self,lat,lon):
         geocodes=[]
         for i in range(len(self.regions)):
             if self.regions[i].checkPointBelongs(lat,lon):
                 geocodes.append(self.regions[i].name)
-                geocodes.append('??') 
+
         
         if len(geocodes) == 0:
             geocodes.append('??') 
@@ -229,28 +236,61 @@ class Geocoder:
 
 geocoder=Geocoder()
 #geocoder.loadDataFromPoly()
-geocoder.loadDataFromOsmFile("d:\\_planet.osm\\geocoder2.osm")
+geocoder.loadDataFromOsmFile("d:\\_planet.osm\\geocoder1.osm")
 print("Geocoder loaded")
 
 #print(geocoder.getGeoCodes(0,0))
 print(geocoder.getGeoCodes(55,37))
-print(geocoder.getGeoCodes(61.6685237, 50.8352024))
+print(geocoder.getGeoCodes(61.6685237, 50.8352024)) # Сывтывкар (Коми)
+print(geocoder.getGeoCodes(54.7744826, 20.5705741)) #Калининград
 
-
-
-fo=open("D:\\Quadrants_Ru.dat", 'w', encoding="utf-8") 
-
+fo=open("D:\\Quadrants_Ru.dat", 'w', encoding="utf-8")
+fo1=open("D:\\reverse_index.dat", 'w', encoding="utf-8")
+reverse_index={}
 for i in range(0,89):
     for j in range(0,179):
         strQuadrant = composeQuadrantName(i,j)
-        
-        geocodes = geocoder.getGeoCodes(i,j)
-        
-        if geocodes[0]=='RU':
+        geocodes=[]
+        for k in range(5):
+            if k==0:
+                lat=i
+                lon=j
+            if k==1:
+                lat=i+1
+                lon=j
+            if k==2:
+                lat=i
+                lon=j+1
+            if k==3:
+                lat=i+1
+                lon=j+1
+            if k==4:
+                lat=i+0.5
+                lon=j+0.5
+            regcode=geocoder.getGeoCodes(lat,lon)[0] # Предполагается, что мы получили название/код области
+            if regcode!='??':
+                #добавим в обратный индекс квадрантов
+                rev_ind_quads=reverse_index.get(regcode, [])
+                if not (strQuadrant in rev_ind_quads):
+                    rev_ind_quads.append(strQuadrant)
+                    reverse_index[regcode]=rev_ind_quads
+
+                # добавим в геокоды квадранта. Квадрант очевидно может принадлежать нескольким областям
+                if not (regcode in geocodes):
+                    geocodes.append(regcode)
+
+        if len(geocodes)!=0:
            #print(strQuadrant,geocodes ) 
-           fo.write(strQuadrant +'|' + str(geocodes)+'\n')
-fo.close() 
+           fo.write(strQuadrant +'|' + str(geocodes) + '|0|0|1900.01.01 00:00:00' +'\n')
+fo.close()
 
+#print reverse index
 
+for key in reverse_index:
+    if key !='??':
+        for quadrant in reverse_index[key]:
+            fo1.write(str(key) + '|' + str(quadrant) + '\n')
+
+fo1.close()
 
 print("done")   
