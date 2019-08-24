@@ -51,6 +51,6 @@ for row in cells:
  
        strCommand='process.bat ' + strQuadrantName +' "'+lon1+','+lat1+','+lon2+','+lat2+'"'
        print(strCommand)
-       #subprocess.call(BUILD_PATH + '\\'+strCommand, cwd=BUILD_PATH)   
+       subprocess.call(BUILD_PATH + '\\'+strCommand, cwd=BUILD_PATH)   
 
 print ("Done!")
