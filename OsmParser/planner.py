@@ -8,7 +8,7 @@ import subprocess
 
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
-CYCLE=24*60*60*3
+CYCLE=24*60*60
 
 def sortRecordset(cells, sort_field):
     cells.sort(key=lambda row: row[sort_field])
@@ -27,7 +27,7 @@ sortRecordset(cells, 4)
 curtime=time.time()
 
 for row in cells:
-   if row[4].strip()!="":
+   if (row[4].strip()!="") and (row[4].strip()!="1900.01.01 00:00:00") :
        time_diff= curtime-time.mktime(time.strptime(row[4],"%Y.%m.%d %H:%M:%S"))
        time_diff=int(time_diff)
        if time_diff>CYCLE:
