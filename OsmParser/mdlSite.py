@@ -382,7 +382,7 @@ def CreateIndexPage():
         intRate=0
         if int(cells[i][2]) !=0:
             intRate = Round(100.0*int(cells[i][3])/int(cells[i][2])) 
-        fo.write( '    <tr><td>'+cells[i][0]+'</td><td><a href="'+cells[i][0]+'.html">'+ cells[i][1] +'</a> </td><td>'+cells[i][2]+'</td><td>' + cells[i][3]+ '</td><td>' + str(intRate)+ '</td><td>' + cells[i][4]+ '</td><tr>' + '\n')
+        fo.write( '    <tr><td>'+cells[i][0]+'</td><td><a href="'+cells[i][0]+'.html">'+ cells[i][1] +'</a> </td><td>'+cells[i][2]+'</td><td>' + cells[i][3]+ '</td><td>' + str(intRate)+ '</td><td>' + cells[i][4]+ '</td></tr>' + '\n')
 
     fo.write( '  </table>' + '\n')
     fo.write( '  <h2>Полезные ссылки</h2>' + '\n')
