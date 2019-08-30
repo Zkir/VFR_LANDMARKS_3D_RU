@@ -1,4 +1,5 @@
-﻿from mdlMisc import *
+﻿import time
+from mdlMisc import *
 from osmGeometry import *
 from osmXMLparcer import *
 
@@ -162,7 +163,7 @@ class Geocoder:
                 
                 if (Tags.get("type")=="boundary") and not blnObjectIncomplete :
                     admin_level=Tags.get("admin_level","")
-                    if admin_level=="1" or admin_level=="-2" or admin_level=="3" or admin_level=="4" or admin_level=="-5" or admin_level=="-6":
+                    if admin_level=="1" or admin_level=="2" or admin_level=="3" or admin_level=="4" or admin_level=="5" or admin_level=="6" or admin_level=="-8":
                         #print("BOUNDARY ADMINISTRATIVE ")
                         size = objOsmGeom.CalculateRelationSize(WayRefs, len(WayRefs))
                         #print(" " + Tags.get("name",""))
@@ -215,14 +216,10 @@ class Geocoder:
 # ===================================================================================================================
 
     def getGeoCodes(self,lat,lon):
-        geocodes=[]
+        geocodes={}
         for i in range(len(self.regions)):
             if self.regions[i].checkPointBelongs(lat,lon):
-                geocodes.append(self.regions[i].name)
-
-        
-        if len(geocodes) == 0:
-            geocodes.append('??') 
+                geocodes['adminlevel_'+ str(self.regions[i].adminlevel)]=self.regions[i].name
         return geocodes
     
 
@@ -234,15 +231,21 @@ class Geocoder:
 # W 19°38′19″
 # E 180°  / 169°01′ w. lon. 
 
+t1 = time.time()
 geocoder=Geocoder()
 #geocoder.loadDataFromPoly()
 geocoder.loadDataFromOsmFile("d:\\_planet.osm\\geocoder1.osm")
-print("Geocoder loaded")
+t2 = time.time()
+print("Geocoder loaded in " + str(t2 - t1) + " seconds")
 
 #print(geocoder.getGeoCodes(0,0))
-print(geocoder.getGeoCodes(55,37))
+print(geocoder.getGeoCodes(55, 37)) # угол московской области
+print(geocoder.getGeoCodes(56.3344086, 38.0993541)) # Сергиев Посад
 print(geocoder.getGeoCodes(61.6685237, 50.8352024)) # Сывтывкар (Коми)
-print(geocoder.getGeoCodes(54.7744826, 20.5705741)) #Калининград
+print(geocoder.getGeoCodes(54.7744826, 20.5705741)) # Калининград
+t3 = time.time()
+print("4 geocoding queries in  " + str(t3 - t2) + " seconds")
+
 
 fo=open("D:\\Quadrants_Ru.dat", 'w', encoding="utf-8")
 fo1=open("D:\\reverse_index.dat", 'w', encoding="utf-8")
@@ -267,7 +270,7 @@ for i in range(0,89):
             if k==4:
                 lat=i+0.5
                 lon=j+0.5
-            regcode=geocoder.getGeoCodes(lat,lon)[0] # Предполагается, что мы получили название/код области
+            regcode=geocoder.getGeoCodes(lat,lon).get('adminlevel_4','??') # Предполагается, что мы получили название/код области
             if regcode!='??':
                 #добавим в обратный индекс квадрантов
                 rev_ind_quads=reverse_index.get(regcode, [])

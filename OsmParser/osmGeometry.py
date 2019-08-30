@@ -205,7 +205,7 @@ class clsOsmGeometry():
 
         i = 0
         j = 0
-        k = 0
+
 
         firstNodeId = 0
         lastNodeId = 0
@@ -230,70 +230,82 @@ class clsOsmGeometry():
         outline_nodeCount = 0
         firstNodeId = - 1
         lastNodeId = - 1
-        for i in range(len(WayRefs)):
-            wayno=WayRefs[i][0]
-            role=WayRefs[i][1]
-            if role == 'outer':
-                w_NodeRefs=self.GetWayNodeRefsAndCount(wayno)
-                w_node_count=len(w_NodeRefs)
-                if firstNodeId != - 1:
-                    PrevFirstNodeId = OutlineNodeRefs[0]
-                    PrevLastNodeId = OutlineNodeRefs[outline_nodeCount - 1]
-                else:
-                    PrevFirstNodeId = firstNodeId
-                    PrevLastNodeId = lastNodeId
-                firstNodeId = w_NodeRefs[0]
-                lastNodeId = w_NodeRefs[w_node_count - 1]
-                if k == 0:
-                    theVeryFirstNodeId = firstNodeId
-                    theVeryLastNodeId = lastNodeId
-                    blnInsertIntoBeginning = False
-                    k=1 # dirty trick. We need to know that it is no longer first way.
-                else:
-                    if firstNodeId == PrevLastNodeId:
-                        #Debug.Print "continuation found, direct order"
-                        blnReverseOrder = False
-                        blnInsertIntoBeginning = False
-                    elif lastNodeId == PrevLastNodeId:
-                        #Debug.Print "continuation found, reverse order"
-                        blnReverseOrder = True
-                        blnInsertIntoBeginning = False
-                        firstNodeId = w_NodeRefs[w_node_count - 1]
-                        lastNodeId = w_NodeRefs[0]
-                    elif  ( firstNodeId == PrevFirstNodeId )  or  ( lastNodeId == PrevFirstNodeId ) :
-                        # opposite directions of the first two ways!
-                        # We need to insert into the beginning
-                        if firstNodeId == PrevFirstNodeId:
-                            blnReverseOrder = True
-                        else:
-                            blnReverseOrder = False
-                        blnInsertIntoBeginning = True
-                        for j in range(w_node_count-1 , -1, - 1):
-                            OutlineNodeRefs.insert(0,0)
-                            #OutlineNodeRefs[j + w_node_count] = OutlineNodeRefs[j]
-                            #OutlineNodeRefs[j] = 0
-                        outline_nodeCount = outline_nodeCount + w_node_count
+        k = 0
+        way_numbers=list(range(len(WayRefs))) #we need just indices instead of list of way refs
+        while len(way_numbers)>0:
+            for i in way_numbers:
+                wayno=WayRefs[i][0]
+                role=WayRefs[i][1]
+                if role == 'outer':
+                    w_NodeRefs=self.GetWayNodeRefsAndCount(wayno)
+                    w_node_count=len(w_NodeRefs)
+                    if firstNodeId != - 1:
+                        PrevFirstNodeId = OutlineNodeRefs[0]
+                        PrevLastNodeId = OutlineNodeRefs[outline_nodeCount - 1]
                     else:
-                        print('relation is broken')
-                        break
-                if not blnReverseOrder:
-                    for j in range(w_node_count):
-                        #'w_node_id = GetNodeID(w_NodeRefs(j))
-                        #'Debug.Print w_node_id
-                        if blnInsertIntoBeginning:
-                            OutlineNodeRefs[j] = w_NodeRefs[j]
+                        PrevFirstNodeId = firstNodeId
+                        PrevLastNodeId = lastNodeId
+                    firstNodeId = w_NodeRefs[0]
+                    lastNodeId = w_NodeRefs[w_node_count - 1]
+                    if k == 0:
+                        theVeryFirstNodeId = firstNodeId
+                        theVeryLastNodeId = lastNodeId
+                        blnInsertIntoBeginning = False
+                        k=1 # dirty trick. We need to know that it is no longer first way.
+
+                    else:
+                        if firstNodeId == PrevLastNodeId:
+                            #Debug.Print "continuation found, direct order"
+                            blnReverseOrder = False
+                            blnInsertIntoBeginning = False
+                        elif lastNodeId == PrevLastNodeId:
+                            #Debug.Print "continuation found, reverse order"
+                            blnReverseOrder = True
+                            blnInsertIntoBeginning = False
+                            firstNodeId = w_NodeRefs[w_node_count - 1]
+                            lastNodeId = w_NodeRefs[0]
+                        elif  ( firstNodeId == PrevFirstNodeId )  or  ( lastNodeId == PrevFirstNodeId ) :
+                            # opposite directions of the first two ways!
+                            # We need to insert into the beginning
+                            if firstNodeId == PrevFirstNodeId:
+                                blnReverseOrder = True
+                            else:
+                                blnReverseOrder = False
+                            blnInsertIntoBeginning = True
+                            for j in range(w_node_count-1 , -1, - 1):
+                                OutlineNodeRefs.insert(0,0)
+                                #OutlineNodeRefs[j + w_node_count] = OutlineNodeRefs[j]
+                                #OutlineNodeRefs[j] = 0
+                            outline_nodeCount = outline_nodeCount + w_node_count
                         else:
-                            OutlineNodeRefs.append(w_NodeRefs[j])
-                            outline_nodeCount = outline_nodeCount + 1
-                else:
-                    for j in range(w_node_count - 1, -1, - 1):
-                        #'w_node_id = GetNodeID(w_NodeRefs(j))
-                        #'Debug.Print w_node_id
-                        if blnInsertIntoBeginning:
-                            OutlineNodeRefs[w_node_count - 1 - j] = w_NodeRefs[j]
-                        else:
-                            OutlineNodeRefs.append( w_NodeRefs[j])
-                            outline_nodeCount = outline_nodeCount + 1
+                            #print('relation is not sorted?')
+                            continue #we should try other members, may be they are not sequential
+                    if not blnReverseOrder:
+                        for j in range(w_node_count):
+                            #'w_node_id = GetNodeID(w_NodeRefs(j))
+                            #'Debug.Print w_node_id
+                            if blnInsertIntoBeginning:
+                                OutlineNodeRefs[j] = w_NodeRefs[j]
+                            else:
+                                OutlineNodeRefs.append(w_NodeRefs[j])
+                                outline_nodeCount = outline_nodeCount + 1
+                    else:
+                        for j in range(w_node_count - 1, -1, - 1):
+                            #'w_node_id = GetNodeID(w_NodeRefs(j))
+                            #'Debug.Print w_node_id
+                            if blnInsertIntoBeginning:
+                                OutlineNodeRefs[w_node_count - 1 - j] = w_NodeRefs[j]
+                            else:
+                                OutlineNodeRefs.append( w_NodeRefs[j])
+                                outline_nodeCount = outline_nodeCount + 1
+                # we can exit cycle, because  we have found some way to continue chain
+                # and we should remove this way from the list of unprocessed relation members
+                way_numbers.remove(i)
+                break
+            else:
+                #we have NOT found any way to continue chain
+                print('relation is broken')
+                break # nothing else to analyze
 
             if (k>0) and (OutlineNodeRefs[0] == OutlineNodeRefs[outline_nodeCount - 1]):
                 #print("ring closed")
