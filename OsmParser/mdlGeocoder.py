@@ -156,14 +156,52 @@ class Geocoder:
 
             if strTag == '/way':
                 intWayNo = objOsmGeom.AddWay(id, NodeRefs, len(NodeRefs))
-                
+                if NodeRefs[0] == NodeRefs[-1]: #closed way
+
+                    if Tags.get("place","") !="":
+                        size = objOsmGeom.CalculateWaySize(intWayNo)
+                        Outlines=[]
+                        Outlines.append(NodeRefs)
+                        boundaries = []
+                        bbox = Bbox()
+                        bbox.minLat = objOsmGeom.nodes[Outlines[0][0]].lat
+                        bbox.maxLat = objOsmGeom.nodes[Outlines[0][0]].lat
+                        bbox.minLon = objOsmGeom.nodes[Outlines[0][0]].lon
+                        bbox.maxLon = objOsmGeom.nodes[Outlines[0][0]].lon
+
+                        for OutlineNodeRefs in Outlines:
+                            boundary = []
+                            for node in OutlineNodeRefs:
+                                boundary.append([objOsmGeom.nodes[node].lat, objOsmGeom.nodes[node].lon])
+                                if objOsmGeom.nodes[node].lat < bbox.minLat:
+                                    bbox.minLat = objOsmGeom.nodes[node].lat
+                                if objOsmGeom.nodes[node].lat > bbox.maxLat:
+                                    bbox.maxLat = objOsmGeom.nodes[node].lat
+
+                                if objOsmGeom.nodes[node].lon < bbox.minLon:
+                                    bbox.minLon = objOsmGeom.nodes[node].lon
+                                if objOsmGeom.nodes[node].lon > bbox.maxLon:
+                                    bbox.maxLon = objOsmGeom.nodes[node].lon
+                            boundaries.append(boundary)
+
+                        region = GeoRegion()
+                        region.id = id
+                        region.name = Tags.get("name", "")
+                        region.adminlevel = Tags.get("place","")
+                        region.boundary = boundaries
+                        region.bbox = bbox
+                        region.size = size
+                        self.regions.append(region)
 
             if strTag == '/relation':
                 #Здесь-то мы и должны добавить регион в геокодинг 
                 
-                if (Tags.get("type")=="boundary") and not blnObjectIncomplete :
-                    admin_level=Tags.get("admin_level","")
-                    if admin_level=="1" or admin_level=="2" or admin_level=="3" or admin_level=="4" or admin_level=="5" or admin_level=="6" or admin_level=="-8":
+                if ((Tags.get("type")=="boundary") or Tags.get("type")=="multipolygon")and (not blnObjectIncomplete) :
+                    admin_level = Tags.get("admin_level", "")
+                    place = Tags.get("place", "")
+
+                    if admin_level=="1" or admin_level=="2" or admin_level=="3" or admin_level=="4" or admin_level=="5" or admin_level=="6" or admin_level=="-8"  \
+                            or place=="city" or place=="town" or place=="village" or place=="hamlet":
                         #print("BOUNDARY ADMINISTRATIVE ")
                         size = objOsmGeom.CalculateRelationSize(WayRefs, len(WayRefs))
                         #print(" " + Tags.get("name",""))
@@ -196,7 +234,10 @@ class Geocoder:
                             region = GeoRegion()
                             region.id=id
                             region.name = Tags.get("name","") # "RU"
-                            region.adminlevel = admin_level
+                            if admin_level!="":
+                                region.adminlevel = admin_level
+                            else:
+                                region.adminlevel = place
                             region.boundary = boundaries
                             region.bbox=bbox
                             region.size=size
@@ -234,15 +275,17 @@ class Geocoder:
 t1 = time.time()
 geocoder=Geocoder()
 #geocoder.loadDataFromPoly()
-geocoder.loadDataFromOsmFile("d:\\_planet.osm\\geocoder1.osm")
+geocoder.loadDataFromOsmFile("d:\\_planet.osm\\geocoder.osm")
 t2 = time.time()
 print("Geocoder loaded in " + str(t2 - t1) + " seconds")
 
 #print(geocoder.getGeoCodes(0,0))
 print(geocoder.getGeoCodes(55, 37)) # угол московской области
-print(geocoder.getGeoCodes(56.3344086, 38.0993541)) # Сергиев Посад
+print(geocoder.getGeoCodes(56.3068839, 38.1251472)) # Сергиев Посад
 print(geocoder.getGeoCodes(61.6685237, 50.8352024)) # Сывтывкар (Коми)
 print(geocoder.getGeoCodes(54.7744826, 20.5705741)) # Калининград
+print(geocoder.getGeoCodes(55.3995684, 57.9281070)) # Аракулово
+
 t3 = time.time()
 print("4 geocoding queries in  " + str(t3 - t2) + " seconds")
 
