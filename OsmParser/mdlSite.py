@@ -145,43 +145,45 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
 
 def GetSummary(cells):
     summary = [] 
-    sumrec= TSummaryRec()
-    sumrec.DistrictName = ""
-    sumrec.RegionName= "Всего в квадрате"
-    sumrec.TotalObjects = 0
-    sumrec.ObjectsWith3d= 0
-    summary.append (sumrec) 
+    total= TSummaryRec()
+    total.DistrictName = ""
+    total.RegionName= "Всего в квадрате"
+    total.TotalObjects = 0
+    total.ObjectsWith3d= 0
+
     for i in range(len(cells)):
         #find existing record
         blnFound=False
         for j in range(len(summary)):  
-            if summary[j].DistrictName == "" and summary[j].RegionName == cells[i][21] :
+            if summary[j].DistrictName == cells[i][21] and summary[j].RegionName == cells[i][22] :
                 sumrec = summary[j]  
                 blnFound = True
                 break  
         if not blnFound:
             sumrec= TSummaryRec()
-            sumrec.DistrictName = ""
-            sumrec.RegionName= cells[i][21]
+            sumrec.DistrictName = cells[i][21]
+            sumrec.RegionName= cells[i][22]
             sumrec.TotalObjects = 0
             sumrec.ObjectsWith3d = 0
             summary.append (sumrec) 
           
         sumrec.TotalObjects=sumrec.TotalObjects+1
-        summary[0].TotalObjects=summary[0].TotalObjects+1
+        total.TotalObjects=total.TotalObjects+1
 
         if cells[i][23] == "True": 
             sumrec.ObjectsWith3D=sumrec.ObjectsWith3D+1
-            summary[0].ObjectsWith3D=summary[0].ObjectsWith3D+1
+            total.ObjectsWith3D=total.ObjectsWith3D+1
 
-
+    # sort alphabetically
+    summary.sort(key=lambda row: row.RegionName, reverse=False)
+    summary.insert(0, total)
     return summary
 
 #========================================================================
 #  Web Page for Area(quadrant) summary
 #========================================================================
 
-def CreateRegionSummaryPage(Sheet1, dsfLat, dsfLon):
+def CreateRegionSummaryPage(dsfLat, dsfLon):
     strHTMLPage = ""
 
     i = 0

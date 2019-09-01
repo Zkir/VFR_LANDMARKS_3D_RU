@@ -666,7 +666,7 @@ def ProcessQuadrant(strQuadrantName):
     lat=int(strQuadrantName[1:3])
     lon=int(strQuadrantName[4:7])
 
-    CreateRegionSummaryPage(None, lat, lon)
+    CreateRegionSummaryPage( lat, lon)
     CreateIndexPage()
     t4=time.time()
     print ("Summary pages created " + str(t4-t3) +" seconds")
