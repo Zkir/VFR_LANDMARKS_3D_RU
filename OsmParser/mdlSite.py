@@ -211,25 +211,27 @@ def CreateRegionSummaryPage(dsfLat, dsfLon):
     # ==========================================================================
     # find addresses of our osm-objects
     # ==========================================================================
-    print("Loading geocoder...")
-    t1 = time.time()
-    geocoder = Geocoder()
-    geocoder.loadDataFromOsmFile(GEOCODER_SOURCE_OSM)
-    t2 = time.time()
-    print("Geocoder loaded in " + str(t2 - t1) + " seconds")
+    if len(cells)>0:
+        print("Loading geocoder...")
+        t1 = time.time()
+        geocoder = Geocoder()
+        geocoder.loadDataFromOsmFile(GEOCODER_SOURCE_OSM)
+        t2 = time.time()
+        print("Geocoder loaded in " + str(t2 - t1) + " seconds")
 
-    for i in range(len(cells)):
-        lat = (float(cells[i][3]) + float(cells[i][5])) / 2
-        lon = (float(cells[i][4]) + float(cells[i][6])) / 2
-        geocodes = geocoder.getGeoCodes(lat, lon)
-        cells[i][20] = geocodes.get('place', '')  # город
-        cells[i][21] = geocodes.get('adminlevel_6', '')  # район
-        cells[i][22] = geocodes.get('adminlevel_4', '')  # область
-    t3 = time.time()
-    # we still need to save results, we will need them in future.
-    saveDatFile(cells, strInputFile)
-    print("objects geocoded in " + str(t3 - t2) + " seconds")
-
+        for i in range(len(cells)):
+            lat = (float(cells[i][3]) + float(cells[i][5])) / 2
+            lon = (float(cells[i][4]) + float(cells[i][6])) / 2
+            geocodes = geocoder.getGeoCodes(lat, lon)
+            cells[i][20] = geocodes.get('place', '')  # город
+            cells[i][21] = geocodes.get('adminlevel_6', '')  # район
+            cells[i][22] = geocodes.get('adminlevel_4', '')  # область
+        t3 = time.time()
+        # we still need to save results, we will need them in future.
+        saveDatFile(cells, strInputFile)
+        print("objects geocoded in " + str(t3 - t2) + " seconds")
+    else:
+        print("No objects, geocoding skipped")
     # ==========================================================================
     # sort by number of building parts
     # ==========================================================================
@@ -408,10 +410,11 @@ def CreateIndexPage():
     fo.write( '    <tr><th>Квадрат</th><th>Описание</th><th>Всего объектов</th><th>С 3D моделью</th><th>Процент</th><th>Дата последнего обновления</th></tr>' + '\n')
     
     for i in range(len(cells)):
-        intRate=0
-        if int(cells[i][2]) !=0:
-            intRate = Round(100.0*int(cells[i][3])/int(cells[i][2])) 
-        fo.write( '    <tr><td>'+cells[i][0]+'</td><td><a href="'+cells[i][0]+'.html">'+ cells[i][1] +'</a> </td><td>'+cells[i][2]+'</td><td>' + cells[i][3]+ '</td><td>' + str(intRate)+ '</td><td>' + cells[i][4]+ '</td></tr>' + '\n')
+        if cells[i][4]>'1900.01.01 00:00:00': 
+            intRate=0
+            if int(cells[i][2]) !=0:
+                intRate = Round(100.0*int(cells[i][3])/int(cells[i][2])) 
+            fo.write( '    <tr><td>'+cells[i][0]+'</td><td><a href="'+cells[i][0]+'.html">'+ cells[i][1] +'</a> </td><td>'+cells[i][2]+'</td><td>' + cells[i][3]+ '</td><td>' + str(intRate)+ '</td><td>' + cells[i][4]+ '</td></tr>' + '\n')
 
     fo.write( '  </table>' + '\n')
     fo.write( '  <h2>Полезные ссылки</h2>' + '\n')
