@@ -43,9 +43,16 @@ class T3DObject:
         self.colour = ""
         self.dblHeight = 0
         self.osmtags = {}
-        self.tag_count = 0
         self.size = 0
         self.blnHasBuildingParts = False
+
+        self.bbox.minLat = 0
+        self.bbox.minLon = 0
+        self.bbox.maxLat = 0
+        self.bbox.maxLon = 0
+
+    def getTag(self ,strKey):
+        return self.osmtags.get(strKey,'')
 
 
 def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strOutputFile, OSM_3D_MODELS_PATH):
@@ -86,11 +93,8 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
             osmObject = T3DObject()
             osmObject.type = strTag
             osmObject.id = objXML.GetAttribute('id')
-            osmObject.dblHeight = 0
-            osmObject.name = ''
-            osmObject.descr = ''
-            osmObject.key_tags = ''
-            osmObject.strWikipediaName = ''
+           
+           
             blnBuilding = False
             blnBuildingPart = False
             blnFence = False
@@ -99,30 +103,6 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
             #'lon = 0
             #'lat1 = 0
             #'lon1 = 0
-            osmObject.node_count = 0
-            osmObject.way_count = 0
-            osmObject.bbox.minLat = 0
-            osmObject.bbox.minLon = 0
-            osmObject.bbox.maxLat = 0
-            osmObject.bbox.maxLon = 0
-            osmObject.colour = ''
-            osmObject.material = ''
-            osmObject.tagBuilding = ''
-            osmObject.tagArchitecture = ''
-            osmObject.tagStartDate = ''
-            osmObject.tagManMade = ''
-            osmObject.tagBarrier = ''
-            osmObject.tagTowerType = ''
-            osmObject.tagAmenity = ''
-            osmObject.tagDenomination = ''
-            osmObject.tagRuins = ''
-            osmObject.tagWikipedia = ''
-            osmObject.tagAddrStreet = ''
-            osmObject.tagAddrHouseNumber = ''
-            osmObject.tagAddrCity = ''
-            osmObject.tagAddrDistrict= ''
-            osmObject.tagAddrRegion = ''
-            osmObject.tag_count = 0
 
             blnObjectIncomplete= False
             blnRelationBuilding=False
@@ -169,9 +149,9 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
         if strTag == 'tag':
             StrKey = objXML.GetAttribute('k')
             strValue = objXML.GetAttribute('v')
-            osmObject.osmtags[osmObject.tag_count, 0] = StrKey
-            osmObject.osmtags[osmObject.tag_count, 1] = strValue
-            osmObject.tag_count = osmObject.tag_count + 1
+
+            osmObject.osmtags[StrKey] = strValue
+
             if StrKey == 'height':
                 osmObject.dblHeight = ParseHeightValue(strValue)
                 if osmObject.dblHeight > dblMaxHeight:
@@ -269,7 +249,7 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
                                 intModelsCreated = intModelsCreated + 1
                                 print('3d model created ' + Left(osmObject.type, 1) + ':' + osmObject.id +' ' + safeString(osmObject.name) + ' ' + safeString(osmObject.descr))
                         #fill report
-                        strBuildingType = CalculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType, osmObject.tagAmenity, osmObject.tagDenomination, osmObject.tagBarrier, osmObject.size, osmObject.tagRuins)
+                        strBuildingType = CalculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType, osmObject.tagAmenity, osmObject.getTag('religion'), osmObject.tagDenomination, osmObject.tagBarrier, osmObject.size, osmObject.tagRuins)
                         j = j + 1
                         fo.write( str(j) + '|' + osmObject.type + '|' + osmObject.id + '|' + str(osmObject.bbox.minLat) + '|' + str(osmObject.bbox.minLon) + '|' + 
                                   str(osmObject.bbox.maxLat) + '|' + str(osmObject.bbox.maxLon) + '|' + osmObject.name + '|' + osmObject.descr + '|' + ref_temples_ru + '|' + 
@@ -414,10 +394,9 @@ def GuessBuildingStyle(strArchitecture, strDate):
     fn_return_value = LCase(strResult)
     return fn_return_value
 
-def CalculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tagDenomination, tagBarrier, dblSize, tagRuins):
+def CalculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tagReligion, tagDenomination, tagBarrier, dblSize, tagRuins):
     CHURCH_MIN_SIZE = 10
 
-    strResult = ""
     strResult = ''
     if tagDenomination == 'orthodox' or tagDenomination == 'russian_orthodox' or tagDenomination == 'dissenters':
         tagDenomination = 'RUSSIAN ORTHODOX'
@@ -432,10 +411,14 @@ def CalculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
         #strResult = "CHURCH FENCE"
     if tagBuilding == 'yes':
         if tagAmenity == 'place_of_worship':
-            if dblSize != 0 and dblSize < CHURCH_MIN_SIZE:
-                strResult = tagDenomination + ' CHAPEL'
-            else:
-                strResult = tagDenomination + ' CHURCH'
+            if tagReligion == 'christian':
+                if dblSize != 0 and dblSize < CHURCH_MIN_SIZE:
+                    strResult = tagDenomination + ' CHAPEL'
+                else:
+                    strResult = tagDenomination + ' CHURCH'
+            if tagReligion == 'muslim':
+                strResult = tagDenomination + ' MOSQUE'
+
         if tagBarrier == 'city_wall':
             strResult = 'DEFENSIVE WALL'
     else:
