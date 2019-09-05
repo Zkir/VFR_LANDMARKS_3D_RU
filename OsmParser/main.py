@@ -649,7 +649,8 @@ def ProcessQuadrant(strQuadrantName):
     lat=int(strQuadrantName[1:3])
     lon=int(strQuadrantName[4:7])
 
-    CreateRegionSummaryPage( lat, lon)
+    strInputFile = "d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\" + strQuadrantName + "\\" + strQuadrantName + ".dat"
+    CreateRegionSummaryPage(strQuadrantName, strInputFile, True, True )
     CreateIndexPage()
     t4=time.time()
     print ("Summary pages created " + str(t4-t3) +" seconds")

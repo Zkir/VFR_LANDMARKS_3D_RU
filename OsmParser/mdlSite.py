@@ -184,26 +184,13 @@ def GetSummary(cells):
 #  Web Page for Area(quadrant) summary
 #========================================================================
 
-def CreateRegionSummaryPage(dsfLat, dsfLon):
+def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages, blnGeocode):
     strHTMLPage = ""
 
     i = 0
-    strOsmID = ""
-    strModelUrl = ""
-    strF4url = ""
-    strOSMurl = ""
+
     strTemplesUrl = ""
-    strTemplesID = ""
-    strJOSMurl = ""
-    strDescription = ""
-    strDistrict = ""
-    strQuadrantName = ""
 
-    dblPercentage = 0
-    strQuadrantName = composeQuadrantName(dsfLat, dsfLon)
-
-    strInputFile="d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\" + strQuadrantName +"\\" + strQuadrantName + ".dat"
-    
 
     cells = loadDatFile(strInputFile)
 
@@ -211,7 +198,7 @@ def CreateRegionSummaryPage(dsfLat, dsfLon):
     # ==========================================================================
     # find addresses of our osm-objects
     # ==========================================================================
-    if len(cells)>0:
+    if blnGeocode and (len(cells) > 0):
         print("Loading geocoder...")
         t1 = time.time()
         geocoder = Geocoder()
@@ -240,10 +227,10 @@ def CreateRegionSummaryPage(dsfLat, dsfLon):
     #==========================================================================
     # create individual object pages
     #==========================================================================
-
-    for i in range(len(cells)):
-        if (cells[i][23] == "True") or (int(cells[i][24])>0) :
-            CreateObjectPage(strQuadrantName, cells, i)	
+    if blnCreateObjectPages:
+        for i in range(len(cells)):
+            if (cells[i][23] == "True") or (int(cells[i][24])>0) :
+                CreateObjectPage(strQuadrantName, cells, i)
 
 
     #==========================================================================

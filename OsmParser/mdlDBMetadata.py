@@ -1,0 +1,42 @@
+# ===========================================
+# Quadrant list
+# ===========================================
+# Квадрат |Описание	|Всего объектов | С 3D моделью|	Дата последнего обновлени
+# +41+046|['Республика Дагестан']|0|0|2019.09.03 22:38:50
+QUADLIST_QUADCODE = 0
+QUADLIST_DESCR = 1
+QUADLIST_TOTAL_OBJECTS = 2
+QUADLIST_3D_OBJECTS = 3
+QUADLIST_LAST_UPDATE_DATE = 4
+
+# ===========================================
+# Quadrant data
+# ===========================================
+# 1|way|23146719|55.8481378|37.3975364|55.8487769|37.3982731|Главный дом усадьбы Братцево||||36|0|||||ru:Братцево|Светлогорский проезд|13|Москва||Москва|False|0
+QUADDATA_NO = 0
+QUADDATA_OBJ_TYPE = 1
+QUADDATA_OBJ_ID = 2
+QUADDATA_MINLAT = 3
+QUADDATA_MINLON = 4
+QUADDATA_MAXLAT = 5
+QUADDATA_MAXLON = 6
+QUADDATA_NAME = 7
+QUADDATA_DESCR = 8
+QUADDATA_TEMPLESRU_ID = 9
+QUADDATA_BUILDING_TYPE = 10
+QUADDATA_SIZE = 11
+QUADDATA_HEIGHT = 12
+QUADDATA_MATERIAL1=13
+QUADDATA_MATERIAL2=14
+QUADDATA_MATERIAL3=15
+QUADDATA_BUILD_DATE=16
+QUADDATA_WIKIPEDIA = 17
+QUADDATA_ADDR_STREET = 18
+QUADDATA_ADDR_HOUSENUMBER = 19
+QUADDATA_ADDR_CITY = 20
+QUADDATA_ADDR_DISTRICT = 21
+QUADDATA_ADDR_REGION = 22
+QUADDATA_OSM3D = 23
+QUADDATA_NUMBER_OF_PARTS = 24
+
+

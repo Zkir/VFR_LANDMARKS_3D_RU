@@ -1,6 +1,7 @@
 from osmXMLparcer import *
 from osmGeometry import *
 from vbFunctions import *
+from mdlDBMetadata import *
 from mdlMisc import *
 import time
 import sys
@@ -23,12 +24,12 @@ print("total number of quadrants: "+str(len(cells)))
 print("Validator cycle: " + str(CYCLE)) 
 
 # sort by date 
-sortRecordset(cells, 4)
+sortRecordset(cells, QUADLIST_LAST_UPDATE_DATE)
 curtime=time.time()
 
 for row in cells:
-   if (row[4].strip()!="") and (row[4].strip()!="1900.01.01 00:00:00") :
-       time_diff= curtime-time.mktime(time.strptime(row[4],"%Y.%m.%d %H:%M:%S"))
+   if (row[QUADLIST_LAST_UPDATE_DATE].strip()!="") and (row[QUADLIST_LAST_UPDATE_DATE].strip()!="1900.01.01 00:00:00") :
+       time_diff= curtime-time.mktime(time.strptime(row[QUADLIST_LAST_UPDATE_DATE],"%Y.%m.%d %H:%M:%S"))
        time_diff=int(time_diff)
        if time_diff>CYCLE:
            past_due=True
@@ -39,10 +40,10 @@ for row in cells:
        time_diff=CYCLE
 
 
-   print(row[0]+" " +row[4] + " " + str(time_diff) + " " + str(past_due) )
+   print(row[QUADLIST_QUADCODE]+" " +row[QUADLIST_LAST_UPDATE_DATE] + " " + str(time_diff) + " " + str(past_due) )
    
    if past_due:
-       strQuadrantName = row[0]
+       strQuadrantName = row[QUADLIST_QUADCODE]
        lat1=str(int(strQuadrantName[1:3]))
        lon1=str(int(strQuadrantName[4:7]))
        lat2=str(int(lat1)+1)
@@ -51,6 +52,6 @@ for row in cells:
  
        strCommand='process.bat ' + strQuadrantName +' "'+lon1+','+lat1+','+lon2+','+lat2+'"'
        print(strCommand)
-       subprocess.call(BUILD_PATH + '\\'+strCommand, cwd=BUILD_PATH)   
+       subprocess.call(BUILD_PATH + '\\'+strCommand, cwd=BUILD_PATH)
 
 print ("Done!")

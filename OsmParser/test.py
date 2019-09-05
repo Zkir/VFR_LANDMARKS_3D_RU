@@ -2,6 +2,7 @@
 # here we will check our ideas.
 from mdlSite import *
 from mdlGeocoder import *
+from mdlDBMetadata import *
 
 dsfLat=52
 dsfLon=41
@@ -38,5 +39,28 @@ dsfLon=41
 # saveDatFile(cells,strInputFile)
 
 
-CreateRegionSummaryPage(dsfLat, dsfLon)
+# CreateRegionSummaryPage(dsfLat, dsfLon)
 
+#Зачитаем список квадатов.
+#SELECT * FROM ALL QUADRANTS WHERE REGION="xxx"
+DB_FOLDER="d:\\_VFR_LANDMARKS_3D_RU\\3dcheck\\data\\"
+
+strInputFile = DB_FOLDER+"Quadrants.dat"
+rsQuadrantList = loadDatFile(strInputFile)
+
+rsOutput=[]
+for rec in rsQuadrantList:
+    if (rec[QUADLIST_LAST_UPDATE_DATE].strip() != "") and (
+            rec[QUADLIST_LAST_UPDATE_DATE].strip() != "1900.01.01 00:00:00"):
+        strQuadrantCode=rec[QUADLIST_QUADCODE]
+        rsQuandrant=loadDatFile(DB_FOLDER+strQuadrantCode+".dat")
+        for rec1 in rsQuandrant:
+            # if rec1[QUADDATA_ADDR_REGION]=='Алтайский край':
+             if (rec1[QUADDATA_OSM3D] == 'True') and (int(rec1[QUADDATA_NUMBER_OF_PARTS]) > 25):
+                rsOutput.append(rec1)
+
+rsOutput.sort(key=lambda row: int(row[QUADDATA_NUMBER_OF_PARTS]), reverse=True)
+
+saveDatFile(rsOutput,"d:\\_VFR_LANDMARKS_3D_RU\\3dcheck\\data\\"+'RUS_TOP.dat')
+
+CreateRegionSummaryPage('RUS_TOP', "d:\\_VFR_LANDMARKS_3D_RU\\3dcheck\\data\\"+'RUS_TOP.dat', False,  False)
