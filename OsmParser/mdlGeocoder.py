@@ -54,9 +54,10 @@ class Bbox:
 
 class GeoRegion:
     def __init__(self):
+        self.id=""
         self.bbox=Bbox()
         self.name=""
-        self.adminlevel=0
+        self.adminlevel=""
         self.boundary=[]
         
     def checkPointBelongs(self, lat,lon):
@@ -249,7 +250,7 @@ class Geocoder:
         return True
 
 
-    def saveGeoCoderToTextFile(self, strOutputFile):
+    def saveDataToTextFile(self, strOutputFile):
 
         filehandle = open(strOutputFile, 'w', encoding="utf-8")
         for region in self.regions:
@@ -262,14 +263,73 @@ class Geocoder:
 
             for outline in region.boundary:
                 filehandle.write('Data0=')
-                for i in range(len(outline)):
-                    if i>0:
-                        filehandle.write(',')
+                filehandle.write('(' + str(outline[0][0]) + ',' + str(outline[0][1]) + ')')
+                for i in range(1, len(outline)):
+                    filehandle.write(',')
                     filehandle.write('('+ str(outline[i][0]) + ',' + str(outline[i][1]) + ')' )
                 filehandle.write('\n')
             filehandle.write('[END]' + '\n\n')
         filehandle.write('# That\'s all, folks!')
         filehandle.close()
+
+    def loadDataFromTextFile(self, strInputFile):
+        fh = open(strInputFile, 'r', encoding="utf-8")
+        line=fh.readline().strip()
+        line=line.replace("\n","")
+
+        while True:
+            if line=='[REGION]':
+                region=GeoRegion()
+            if line[0:3]=='id=':
+                 region.id=line[3:]
+
+
+            if line[0:5]=='name=':
+                 region.name=line[5:]
+            if line[0:11]=='adminlevel=':
+                region.adminlevel=line[11:]
+            if line[0:5]=='bbox=':
+                bb=line[5:].split(",")
+                region.bbox.minLat = float(bb[0])
+                region.bbox.minLon = float(bb[1])
+                region.bbox.maxLat = float(bb[2])
+                region.bbox.maxLon = float(bb[3])
+            if line[0:5]=='size=':
+               region.size=line[5:]
+            if line[0:6]=='Data0=':
+
+                outline=[]
+                l = line[6:].replace("(", "")
+                l = l.replace(")", "")
+                vv = l.split(",")
+                for i in range(len(vv)//2):
+                    outline.append([float(vv[i*2]), float(vv[i*2+1])])
+                region.boundary.append(outline)
+                pass
+
+            if line == '[END]':
+                self.regions.append(region)
+
+            line=fh.readline()
+
+            if (len(line) == 0):
+                break
+
+            line=line.strip()
+            line = line.replace("\n", "")
+
+
+
+            #lon,lat=line.split(" ")
+            #lat=float(lat)
+            #lon=float(lon)
+            #boundary.append([lat,lon])
+
+       
+
+
+        fh.close()
+
 # ===================================================================================================================
 # Задача обратного геокодинга.
 # по координате найдем адрес.
