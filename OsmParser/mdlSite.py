@@ -198,27 +198,28 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     # ==========================================================================
     # find addresses of our osm-objects
     # ==========================================================================
-    if blnGeocode and (len(cells) > 0):
-        print("Loading geocoder...")
-        t1 = time.time()
-        geocoder = Geocoder()
-        geocoder.loadDataFromOsmFile(GEOCODER_SOURCE_OSM)
-        t2 = time.time()
-        print("Geocoder loaded in " + str(t2 - t1) + " seconds")
+    if blnGeocode:
+        if  (len(cells) > 0):
+            print("Loading geocoder...")
+            t1 = time.time()
+            geocoder = Geocoder()
+            geocoder.loadDataFromOsmFile(GEOCODER_SOURCE_OSM)
+            t2 = time.time()
+            print("Geocoder loaded in " + str(t2 - t1) + " seconds")
 
-        for i in range(len(cells)):
-            lat = (float(cells[i][3]) + float(cells[i][5])) / 2
-            lon = (float(cells[i][4]) + float(cells[i][6])) / 2
-            geocodes = geocoder.getGeoCodes(lat, lon)
-            cells[i][20] = geocodes.get('place', '')  # город
-            cells[i][21] = geocodes.get('adminlevel_6', '')  # район
-            cells[i][22] = geocodes.get('adminlevel_4', '')  # область
-        t3 = time.time()
-        # we still need to save results, we will need them in future.
-        saveDatFile(cells, strInputFile)
-        print("objects geocoded in " + str(t3 - t2) + " seconds")
-    else:
-        print("No objects, geocoding skipped")
+            for i in range(len(cells)):
+                lat = (float(cells[i][3]) + float(cells[i][5])) / 2
+                lon = (float(cells[i][4]) + float(cells[i][6])) / 2
+                geocodes = geocoder.getGeoCodes(lat, lon)
+                cells[i][20] = geocodes.get('place', '')  # город
+                cells[i][21] = geocodes.get('adminlevel_6', '')  # район
+                cells[i][22] = geocodes.get('adminlevel_4', '')  # область
+            t3 = time.time()
+            # we still need to save results, we will need them in future.
+            saveDatFile(cells, strInputFile)
+            print("objects geocoded in " + str(t3 - t2) + " seconds")
+        else:
+            print("No objects, geocoding skipped")
     # ==========================================================================
     # sort by number of building parts
     # ==========================================================================
@@ -366,9 +367,9 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     fo.close()
 
 
-def CreateIndexPage():
+def CreateIndexPage(strInputFile):
 
-    strInputFile="d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\Quadrants.dat"
+
     cells = loadDatFile(strInputFile)
 
 
