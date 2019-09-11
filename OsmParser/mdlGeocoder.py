@@ -249,6 +249,27 @@ class Geocoder:
         return True
 
 
+    def saveGeoCoderToTextFile(self, strOutputFile):
+
+        filehandle = open(strOutputFile, 'w', encoding="utf-8")
+        for region in self.regions:
+            filehandle.write('[REGION]' + '\n')
+            filehandle.write('id=' + region.id + '\n')
+            filehandle.write('name=' + region.name + '\n')
+            filehandle.write('adminlevel=' + region.adminlevel + '\n')
+            filehandle.write('bbox=' + str(region.bbox.minLat) + ',' + str(region.bbox.minLon)  + ',' + str(region.bbox.maxLat) + ',' + str(region.bbox.maxLon)  + '\n')
+            filehandle.write('size=' + str(region.size) + '\n')
+
+            for outline in region.boundary:
+                filehandle.write('Data0=')
+                for i in range(len(outline)):
+                    if i>0:
+                        filehandle.write(',')
+                    filehandle.write('('+ str(outline[i][0]) + ',' + str(outline[i][1]) + ')' )
+                filehandle.write('\n')
+            filehandle.write('[END]' + '\n\n')
+        filehandle.write('# That\'s all, folks!')
+        filehandle.close()
 # ===================================================================================================================
 # Задача обратного геокодинга.
 # по координате найдем адрес.
