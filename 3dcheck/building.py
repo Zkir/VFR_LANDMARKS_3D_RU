@@ -27,6 +27,7 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
 
     strOSMurl = 'https://www.openstreetmap.org/' + LCase(cells[i][1]) + '/' + cells[i][2]
     strF4url = 'http://demo.f4map.com/#lat=' + str(lat) + '&lon=' + str(lon) + '&zoom=19'
+    strOsmBurl = 'http://osmbuildings.org/?lat='+ str(lat) +'&lon=' + str(lon) + '&zoom=19.0'
 
     strJOSMurl = "http://localhost:8111/load_and_zoom?left="+ cells[i][4] + "&right="+ cells[i][6] + "&top="+ cells[i][5] +"&bottom="+ cells[i][3] #"&select=object"
     strTemplesID = cells[i][9]
@@ -44,7 +45,15 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
     strObjectName=cells[intObjectIndex][7]
     if strObjectName=="" and strWikipediaName!="":
         strObjectName=strWikipediaName
-
+    
+    strStars=''
+    intNumberOfParts=int(cells[intObjectIndex][24])
+    if intNumberOfParts>25:
+       strStars='★'
+    if intNumberOfParts>100:
+       strStars='★★'
+    if intNumberOfParts>1000:
+       strStars='★★★'
   
     print( '<!doctype html>'+ '\n')
     print( '<html>'+ '\n')
@@ -105,6 +114,9 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
         print( '  <tr><td>Википедия:</td><td><a target=\'_blank\' href=\'' + strWikipediaLink + '\'>' + Mid(cells[intObjectIndex][17], 4) + '</a></td></tr>'+ '\n')
     print( '  <tr><td>temples.ru:</td><td><a target=\'_blank\' href=\'' + strTemplesUrl + '\'>' + strTemplesID + '</a></td></tr>'+ '\n')
     print( '  <tr><td>F4 Map</td><td><a target=\'_blank\' href=\'' + strF4url + '\'>' + 'demo.f4map.com' + '</a></td></tr>'+ '\n')
+    print( '  <tr><td>Osm Buildings</td><td><a target=\'_blank\' href=\'' + strOsmBurl + '\'>' + 'osmbuildings.org' + '</a></td></tr>'+ '\n')
+    print( '  <tr><td>Число частей:</td><td>'+cells[intObjectIndex][24]+strStars+'</td></tr>'+ '\n')
+
     print( '  <tr><td colspan="2"><br/><b><center>*<a target="josm" href="' + strJOSMurl + '">Редактировать в JOSM</a>*</center></b></td></tr>'+ '\n')
     print( '  </table>'+ '\n')
     print( '   '+ '\n')
