@@ -22,5 +22,8 @@ xcopy /Y %WORK_FOLDER%\Quadrants.dat d:\_VFR_LANDMARKS_3D_RU\3dcheck\data
 "c:\Program Files\CoreFTP\coreftp.exe" -site 3dcheck -O -u %WORK_FOLDER%\%QUADRANT%\osm_3dmodels\*.png   -p /http/models -s
 "c:\Program Files\CoreFTP\coreftp.exe" -site 3dcheck -O -u %WORK_FOLDER%\%QUADRANT%\osm_3dmodels\*.html   -p /http/models -s
 
-"c:\Program Files\CoreFTP\coreftp.exe" -site 3dcheck -O -u d:\_VFR_LANDMARKS_3D_RU\3dcheck\%QUADRANT%.html   -p /http/ -s
+rem "c:\Program Files\CoreFTP\coreftp.exe" -site 3dcheck -O -u d:\_VFR_LANDMARKS_3D_RU\3dcheck\%QUADRANT%.html   -p /http/ -s
 "c:\Program Files\CoreFTP\coreftp.exe" -site 3dcheck -O -u d:\_VFR_LANDMARKS_3D_RU\3dcheck\index.html   -p /http/ -s
+
+"c:\Program Files\CoreFTP\coreftp.exe" -site 3dcheck -O -u %WORK_FOLDER%\%QUADRANT%\%QUADRANT%.dat -p /http/data -s
+"c:\Program Files\CoreFTP\coreftp.exe" -site 3dcheck -O -u %WORK_FOLDER%\Quadrants.dat   -p /http/data -s 

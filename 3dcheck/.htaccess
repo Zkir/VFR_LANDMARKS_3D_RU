@@ -1,4 +1,4 @@
 RewriteEngine on
 RewriteRule ^test$ test.py
-RewriteRule ^([A-Z0-9\-_]+).html$  region.py?param=$1
-RewriteRule ^([A-Z0-9\-_]+)/([RWN0-9]+).html$  building.py?quadrant=$1&object=$2
+RewriteRule ^([A-Z0-9\-\+_]+).html$  region.py?param=$1
+RewriteRule ^([A-Z0-9\-\+_]+)/([RWN0-9]+).html$  building.py?quadrant=$1&object=$2

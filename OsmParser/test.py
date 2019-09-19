@@ -1,4 +1,4 @@
-# This is our playground
+﻿# This is our playground
 # here we will check our ideas.
 from mdlSite import *
 from mdlGeocoder import *
@@ -107,7 +107,7 @@ for region in rsISO3166:
                     region_ex[QUADLIST_LAST_UPDATE_DATE] = rec[QUADLIST_LAST_UPDATE_DATE]
     rsOutput.sort(key=lambda row: int(row[QUADDATA_NUMBER_OF_PARTS]), reverse=True)
     saveDatFile(rsOutput, DB_FOLDER + region[0]+'.dat')
-    CreateRegionSummaryPage(region[0], "d:\\_VFR_LANDMARKS_3D_RU\\3dcheck\\data\\" + region[0]+'.dat', False, False)
+    #CreateRegionSummaryPage(region[0], "d:\\_VFR_LANDMARKS_3D_RU\\3dcheck\\data\\" + region[0]+'.dat', False, False)
 
     region_ex[QUADLIST_TOTAL_OBJECTS] = str(len(rsOutput))
     intObjectsWith3DModel = 0
@@ -121,7 +121,7 @@ for region in rsISO3166:
 rsRegions.sort(key=lambda row: row[QUADLIST_DESCR], reverse=False)
 saveDatFile(rsRegions, DB_FOLDER+'Regions.dat')
 
-CreateIndexPage(DB_FOLDER+'Regions.dat')
+#CreateIndexPage(DB_FOLDER+'Regions.dat')
 
 #QUADLIST_QUADCODE
 #QUADLIST_DESCR
