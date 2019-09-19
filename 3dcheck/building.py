@@ -58,7 +58,7 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
     print( '<!doctype html>'+ '\n')
     print( '<html>'+ '\n')
     print( '<head>'+ '\n')
-    print( '  <title>' + cells[intObjectIndex][7] + '</title>'+ '\n')
+    print( '  <title>' + strObjectName  +'</title>'+ '\n')
     #print( '  <meta encoding=\'utf-8\' />'+ '\n')
     print( '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'+ '\n')
     #Print #4, "  <script src='http://x3dom.org/release/x3dom.js'></script>"
@@ -75,7 +75,7 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
     print( '</head>'+ '\n')
     print( '<body class=\'page\'>'+ '\n')
     print( '  <div class=\'page-header\'>'+ '\n')
-    print( '    <h1>' + strObjectName + ' (' + strOsmID + ')</h1>'+ '\n')
+    print( '    <h1>' + strObjectName + ' (' + strOsmID + ') ' +strStars+ '</h1>'+ '\n')
     print( '  </div>'+ '\n')
     print( '  <div class=\'page-content\'>'+ '\n')
     print( '    <div class=\'scene\' style=\'height:510px; width:510px;float:left\'>'+ '\n')
