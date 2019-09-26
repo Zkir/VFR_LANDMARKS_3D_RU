@@ -4,7 +4,7 @@ import os
 import sys
 import codecs
 from mdlMisc import *
-
+import cgi
 
 
 class TSummaryRec:
@@ -215,7 +215,8 @@ print
 url = os.environ.get("REQUEST_URI","") 
 parsed = urlparse.urlparse(url) 
 strParam=urlparse.parse_qs(parsed.query).get('param','')
-strQuadrantName=url[1:-5]
+#strQuadrantName=url[1:-5]
+strQuadrantName=cgi.FieldStorage().getvalue('param')
 
 #print(strQuadrantName)
 CreateRegionSummaryPage(strQuadrantName, "data/"+strQuadrantName+".dat", False, False)
