@@ -44,13 +44,14 @@ for row in cells:
    
    if past_due:
        strQuadrantName = row[QUADLIST_QUADCODE]
-       lat1=str(int(strQuadrantName[1:3]))
-       lon1=str(int(strQuadrantName[4:7]))
-       lat2=str(int(lat1)+1)
-       lon2=str(int(lon1)+1)
+       #lat1=str(int(strQuadrantName[1:3]))
+       #lon1=str(int(strQuadrantName[4:7]))
+       #lat2=str(int(lat1)+1)
+       #lon2=str(int(lon1)+1)
 
  
-       strCommand='process.bat ' + strQuadrantName +' "'+lon1+','+lat1+','+lon2+','+lat2+'"'
+       #strCommand='process.bat ' + strQuadrantName +' "'+lon1+','+lat1+','+lon2+','+lat2+'"'
+       strCommand='process.bat ' + strQuadrantName + ' '+strQuadrantName+'.poly' 
        print(strCommand)
        subprocess.call(BUILD_PATH + '\\'+strCommand, cwd=BUILD_PATH)
 

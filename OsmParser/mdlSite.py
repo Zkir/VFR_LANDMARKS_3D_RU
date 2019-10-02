@@ -180,25 +180,9 @@ def GetSummary(cells):
     summary.insert(0, total)
     return summary
 
-#========================================================================
-#  Web Page for Area(quadrant) summary
-#========================================================================
-
-def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages, blnGeocode):
-    strHTMLPage = ""
-
-    i = 0
-
-    strTemplesUrl = ""
-
-
+def DoGeocodingForDatFile(strInputFile):
     cells = loadDatFile(strInputFile)
-
-
-    # ==========================================================================
-    # find addresses of our osm-objects
-    # ==========================================================================
-    if blnGeocode:
+    if True:
         if  (len(cells) > 0):
             print("Loading geocoder...")
             t1 = time.time()
@@ -220,6 +204,31 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
             print("objects geocoded in " + str(t3 - t2) + " seconds")
         else:
             print("No objects, geocoding skipped")
+
+
+
+#========================================================================
+#  Web Page for Area(quadrant) summary
+#========================================================================
+
+def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages, blnGeocode):
+    strHTMLPage = ""
+
+    i = 0
+
+    strTemplesUrl = ""
+
+
+    
+
+
+    # ==========================================================================
+    # find addresses of our osm-objects
+    # ==========================================================================
+    if blnGeocode:
+        DoGeocodingForDatFile(strInputFile) 
+
+    cells = loadDatFile(strInputFile)
     # ==========================================================================
     # sort by number of building parts
     # ==========================================================================
