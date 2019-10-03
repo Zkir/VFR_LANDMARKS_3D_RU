@@ -333,11 +333,11 @@ class Geocoder:
         for region in self.regions:
             if region.id == strId: 
                 filehandle.write(region.id + ' ' + region.name+ '\n')
-
+                j=0
                 for outline in region.boundary:
-                    filehandle.write('1'+'\n')
+                    j=j+1
+                    filehandle.write(str(j)+'\n')
                     for i in range(0, len(outline)):
-                        
                         filehandle.write('    '+ str(outline[i][1]) + ' ' + str(outline[i][0]) + '\n' )
                     filehandle.write('END' +'\n')
                 filehandle.write('END' + '\n')
