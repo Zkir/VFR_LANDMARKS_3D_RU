@@ -19,7 +19,7 @@ class TSummaryRec:
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 GEOCODER_SOURCE_OSM = "d:\\_planet.osm\\geocoder.osm"
-
+GEOCODER_SOURCE_TXT  = "d:\\_planet.osm\\geocoder.txt"
 
 
 #========================================================================
@@ -187,7 +187,9 @@ def DoGeocodingForDatFile(strInputFile):
             print("Loading geocoder...")
             t1 = time.time()
             geocoder = Geocoder()
-            geocoder.loadDataFromOsmFile(GEOCODER_SOURCE_OSM)
+            #geocoder.loadDataFromOsmFile(GEOCODER_SOURCE_OSM)
+            geocoder.loadDataFromTextFile(GEOCODER_SOURCE_TXT)
+
             t2 = time.time()
             print("Geocoder loaded in " + str(t2 - t1) + " seconds")
 

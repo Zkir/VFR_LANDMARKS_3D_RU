@@ -63,5 +63,6 @@ sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 print ("Content-Type: text/html; charset=utf-8 \n\n")
 print
 
-CreateIndexPage("data/Regions.dat")
+#CreateIndexPage("data/Regions.dat")
+CreateIndexPage("data/Quadrants.dat")
 
