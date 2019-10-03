@@ -8,7 +8,6 @@ MIN_DATE='1900.01.01 00:00:00'
 
 
 print("Loading geocoder...")
-t3 = time.time()
 geocoder = Geocoder()
 geocoder.loadDataFromTextFile("d:\\_planet.osm\\geocoder.txt")
 t4 = time.time()
@@ -21,5 +20,3 @@ geocoder.saveDataToPolyFile("d:\\RU-SPE.poly","337422")
 geocoder.saveDataToPolyFile("d:\\RU-LEN.poly","176095")
 
 print("Done!")
-
-

@@ -238,6 +238,8 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
              
                 if  ( osmObject.type != 'node' ) :
                     if blnBuilding or blnFence:
+                        heightbyparts = 0
+                        numberofparts = 0 
                         # Rewrite osmObject as osm file!
                         if not blnFence:
                             heightbyparts, numberofparts = RewriteOsmFile(osmObject, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH)
@@ -288,6 +290,8 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
 
 
 def ParseHeightValue(str):
+    if Right(str, 2) == ' м':
+        str = Left(str, Len(str) - 2)
     if Right(str, 2) == ' m':
         str = Left(str, Len(str) - 2)
     if str == 'high' or str == 'low':
@@ -645,9 +649,6 @@ def ProcessQuadrant(strQuadrantName):
     t3=time.time()
     print ("Osm models converted to obj/x3d in " + str(t3-t2) +" seconds")
 
-
-    lat=int(strQuadrantName[1:3])
-    lon=int(strQuadrantName[4:7])
 
     strInputFile = "d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\" + strQuadrantName + "\\" + strQuadrantName + ".dat"
     DoGeocodingForDatFile(strInputFile)
