@@ -325,10 +325,24 @@ class Geocoder:
             #lon=float(lon)
             #boundary.append([lat,lon])
 
-       
-
-
         fh.close()
+
+    def saveDataToPolyFile(self, strOutputFile, strId):
+
+        filehandle = open(strOutputFile, 'w', encoding="utf-8")
+        for region in self.regions:
+            if region.id == strId: 
+                filehandle.write(region.id + ' ' + region.name+ '\n')
+
+                for outline in region.boundary:
+                    filehandle.write('1'+'\n')
+                    for i in range(0, len(outline)):
+                        
+                        filehandle.write('    '+ str(outline[i][1]) + ' ' + str(outline[i][0]) + '\n' )
+                    filehandle.write('END' +'\n')
+                filehandle.write('END' + '\n')
+        #filehandle.write('# That\'s all, folks!')
+        filehandle.close()
 
 # ===================================================================================================================
 # Задача обратного геокодинга.
