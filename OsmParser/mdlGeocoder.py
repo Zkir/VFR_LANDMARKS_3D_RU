@@ -57,6 +57,7 @@ class GeoRegion:
         self.id=""
         self.bbox=Bbox()
         self.name=""
+        self.ISO3166_2=""
         self.adminlevel=""
         self.boundary=[]
         
@@ -188,6 +189,7 @@ class Geocoder:
                         region = GeoRegion()
                         region.id = id
                         region.name = Tags.get("name", "")
+                        region.ISO3166_2 = Tags.get("ISO3166-2", "")
                         region.adminlevel = 'place' #Tags.get("place","")
                         region.boundary = boundaries
                         region.bbox = bbox
@@ -235,6 +237,7 @@ class Geocoder:
                             region = GeoRegion()
                             region.id=id
                             region.name = Tags.get("name","") # "RU"
+                            region.ISO3166_2 = Tags.get("ISO3166-2", "")
                             if admin_level!="":
                                 region.adminlevel = admin_level
                             else:
@@ -257,6 +260,8 @@ class Geocoder:
             filehandle.write('[REGION]' + '\n')
             filehandle.write('id=' + region.id + '\n')
             filehandle.write('name=' + region.name + '\n')
+            if region.ISO3166_2 != "":
+                filehandle.write('ISO3166-2=' + region.ISO3166_2 + '\n')
             filehandle.write('adminlevel=' + region.adminlevel + '\n')
             filehandle.write('bbox=' + str(region.bbox.minLat) + ',' + str(region.bbox.minLon)  + ',' + str(region.bbox.maxLat) + ',' + str(region.bbox.maxLon)  + '\n')
             filehandle.write('size=' + str(region.size) + '\n')
@@ -281,11 +286,12 @@ class Geocoder:
             if line=='[REGION]':
                 region=GeoRegion()
             if line[0:3]=='id=':
-                 region.id=line[3:]
-
+                region.id=line[3:]
 
             if line[0:5]=='name=':
-                 region.name=line[5:]
+                region.name=line[5:]
+            if line[0:10]=='ISO3166-2=':
+                region.ISO3166_2=line[10:]
             if line[0:11]=='adminlevel=':
                 region.adminlevel=line[11:]
             if line[0:5]=='bbox=':
@@ -331,7 +337,7 @@ class Geocoder:
 
         filehandle = open(strOutputFile, 'w', encoding="utf-8")
         for region in self.regions:
-            if region.id == strId: 
+            if (region.id == strId) or (region.ISO3166_2 == strId) : 
                 filehandle.write(region.id + ' ' + region.name+ '\n')
 
                 for outline in region.boundary:
