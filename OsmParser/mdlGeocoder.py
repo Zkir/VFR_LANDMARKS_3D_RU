@@ -350,6 +350,24 @@ class Geocoder:
         #filehandle.write('# That\'s all, folks!')
         filehandle.close()
 
+    def saveDataToPolyFiles(self):
+
+        
+        for region in self.regions:
+            if region.ISO3166_2 != "" : 
+                filehandle = open("d:\\_VFR_LANDMARKS_3D_RU\\poly\\" + region.ISO3166_2 + '.poly', 'w', encoding="utf-8")
+                filehandle.write(region.id + ' ' + region.name+ '\n')
+                j=0
+                for outline in region.boundary:
+                    j=j+1
+                    filehandle.write(str(j)+'\n')
+                    for i in range(0, len(outline)):
+                        filehandle.write('    '+ str(outline[i][1]) + ' ' + str(outline[i][0]) + '\n' )
+                    filehandle.write('END' +'\n')
+                filehandle.write('END' + '\n')
+                filehandle.close()
+
+
 # ===================================================================================================================
 # Задача обратного геокодинга.
 # по координате найдем адрес.
