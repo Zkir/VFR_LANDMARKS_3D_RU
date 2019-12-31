@@ -1,0 +1,321 @@
+/**
+ * File:    ClassicismTemple4.cga
+ * Created: 28 Nov 2019 18:08:44 GMT
+ * Author:  Kirill
+ */
+
+version "2019.1"
+import porch_lib: "Porch.cga"
+
+attr TotalHeight=20
+const RoofHeight=5
+const Heigh=TotalHeight-RoofHeight
+attr ColumnDiameter=2
+attr InterColumnSpace=2
+attr PorchSize=3
+attr Layer3Bevel=0.7
+attr HasBellTower=true
+attr HasRefectory=true
+attr Domed5 =true
+
+@Color
+attr wallColor = "#F0E080"
+
+const refectoryWindowTexture="ClassicismTemple/window.1.png"
+const belltowerWindowTexture="ClassicismTemple/belltowerwindow.png"
+const belltowerBellWindowTexture="ClassicismTemple/belltowerwindow_bells.png"
+const tholobateWindowTexture="ClassicismTemple/belltowerwindow.png"
+const belltowerDoorTexture="ClassicismTemple/belltowerdoor.png"
+const roofTexture="ClassicismTemple/MetalRoof.png"
+const wallRustTexture="ClassicismTemple/rust.png"
+
+@StartRule
+Start -->
+    rectify(40)
+    Main
+
+Main --> 
+    case HasBellTower:  split(z){scope.sx:Quadruple|~1: Refectory| scope.sx/2: BellTower  }
+    else: 
+          case HasRefectory:  split(z){scope.sx:Quadruple|~1: Refectory}
+          else: split(z){scope.sx:Quadruple|~1: NIL}
+          
+None-->
+     color(wallColor)         
+
+#*************************************
+#  Belltower
+#*************************************
+BellTower-->
+    s('0.5,'1,'1)
+    center(x)
+    extrude(world.up, Heigh/1.4)
+    comp(f){ top : BellTowerLayer2 |bottom:NIL| all : BellTowerLayer1Wall}
+
+BellTowerLayer1Wall-->
+    split(x){ '0.3:  None |
+              ~0.3: split(y){~1:  BellTowerDoor|1.5:None} |
+              '0.3:   None
+            }
+BellTowerDoor-->            
+    #extrude(-0.6)
+    #comp(f){ bottom:NIL| front:NIL| all :  BellTowerDoorColor}
+    BellTowerDoorColor
+    
+  
+BellTowerDoorColor -->
+    #color("#9090FF")
+    setupProjection(0,scope.xy,scope.sx,scope.sy)	
+	texture(belltowerDoorTexture)	
+	projectUV(0)          
+
+BellTowerLayer2-->
+   offset(-0.6 )
+   comp(f){ inside : extrude(world.up, Heigh/1.8) comp(f){ top : BellTowerLayer2a |bottom:NIL| all : BellTowerLayer2Wall} |all : None  }
+    
+
+BellTowerLayer2a-->
+    offset(-0.5)
+    comp(f){ inside : extrude(world.up, 2) comp(f){ top : BellTowerLayer3 |bottom:NIL| all : None} |all : None  }
+ 
+ BellTowerLayer2Wall-->
+    split(x){'0.3:None|~1:split(y){'0.2:None|~1:BellTowerLayer2Window|'0.2:None}|'0.3:None}
+    
+ BellTowerLayer2Window-->
+    #color("#2020F0")
+    setupProjection(0,scope.xy,scope.sx,scope.sy)	
+	texture(belltowerWindowTexture)	
+	projectUV(0)          
+   
+BellTowerLayer3 -->
+   offset(-0.6)
+   comp(f){ inside : BellTowerLayer3a  |all : None}
+
+BellTowerLayer3a -->
+    rotateScope (0,0,45)
+    split(x){Layer3Bevel:None|~1:split(y){Layer3Bevel:None|~1:BellTowerLayer3b|Layer3Bevel:None}|Layer3Bevel:None}
+      
+
+BellTowerLayer3b --> 
+    extrude(world.up, Heigh/1.8)
+    comp(f){ top : BellTowerDome |bottom:NIL| all : BellTowerLayer3Wall}
+    
+BellTowerLayer3Wall-->
+    case scope.sx >2: 
+        split(x){'0.1:None|~1:split(y){~1:BellTowerLayer3Window|'0.2:None}|'0.1:None}
+    else:
+       None        
+
+
+BellTowerLayer3Window-->
+    color(wallColor)
+    #color(0.7,0,0,0.7)
+    setupProjection(0,scope.xy,scope.sx,scope.sy)	
+	texture(belltowerBellWindowTexture)	
+	projectUV(0)      
+      
+BellTowerDome -->
+      
+     color("#9090E0")
+     offset(-0.5)
+     //DomeRoofH(5)
+     comp(f){ inside:Dome(2) | all : None }
+
+#*************************************
+#  Refectory
+#*************************************        
+
+Refectory -->
+    s('0.7,'1,'1)
+    center(x)
+    extrude(world.up, Heigh/2)
+    comp(f){ top : RefectoryRoof |bottom:NIL| front :None | back:NIL|all: RefectoryWall}
+    
+RefectoryWall-->
+    setupProjection(0,scope.xy,6,6)
+    
+    split(x) { ~4:RefectoryWallTile}*
+ 
+RefectoryWallTile-->
+    split(x) { 1.2: RefectoryWallSection |
+               ~1: split(y) {'0.2: RefectoryWallSection | ~1: RefectoryWindow | '0.2: RefectoryWallSection } |
+                1.2: RefectoryWallSection }
+  
+ RefectoryWallSection-->
+     None 
+     #color("#FFFFFF")
+     #texture(wallRustTexture)
+     #projectUV(0) 
+  
+RefectoryWindow-->
+      
+    setupProjection(0,scope.xy,scope.sx,scope.sy)	
+	texture(refectoryWindowTexture)	
+	projectUV(0)     
+    
+RefectoryRoof-->
+    #roofGable(30)
+     roofGable(30,1,0.25,false,0)
+     comp(f){ top :RefectoryRoofSolid | all : None}
+     
+RefectoryRoofSolid-->   
+extrude(world.up, 0.3) 
+MetalRoofTexture 
+
+MetalRoofTexture-->
+     #color("#2020F0")
+    setupProjection(0,scope.xy,10,10)	
+	texture(roofTexture)	
+	projectUV(0) 
+    
+#*************************************
+#  Quadruple
+#*************************************        
+
+Quadruple --> 
+    extrude(world.up, Heigh)
+    comp(f){ top : BuildRoof |
+            bottom:NIL| 
+            front: BuildFrontWall |
+            all : BuildCubeWall}
+    
+    
+BuildFrontWall-->
+    case HasRefectory || HasBellTower : None
+    else:              BuildCubeWall
+    
+BuildCubeWall-->
+    split(x){'0.2:None|'0.6: ExtrudePorch| '0.2: None  }
+    
+
+ExtrudePorch-->
+    extrude(PorchSize)
+    rotateScope(-90,90,0)
+    #r(-90,90,0)
+    porch_lib.Porch
+    
+    
+BuildRoof -->    
+    offset(-1,all)
+    comp(f){ inside : BuildRoof1 | all : None}
+    
+BuildRoof1-->    
+    extrude(world.up, Heigh/4)
+    comp(f){ top : BuildRoof2 |bottom:NIL| all : None}
+    
+BuildRoof2-->
+    case Domed5:   
+        split(x){'0.25:A(3)|'0.5:B|'0.25:A(1)}
+    else:
+        BB    
+    
+A(k)-->    
+    split(y){'0.25:AA|'0.5:BA(k)|'0.25: AA}
+B-->    
+    split(y){'0.25:BA(0)|'0.5:BB|'0.25:BA(2)}    
+
+BA(roofOrientation) --> 
+    roofShed(byHeight, 1, roofOrientation)
+    MetalRoofTexture 
+
+    
+AA-->
+     
+    extrude(world.up, Heigh/3)
+    split(y){0.25:None|~1:Tholobate}
+    
+    
+BB-->
+    extrude(world.up, Heigh/2)
+    split(y){1:None|~1:Tholobate}
+    
+     
+Tholobate-->    
+    primitiveCylinder(8)
+    #softenNormals(30)   
+    comp(f){ top : DomeA |bottom:NIL| all : TholobateWall}
+
+TholobateWall-->
+  split(x) {'0.2: None | ~1: split(y) {'0.2: None | ~1: TholobateWindow | '0.2: None } | '0.2: None }    
+
+TholobateWindow-->
+    #color("#F01010")
+    setupProjection(0,scope.xy,scope.sx,scope.sy)	
+	texture(tholobateWindowTexture)	
+	projectUV(0)           
+
+DomeA-->    
+    offset(0.4)
+    #Dome
+    comp(f){ inside : DomeB   |bottom:NIL|all=None }
+        
+DomeB-->    
+    extrude(world.up,0.25)
+    comp(f){ top : DomeC |bottom:NIL|all=None }
+    
+DomeC-->     
+   offset(-0.4)
+    comp(f){ inside : Dome(1)   |bottom:NIL|all=None }
+   
+Dome(h)-->
+    color("#9090E0")
+    [ t(0,0,sqrt(geometry.area()/1.7)) primitiveDisk(12) OnionTholobate(h) ]
+    
+    DomeRoofH(5)
+    
+    
+OnionTholobate(h)-->
+    
+    s('0.25,'0.25,'0.25)
+    center(xy)  
+    #resetGeometry() 
+    extrude(h)
+    comp(f){ top : Dome2 |bottom:NIL| all : None}
+
+Dome2-->    
+    #extrude(2)
+    rotateScope(90,0,0)
+    i("ClassicismTemple/onion_with_neck.obj")
+    color("#FFFF00")
+    #DomeRoofH(5)
+    
+
+    
+    
+
+    
+#========================================================
+# additional roof types
+#========================================================
+
+
+# for curved roofs such as dome or vault
+const curvedAngleResolution = 6
+calcSegmentHt(Roof_Ht,n) = Roof_Ht * (cos(n*curvedAngleResolution) - cos((n+1)*curvedAngleResolution))
+#calcSegmentHt(Roof_Ht,n) = sqrt(geometry.area()/3.14) * (cos(n*curvedAngleResolution) - cos((n+1)*curvedAngleResolution))
+
+calcSegmentAngle(h,r,n) =n*curvedAngleResolution
+ 	     
+# round roofs
+
+RoofMass(removeBottomAndTop) -->
+	case removeBottomAndTop:
+		comp(f){ horizontal: NIL | vertical: Facade | all: RoofPlane }
+	else: # remove only the bottom face
+		comp(f){ bottom: NIL | vertical: Facade | all: RoofPlane }
+
+
+
+DomeRoofH(h) -->
+    
+	#DomeRoof(a,90/curvedAngleResolution-1)
+	DomeRoof(2*sqrt(geometry.area()/3.14),5,90/curvedAngleResolution-1)
+	
+	
+
+DomeRoof(h,r,n) -->
+	case n > 1: roofHip(byAngle,calcSegmentAngle(h,r,n))
+		        split(y){ (calcSegmentHt(h,n)): RoofMass(n!=2) 
+		                                      #s('1,'1.5,'1)
+									          comp(f){ bottom: NIL | horizontal: DomeRoof(h,r,n-1) } }
+	else: NIL     
