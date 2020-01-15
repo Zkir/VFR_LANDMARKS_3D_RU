@@ -34,6 +34,9 @@ church_old_russian_01     | R:7944700       | 56.308627   | 38.132786   | 19 | W
 #Церковь Воскресения Словущего (Сергиев Посад) 
 church_neoclassical_01    | R:7932909       | 56.315409   | 38.131185   | 25 | BLUE   | PLASTER | RUSSIAN ORTHODOX CHURCH
 
+#Церковь Сошествия Святого Духа (Новое, Ярославская область) -- neoclassicism
+church_neoclassical_02    | R:7974036       | 56.601545   | 38.629794   | 32 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH
+
 #Церковь Успения Пресвятой Богородицы (Сергиев Посад)
 church_baroque_01         | R:6648138       | 56.29965305 | 38.1247471  | 30 | ORANGERED | PLASTER | RUSSIAN ORTHODOX CHURCH
 
