@@ -159,31 +159,28 @@ def GetColourName(strRgbCode):
     if Left(strRgbCode, 1) != "#":
         raise Exception ("wrong color format")
 
-    r1 = int( strRgbCode[1: 3],16)
-    g1 = int( strRgbCode[3: 5],16)
-    b1 = int( strRgbCode[5: 7],16)
+    r1 = int(strRgbCode[1: 3],16)
+    g1 = int(strRgbCode[3: 5],16)
+    b1 = int(strRgbCode[5: 7],16)
     minDistance = (r1 * r1) + g1 * g1 + b1 * b1
 
     for color in lstColorCodes:
         if Left(color[1], 1) != "#":
             raise Exception("wrong color format")
 
-        r2 = int(color[1][ 1: 3],16)
-        g2 = int(color[1][ 3: 5],16)
-        b2 = int(color[1][ 5: 7],16)
+        r2 = int(color[1][1: 3],16)
+        g2 = int(color[1][3: 5],16)
+        b2 = int(color[1][5: 7],16)
         Distance = (r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2
 
         if Distance < minDistance:
             strColorName = LCase(color[0])
             minDistance = Distance
 
-    GetColourName = strColorName
-
-
     return strColorName
 
+
 def getColorDistance(strColorName1, strColorName2):
-    i = 0
 
     r1 = 0
     r2 = 0
@@ -191,17 +188,18 @@ def getColorDistance(strColorName1, strColorName2):
     g2 = 0
     b1 = 0
     b2 = 0
-    for i in vbForRange(2, 148):
-        if LCase(strColorName1) == LCase(shtColorCodes.Cells(i, 3)):
-            r1 = CLng('&H' + Mid(shtColorCodes.Cells(i, 4), 2, 2))
-            g1 = CLng('&H' + Mid(shtColorCodes.Cells(i, 4), 4, 2))
-            b1 = CLng('&H' + Mid(shtColorCodes.Cells(i, 4), 6, 2))
-        if LCase(strColorName2) == LCase(shtColorCodes.Cells(i, 3)):
-            r2 = CLng('&H' + Mid(shtColorCodes.Cells(i, 4), 2, 2))
-            g2 = CLng('&H' + Mid(shtColorCodes.Cells(i, 4), 4, 2))
-            b2 = CLng('&H' + Mid(shtColorCodes.Cells(i, 4), 6, 2))
-    fn_return_value = ( r1 - r2 )  ** 2 +  ( g1 - g2 )  ** 2 +  ( b1 - b2 )  ** 2
+    for color in lstColorCodes:
+        if LCase(strColorName1) == LCase(color[0]):
+            r1 = int(color[1][1: 3], 16)
+            g1 = int(color[1][3: 5], 16)
+            b1 = int(color[1][5: 7], 16)
+        if LCase(strColorName2) == LCase(color[0]):
+            r2 = int(color[1][1: 3], 16)
+            g2 = int(color[1][3: 5], 16)
+            b2 = int(color[1][5: 7], 16)
+    fn_return_value = (r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2
     return fn_return_value
+
 
 def composeQuadrantName(dsfLat, dsfLon):
     if dsfLat >= 0:
@@ -231,14 +229,17 @@ def safeString(s):
 # home-brew relational DB interface
 # plain files pipe (|) separated
 #====================================================================================
-def loadDatFile(strInputFile):
-    cells=[]  
-    filehandle = open(strInputFile, 'r', encoding="utf-8")
+def loadDatFile(strInputFile, encoding="utf-8"):
+    cells = []
+    filehandle = open(strInputFile, 'r', encoding=encoding)
     txt = filehandle.readline().strip()
     while len(txt) != 0:
-        row = txt.strip().split("|")
-        if len(row)>1:
-            cells.append(row)
+        if Left(txt,1) != "#":
+            row = txt.strip().split("|")
+            for i in range(len(row)):
+                row[i] = row[i].strip()
+            if len(row)>1:
+                cells.append(row)
         txt = filehandle.readline()
     # end of while
     filehandle.close()

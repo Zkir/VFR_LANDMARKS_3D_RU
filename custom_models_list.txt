@@ -8,95 +8,95 @@
 #
 
 #Колокольня Троице-Сергиевой лавры, Сергиев Посад
-ts_lavra_belltower        | W:36866037      | 56.31050685 | 38.12957430 | 86 | WHITE  | PLASTER | RUSSIAN ORTHODOX CAMPANILE
+ts_lavra_belltower        | W:36866037      | 56.31050685 | 38.12957430 | 86 | WHITE  | PLASTER | RUSSIAN ORTHODOX CAMPANILE | BAROQUE     | 29
 
 #Успенский  собор Троице-Сергиевой  лавры, Сергиев Посад
-ts_lavra_sobor01          | R:6637079       | 56.31033575 | 38.13060525 | 50 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH
+ts_lavra_sobor01          | R:6637079       | 56.31033575 | 38.13060525 | 50 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH    | OLD_RUSSIAN | 35
 
 #Надвратная церковь  Троице-Сергиевой  лавры, Сергиев Посад
-ts_lavra_church01         | W:277544965     | 56.310165   | 38.131830   | 35 | ORANGE | PLASTER | RUSSIAN ORTHODOX CHURCH
-
+ts_lavra_church01         | W:277544965     | 56.310165   | 38.131830   | 35 | ORANGE | PLASTER | RUSSIAN ORTHODOX CHURCH    | BAROQUE     | 18
 #Церковь Сошествия Святого Духа Троице-Сергиевой  лавры, Сергиев Посад
-ts_lavra_church02         | R:7926015       | 56.309923   | 38.130188   | 32 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH
+ts_lavra_church02         | R:7926015       | 56.309923   | 38.130188   | 32 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH    | OLD_RUSSIAN | 16
 
 #Церковь Сергия Радонежского Троице-Сергиевой  лавры, Сергиев Посад
-ts_lavra_church03         | R:6642589       | 56.30952265 | 38.1306209  | 32 | ORANGE | PLASTER | RUSSIAN ORTHODOX CHURCH
+ts_lavra_church03         | R:6642589       | 56.30952265 | 38.1306209  | 32 | ORANGE | PLASTER | RUSSIAN ORTHODOX CHURCH    | UZOROCHYE   | 42
 
 #Собор Троицы Живоначальной  Троице-Сергиевой  лавры, Сергиев Посад
-ts_lavra_church04         | R:8635484       | 56.30968785 | 38.12946975 | 21 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH
+ts_lavra_church04         | R:8635484       | 56.30968785 | 38.12946975 | 21 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH    | OLD_RUSSIAN | 16
 
 #Никоновский придел cобора Троицы Живоначальной  Троице-Сергиевой  лавры, Сергиев Посад
-ts_lavra_church05         | R:8635531       | 56.30960255 | 38.12954135 | 15 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH
+ts_lavra_church05         | R:8635531       | 56.30960255 | 38.12954135 | 15 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH    | OLD_RUSSIAN | 12
 
 #Церковь Церковь Параскевы (Пятницы) Великомученицы, Сергиев Посад
-church_old_russian_01     | R:7944700       | 56.308627   | 38.132786   | 19 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH
+church_old_russian_01     | R:7944700       | 56.308627   | 38.132786   | 19 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH    | UZOROCHYE   | 17
 
 #Церковь Воскресения Словущего (Сергиев Посад) 
-church_neoclassical_01    | R:7932909       | 56.315409   | 38.131185   | 25 | BLUE   | PLASTER | RUSSIAN ORTHODOX CHURCH
+church_neoclassical_01    | R:7932909       | 56.315409   | 38.131185   | 25 | BLUE   | PLASTER | RUSSIAN ORTHODOX CHURCH    | NEOCLASSICISM | 17
 
 #Церковь Сошествия Святого Духа (Новое, Ярославская область) -- neoclassicism
-church_neoclassical_02    | R:7974036       | 56.601545   | 38.629794   | 32 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH
+church_neoclassical_02    | R:7974036       | 56.601545   | 38.629794   | 32 | WHITE  | PLASTER | RUSSIAN ORTHODOX CHURCH    | NEOCLASSICISM | 32
 
 #Церковь Успения Пресвятой Богородицы (Сергиев Посад)
-church_baroque_01         | R:6648138       | 56.29965305 | 38.1247471  | 30 | ORANGERED | PLASTER | RUSSIAN ORTHODOX CHURCH
+church_baroque_01         | R:6648138       | 56.29965305 | 38.1247471  | 30 | ORANGERED | PLASTER | RUSSIAN ORTHODOX CHURCH | BAROQUE       | 27
 
 #Церковь Лазаря праведного (Сергиев Посад)
-church_contemp_01         | R:8794693       | 56.3344087  | 38.0993541  | 18  | ORANGE  | PLASTER | RUSSIAN ORTHODOX CHURCH
+church_contemp_01         | R:8794693       | 56.3344087  | 38.0993541  | 18  | ORANGE  | PLASTER | RUSSIAN ORTHODOX CHURCH  | CONTEMPORARY | 14 
+
 
 #Церковь Георгия Победоносца(Сергиев Посад/Семхоз)
-church_contemp_02         | R:8906499      | 56.28505145  | 38.0602983  | 19  | RED | PLASTER | RUSSIAN ORTHODOX CHURCH
+church_contemp_02         | R:8906499      | 56.28505145  | 38.0602983  | 19  | RED | PLASTER | RUSSIAN ORTHODOX CHURCH | CONTEMPORARY | 17
 
 #Церковь Марии Магдалины (Лоза) 
-church_pseudo-russian_01  | R:9226586      | 56.2576892 |  38.21574415   | 24  | RED | BRICK | RUSSIAN ORTHODOX CHURCH
+church_pseudo-russian_01  | R:9226586      | 56.2576892 |  38.21574415   | 24  | RED | BRICK | RUSSIAN ORTHODOX CHURCH | PSEUDO-RUSSIAN |28
 
 #Собор Иконы Божией Матери Черниговская-Гефсиманская, Черниговский скит, Сергиев Посад 
-church_pseudo-russian_02  | R:7948571     | 56.3071288	| 38.17890055    | 34  | RED | BRICK | RUSSIAN ORTHODOX CHURCH
+church_pseudo-russian_02  | R:7948571     | 56.3071288	| 38.17890055    | 34  | RED | BRICK | RUSSIAN ORTHODOX CHURCH | PSEUDO-RUSSIAN |28
 
 #Колокольня Черниговского скита, Черниговский скит, Сергиев Посад 
-belltower_pseudo-russian_01  | R:8775879     | 56.30688105	| 38.18003065    | 75  | RED | BRICK | CAMPANILE 
+belltower_pseudo-russian_01  | R:8775879     | 56.30688105	| 38.18003065    | 75  | RED | BRICK | CAMPANILE  | PSEUDO-RUSSIAN |23
 
 #
 # Часовни
 #
 
 #Церковь Явления Пресвятой Богородицы Сергию и Михею Радонежским, Сергиев Посад
-ts_lavra_chapel01         | W:277544964     | 56.309679 | 38.130095     | 11  | RED | PLASTER | RUSSIAN ORTHODOX CHAPEL
+ts_lavra_chapel01         | W:277544964     | 56.309679 | 38.130095     | 11  | RED | PLASTER | RUSSIAN ORTHODOX CHAPEL |BAROQUE       | 11
 
 #
 #Крепостные стены и башни.
 #
 
 #Водяная башня Троице-Сергиевой  лавры, Сергиев Посад
-ts_lavra_fortress_tower01 | W:35546654      | 56.30877551 | 38.12938766 | 28 | WHITE | PLASTER | DEFENSIVE TOWER
+ts_lavra_fortress_tower01 | W:35546654      | 56.30877551 | 38.12938766 | 28 | WHITE | PLASTER | DEFENSIVE TOWER | |13
 
 #Пятницкая башня Троице-Сергиевой  лавры, Сергиев Посад
-ts_lavra_fortress_tower02 | W:35447048      | 56.30947600 | 38.13247300 | 30 | WHITE | PLASTER | DEFENSIVE TOWER
+ts_lavra_fortress_tower02 | W:35447048      | 56.30947600 | 38.13247300 | 30 | WHITE | PLASTER | DEFENSIVE TOWER | |18
 
 #Луковая башня Троице-Сергиевой  лавры, Сергиев Посад
-ts_lavra_fortress_tower03 | W:35551878      | 56.309208	  | 38.130966   | 25 | WHITE | PLASTER | DEFENSIVE TOWER
+ts_lavra_fortress_tower03 | W:35551878      | 56.309208	  | 38.130966   | 25 | WHITE | PLASTER | DEFENSIVE TOWER | |10
 
 #Уточья башня Троице-Сергиевой  лавры, Сергиев Посад
-ts_lavra_fortress_tower04 | W:35447051      | 56.312659	  | 38.131960   | 47 | WHITE | PLASTER | DEFENSIVE TOWER
+ts_lavra_fortress_tower04 | W:35447051      | 56.312659	  | 38.131960   | 47 | WHITE | PLASTER | DEFENSIVE TOWER | |16
 
 #Успенские ворота  Троице-Сергиевой  лавры, Сергиев Посад
-ts_lavra_fortress_tower05 | R:6650308       | 56.310203	  | 38.132329   | 32 | WHITE | PLASTER | DEFENSIVE TOWER
+ts_lavra_fortress_tower05 | R:6650308       | 56.310203	  | 38.132329   | 32 | WHITE | PLASTER | DEFENSIVE TOWER | |10
 
 #Сушильная башня   Троице-Сергиевой  лавры, Сергиев Посад
-ts_lavra_fortress_tower06 | W:36128102      | 56.311358  | 38.132112    | 25 | WHITE | PLASTER | DEFENSIVE TOWER
+ts_lavra_fortress_tower06 | W:36128102      | 56.311358  | 38.132112    | 25 | WHITE | PLASTER | DEFENSIVE TOWER | |13
 
 #Пивная башня  Троице-Сергиевой  лавры, Сергиев Посад
-ts_lavra_fortress_tower07 | W:36129618      | 56.309405  | 38.128719    | 30 | WHITE | PLASTER | DEFENSIVE TOWER
+ts_lavra_fortress_tower07 | W:36129618      | 56.309405  | 38.128719    | 30 | WHITE | PLASTER | DEFENSIVE TOWER | |18
 
 #
 # Водонапорные башни
 #
 
 #Водонапорная башня, вокзал, Сергиев посад
-water_tower_01            | W:621316415     | 56.302487  | 38.139847    | 25 | RED   | BRICK   | WATER TOWER
+water_tower_01            | W:621316415     | 56.302487  | 38.139847    | 25 | RED   | BRICK   | WATER TOWER | |9
 
 #
 #Радиобашни
 #
 
 #Ретрансляционная радиобашня, Лесной.
-radiotower01              | w:110540399     | 56.08834715 | 37.93085922 | 100| RED-WHITE |    | RADIO TOWER
+radiotower01              | w:110540399     | 56.08834715 | 37.93085922 | 100| RED-WHITE |    | RADIO TOWER | |0
