@@ -10,8 +10,9 @@
 /osmupdate_temp
 /work_folder
 /OsmParser/.idea/*.*
+/OsmParser/.idea/dictionaries/*.*
+/OsmParser/.idea/inspectionProfiles/*.*
 /OsmParser/__pycache__/*.*
-OsmParser/.idea/dictionaries/KBondarenko.xml
 *.pyc
-OsmParser/.idea/dictionaries/zkir.xml
-OsmParser/.idea/inspectionProfiles/Project_Default.xml
+
+
