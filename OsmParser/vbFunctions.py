@@ -47,7 +47,11 @@ def Round(x):
     return round(x)
 
 def IsNumeric(s):
-    return True
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
 
 def Kill(s):
     remove(s)

@@ -298,10 +298,9 @@ def ParseHeightValue(str):
         str = '0'
     if Right(str,1) == "'":
         str=Trim(Left(str, Len(str) - 1))
-        
         str=float(str)*0.3048 
     if not IsNumeric(str):
-        #print str
+        print ("Unparsed height value: " + str)
         str = '0'
     fn_return_value = float(str)
     return fn_return_value

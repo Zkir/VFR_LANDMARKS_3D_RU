@@ -187,19 +187,22 @@ class clsOsmGeometry():
         return fn_return_value
 
     def CalculateWaySize(self, intWayNo):
-        bbox = TBbox()
 
-        N = 0
         bbox = self.GetWayBBox(intWayNo)
         N = len(self.ways[intWayNo].NodeRefs)-1
+        #print(N)
+        if N<0:
+            print("Way without nodes: " + self.ways[intWayNo].id)
+            return 0.0
+    
         if self.ways[intWayNo].NodeRefs[0] != self.ways[intWayNo].NodeRefs[N]:
             # Debug.Print "way not closed " & ways(intWayNo).ID
             fn_return_value = DEGREE_LENGTH_M * Sqr(Abs(bbox.maxLat - bbox.minLat) * Abs(bbox.maxLon - bbox.minLon) * Cos(( bbox.minLat + bbox.maxLat )  / 2.0 / 180 * Pi))
         else:
             # Debug.Print "way  closed"
             fn_return_value = Sqr(self.CalculateClosedNodeChainSqure(self.ways[intWayNo].NodeRefs, N))
-        #CalculateWaySize = Round(CalculateWaySize)
         return fn_return_value
+
 
     def ExtractCloseNodeChainFromRelation(self, WayRefs):
 
