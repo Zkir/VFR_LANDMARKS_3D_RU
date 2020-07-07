@@ -15,7 +15,7 @@ def CreateIndexPage(strInputFile):
     print( '<head>' + '\n')
     print( '  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'+ '\n')
     print( '  <title>Валидатор 3D: церкви и другие здания</title>' + '\n')
-    print( '  <script src="/sorttable.js" type="Text/javascript"></script>' + '\n')
+    print( '  <script src="/js/sorttable.js" type="Text/javascript"></script>' + '\n')
     print( '  <style>' + '\n')
     print( '    table {border: 1px solid grey;}' + '\n')
     print( '    th {border: 1px solid grey; }' + '\n')
