@@ -1,0 +1,58 @@
+   html, body {
+       height: 100%;
+       padding:0;
+       margin:0;
+   }
+   div.page{
+       /* border: solid 3px green; */
+
+       height: 100%;
+       width: 100%;
+       position: absolute;
+       left:0;
+       top:0; 
+   }
+   div.page-header {
+      /* border: solid 1px black; */
+       height:65px; 
+       padding-left:10px;
+       margin:0px;
+   }
+   div.descr {
+       /*border: solid 1px black;*/
+       float: right;
+       width: 300px;
+   }
+   div.scene {
+       /* background: #e3e8cc;
+       border:dotted 2px blue; */
+       position:absolute; 
+       top:85px;
+       bottom:90px;
+       left:0px;
+       right:300px;
+
+   }
+   div.x3d-content {
+       /*border:dotted 2px red;*/
+       position:relative; 
+       top:0px;
+       left:0px;
+       width:100%;
+       height:100% 
+   } 
+
+   div.page-footer {
+       /*border: solid 1px black; */
+       position: absolute;
+       min-top:200;
+       bottom: 0;
+       padding-left:10px;
+       width: 99%;
+       height:90px    
+   }
+   button#trigger-overlay{
+       position: absolute;
+       bottom:0px;
+       right: 0px;
+   }

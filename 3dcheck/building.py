@@ -79,28 +79,15 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
     print( '  </script>'+ '\n')
     print( '  <link rel="stylesheet" type="text/css" href="/css/style5.css" />'+ '\n')
     print( '  <script src="/js/modernizr.custom.js"></script>'+ '\n')
+    print( '  <link rel="stylesheet" type="text/css" href="/css/building.css" />'+ '\n')
     print( '</head>'+ '\n')
     print( '<body class=\'page\'>'+ '\n')
     print( '  <div class=\'page-header\'>'+ '\n')
     print( '    <h1>' + strObjectName + ' (' + strOsmID + ') ' +strStars+ '</h1>'+ '\n')
     print( '  </div>'+ '\n')
     print( '  <div class=\'page-content\'>'+ '\n')
-    print( '    <div class=\'scene\' style=\'height:520px; width:510px;float:left\'>'+ '\n')
-    if cells[i][23] == "True":
-        print( '      <div class=\'x3d-content\'>'+ '\n')
-        print( '        <x3d id=\'x3dElem\' x=\'0px\' y=\'0px\' width=\'500px\' height=\'500px\'>'+ '\n')
-        print( '          <scene>'+ '\n')
-        print( "            <inline onload='fitCamera()' url='/models/" + strOsmID + ".x3d'></inline>" + "\n")
-        print( '          </scene>'+ '\n')
-        print( '        </x3d>'+ '\n')
-        print( '      </div>'+ '\n')
-    else:
-        print( '      <div class=\'no_model\'>'+ '\n')
-        print( '           <img src=\'/nomodel.gif\' width=\'450px\' height=\'450px\' alt=\'3d Модель отсутствует\' ><img> '+ '\n')
-        print( '      </div>'+ '\n')
-    print( '       <center><button id="trigger-overlay" type="button">На весь экран</button> </center>'+ '\n')
-    print( '    </div>'+ '\n')
-    print( '  <div class=\'Description\' style=\'float:left\' >'+ '\n')
+
+    print( '  <div class=\'descr\'  >'+ '\n')
     print( '  <table style=\'padding-left:15px\'>'+ '\n')
     print( '  <tr><td>Тип здания:  </td><td>' + cells[intObjectIndex][10] + '</td></tr>'+ '\n')
     print( '  <tr><td>Описание:  </td><td>' + cells[intObjectIndex][8] + '</td></tr>'+ '\n')
@@ -128,6 +115,23 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
     print( '  </table>'+ '\n')
     print( '   '+ '\n')
     print( '  </div>'+ '\n')
+
+    print( '    <div class=\'scene\' >'+ '\n')
+    if cells[i][23] == "True":
+        print( '      <div class=\'x3d-content\'>'+ '\n')
+        print( '        <x3d id=\'x3dElem\' x=\'0px\' y=\'0px\' width=\'100%\' height=\'100%\'>'+ '\n')
+        print( '          <scene>'+ '\n')
+        print( "            <inline onload='fitCamera()' url='/models/" + strOsmID + ".x3d'></inline>" + "\n")
+        print( '          </scene>'+ '\n')
+        print( '        </x3d>'+ '\n')
+        print( '      </div>'+ '\n')
+    else:
+        print( '      <div class=\'no_model\'>'+ '\n')
+        print( '           <img src=\'/nomodel.gif\' width=\'450px\' height=\'450px\' alt=\'3d Модель отсутствует\' ><img> '+ '\n')
+        print( '      </div>'+ '\n')
+    print( '       <button id="trigger-overlay" type="button">На весь экран</button>'+ '\n')
+    print( '    </div>'+ '\n')
+
     print( '  <div style=\'clear:both;\'></div>'+ '\n')
     print( '  </div>'+ '\n')
     print( '  <div class=\'page-footer\'>'+ '\n')
@@ -190,5 +194,4 @@ for i in range(len(cells)):
        intObjectIndex=i
        break  
     
-
 CreateObjectPage(strQuadrantName, cells, intObjectIndex)
