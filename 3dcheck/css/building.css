@@ -3,20 +3,31 @@
        padding:0;
        margin:0;
    }
-   div.page{
-       /* border: solid 3px green; */
+   .page{
+      /* border: solid 3px green; */
 
+       
        height: 100%;
        width: 100%;
        position: absolute;
        left:0;
        top:0; 
+       
+       display: flex;
+       flex-direction: column;
+
    }
    div.page-header {
-      /* border: solid 1px black; */
-       height:65px; 
+       /* border: solid 1px black; 
+       height:65px;  */
+
        padding-left:10px;
        margin:0px;
+   }
+
+   div.page-content {
+       /*border:dotted 2px blue; */
+       flex-grow: 1;
    }
    div.descr {
        /*border: solid 1px black;*/
@@ -24,13 +35,13 @@
        width: 300px;
    }
    div.scene {
-       /* background: #e3e8cc;
-       border:dotted 2px blue; */
+     /*  background: #e3e8cc;
+         border:dotted 2px blue;  */
        position:absolute; 
        top:85px;
        bottom:90px;
        left:0px;
-       right:300px;
+       right:300px; 
 
    }
    div.x3d-content {
@@ -43,13 +54,9 @@
    } 
 
    div.page-footer {
-       /*border: solid 1px black; */
-       position: absolute;
-       min-top:200;
-       bottom: 0;
+     /*  border: solid 1px black;  */
        padding-left:10px;
-       width: 99%;
-       height:90px    
+
    }
    button#trigger-overlay{
        position: absolute;
