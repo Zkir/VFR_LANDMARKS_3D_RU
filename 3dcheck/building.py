@@ -83,7 +83,8 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
     print( '</head>'+ '\n')
     print( '<body class=\'page\'>'+ '\n')
     print( '  <div class=\'page-header\'>'+ '\n')
-    print( '    <h1>' + strObjectName + ' (' + strOsmID + ') ' +strStars+ '</h1>'+ '\n')
+    strPageTitle=strObjectName + ' (' + strOsmID + ') ' +strStars
+    print( '    <h1 title="'+strPageTitle+'">' + strPageTitle + '</h1>'+ '\n')
     print( '  </div>'+ '\n')
     print( '  <div class=\'page-content\'>'+ '\n')
 

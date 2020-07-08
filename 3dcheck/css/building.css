@@ -58,6 +58,11 @@
        padding-left:10px;
 
    }
+   h1 {
+       white-space: nowrap;
+       overflow: hidden;
+       text-overflow: ellipsis;
+   }
    button#trigger-overlay{
        position: absolute;
        bottom:0px;
