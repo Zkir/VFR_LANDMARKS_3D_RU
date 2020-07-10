@@ -55,13 +55,11 @@ class T3DObject:
         return self.osmtags.get(strKey,'')
 
 
-def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strOutputFile, OSM_3D_MODELS_PATH):
-    i = 0
-    j = 0
-    k = 0
+# we will read osm file into a set of objects + complex structure with geometry
+def ReadOsmXml(strSrcOsmFile):
+
     dblMaxHeight = 0
 
-    strTag = ""
     blnBuilding = False
     blnBuildingPart = False
     blnFence = False
@@ -69,21 +67,12 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
     node_id = ""
     way_id = ""
     waybbox = TBbox()
-    objOsmGeom = clsOsmGeometry()
-    objXML = clsXMLparser()
-    intNodeNo = 0
-    intWayNo = 0
-    StrKey = ""
-    strValue = ""
-    intModelsCreated = 0
-
-
 
     print('Process start: list of building is generated')
     objOsmGeom = clsOsmGeometry()
     objXML = clsXMLparser()
+    Objects = []
 
-    fo=open(strOutputFile, 'w', encoding="utf-8")
     objXML.OpenFile(strSrcOsmFile)
     intModelsCreated = 0
     while not objXML.bEOF:
@@ -93,23 +82,17 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
             osmObject = T3DObject()
             osmObject.type = strTag
             osmObject.id = objXML.GetAttribute('id')
-           
-           
+
             blnBuilding = False
             blnBuildingPart = False
             blnFence = False
-            ref_temples_ru = ''
-            #'lat = 0
-            #'lon = 0
-            #'lat1 = 0
-            #'lon1 = 0
 
             blnObjectIncomplete= False
             blnRelationBuilding=False
 
         if strTag == 'node':
             objOsmGeom.AddNode(osmObject.id, objXML.GetAttribute('lat'), objXML.GetAttribute('lon'))
-        #references to nodes in ways. we need to find coordinates
+        # references to nodes in ways. we need to find coordinates
         if strTag == 'nd':
             node_id = objXML.GetAttribute('ref')
             intNodeNo = objOsmGeom.FindNode(node_id)
@@ -119,7 +102,7 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
             else: 
                 osmObject.NodeRefs.append( intNodeNo)
                 osmObject.node_count = osmObject.node_count + 1
-        #references to ways in relations. we need find coordinates
+        # references to ways in relations. we need find coordinates
         if strTag == 'member':
             if objXML.GetAttribute('type') == 'way':
                 way_id = objXML.GetAttribute('ref')
@@ -145,6 +128,7 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
                         if waybbox.maxLon > osmObject.bbox.maxLon:
                             osmObject.bbox.maxLon = waybbox.maxLon
                     osmObject.way_count = osmObject.way_count + 1
+
         #get osmObject osm tags
         if strTag == 'tag':
             StrKey = objXML.GetAttribute('k')
@@ -155,7 +139,6 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
             if StrKey == 'height':
                 osmObject.dblHeight = ParseHeightValue(strValue)
                 if osmObject.dblHeight > dblMaxHeight:
-                    #print dblHeight
                     dblMaxHeight = osmObject.dblHeight
             if StrKey == 'name':
                 osmObject.name = strValue
@@ -177,7 +160,7 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
             if StrKey == 'barrier':
                 osmObject.tagBarrier = strValue
                 osmObject.key_tags = osmObject.key_tags + ' barrier=' + osmObject.tagBarrier
-            #wikipedia
+            # wikipedia
             if StrKey == 'wikipedia':
                 osmObject.tagWikipedia = strValue
             if StrKey == 'addr:street':
@@ -203,7 +186,7 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
             if StrKey == 'building:material':
                 osmObject.material = strValue
             #for buildings we have building:colour, for other objects, e.g. fences, just colour
-            if  ( StrKey == 'building:colour' )  or  ( StrKey == 'colour' ) :
+            if ( StrKey == 'building:colour' )  or  ( StrKey == 'colour' ) :
                 osmObject.colour = strValue
                 if Left(strValue, 1) == '#':
                     osmObject.colour = GetColourName(strValue)
@@ -222,10 +205,10 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
             if blnRelationBuilding:
                 blnBuilding=False
 
-            osmObject.size = 0
             osmObject.size = objOsmGeom.CalculateRelationSize(osmObject.WayRefs, osmObject.way_count)
-            #print osmObject.size
-        #Closing node
+            # print osmObject.size
+
+        # Closing node
         if strTag == '/node' or strTag == '/way' or strTag == '/relation':
 
             if not blnBuilding:
@@ -234,32 +217,12 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
                 #If blnFence Then
                 #  print "barrier=fence"
                 #End If
-            if  blnObjectIncomplete != True:   
+            if blnObjectIncomplete != True:
              
-                if  ( osmObject.type != 'node' ) :
+                if osmObject.type != 'node':
                     if blnBuilding or blnFence:
-                        heightbyparts = 0
-                        numberofparts = 0 
-                        # Rewrite osmObject as osm file!
-                        if not blnFence:
-                            heightbyparts, numberofparts = RewriteOsmFile(osmObject, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH)
-                            osmObject.blnHasBuildingParts = ( heightbyparts > 0 )
-                 
-                            if heightbyparts > osmObject.dblHeight:
-                                osmObject.dblHeight = heightbyparts
-                            if osmObject.blnHasBuildingParts and  ( osmObject.dblHeight > 0 ) :
-                                intModelsCreated = intModelsCreated + 1
-                                print('3d model created ' + Left(osmObject.type, 1) + ':' + osmObject.id +' ' + safeString(osmObject.name) + ' ' + safeString(osmObject.descr))
-                        #fill report
-                        strBuildingType = CalculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType, osmObject.tagAmenity, osmObject.getTag('religion'), osmObject.tagDenomination, osmObject.tagBarrier, osmObject.size, osmObject.tagRuins)
-                        j = j + 1
-                        fo.write( str(j) + '|' + osmObject.type + '|' + osmObject.id + '|' + str(osmObject.bbox.minLat) + '|' + str(osmObject.bbox.minLon) + '|' + 
-                                  str(osmObject.bbox.maxLat) + '|' + str(osmObject.bbox.maxLon) + '|' + osmObject.name + '|' + osmObject.descr + '|' + ref_temples_ru + '|' + 
-                                  strBuildingType + '|' + str(Round(osmObject.size)) + '|' + str(Round(osmObject.dblHeight)) + '|' + osmObject.colour + '|' + osmObject.material + '|' +
-                                  GuessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate) + '|' + ParseStartDateValue(osmObject.tagStartDate) + '|' + osmObject.tagWikipedia + '|' +
-                                  osmObject.tagAddrStreet + '|' + osmObject.tagAddrHouseNumber + '|' + osmObject.tagAddrCity + '|' + osmObject.tagAddrDistrict + '|' + osmObject.tagAddrRegion + '|' +
-                                  str(( osmObject.blnHasBuildingParts )  and  ( osmObject.dblHeight > 0 )) + '|' + str(numberofparts) +
-                                  '\n')
+                        Objects.append(osmObject)
+
                     else:
                         #print "Building part is skipped: " & osmObject.type & " " & osmObject.id
                         # print "not a building: " & osmObject.type & " " & osmObject.id
@@ -268,26 +231,63 @@ def ReadOsmXml(strQuadrantName, strSrcOsmFile, strObjectsWithPartsFileName, strO
                 print('Object is incomplete ' + osmObject.type +' ' +  osmObject.id) 
 
     objXML.CloseFile()
-    print(str(j) + ' objects detected, ' + str(intModelsCreated) + ' 3d models created')
-    
-    #miracle: update totals file
+
+    return objOsmGeom, Objects
+
+
+def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFileName, strOutputFile, OSM_3D_MODELS_PATH):
+    j = 0
+    intModelsCreated=0
+    fo = open(strOutputFile, 'w', encoding="utf-8")
+    for osmObject in Objects:
+        heightbyparts = 0
+        numberofparts = 0
+        blnFence = (osmObject.tagBarrier == 'fence') or (osmObject.tagBarrier == 'wall')
+
+        # Rewrite osmObject as osm file!
+        if not blnFence:
+            heightbyparts, numberofparts = RewriteOsmFile(osmObject, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH)
+            osmObject.blnHasBuildingParts = (heightbyparts > 0)
+
+            if heightbyparts > osmObject.dblHeight:
+                osmObject.dblHeight = heightbyparts
+            if osmObject.blnHasBuildingParts and (osmObject.dblHeight > 0):
+                intModelsCreated = intModelsCreated + 1
+                print('3d model created ' + Left(osmObject.type, 1) + ':' + osmObject.id + ' ' + safeString(
+                    osmObject.name) + ' ' + safeString(osmObject.descr))
+
+        # fill report
+        strBuildingType = CalculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType,
+                                                osmObject.tagAmenity, osmObject.getTag('religion'),
+                                                osmObject.tagDenomination, osmObject.tagBarrier, osmObject.size,
+                                                osmObject.tagRuins)
+        ref_temples_ru = osmObject.getTag('ref:temples.ru')
+        j = j + 1
+        fo.write(str(j) + '|' + osmObject.type + '|' + osmObject.id + '|' + str(osmObject.bbox.minLat) + '|' + str(
+            osmObject.bbox.minLon) + '|' +
+                 str(osmObject.bbox.maxLat) + '|' + str(
+            osmObject.bbox.maxLon) + '|' + osmObject.name + '|' + osmObject.descr + '|' + ref_temples_ru + '|' +
+                 strBuildingType + '|' + str(Round(osmObject.size)) + '|' + str(
+            Round(osmObject.dblHeight)) + '|' + osmObject.colour + '|' + osmObject.material + '|' +
+                 GuessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate) + '|' + ParseStartDateValue(
+            osmObject.tagStartDate) + '|' + osmObject.tagWikipedia + '|' +
+                 osmObject.tagAddrStreet + '|' + osmObject.tagAddrHouseNumber + '|' + osmObject.tagAddrCity + '|' + osmObject.tagAddrDistrict + '|' + osmObject.tagAddrRegion + '|' +
+                 str(osmObject.blnHasBuildingParts and (osmObject.dblHeight > 0)) + '|' + str(numberofparts) +
+                 '\n')
+    fo.close()
+
+    # miracle: update totals file
     totals = loadDatFile("d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\Quadrants.dat")
-    #fiter by quadrant name
+    # filter by quadrant name
     for i in range(len(totals)):
         if totals[i][0] == strQuadrantName:
-           totals[i][2] = str(j)
-           totals[i][3] = str(intModelsCreated)
-           totals[i][4] = getTimeStamp()
-           break  
+            totals[i][2] = str(j)
+            totals[i][3] = str(intModelsCreated)
+            totals[i][4] = getTimeStamp()
+            break
 
-    saveDatFile(totals,"d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\Quadrants.dat")
- 
-
-    fn_return_value = objOsmGeom
-    fo.close()
-    return fn_return_value
-
-
+    saveDatFile(totals, "d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\Quadrants.dat")
+    print(str(j) + ' objects detected, ' + str(intModelsCreated) + ' 3d models created')
 
 def ParseHeightValue(str):
     if Right(str, 2) == ' м':
@@ -602,6 +602,7 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
     fn_return_value = [height, numberofparts]
     return fn_return_value
 
+
 def DeleteUnnecessaryModels(Sheet1):
     i = 0
 
@@ -628,19 +629,25 @@ def DeleteUnnecessaryModels(Sheet1):
                 if Dir(strOutputOsmFileName) != '':
                     Kill(strOutputOsmFileName)
 
+
 def ProcessQuadrant(strQuadrantName):
     print("processing quadrant: "+ strQuadrantName)
 
-    t1=time.time()
+    t1 = time.time()
     strWorkingFolder = ""
 
     strWorkingFolder = BUILD_PATH + '\\work_folder\\' + strQuadrantName
 
     subprocess.call(BUILD_PATH + '\\cleanup.bat', cwd=strWorkingFolder + '\\osm_3dmodels')
 
-    objOsmGeom = ReadOsmXml(strQuadrantName, strWorkingFolder + '\\osm_data\\objects-all.osm', strWorkingFolder + '\\osm_data\\objects-with-parts.osm', strWorkingFolder + '\\' + strQuadrantName + '.dat', strWorkingFolder + '\\osm_3dmodels')
-    t2=time.time()
-    print ("Quadrant " + strQuadrantName + " processed in "+str(t2-t1)+" seconds")
+    objOsmGeom, Objects = ReadOsmXml(strWorkingFolder + '\\osm_data\\objects-all.osm')
+    processBuildings(objOsmGeom, Objects, strQuadrantName,
+                     strWorkingFolder + '\\osm_data\\objects-with-parts.osm',
+                     strWorkingFolder + '\\' + strQuadrantName + '.dat',
+                     strWorkingFolder + '\\osm_3dmodels'
+                     )
+    t2 = time.time()
+    print("Quadrant " + strQuadrantName + " processed in "+str(t2-t1)+" seconds")
 
     subprocess.call(BUILD_PATH + '\\convert-all-obj.bat', cwd=strWorkingFolder + '\\osm_3dmodels')
     subprocess.call(BUILD_PATH + '\\convert-all-x3d.bat', cwd=strWorkingFolder + '\\osm_3dmodels')
