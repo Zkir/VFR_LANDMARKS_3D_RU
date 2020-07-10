@@ -54,20 +54,24 @@ class T3DObject:
     def getTag(self ,strKey):
         return self.osmtags.get(strKey,'')
 
+    def isBuilding(self):
+        # if an object has building tag, it's probably a building (forget about building=no)
+        blnBuilding=(self.getTag("building") != "")
+        # Relation building is not really a building, it's just a group of building parts.
+        if (self.getTag("type") == "building"):
+            blnBuilding = False
+        return  blnBuilding
+
+    def isBuildingPart(self):
+        return (self.getTag("building:part") != "")
+
+
 
 # we will read osm file into a set of objects + complex structure with geometry
 def ReadOsmXml(strSrcOsmFile):
 
     dblMaxHeight = 0
-
-    blnBuilding = False
-    blnBuildingPart = False
-    blnFence = False
-    ref_temples_ru = ""
-    node_id = ""
-    way_id = ""
-    waybbox = TBbox()
-
+    blnObjectIncomplete=False
     print('Process start: list of building is generated')
     objOsmGeom = clsOsmGeometry()
     objXML = clsXMLparser()
@@ -82,13 +86,7 @@ def ReadOsmXml(strSrcOsmFile):
             osmObject = T3DObject()
             osmObject.type = strTag
             osmObject.id = objXML.GetAttribute('id')
-
-            blnBuilding = False
-            blnBuildingPart = False
-            blnFence = False
-
             blnObjectIncomplete= False
-            blnRelationBuilding=False
 
         if strTag == 'node':
             objOsmGeom.AddNode(osmObject.id, objXML.GetAttribute('lat'), objXML.GetAttribute('lon'))
@@ -147,9 +145,6 @@ def ReadOsmXml(strSrcOsmFile):
             if StrKey == 'building':
                 osmObject.tagBuilding = strValue
                 osmObject.key_tags = osmObject.key_tags + ' building=' + osmObject.tagBuilding
-                blnBuilding = True
-            if StrKey == 'building:part':
-                blnBuildingPart = True
             if StrKey == 'building:architecture':
                 osmObject.tagArchitecture = strValue
             if StrKey == 'start_date':
@@ -192,8 +187,7 @@ def ReadOsmXml(strSrcOsmFile):
                     osmObject.colour = GetColourName(strValue)
             if StrKey == 'ruins':
                 osmObject.tagRuins = strValue
-            if (StrKey == 'type') and (strValue== 'building'):
-                blnRelationBuilding=True        
+
 
         if strTag == '/way':
             intWayNo = objOsmGeom.AddWay(osmObject.id, osmObject.NodeRefs, osmObject.node_count)
@@ -201,34 +195,17 @@ def ReadOsmXml(strSrcOsmFile):
             osmObject.size = objOsmGeom.CalculateWaySize(intWayNo)
 
         if strTag == '/relation':
-            # Relation building is not really a building, it's just a group of building parts.
-            if blnRelationBuilding:
-                blnBuilding=False
-
             osmObject.size = objOsmGeom.CalculateRelationSize(osmObject.WayRefs, osmObject.way_count)
-            # print osmObject.size
+            # bbox is already calculated above
 
         # Closing node
         if strTag == '/node' or strTag == '/way' or strTag == '/relation':
-
-            if not blnBuilding:
-                # fences are not buildings
-                blnFence = ( osmObject.tagBarrier == 'fence' )  or  ( osmObject.tagBarrier == 'wall' )
-                #If blnFence Then
-                #  print "barrier=fence"
-                #End If
-            if blnObjectIncomplete != True:
-             
-                if osmObject.type != 'node':
-                    if blnBuilding or blnFence:
-                        Objects.append(osmObject)
-
-                    else:
-                        #print "Building part is skipped: " & osmObject.type & " " & osmObject.id
-                        # print "not a building: " & osmObject.type & " " & osmObject.id
-                        pass
+            if (blnObjectIncomplete != True) and (osmObject.type != 'node'):
+                # we will return only completed objects, and we will skip nodes (to save CPU time)
+                Objects.append(osmObject)
             else:
-                print('Object is incomplete ' + osmObject.type +' ' +  osmObject.id) 
+                #print('Object is incomplete ' + osmObject.type +' ' +  osmObject.id)
+                pass
 
     objXML.CloseFile()
 
@@ -238,8 +215,25 @@ def ReadOsmXml(strSrcOsmFile):
 def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFileName, strOutputFile, OSM_3D_MODELS_PATH):
     j = 0
     intModelsCreated=0
-    fo = open(strOutputFile, 'w', encoding="utf-8")
+
+    # lets's filter out something, we are interested only in buildings and fences.
+    SelectedObjects = []
     for osmObject in Objects:
+        blnBuilding= osmObject.isBuilding()
+        blnFence=False
+
+        if not blnBuilding:
+            # fences are not buildings
+            blnFence = (osmObject.tagBarrier == 'fence') or (osmObject.tagBarrier == 'wall')
+
+        if blnBuilding or blnFence:
+            SelectedObjects.append(osmObject)
+        else:
+            print( "not a building: " + osmObject.type + " " + osmObject.id)
+            # pass
+
+    fo = open(strOutputFile, 'w', encoding="utf-8")
+    for osmObject in SelectedObjects:
         heightbyparts = 0
         numberofparts = 0
         blnFence = (osmObject.tagBarrier == 'fence') or (osmObject.tagBarrier == 'wall')
@@ -289,6 +283,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFi
     saveDatFile(totals, "d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\Quadrants.dat")
     print(str(j) + ' objects detected, ' + str(intModelsCreated) + ' 3d models created')
 
+
 def ParseHeightValue(str):
     if Right(str, 2) == ' м':
         str = Left(str, Len(str) - 2)
@@ -304,6 +299,7 @@ def ParseHeightValue(str):
         str = '0'
     fn_return_value = float(str)
     return fn_return_value
+
 
 def ParseStartDateValue(strDate):
 
@@ -370,6 +366,7 @@ def ParseStartDateValue(strDate):
                         strResult = strDate
     fn_return_value = strResult
     return fn_return_value
+
 
 def GuessBuildingStyle(strArchitecture, strDate):
     strResult = ""
