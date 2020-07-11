@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 from mdlMisc import *
-from mdlOsmParser import readOsmXml
+from mdlOsmParser import readOsmXml, encodeXmlString
 from osmGeometry import clsOsmGeometry
 from mdlXmlParser import clsXMLparser
 from mdlSite import DoGeocodingForDatFile
