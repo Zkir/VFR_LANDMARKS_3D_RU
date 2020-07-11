@@ -40,7 +40,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFi
 
         # Rewrite osmObject as osm file!
         if not blnFence:
-            heightbyparts, numberofparts = RewriteOsmFile(osmObject, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH)
+            heightbyparts, numberofparts = rewriteOsmFile(osmObject, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH)
             osmObject.blnHasBuildingParts = (heightbyparts > 0)
 
             if heightbyparts > osmObject.dblHeight:
@@ -51,7 +51,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFi
                     osmObject.name) + ' ' + safeString(osmObject.descr))
 
         # fill report
-        strBuildingType = CalculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType,
+        strBuildingType = calculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType,
                                                 osmObject.tagAmenity, osmObject.getTag('religion'),
                                                 osmObject.tagDenomination, osmObject.tagBarrier, osmObject.size,
                                                 osmObject.tagRuins)
@@ -67,7 +67,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFi
                  + str(osmObject.bbox.maxLon) + '|' + osmObject.name + '|' + osmObject.descr + '|' + ref_temples_ru + '|'
                  + strBuildingType + '|' + str(Round(osmObject.size)) + '|'
                  + str(Round(osmObject.dblHeight)) + '|' + osmObject.colour + '|' + osmObject.material + '|'
-                 + GuessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate) + '|'
+                 + guessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate) + '|'
                  + parseStartDateValue( osmObject.tagStartDate) + '|' + osmObject.tagWikipedia + '|'
                  + osmObject.tagAddrStreet + '|' + osmObject.tagAddrHouseNumber + '|' + osmObject.tagAddrCity + '|'
                  + osmObject.tagAddrDistrict + '|' + osmObject.tagAddrRegion + '|'
@@ -175,7 +175,7 @@ def parseStartDateValue(strDate):
     return fn_return_value
 
 
-def GuessBuildingStyle(strArchitecture, strDate):
+def guessBuildingStyle(strArchitecture, strDate):
     strResult = ""
     if strArchitecture != '':
         strResult = strArchitecture
@@ -201,7 +201,7 @@ def GuessBuildingStyle(strArchitecture, strDate):
     fn_return_value = LCase(strResult)
     return fn_return_value
 
-def CalculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tagReligion, tagDenomination, tagBarrier, dblSize, tagRuins):
+def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tagReligion, tagDenomination, tagBarrier, dblSize, tagRuins):
     CHURCH_MIN_SIZE = 10
 
     strResult = ''
@@ -252,7 +252,7 @@ def CalculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
 
 
 
-def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
+def rewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
     i = 0
 
     objOsmGeom = clsOsmGeometry()
@@ -404,34 +404,7 @@ def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
     return fn_return_value
 
 
-def DeleteUnnecessaryModels(Sheet1):
-    i = 0
-
-    strOutputOsmFileName = ""
-    for i in vbForRange(2, 30000):
-        if Sheet1.Cells(i, 1) == '':
-            break
-        if Sheet1.Cells(i, 13) == True:
-            #but we already have either a good match, or we model it with a facade, it should be excluded.
-            if  ( Sheet1.Cells(i, 15) == 5 )  or  ( Sheet1.Cells(i, 15) == 4 )  or  ( Sheet1.Cells(i, 14) == 'FAC' ) :
-                strOutputOsmFileName = OSM_3D_MODELS_PATH + '\\' + UCase(Left(Sheet1.Cells(i, 1), 1)) + Sheet1.Cells(i, 2) + '.osm'
-                if Dir(strOutputOsmFileName) != '':
-                    Kill(strOutputOsmFileName)
-                strOutputOsmFileName = OSM_3D_MODELS_PATH + '\\' + UCase(Left(Sheet1.Cells(i, 1), 1)) + Sheet1.Cells(i, 2) + '.blend'
-                if Dir(strOutputOsmFileName) != '':
-                    Kill(strOutputOsmFileName)
-                strOutputOsmFileName = OSM_3D_MODELS_PATH + '\\' + UCase(Left(Sheet1.Cells(i, 1), 1)) + Sheet1.Cells(i, 2) + '.blend1'
-                if Dir(strOutputOsmFileName) != '':
-                    Kill(strOutputOsmFileName)
-                strOutputOsmFileName = OSM_3D_MODELS_PATH + '\\' + UCase(Left(Sheet1.Cells(i, 1), 1)) + Sheet1.Cells(i, 2) + '.png'
-                if Dir(strOutputOsmFileName) != '':
-                    Kill(strOutputOsmFileName)
-                strOutputOsmFileName = OSM_3D_MODELS_PATH + '\\' + UCase(Left(Sheet1.Cells(i, 1), 1)) + Sheet1.Cells(i, 2) + '.obj'
-                if Dir(strOutputOsmFileName) != '':
-                    Kill(strOutputOsmFileName)
-
-
-def ProcessQuadrant(strQuadrantName):
+def processQuadrant(strQuadrantName):
     print("processing quadrant: "+ strQuadrantName)
 
     t1 = time.time()
@@ -473,7 +446,7 @@ def main():
     else:
         strQuadrantName = composeQuadrantName(52, 41)
 
-    ProcessQuadrant(strQuadrantName)
+    processQuadrant(strQuadrantName)
     print('Thats all, folks!')
 
 
