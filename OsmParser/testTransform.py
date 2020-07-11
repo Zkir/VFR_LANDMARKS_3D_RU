@@ -119,6 +119,53 @@ def main():
                 Objects2.append(osmObject)
 
             elif osmObject.getTag("building:part") == "porch_columns":
+                # split(x){ {~sy:porch_column_pre| ~sy:Nil}* | ~sy:porch_column_pre }
+                #osmObject.osmtags["building:colour"] = "pink"
+                sx=(osmObject.bbox.maxLon - osmObject.bbox.minLon)
+                sy=(osmObject.bbox.maxLat - osmObject.bbox.minLat)
+                n=5 #round(sx/sy)
+                dx=sx/n
+                print ("scope:", sx*DEGREE_LENGTH_M, sy*DEGREE_LENGTH_M, n, dx*DEGREE_LENGTH_M)
+                for i in range (n):
+                    porch_column_pre = T3DObject()
+                    porch_column_pre.id = getID()
+                    porch_column_pre.type = "way"
+
+                    porch_column_pre.osmtags["building:part"] = "porch_column_pre1"
+                    porch_column_pre.osmtags["height"] = osmObject.getTag("height")
+                    porch_column_pre.osmtags["min_height"] = osmObject.getTag("min_height")
+
+                    # 1
+                    Lon=osmObject.bbox.minLon+dx*i
+                    Lat=osmObject.bbox.minLat
+                    porch_column_pre.NodeRefs.append(objOsmGeom.AddNode(getID(), Lat, Lon))
+
+                    # 2
+                    Lon = osmObject.bbox.minLon + dx * (i+1)
+                    Lat = osmObject.bbox.minLat
+                    porch_column_pre.NodeRefs.append(objOsmGeom.AddNode(getID(), Lat, Lon))
+
+                    # 3
+                    Lon = osmObject.bbox.minLon + dx * (i+1)
+                    Lat = osmObject.bbox.minLat + sy
+                    porch_column_pre.NodeRefs.append(objOsmGeom.AddNode(getID(), Lat, Lon))
+
+                    # 4
+                    Lon = osmObject.bbox.minLon + dx * i
+                    Lat = osmObject.bbox.minLat + sy
+                    porch_column_pre.NodeRefs.append(objOsmGeom.AddNode(getID(), Lat, Lon))
+
+                    # 5
+                    Lon = osmObject.bbox.minLon + dx * i
+                    Lat = osmObject.bbox.minLat
+                    porch_column_pre.NodeRefs.append(objOsmGeom.AddNode(getID(), Lat, Lon))
+
+                    #porch_column_pre.updateBBox(objOsmGeom)
+
+                    Objects2.append(porch_column_pre)
+                    blnThereAreUnprocessedRules = True
+
+            elif osmObject.getTag("building:part") == "porch_column_pre":
                 osmObject.osmtags["building:colour"] = "green"
                 # insert_circle
                 # Определить bbox
@@ -136,6 +183,7 @@ def main():
                 porch_column.osmtags["building:part"] = "porch_column"
                 porch_column.osmtags["height"] = osmObject.getTag("height")
                 porch_column.osmtags["min_height"]=osmObject.getTag("min_height")
+
                 porch_column.osmtags["building:colour"]=osmObject.getTag("building:colour")
 
                 cLat = (osmObject.bbox.minLat + osmObject.bbox.maxLat) / 2
@@ -166,6 +214,7 @@ def main():
 
             else:
                 Objects2.append(osmObject)
+
         Objects = Objects2
 
     writeOsmXml(objOsmGeom, Objects , "D:\\rewrite.osm")
