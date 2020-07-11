@@ -1,7 +1,7 @@
 ﻿import time
 from mdlMisc import *
 from osmGeometry import *
-from osmXMLparcer import *
+from mdlXmlParser import *
 
 #===================================================================
 # Проверка принадлежности точки полигону методом испускания луча
