@@ -43,6 +43,33 @@ class T3DObject:
         self.bbox.maxLat = 0
         self.bbox.maxLon = 0
 
+    def updateBBox(self,objOsmGeom):
+        if self.type == "way":
+            self.bbox.minLat = objOsmGeom.nodes[self.NodeRefs[0]].lat
+            self.bbox.minLon = objOsmGeom.nodes[self.NodeRefs[0]].lon
+            self.bbox.maxLat = objOsmGeom.nodes[self.NodeRefs[0]].lat
+            self.bbox.maxLon = objOsmGeom.nodes[self.NodeRefs[0]].lon
+
+            for node_no in self.NodeRefs:
+                lat= objOsmGeom.nodes[node_no].lat
+                lon= objOsmGeom.nodes[node_no].lon
+
+                if lat<self.bbox.minLat:
+                    self.bbox.minLat=lat
+
+                if lat > self.bbox.maxLat:
+                    self.bbox.maxLat = lat
+
+                if lon < self.bbox.minLon:
+                    self.bbox.minLon = lon
+
+                if lon>self.bbox.maxLon:
+                    self.bbox.maxLon=lon
+
+            self.size=Sqr(objOsmGeom.CalculateClosedNodeChainSqure(self.NodeRefs, len(self.NodeRefs)-1))
+        else:
+            raise Exception("Only ways are supported currently")
+
     def getTag(self ,strKey):
         return self.osmtags.get(strKey,'')
 

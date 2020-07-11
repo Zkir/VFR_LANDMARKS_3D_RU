@@ -131,14 +131,15 @@ def main():
                     porch_column_pre.id = getID()
                     porch_column_pre.type = "way"
 
-                    porch_column_pre.osmtags["building:part"] = "porch_column_pre1"
+                    porch_column_pre.osmtags["building:part"] = "porch_column_pre"
                     porch_column_pre.osmtags["height"] = osmObject.getTag("height")
                     porch_column_pre.osmtags["min_height"] = osmObject.getTag("min_height")
 
                     # 1
                     Lon=osmObject.bbox.minLon+dx*i
                     Lat=osmObject.bbox.minLat
-                    porch_column_pre.NodeRefs.append(objOsmGeom.AddNode(getID(), Lat, Lon))
+                    node_no_1=objOsmGeom.AddNode(getID(), Lat, Lon)
+                    porch_column_pre.NodeRefs.append(node_no_1)
 
                     # 2
                     Lon = osmObject.bbox.minLon + dx * (i+1)
@@ -156,11 +157,9 @@ def main():
                     porch_column_pre.NodeRefs.append(objOsmGeom.AddNode(getID(), Lat, Lon))
 
                     # 5
-                    Lon = osmObject.bbox.minLon + dx * i
-                    Lat = osmObject.bbox.minLat
-                    porch_column_pre.NodeRefs.append(objOsmGeom.AddNode(getID(), Lat, Lon))
+                    porch_column_pre.NodeRefs.append(node_no_1)
 
-                    #porch_column_pre.updateBBox(objOsmGeom)
+                    porch_column_pre.updateBBox(objOsmGeom)
 
                     Objects2.append(porch_column_pre)
                     blnThereAreUnprocessedRules = True
