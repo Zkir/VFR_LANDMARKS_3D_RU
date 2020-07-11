@@ -250,10 +250,7 @@ def CalculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
     fn_return_value = Trim(strResult)
     return fn_return_value
 
-def encodeXmlString(txt):
-    txt = txt.replace("\"","&quot;" )
-    txt = txt.replace("'","&apos;")
-    return(txt) 
+
 
 def RewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
     i = 0

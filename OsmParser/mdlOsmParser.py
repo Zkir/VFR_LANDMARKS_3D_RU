@@ -82,6 +82,7 @@ def readOsmXml(strSrcOsmFile):
             blnObjectIncomplete= False
 
         if strTag == 'node':
+
             objOsmGeom.AddNode(osmObject.id, objXML.GetAttribute('lat'), objXML.GetAttribute('lon'))
         # references to nodes in ways. we need to find coordinates
         if strTag == 'nd':
