@@ -360,7 +360,7 @@ def rewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
         #object is closed
         if strTag == '/way':
             if blnCompleteObject:
-                intWayNo = objOsmGeom.AddWay(obj_id, NodeRefs, node_count)
+                intWayNo = objOsmGeom.AddWay(obj_id, NodeRefs)
                 #print way with node refs and tags
                 fo.write( '<way id="' + obj_id + '" version="' + obj_ver + '" >' + '\n')
                 for i in range(node_count):

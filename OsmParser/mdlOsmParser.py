@@ -10,9 +10,7 @@ class T3DObject:
         self.id = ""
         self.type = ""
         self.bbox = TBbox()
-        self.node_count = 0
         self.NodeRefs = []
-        self.way_count = 0
         self.WayRefs = []
         self.name = ""
         self.descr = ""
@@ -93,7 +91,7 @@ def readOsmXml(strSrcOsmFile):
                 blnObjectIncomplete=True
             else:
                 osmObject.NodeRefs.append( intNodeNo)
-                osmObject.node_count = osmObject.node_count + 1
+
         # references to ways in relations. we need find coordinates
         if strTag == 'member':
             if objXML.GetAttribute('type') == 'way':
@@ -104,8 +102,8 @@ def readOsmXml(strSrcOsmFile):
                     blnObjectIncomplete=True
                 else:
                     waybbox = objOsmGeom.GetWayBBox(intWayNo)
-                    osmObject.WayRefs.append([intWayNo, objXML.GetAttribute('role')])
-                    if osmObject.way_count == 0:
+
+                    if len(osmObject.WayRefs)== 0:
                         osmObject.bbox.minLat = waybbox.minLat
                         osmObject.bbox.minLon = waybbox.minLon
                         osmObject.bbox.maxLat = waybbox.maxLat
@@ -119,7 +117,7 @@ def readOsmXml(strSrcOsmFile):
                             osmObject.bbox.minLon = waybbox.minLon
                         if waybbox.maxLon > osmObject.bbox.maxLon:
                             osmObject.bbox.maxLon = waybbox.maxLon
-                    osmObject.way_count = osmObject.way_count + 1
+                    osmObject.WayRefs.append([intWayNo, objXML.GetAttribute('role')])
 
         #get osmObject osm tags
         if strTag == 'tag':
@@ -181,12 +179,12 @@ def readOsmXml(strSrcOsmFile):
 
 
         if strTag == '/way':
-            intWayNo = objOsmGeom.AddWay(osmObject.id, osmObject.NodeRefs, osmObject.node_count)
+            intWayNo = objOsmGeom.AddWay(osmObject.id, osmObject.NodeRefs)
             osmObject.bbox = objOsmGeom.GetWayBBox(intWayNo)
             osmObject.size = objOsmGeom.CalculateWaySize(intWayNo)
 
         if strTag == '/relation':
-            osmObject.size = objOsmGeom.CalculateRelationSize(osmObject.WayRefs, osmObject.way_count)
+            osmObject.size = objOsmGeom.CalculateRelationSize(osmObject.WayRefs)
             # bbox is already calculated above
 
         # Closing node

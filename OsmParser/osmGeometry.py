@@ -52,6 +52,8 @@ class clsOsmGeometry():
         self.max_node = self.max_node + 1
         self.nodehash[id]=self.max_node
 
+        return self.max_node
+
     def FindNode(self, id):
         #i = 0
         #blnFound = False
@@ -78,7 +80,7 @@ class clsOsmGeometry():
         fn_return_value = self.nodes[intNodeNo].lon
         return fn_return_value
 
-    def AddWay(self, id, NodeRefs, node_count):
+    def AddWay(self, id, NodeRefs):
         i = 0
 
         lat = 0
@@ -87,6 +89,7 @@ class clsOsmGeometry():
         minLon = 0
         maxLat = 0
         maxLon = 0
+        node_count=len(NodeRefs)
         #save id
         aWay= TWay()
         self.ways.append(aWay)
@@ -322,15 +325,16 @@ class clsOsmGeometry():
 
         return Outlines
 
-    def CalculateRelationSize(self, WayRefs, way_count):
+    def CalculateRelationSize(self, WayRefs):
         size = 0.0
         Outlines=self.ExtractCloseNodeChainFromRelation(WayRefs)
+        way_count=len(WayRefs)
 
         if len(Outlines) > 0:
             for OutlineNodeRefs in Outlines:
                 outline_nodeCount = len(OutlineNodeRefs)
                 if OutlineNodeRefs[0] == OutlineNodeRefs[outline_nodeCount - 1]:
-                    size =size + Sqr(self.CalculateClosedNodeChainSqure(OutlineNodeRefs, outline_nodeCount - 1))
+                    size = size + Sqr(self.CalculateClosedNodeChainSqure(OutlineNodeRefs, outline_nodeCount - 1))
                 else:
                     print('Relation is not closed')
         else:
