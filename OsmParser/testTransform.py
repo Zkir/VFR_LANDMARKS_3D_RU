@@ -121,11 +121,21 @@ def main():
             elif osmObject.getTag("building:part") == "porch_columns":
                 # split(x){ {~sy:porch_column_pre| ~sy:Nil}* | ~sy:porch_column_pre }
                 #osmObject.osmtags["building:colour"] = "pink"
-                sx=(osmObject.bbox.maxLon - osmObject.bbox.minLon)
-                sy=(osmObject.bbox.maxLat - osmObject.bbox.minLat)
-                n=5 #round(sx/sy)
-                dx=sx/n
-                print ("scope:", sx*DEGREE_LENGTH_M, sy*DEGREE_LENGTH_M, n, dx*DEGREE_LENGTH_M)
+
+                osmObject.alignScopeToWorld()
+                osmObject.rotateScope(33, objOsmGeom)
+
+                if osmObject.scope_sx<osmObject.scope_sy:
+                    osmObject.rotateScope(90, objOsmGeom)
+
+                scope_sx = osmObject.scope_sx
+                scope_sy = osmObject.scope_sy
+
+
+
+                n = 4  # round(sx/sy)
+                dx=scope_sx/n
+                print("scope:", scope_sx, scope_sy, n, dx)
                 for i in range (n):
                     porch_column_pre = T3DObject()
                     porch_column_pre.id = getID()
@@ -136,24 +146,20 @@ def main():
                     porch_column_pre.osmtags["min_height"] = osmObject.getTag("min_height")
 
                     # 1
-                    Lon=osmObject.bbox.minLon+dx*i
-                    Lat=osmObject.bbox.minLat
+                    Lat, Lon = osmObject.localXY2LatLon(-scope_sx/2+dx*i,-scope_sy/2)
                     node_no_1=objOsmGeom.AddNode(getID(), Lat, Lon)
                     porch_column_pre.NodeRefs.append(node_no_1)
 
                     # 2
-                    Lon = osmObject.bbox.minLon + dx * (i+1)
-                    Lat = osmObject.bbox.minLat
+                    Lat, Lon = osmObject.localXY2LatLon(-scope_sx / 2 + dx * (i+1), -scope_sy / 2)
                     porch_column_pre.NodeRefs.append(objOsmGeom.AddNode(getID(), Lat, Lon))
 
                     # 3
-                    Lon = osmObject.bbox.minLon + dx * (i+1)
-                    Lat = osmObject.bbox.minLat + sy
+                    Lat, Lon = osmObject.localXY2LatLon(-scope_sx / 2 + dx * (i+1), +scope_sy / 2)
                     porch_column_pre.NodeRefs.append(objOsmGeom.AddNode(getID(), Lat, Lon))
 
                     # 4
-                    Lon = osmObject.bbox.minLon + dx * i
-                    Lat = osmObject.bbox.minLat + sy
+                    Lat, Lon = osmObject.localXY2LatLon(-scope_sx / 2 + dx * (i), +scope_sy / 2)
                     porch_column_pre.NodeRefs.append(objOsmGeom.AddNode(getID(), Lat, Lon))
 
                     # 5
@@ -185,23 +191,21 @@ def main():
 
                 porch_column.osmtags["building:colour"]=osmObject.getTag("building:colour")
 
-                cLat = (osmObject.bbox.minLat + osmObject.bbox.maxLat) / 2
-                cLon = (osmObject.bbox.minLon + osmObject.bbox.maxLon) / 2
-                R = osmObject.size/5
+                R = osmObject.size/3
                 Lat = [None] * 12
                 Lon = [None] * 12
                 ids = [None] * 12
-                print("Column ", cLat, cLon, R)
+
                 for i in range(12):
                     alpha = 2 * pi / 12 * i
-                    Lat[i] = cLat + R * cos(alpha)/DEGREE_LENGTH_M
-                    Lon[i] = cLon + R * sin(alpha)/DEGREE_LENGTH_M/cos(cLat/360*2*pi)
+
+                    Lat[i], Lon[i]=osmObject.localXY2LatLon(R * cos(alpha), R * sin(alpha))
                     ids[i] = getID()
                     #print(ids[i], x[i], y[i])
                     objOsmGeom.AddNode(ids[i], Lat[i], Lon[i])
                     intNodeNo = objOsmGeom.FindNode(ids[i])
                     porch_column.NodeRefs.append(intNodeNo)
-                objOsmGeom.AddNode(ids[0], Lat[0], Lon[0])
+                #objOsmGeom.AddNode(ids[0], Lat[0], Lon[0])
                 intNodeNo = objOsmGeom.FindNode(ids[0])
                 porch_column.NodeRefs.append(intNodeNo)
 

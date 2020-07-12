@@ -4,6 +4,7 @@
 from osmGeometry import *
 from mdlXmlParser import *
 from mdlMisc import getColourName
+from math import pi, sin, cos
 
 class T3DObject:
     def __init__(self):
@@ -43,6 +44,10 @@ class T3DObject:
         self.bbox.maxLat = 0
         self.bbox.maxLon = 0
 
+        self.scope_sx=0
+        self.scope_sy=0
+        self.scope_rz=0
+
     def updateBBox(self,objOsmGeom):
         if self.type == "way":
             self.bbox.minLat = objOsmGeom.nodes[self.NodeRefs[0]].lat
@@ -79,11 +84,116 @@ class T3DObject:
         # Relation building is not really a building, it's just a group of building parts.
         if (self.getTag("type") == "building"):
             blnBuilding = False
-        return  blnBuilding
+        return blnBuilding
 
     def isBuildingPart(self):
         return (self.getTag("building:part") != "")
 
+    def updateScopeBBox(self, objOsmGeom):
+        if self.type == "way":
+            lat = objOsmGeom.nodes[self.NodeRefs[0]].lat
+            lon = objOsmGeom.nodes[self.NodeRefs[0]].lon
+            x, y = self.LatLon2LocalXY(lat, lon)
+            min_x = x
+            min_y = y
+            max_x = x
+            max_y = y
+
+            for node_no in self.NodeRefs:
+                lat= objOsmGeom.nodes[node_no].lat
+                lon= objOsmGeom.nodes[node_no].lon
+                x, y = self.LatLon2LocalXY(lat,lon)
+
+                if x < min_x:
+                    min_x = x
+                if x > max_x:
+                    max_x = x
+                if y < min_y:
+                    min_y = y
+                if y > max_y:
+                    max_y = y
+
+            self.scope_sx=max_x - min_x
+            self.scope_sy=max_y - max_y
+
+        elif self.type=="relation":
+            lat = objOsmGeom.nodes[objOsmGeom.ways[self.WayRefs[0][0]].NodeRefs[0]].lat
+            lon = objOsmGeom.nodes[objOsmGeom.ways[self.WayRefs[0][0]].NodeRefs[0]].lon
+            x, y = self.LatLon2LocalXY(lat, lon)
+            min_x = x
+            min_y = y
+            max_x = x
+            max_y = y
+
+            for way_no in self.WayRefs:
+                for node_no in objOsmGeom.ways[way_no[0]].NodeRefs:
+                    lat = objOsmGeom.nodes[node_no].lat
+                    lon = objOsmGeom.nodes[node_no].lon
+                    x, y = self.LatLon2LocalXY(lat, lon)
+
+                    if x < min_x:
+                        min_x = x
+                    if x > max_x:
+                        max_x = x
+                    if y < min_y:
+                        min_y = y
+                    if y > max_y:
+                        max_y = y
+
+            self.scope_sx = max_x - min_x
+            self.scope_sy = max_y - min_y
+
+        else:
+            raise Exception("Unknown object type")
+
+    def alignScopeToWorld(self):
+        cLat = (self.bbox.minLat + self.bbox.maxLat) / 2
+
+        self.scope_sx = (self.bbox.maxLon - self.bbox.minLon) * DEGREE_LENGTH_M * cos(cLat / 360 * 2 * pi)
+        self.scope_sy = (self.bbox.maxLat - self.bbox.minLat) * DEGREE_LENGTH_M
+
+        self.scope_rz=0
+
+    def alignScopeToGeometry(self):
+        pass
+
+    #rotates the scope of the shape.
+    #only local coordinate system is rotated, geometry is not touched.
+    #since we have only 2.5D here, we can rotate around vertical axis(z) only
+    # zAngle -- angle in degrees
+    def rotateScope(self, zAngle,objOsmGeom):
+        self.scope_rz = self.scope_rz + zAngle/180*pi
+        # sx and sy should be recalculated.
+        self.updateScopeBBox(objOsmGeom)
+
+
+    def localXY2LatLon(self,x,y):
+        # there is local coordinate system with origin at center point
+        # X,Y are in meters
+        # it can be rotated.
+        cLat = (self.bbox.minLat + self.bbox.maxLat) / 2
+        cLon = (self.bbox.minLon + self.bbox.maxLon) / 2
+        teta=self.scope_rz
+        x1=x*cos(teta) -y*sin(teta)
+        y1=x*sin(teta) + y* cos(teta)
+
+        lat = cLat + y1 / DEGREE_LENGTH_M
+        lon = cLon + x1 / DEGREE_LENGTH_M / cos(cLat / 360 * 2 * pi)
+        return lat, lon
+
+    def LatLon2LocalXY(self,lat,lon):
+
+        cLat = (self.bbox.minLat + self.bbox.maxLat) / 2
+        cLon = (self.bbox.minLon + self.bbox.maxLon) / 2
+
+        y1 = (lat - cLat) * DEGREE_LENGTH_M
+        x1 = (lon - cLon) * DEGREE_LENGTH_M * cos(cLat / 360 * 2 * pi)
+
+        teta = -self.scope_rz
+        x = x1 * cos(teta) - y1 * sin(teta)
+        y = x1 * sin(teta) + y1 * cos(teta)
+
+        return x, y
 
 # we will read osm file into a set of objects + complex structure with geometry
 def readOsmXml(strSrcOsmFile):
