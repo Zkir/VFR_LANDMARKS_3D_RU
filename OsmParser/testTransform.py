@@ -131,9 +131,8 @@ def main():
                 scope_sx = osmObject.scope_sx
                 scope_sy = osmObject.scope_sy
 
-
-
-                n = 4  # round(sx/sy)
+                #n = 4
+                n = round(scope_sx/scope_sy)
                 dx=scope_sx/n
                 print("scope:", scope_sx, scope_sy, n, dx)
                 for i in range (n):
