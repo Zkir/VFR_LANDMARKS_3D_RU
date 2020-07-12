@@ -154,8 +154,25 @@ class T3DObject:
 
         self.scope_rz=0
 
-    def alignScopeToGeometry(self):
-        pass
+    # scope is aligned according to geometry
+    # we search for the oriented bbox with minimal square
+    # todo: more efficient algorithm should be found.
+    def alignScopeToGeometry(self,objOsmGeom):
+        bestAlpha=0
+        S=0
+        minS=-1
+        for i in range(180):
+            self.scope_rz = i / 180 * pi
+            self.updateScopeBBox(objOsmGeom)
+            S = self.scope_sx*self.scope_sy
+            if minS == -1:
+                minS = S
+            if S<minS:
+                minS= S
+                bestAlpha = i
+
+        self.scope_rz = bestAlpha / 180 * pi
+        self.updateScopeBBox(objOsmGeom)
 
     #rotates the scope of the shape.
     #only local coordinate system is rotated, geometry is not touched.

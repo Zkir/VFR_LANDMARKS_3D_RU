@@ -1,4 +1,4 @@
-from mdlOsmParser import readOsmXml,T3DObject
+﻿from mdlOsmParser import readOsmXml,T3DObject
 from mdlXmlParser import encodeXmlString
 from osmGeometry import DEGREE_LENGTH_M
 from copy import copy
@@ -49,7 +49,8 @@ def writeOsmXml(objOsmGeom, Objects, strOutputOsmFileName):
 
 
 def main():
-    objOsmGeom, Objects = readOsmXml("d:\_BLENDER-OSM-TEST\samples\Church-vozdvizhenskoe.osm")
+    #objOsmGeom, Objects = readOsmXml("d:\_BLENDER-OSM-TEST\samples\Church-vozdvizhenskoe.osm")
+    objOsmGeom, Objects = readOsmXml("d:\original.osm")
     #print(len(Objects))
 
     #magic!
@@ -122,8 +123,9 @@ def main():
                 # split(x){ {~sy:porch_column_pre| ~sy:Nil}* | ~sy:porch_column_pre }
                 #osmObject.osmtags["building:colour"] = "pink"
 
-                osmObject.alignScopeToWorld()
-                osmObject.rotateScope(33, objOsmGeom)
+                #osmObject.alignScopeToWorld()
+                osmObject.alignScopeToGeometry(objOsmGeom)
+                #osmObject.rotateScope(33, objOsmGeom)
 
                 if osmObject.scope_sx<osmObject.scope_sy:
                     osmObject.rotateScope(90, objOsmGeom)
@@ -131,9 +133,9 @@ def main():
                 scope_sx = osmObject.scope_sx
                 scope_sy = osmObject.scope_sy
 
-                #n = 4
-                n = round(scope_sx/scope_sy)
-                dx=scope_sx/n
+                n = 4
+                # n = round(scope_sx/scope_sy/2)*2
+                dx = scope_sx/n
                 print("scope:", scope_sx, scope_sy, n, dx)
                 for i in range (n):
                     porch_column_pre = T3DObject()
