@@ -1,4 +1,4 @@
-﻿from mdlOsmParser import readOsmXml,T3DObject
+﻿from mdlOsmParser import T3DObject,readOsmXml, writeOsmXml
 from mdlXmlParser import encodeXmlString
 from osmGeometry import DEGREE_LENGTH_M
 from copy import copy
@@ -10,42 +10,6 @@ def getID():
     _id_counter=_id_counter-1
     return str(_id_counter)
 
-
-def writeOsmXml(objOsmGeom, Objects, strOutputOsmFileName):
-    fo = open(strOutputOsmFileName, 'w', encoding="utf-8")
-
-    # Print #fo, "<?xml version='1.0' encoding='UTF-8'?>"
-    fo.write('<?xml version=\'1.0\' encoding=\'utf-8\'?>' + '\n')
-    fo.write('<osm version="0.6" generator="zkir manually">' + '\n')
-    # fo.write('  <bounds minlat="' + str(object1.bbox.minLat) + '" minlon="' + str(object1.bbox.minLon) + '" maxlat="' + str(
-    #    object1.bbox.maxLat) + '" maxlon="' + str(object1.bbox.maxLon) + '"/> ' + '\n')
-
-    for node in objOsmGeom.nodes:
-        obj_id = node.id
-        obj_ver = "1"
-        node_lat = node.lat
-        node_lon = node.lon
-        fo.write('  <node id="' + obj_id + '" version="' + obj_ver + '"  lat="' + str(node_lat) + '" lon="' + str(
-            node_lon) + '"/>' + '\n')
-
-    for osmObject in Objects:
-        if osmObject.type == "way":
-            fo.write('  <way id="' + osmObject.id + '" version="' + "1" + '" >' + '\n')
-            for node in osmObject.NodeRefs:
-                fo.write('    <nd ref="' + objOsmGeom.GetNodeID(node) + '" />' + '\n')
-        if osmObject.type == "relation":
-            fo.write('  <relation id="' + osmObject.id + '" version="' + "1" + '" >' + '\n')
-            for way in osmObject.WayRefs:
-                fo.write(
-                    '    <member type="way" ref="' + objOsmGeom.GetWayID(way[0]) + '" role="' + way[1] + '"  />' + '\n')
-        for tag in osmObject.osmtags:
-            fo.write('    <tag k="' + tag + '" v="' + encodeXmlString(osmObject.getTag(tag)) + '" />' + '\n')
-        if osmObject.type == "way":
-            fo.write('  </way>' + '\n')
-        if osmObject.type == "relation":
-            fo.write('  </relation>' + '\n')
-    fo.write('</osm>' + '\n')
-    fo.close()
 
 
 def main():
