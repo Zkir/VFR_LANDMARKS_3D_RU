@@ -129,13 +129,13 @@ def split_x(osmObject, objOsmGeom, rule_name, n):
     return Objects2
 
 #todo: where the tags are inherited and modified
-def insert_circle(osmObject,objOsmGeom):
+def insert_circle(osmObject,objOsmGeom,rule_name):
     Objects2=[]
     new_obj = T3DObject()
     new_obj.id = getID()
     new_obj.type = "way"
 
-    new_obj.osmtags["building:part"] = "porch_column"
+    new_obj.osmtags["building:part"] = rule_name
     new_obj.osmtags["height"] = osmObject.getTag("height")
     new_obj.osmtags["min_height"] = osmObject.getTag("min_height")
 
@@ -206,9 +206,9 @@ def main():
             elif osmObject.getTag("building:part") == "porch_column_pre":
                 osmObject.osmtags["building:colour"] = "green"
             
-                new_objects=insert_circle(osmObject, objOsmGeom)
+                new_objects=insert_circle(osmObject, objOsmGeom,"porch_column")
                 Objects2.extend(new_objects)
-            
+
             elif osmObject.getTag("building:part") == "porch_top":
                 osmObject.osmtags["building:colour"] = "blue"
                 Objects2.append(osmObject)
