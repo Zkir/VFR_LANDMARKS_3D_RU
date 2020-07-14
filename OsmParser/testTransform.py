@@ -128,32 +128,34 @@ def split_x(osmObject, objOsmGeom, rule_name, n):
 
     return Objects2
 
-#todo: where the tags are inherited and modified
-def insert_circle(osmObject,objOsmGeom,rule_name):
+
+#todo: insert_circle should be NON-DESTRUCTIVE OPERATION
+#object remain, but geometry is changed
+def insert_circle(osmObject,objOsmGeom, rule_name, nVertices=12, radius=None):
     Objects2=[]
     new_obj = T3DObject()
     new_obj.id = getID()
     new_obj.type = "way"
 
+    new_obj.osmtags = copy(osmObject.osmtags) #tags are inherited
     new_obj.osmtags["building:part"] = rule_name
-    new_obj.osmtags["height"] = osmObject.getTag("height")
-    new_obj.osmtags["min_height"] = osmObject.getTag("min_height")
 
-    new_obj.osmtags["building:colour"] = osmObject.getTag("building:colour")
+    if radius is None:
+        R = osmObject.size / 3
+    else:
+        R = radius
 
-    R = osmObject.size / 3
-    Lat = [None] * 12
-    Lon = [None] * 12
-    ids = [None] * 12
+    Lat = [None] * nVertices
+    Lon = [None] * nVertices
+    ids = [None] * nVertices
 
-    for i in range(12):
-        alpha = 2 * pi / 12 * i
+    for i in range(nVertices):
+        alpha = 2 * pi / nVertices * i
 
         Lat[i], Lon[i] = osmObject.localXY2LatLon(R * cos(alpha), R * sin(alpha))
         ids[i] = getID()
         # print(ids[i], x[i], y[i])
-        objOsmGeom.AddNode(ids[i], Lat[i], Lon[i])
-        intNodeNo = objOsmGeom.FindNode(ids[i])
+        intNodeNo= objOsmGeom.AddNode(ids[i], Lat[i], Lon[i])
         new_obj.NodeRefs.append(intNodeNo)
     # objOsmGeom.AddNode(ids[0], Lat[0], Lon[0])
     intNodeNo = objOsmGeom.FindNode(ids[0])
@@ -206,7 +208,7 @@ def main():
             elif osmObject.getTag("building:part") == "porch_column_pre":
                 osmObject.osmtags["building:colour"] = "green"
             
-                new_objects=insert_circle(osmObject, objOsmGeom,"porch_column")
+                new_objects=insert_circle(osmObject, objOsmGeom,"porch_column", 4)
                 Objects2.extend(new_objects)
 
             elif osmObject.getTag("building:part") == "porch_top":
@@ -219,7 +221,5 @@ def main():
         Objects = Objects2
 
     writeOsmXml(objOsmGeom, Objects , "D:\\rewrite.osm")
-
-
 
 main()
