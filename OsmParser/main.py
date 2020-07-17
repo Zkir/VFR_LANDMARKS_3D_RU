@@ -363,6 +363,7 @@ def main():
     else:
         strQuadrantName = composeQuadrantName(52, 41)
 
+    print('Process start: list of building is generated')
     processQuadrant(strQuadrantName)
     print('Thats all, folks!')
 

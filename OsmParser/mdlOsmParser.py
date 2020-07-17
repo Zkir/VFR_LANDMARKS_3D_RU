@@ -206,9 +206,9 @@ class T3DObject:
         y1 = (lat - cLat) * DEGREE_LENGTH_M
         x1 = (lon - cLon) * DEGREE_LENGTH_M * cos(cLat / 360 * 2 * pi)
 
-        teta = -self.scope_rz
-        x = x1 * cos(teta) - y1 * sin(teta)
-        y = x1 * sin(teta) + y1 * cos(teta)
+        theta = -self.scope_rz
+        x = x1 * cos(theta) - y1 * sin(theta)
+        y = x1 * sin(theta) + y1 * cos(theta)
 
         return x, y
 
@@ -218,7 +218,6 @@ def readOsmXml(strSrcOsmFile):
 
     dblMaxHeight = 0
     blnObjectIncomplete=False
-    print('Process start: list of building is generated')
     objOsmGeom = clsOsmGeometry()
     objXML = clsXMLparser()
     Objects = []
@@ -382,7 +381,8 @@ def writeOsmXml(objOsmGeom, Objects, strOutputOsmFileName):
                 fo.write(
                     '    <member type="way" ref="' + objOsmGeom.GetWayID(way[0]) + '" role="' + way[1] + '"  />' + '\n')
         for tag in osmObject.osmtags:
-            fo.write('    <tag k="' + tag + '" v="' + encodeXmlString(osmObject.getTag(tag)) + '" />' + '\n')
+            if osmObject.getTag(tag)!="":
+                fo.write('    <tag k="' + tag + '" v="' + encodeXmlString(osmObject.getTag(tag)) + '" />' + '\n')
         if osmObject.type == "way":
             fo.write('  </way>' + '\n')
         if osmObject.type == "relation":
