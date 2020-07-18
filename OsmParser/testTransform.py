@@ -254,13 +254,7 @@ def main():
                     new_obj.type = "way"
 
                     new_obj.osmtags = copy(osmObject.osmtags)  # tags are inherited
-                    new_obj.bbox = copy(osmObject.bbox)
-                    new_obj.size = osmObject.size
-                    new_obj.scope_sx = osmObject.scope_sx
-                    new_obj.scope_sy = osmObject.scope_sy
-                    new_obj.scope_rz = osmObject.scope_rz
-
-
+                    
                     lat0 = objOsmGeom.nodes[osmObject.NodeRefs[i]].lat
                     lon0 = objOsmGeom.nodes[osmObject.NodeRefs[i]].lon
                     x0, y0 = osmObject.LatLon2LocalXY(lat0, lon0)
