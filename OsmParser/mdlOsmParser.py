@@ -114,7 +114,7 @@ class T3DObject:
                     max_y = y
 
             self.scope_sx=max_x - min_x
-            self.scope_sy=max_y - max_y
+            self.scope_sy=max_y - min_y
 
         elif self.type=="relation":
             lat = objOsmGeom.nodes[objOsmGeom.ways[self.WayRefs[0][0]].NodeRefs[0]].lat
