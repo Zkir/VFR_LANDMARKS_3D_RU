@@ -201,6 +201,42 @@ def primitiveCircle(osmObject, objOsmGeom, rule_name, nVertices=12, radius=None)
 
     Objects2.append(new_obj)
     return Objects2
+
+
+def scale(osmObject, objOsmGeom, sx, sy, sz=None):
+    if osmObject.type == "relation":
+        raise Exception("todo: relations is not supported")
+
+    if sz is not None:
+        raise Exception("Scale Z is not implemented")
+
+    kx = sx/osmObject.scope_sx
+    ky = sy/osmObject.scope_sy
+    # we should not transfer the same node twice
+    if osmObject.NodeRefs[0]==osmObject.NodeRefs[-1]:
+        closed_way_flag = 1
+    else:
+        closed_way_flag = 0
+
+    new_node_refs =[]
+    for i in range(len(osmObject.NodeRefs)-closed_way_flag):
+        node=osmObject.NodeRefs[i]
+        x, y = osmObject.LatLon2LocalXY(objOsmGeom.nodes[node].lat, objOsmGeom.nodes[node].lon)
+        x = x*kx
+        y = y*ky
+        lat, lon=osmObject.localXY2LatLon(x, y)
+
+        node_ref=objOsmGeom.AddNode(getID(), lat, lon)
+        new_node_refs.append(node_ref)
+
+    if closed_way_flag == 1:
+        new_node_refs.append(new_node_refs[0])
+
+    osmObject.NodeRefs=new_node_refs
+
+    osmObject.updateBBox(objOsmGeom)
+    osmObject.updateScopeBBox(objOsmGeom)
+
 # ======================================================================================================================
 def main():
     #objOsmGeom, Objects = readOsmXml("d:\_BLENDER-OSM-TEST\samples\Church-vozdvizhenskoe.osm")
@@ -328,8 +364,10 @@ def main():
                 if osmObject.scope_sx < osmObject.scope_sy:
                     osmObject.rotateScope(90, objOsmGeom)
 
-                new_objects = split_z_preserve_roof(osmObject, (("~4", "arch_middle"),
-                                                               ("~1", "arch_top")))
+                new_objects = split_z_preserve_roof(osmObject, (("0.2", "stilobate"),
+                                                                ("~4", "arch_middle"),
+                                                                ("~1.5", "arch_top"),
+                                                                ("~1", "arch_top2")))
 
                 Objects2.extend(new_objects)
 
@@ -339,22 +377,59 @@ def main():
                 Objects2.append(osmObject)
 
             elif osmObject.getTag("building:part") == "arch_middle":
-                new_objects = split_x(osmObject, objOsmGeom, (("~1", "pylon"),
+                new_objects = split_x(osmObject, objOsmGeom, (("~1", "pylon_pre"),
                                                               ("~4", "arch_columns"),
-                                                              ("~1", "pylon")))
+                                                              ("~1", "pylon_pre")))
 
                 Objects2.extend(new_objects)
                 blnThereAreUnprocessedRules = True
 
+            elif osmObject.getTag("building:part") == "arch_top2":
+                new_objects = split_x(osmObject, objOsmGeom, (("~1", "pylon_top"),
+                                                              ("~4", "NIL"),
+                                                              ("~1", "pylon_top")))
+
+                Objects2.extend(new_objects)
+                blnThereAreUnprocessedRules = True
+
+            elif osmObject.getTag("building:part") == "pylon_pre":
+                scale(osmObject, objOsmGeom, osmObject.scope_sx*0.95, osmObject.scope_sy*0.95)
+                osmObject.osmtags["building:part"]="pylon"
+                Objects2.append(osmObject)
+
+            elif osmObject.getTag("building:part") == "pylon_top":
+                scale(osmObject, objOsmGeom, osmObject.scope_sx * 0.95, osmObject.scope_sy * 0.95)
+                new_objects = split_z_preserve_roof(osmObject, (("~1", "pylon_top1_pre"),
+                                                                ("~1", "pylon_top2_pre"),
+                                                                ("~1", "pylon_top3_pre")))
+                Objects2.extend(new_objects)
+                blnThereAreUnprocessedRules = True
+
+            elif osmObject.getTag("building:part") == "pylon_top1_pre":
+                scale(osmObject, objOsmGeom, osmObject.scope_sx*0.6, osmObject.scope_sy*0.6)
+                osmObject.osmtags["building:part"]="yep"
+                Objects2.append(osmObject)
+
+            elif osmObject.getTag("building:part") == "pylon_top2_pre":
+                scale(osmObject, objOsmGeom, osmObject.scope_sx*0.5, osmObject.scope_sy*0.5)
+                osmObject.osmtags["building:part"]="yep"
+                Objects2.append(osmObject)
+
+            elif osmObject.getTag("building:part") == "pylon_top3_pre":
+                scale(osmObject, objOsmGeom, osmObject.scope_sx*0.4, osmObject.scope_sy*0.4)
+                osmObject.osmtags["building:part"]="yep"
+                Objects2.append(osmObject)
+
             elif osmObject.getTag("building:part") == "arch_columns":
 
                 # split(x){ {~sy:porch_column_pre| ~sy:Nil}* | ~sy:porch_column_pre }
-                new_objects = split_x(osmObject,objOsmGeom,(("~1", "arch_column_block"),
-                                                            ("~1", "arch_column_block"),
-                                                            ("~1", "arch_column_block"),
-                                                            ("~1", "arch_column_block"),
-                                                            ("~1", "arch_column_block"),
-                                                            ("~1", "arch_column_block")))
+                new_objects = split_x(osmObject,objOsmGeom,(("~1.4", "NIL"),
+                                                            ("~1", "arch_column_block"),("~1.4", "NIL"),
+                                                            ("~1", "arch_column_block"),("~1.4", "NIL"),
+                                                            ("~1", "arch_column_block"),("~1.4", "NIL"),
+                                                            ("~1", "arch_column_block"),("~1.4", "NIL"),
+                                                            ("~1", "arch_column_block"),("~1.4", "NIL"),
+                                                            ("~1", "arch_column_block"),("~1.4", "NIL")))
 
                 Objects2.extend(new_objects)
                 blnThereAreUnprocessedRules = True
