@@ -59,6 +59,7 @@ def copyBuildingPartTags(osmObject):
     osmtags["building:colour"] = osmObject.getTag("building:colour")
     osmtags["roof:material"] = osmObject.getTag("roof:material")
     osmtags["roof:colour"] = osmObject.getTag("roof:colour")
+    osmtags["roof:height"] = osmObject.getTag("roof:height")
 
     osmtags["type"] = osmObject.getTag("type")
 
@@ -142,6 +143,56 @@ def split_x(osmObject, objOsmGeom, split_pattern):
 
         Objects2.append(new_obj)
 
+    return Objects2
+
+
+# some kind of hybrid between offset and comp(border) operations
+# we create geometry along edges of our roof, to create decorative elements
+def comp_roof_border(osmObject, objOsmGeom, rule_name, distance=1):
+    Objects2 = []
+    if osmObject.type=="relation":
+        raise Exception("relation is not supported in the comp_roof_border operation")
+
+    for i in range(len(osmObject.NodeRefs) - 1):
+        new_obj = T3DObject()
+        new_obj.id = getID()
+        new_obj.type = "way"
+
+        new_obj.osmtags = copy(osmObject.osmtags)  # tags are inherited
+
+        lat0 = objOsmGeom.nodes[osmObject.NodeRefs[i]].lat
+        lon0 = objOsmGeom.nodes[osmObject.NodeRefs[i]].lon
+        x0, y0 = osmObject.LatLon2LocalXY(lat0, lon0)
+
+        lat1 = objOsmGeom.nodes[osmObject.NodeRefs[i + 1]].lat
+        lon1 = objOsmGeom.nodes[osmObject.NodeRefs[i + 1]].lon
+        x1, y1 = osmObject.LatLon2LocalXY(lat1, lon1)
+
+        xc = (x0 + x1) / 2
+        yc = (y0 + y1) / 2
+        facade_len = ((x1 - x0) ** 2 + (y1 - y0) ** 2) ** 0.5
+
+        new_obj.scope_rz = osmObject.scope_rz + atan2(y1 - y0, x1 - x0)
+
+        # we need to move the created shape "inwards", so that outer edges coincide.
+        # todo: individual shift for each vertex/edge
+        rc = (xc * xc + yc * yc) ** 0.5
+        dlat, dlon = osmObject.localXY2LatLon(xc / rc * 0.5, yc / rc * 0.5)
+        dlat = dlat - (osmObject.bbox.minLat + osmObject.bbox.maxLat) / 2
+        dlon = dlon - (osmObject.bbox.minLon + osmObject.bbox.maxLon) / 2
+
+        new_obj.bbox.minLat = min(lat0, lat1) - dlat
+        new_obj.bbox.maxLat = max(lat0, lat1) - dlat
+        new_obj.bbox.minLon = min(lon0, lon1) - dlon
+        new_obj.bbox.maxLon = max(lon0, lon1) - dlon
+
+        insert_Quad(new_obj, objOsmGeom, new_obj.NodeRefs, facade_len, 1, 0, 0)
+        new_obj.updateScopeBBox(objOsmGeom)
+        new_obj.osmtags = copyBuildingPartTags(osmObject)
+        new_obj.osmtags["building:part"] = rule_name
+        new_obj.osmtags["min_height"] = str(
+            parseHeightValue(osmObject.osmtags["height"]) - parseHeightValue(osmObject.osmtags["roof:height"]))
+        Objects2.append(new_obj)
     return Objects2
 
 
@@ -240,7 +291,8 @@ def scale(osmObject, objOsmGeom, sx, sy, sz=None):
 # ======================================================================================================================
 def main():
     #objOsmGeom, Objects = readOsmXml("d:\_BLENDER-OSM-TEST\samples\Church-vozdvizhenskoe.osm")
-    objOsmGeom, Objects = readOsmXml("d:\\original.osm")
+    objOsmGeom, Objects = readOsmXml("d:\\original_gorky_park.osm")
+    #objOsmGeom, Objects = readOsmXml("d:\\egorievsk.osm")
 
     #magic!
     blnThereAreUnprocessedRules = True
@@ -282,7 +334,18 @@ def main():
                 blnThereAreUnprocessedRules = True
 
             elif osmObject.getTag("building:part") == "porch_column_pre":
-                osmObject.osmtags["building:colour"] = "green"
+                new_objects = split_z_preserve_roof(osmObject, (("~1", "porch_column_main"),
+                                                                ("0.25", "porch_column_top")))
+
+                Objects2.extend(new_objects)
+                blnThereAreUnprocessedRules = True
+            elif osmObject.getTag("building:part") == "porch_column_top":
+                top_size=min(osmObject.scope_sx, osmObject.scope_sy)/1.3
+                scale(osmObject,objOsmGeom,top_size,top_size)
+                Objects2.append(osmObject)
+
+            elif osmObject.getTag("building:part") == "porch_column_main":
+                #osmObject.osmtags["building:colour"] = "green"
             
                 new_objects=primitiveCircle(osmObject, objOsmGeom,"porch_column", 12, min(osmObject.scope_sx, osmObject.scope_sy)/3)
                 Objects2.extend(new_objects)
@@ -291,63 +354,33 @@ def main():
                 osmObject.osmtags["building:colour"] = "blue"
                 Objects2.append(osmObject)
 
-            elif (osmObject.getTag("building:part")!="" and  osmObject.getTag("building:roof:kokoshniks")=="yes"):
+            # ===========================================================================================================
+            # Kokoshnik
+            # ===========================================================================================================
+            elif (osmObject.getTag("building:part")!="") and (osmObject.getTag("building:roof:kokoshniks")=="yes"):
 
                 # what do we here?
                 # some kind of the comp operator
                 # for each edge of the tholobate we create kokoshnik.
-
-                for i in range(len(osmObject.NodeRefs)-1):
-                    new_obj = T3DObject()
-                    new_obj.id = getID()
-                    new_obj.type = "way"
-
-                    new_obj.osmtags = copy(osmObject.osmtags)  # tags are inherited
-
-                    lat0 = objOsmGeom.nodes[osmObject.NodeRefs[i]].lat
-                    lon0 = objOsmGeom.nodes[osmObject.NodeRefs[i]].lon
-                    x0, y0 = osmObject.LatLon2LocalXY(lat0, lon0)
-
-                    lat1 = objOsmGeom.nodes[osmObject.NodeRefs[i+1]].lat
-                    lon1 = objOsmGeom.nodes[osmObject.NodeRefs[i+1]].lon
-                    x1, y1 = osmObject.LatLon2LocalXY(lat1, lon1)
-
-                    xc = (x0+x1)/2
-                    yc = (y0+y1)/2
-                    facade_len = ((x1-x0)**2+(y1-y0)**2)**0.5
-
-                    new_obj.scope_rz = new_obj.scope_rz + atan2(y1-y0, x1-x0)
-
-                    # we need to move the created shape "inwards", so that outer edges coincide.
-                    # todo: individual shift for each vertex/edge
-                    rc = (xc*xc+yc*yc)**0.5
-                    dlat, dlon = osmObject.localXY2LatLon(xc/rc*0.5,yc/rc*0.5)
-                    dlat = dlat - (osmObject.bbox.minLat + osmObject.bbox.maxLat) / 2
-                    dlon = dlon - (osmObject.bbox.minLon + osmObject.bbox.maxLon) / 2
-
-                    new_obj.bbox.minLat = min(lat0, lat1) - dlat
-                    new_obj.bbox.maxLat = max(lat0, lat1) - dlat
-                    new_obj.bbox.minLon = min(lon0, lon1) - dlon
-                    new_obj.bbox.maxLon = max(lon0, lon1) - dlon
-
-                    insert_Quad(new_obj, objOsmGeom, new_obj.NodeRefs, facade_len, 1, 0, 0)
-
-                    new_obj.osmtags["building:part"] = "kokoshnik"
-                    new_obj.osmtags["roof:shape"] = "round"
-                    new_obj.osmtags["roof:orientation"] = "across"
-                    new_obj.osmtags["roof:height"] = str(facade_len/2)
-                    new_obj.osmtags["min_height"] = str(parseHeightValue(osmObject.osmtags["height"]) - parseHeightValue(osmObject.osmtags["roof:height"]))
-                    new_obj.osmtags["height"] = str(parseHeightValue(new_obj.osmtags["min_height"]) + facade_len/2+0.1)
-
-                    new_obj.osmtags["building:roof:kokoshniks"] = ""
-                    new_obj.osmtags["name"] = ""
-
-                    Objects2.append(new_obj)
-
                 # remove the kokoshniks tag, to prevent dead loops.
                 osmObject.osmtags["building:roof:kokoshniks"] = ""
                 Objects2.append(osmObject)
 
+                new_objects = comp_roof_border(osmObject, objOsmGeom, "kokoshnik_pre")
+                Objects2.extend(new_objects)
+
+                blnThereAreUnprocessedRules = True
+
+            elif osmObject.getTag("building:part") == "kokoshnik_pre":
+                facade_len=osmObject.scope_sx
+                osmObject.osmtags["building:part"] = "kokoshnik"
+                osmObject.osmtags["roof:shape"] = "round"
+                osmObject.osmtags["roof:orientation"] = "across"
+                osmObject.osmtags["roof:height"] = str(facade_len / 2)
+                osmObject.osmtags["height"] = str(parseHeightValue(osmObject.osmtags["min_height"]) + facade_len / 2 + 0.1)
+                osmObject.osmtags["building:roof:kokoshniks"] = ""
+
+                Objects2.append(osmObject)
             # ===========================================================================================================
             # Entrance to the Gorky Park
             # ===========================================================================================================
@@ -366,15 +399,30 @@ def main():
 
                 new_objects = split_z_preserve_roof(osmObject, (("0.2", "stilobate"),
                                                                 ("~4", "arch_middle"),
-                                                                ("~1.5", "arch_top"),
+                                                                ("~1.5", "arch_top_pre"),
                                                                 ("~1", "arch_top2")))
 
                 Objects2.extend(new_objects)
 
                 blnThereAreUnprocessedRules = True
 
-            elif osmObject.getTag("building:part") == "arch_top":
-                Objects2.append(osmObject)
+            # elif osmObject.getTag("building:part") == "arch_top_pre":
+            #
+            #     new_objects = split_x(osmObject, objOsmGeom, (("~1", "NIL"),
+            #                                                   ("~4", "arch_top_decorations"),
+            #                                                   ("~1", "NIL")))
+            #
+            #     Objects2.extend(new_objects)
+            #
+            #     osmObject.osmtags["building:part"]= "arch_top"
+            #     Objects2.append(osmObject)
+            #     blnThereAreUnprocessedRules = True
+            #
+            # elif osmObject.getTag("building:part") == "arch_top_decorations":
+            #      scale(osmObject, objOsmGeom, osmObject.scope_sx * 0.99, osmObject.scope_sy * 0.99, )
+            #     new_objects = comp_roof_border(osmObject, objOsmGeom, "kokoshnik_pre")
+            #     Objects2.extend(new_objects)
+            #     blnThereAreUnprocessedRules = True
 
             elif osmObject.getTag("building:part") == "arch_middle":
                 new_objects = split_x(osmObject, objOsmGeom, (("~1", "pylon_pre"),
@@ -393,12 +441,12 @@ def main():
                 blnThereAreUnprocessedRules = True
 
             elif osmObject.getTag("building:part") == "pylon_pre":
-                scale(osmObject, objOsmGeom, osmObject.scope_sx*0.95, osmObject.scope_sy*0.95)
+                scale(osmObject, objOsmGeom, osmObject.scope_sx*0.99, osmObject.scope_sy*0.99)
                 osmObject.osmtags["building:part"]="pylon"
                 Objects2.append(osmObject)
 
             elif osmObject.getTag("building:part") == "pylon_top":
-                scale(osmObject, objOsmGeom, osmObject.scope_sx * 0.95, osmObject.scope_sy * 0.95)
+                scale(osmObject, objOsmGeom, osmObject.scope_sx * 0.99, osmObject.scope_sy * 0.99)
                 new_objects = split_z_preserve_roof(osmObject, (("~1", "pylon_top1_pre"),
                                                                 ("~1", "pylon_top2_pre"),
                                                                 ("~1", "pylon_top3_pre")))
@@ -417,7 +465,7 @@ def main():
 
             elif osmObject.getTag("building:part") == "pylon_top3_pre":
                 scale(osmObject, objOsmGeom, osmObject.scope_sx*0.4, osmObject.scope_sy*0.4)
-                osmObject.osmtags["building:part"]="yep"
+                osmObject.osmtags["building:part"]="yes"
                 Objects2.append(osmObject)
 
             elif osmObject.getTag("building:part") == "arch_columns":
@@ -444,7 +492,22 @@ def main():
                                                             ("~1", "porch_column_pre")))
 
                 Objects2.extend(new_objects)
+                new_objects = split_x(osmObject, objOsmGeom, (("~1", "obelisk_pre"),
+                                                              ("~8", "NIL"),
+                                                              ("~1", "obelisk_pre")))
+
+                Objects2.extend(new_objects)
                 blnThereAreUnprocessedRules = True
+
+            elif osmObject.getTag("building:part") == "obelisk_pre":
+                scale(osmObject,objOsmGeom, 1, 1.5)
+                osmObject.osmtags["building:part"] = "yes"
+                osmObject.osmtags["min_height"] =" 18.3"
+                osmObject.osmtags["height"] = "20.1"
+                osmObject.osmtags["roof:height"] = "1.70"
+                osmObject.osmtags["roof:shape"] = "round"
+                osmObject.osmtags["roof:orientation"] = "across"
+                Objects2.append(osmObject)
 
             elif osmObject.getTag("building:part") == "NIL":
                 pass

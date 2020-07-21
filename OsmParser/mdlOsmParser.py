@@ -174,6 +174,25 @@ class T3DObject:
         self.scope_rz = bestAlpha / 180 * pi
         self.updateScopeBBox(objOsmGeom)
 
+        #lets find more precise angle.
+        alpha = bestAlpha
+        S = minS
+        prevS=minS
+        delta_alpha=0.5
+        epsilon = 0.0001
+        while abs(delta_alpha)>epsilon:
+            alpha=alpha+delta_alpha
+            self.scope_rz = alpha / 180 * pi
+            self.updateScopeBBox(objOsmGeom)
+            S = self.scope_sx * self.scope_sy
+            if S<prevS:
+                #minS= S
+                bestAlpha=alpha
+            else:
+                delta_alpha=-delta_alpha/2
+            prevS = S
+        self.scope_rz = alpha / 180 * pi
+        self.updateScopeBBox(objOsmGeom)
     #rotates the scope of the shape.
     #only local coordinate system is rotated, geometry is not touched.
     #since we have only 2.5D here, we can rotate around vertical axis(z) only
