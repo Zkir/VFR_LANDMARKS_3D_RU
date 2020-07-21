@@ -455,12 +455,12 @@ def main():
 
             elif osmObject.getTag("building:part") == "pylon_top1_pre":
                 scale(osmObject, objOsmGeom, osmObject.scope_sx*0.6, osmObject.scope_sy*0.6)
-                osmObject.osmtags["building:part"]="yep"
+                osmObject.osmtags["building:part"]="yes"
                 Objects2.append(osmObject)
 
             elif osmObject.getTag("building:part") == "pylon_top2_pre":
                 scale(osmObject, objOsmGeom, osmObject.scope_sx*0.5, osmObject.scope_sy*0.5)
-                osmObject.osmtags["building:part"]="yep"
+                osmObject.osmtags["building:part"]="yes"
                 Objects2.append(osmObject)
 
             elif osmObject.getTag("building:part") == "pylon_top3_pre":
