@@ -397,16 +397,30 @@ def writeOsmXml(objOsmGeom, Objects, strOutputOsmFileName):
                 break
 
         if node_used:
-            fo.write('  <node id="' + obj_id + '" version="' + obj_ver + '"  lat="' + str(node_lat) + '" lon="' + str(
+            if int(obj_id)<0:
+                action=' action="modify" '
+            else:
+                action=''
+
+            fo.write('  <node id="' + obj_id + '"' + action + ' version="' + obj_ver + '"  lat="' + str(node_lat) + '" lon="' + str(
                       node_lon) + '"/>' + '\n')
 
     for osmObject in Objects:
         if osmObject.type == "way":
-            fo.write('  <way id="' + osmObject.id + '" version="' + "1" + '" >' + '\n')
+            if int(osmObject.id) < 0:
+                action = ' action="modify" '
+            else:
+                action = ''
+            fo.write('  <way id="' + osmObject.id + '"'+action+' version="' + "1" + '" >' + '\n')
             for node in osmObject.NodeRefs:
                 fo.write('    <nd ref="' + objOsmGeom.GetNodeID(node) + '" />' + '\n')
+
         if osmObject.type == "relation":
-            fo.write('  <relation id="' + osmObject.id + '" version="' + "1" + '" >' + '\n')
+            if int(osmObject.id) < 0:
+                action = ' action="modify" '
+            else:
+                action = ''
+            fo.write('  <relation id="' + osmObject.id + '"'+action + ' version="' + "1" + '" >' + '\n')
             for way in osmObject.WayRefs:
                 fo.write(
                     '    <member type="way" ref="' + objOsmGeom.GetWayID(way[0]) + '" role="' + way[1] + '"  />' + '\n')
@@ -419,6 +433,7 @@ def writeOsmXml(objOsmGeom, Objects, strOutputOsmFileName):
             fo.write('  </relation>' + '\n')
     fo.write('</osm>' + '\n')
     fo.close()
+
 
 def parseHeightValue(str):
     if Right(str, 2) == ' м':

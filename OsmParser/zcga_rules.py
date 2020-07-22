@@ -197,7 +197,7 @@ def checkRulesMy(ctx):
         ctx.setTag("building:part", "obelisk")
         ctx.scale(1, 1.5)
         ctx.setTag("building:part", "yes")
-        ctx.setTag("min_height", " 18.3")
+        ctx.setTag("min_height", "18.3")
         ctx.setTag("height", "20.1")
         ctx.setTag("roof:height", "1.70")
         ctx.setTag("roof:shape", "round")

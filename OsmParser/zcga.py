@@ -53,23 +53,25 @@ def calculateDimensionsForSplitPattern(h, split_pattern):
     return Heights
 
 
-def copyBuildingPartTags(osmObject):
+def copyBuildingPartTags(new_object, old_object):
     # todo: inherit tags
     # some tags should be dropped, e.g. type (as valid for relations only)
     # roof shape may produce funny results if copied for horizontal split
     osmtags = {}
-    osmtags["building:part"] = osmObject.getTag("building:part")
-    osmtags["height"] = osmObject.getTag("height")
-    osmtags["min_height"] = osmObject.getTag("min_height")
-    osmtags["building:material"] = osmObject.getTag("building:material")
-    osmtags["building:colour"] = osmObject.getTag("building:colour")
-    osmtags["roof:material"] = osmObject.getTag("roof:material")
-    osmtags["roof:colour"] = osmObject.getTag("roof:colour")
-    osmtags["roof:height"] = osmObject.getTag("roof:height")
+    osmtags["building:part"] = old_object.getTag("building:part")
+    osmtags["height"] = old_object.getTag("height")
+    osmtags["min_height"] = old_object.getTag("min_height")
+    osmtags["building:material"] = old_object.getTag("building:material")
+    osmtags["building:colour"] = old_object.getTag("building:colour")
+    osmtags["roof:material"] = old_object.getTag("roof:material")
+    osmtags["roof:colour"] = old_object.getTag("roof:colour")
+    osmtags["roof:height"] = old_object.getTag("roof:height")
 
-    osmtags["type"] = osmObject.getTag("type")
+    if new_object.type == "relation":
+        osmtags["type"] = old_object.getTag("type")
 
-    return osmtags
+    new_object.osmtags=osmtags
+
 
 
 # split object in vertical direction.
@@ -94,7 +96,7 @@ def split_z_preserve_roof(osmObject, split_pattern):
         new_obj.type = osmObject.type
         new_obj.NodeRefs = copy(osmObject.NodeRefs)
         new_obj.WayRefs = copy(osmObject.WayRefs)
-        new_obj.osmtags = copyBuildingPartTags(osmObject)
+        copyBuildingPartTags(new_obj, osmObject)
         new_obj.bbox = copy(osmObject.bbox)
         new_obj.size = osmObject.size
         new_obj.scope_sx = osmObject.scope_sx
@@ -133,7 +135,7 @@ def split_x(osmObject, objOsmGeom, split_pattern):
         new_obj.id = getID()
         new_obj.type = "way"
 
-        new_obj.osmtags = copyBuildingPartTags(osmObject)
+        copyBuildingPartTags(new_obj, osmObject)
         new_obj.osmtags["building:part"] = split_pattern[i][1]
 
         dx = Lengths[i]
