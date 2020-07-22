@@ -381,13 +381,24 @@ def writeOsmXml(objOsmGeom, Objects, strOutputOsmFileName):
     # fo.write('  <bounds minlat="' + str(object1.bbox.minLat) + '" minlon="' + str(object1.bbox.minLon) + '" maxlat="' + str(
     #    object1.bbox.maxLat) + '" maxlon="' + str(object1.bbox.maxLon) + '"/> ' + '\n')
 
-    for node in objOsmGeom.nodes:
+    for i in range(len(objOsmGeom.nodes)):
+        node=objOsmGeom.nodes[i]
         obj_id = node.id
         obj_ver = "1"
         node_lat = node.lat
         node_lon = node.lon
-        fo.write('  <node id="' + obj_id + '" version="' + obj_ver + '"  lat="' + str(node_lat) + '" lon="' + str(
-            node_lon) + '"/>' + '\n')
+        node_used=False
+        for obj in Objects:
+            for node_ref in obj.NodeRefs:
+                if i==node_ref:
+                    node_used = True
+                    break
+            if node_used:
+                break
+
+        if node_used:
+            fo.write('  <node id="' + obj_id + '" version="' + obj_ver + '"  lat="' + str(node_lat) + '" lon="' + str(
+                      node_lon) + '"/>' + '\n')
 
     for osmObject in Objects:
         if osmObject.type == "way":
