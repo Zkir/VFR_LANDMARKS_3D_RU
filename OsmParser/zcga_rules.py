@@ -98,26 +98,26 @@ def checkRulesMy(ctx):
 
     elif ctx.getTag("building:part") == "pylon_middle":
         ctx.split_z_preserve_roof( (("~1", "pylon_middle_wall"),
-                                    ("0.6", "pylon_middle_carnice1_pre"),
-                                    ("0.6", "pylon_middle_carnice2_pre"),
+                                    ("0.6", "pylon_middle_cornice1_pre"),
+                                    ("0.6", "pylon_middle_cornice2_pre"),
                                     ("~2", "pylon_middle_wall"),
-                                    ("0.3", "pylon_middle_carnice3_pre"),
-                                    ("0.3", "pylon_middle_carnice4_pre")
+                                    ("0.3", "pylon_middle_cornice3_pre"),
+                                    ("0.3", "pylon_middle_cornice4_pre")
                                                         ))
 
-    elif ctx.getTag("building:part") == "pylon_middle_carnice1_pre":
+    elif ctx.getTag("building:part") == "pylon_middle_cornice1_pre":
         ctx.scale(ctx.scope_sx() + 1.4, ctx.scope_sy() + 1.4)
         ctx.setTag("building:part", "cornice1")
 
-    elif ctx.getTag("building:part") == "pylon_middle_carnice2_pre":
+    elif ctx.getTag("building:part") == "pylon_middle_cornice2_pre":
         ctx.scale(ctx.scope_sx() + 2.45, ctx.scope_sy() + 2.45)
         ctx.setTag("building:part", "cornice2")
 
-    elif ctx.getTag("building:part") == "pylon_middle_carnice3_pre":
+    elif ctx.getTag("building:part") == "pylon_middle_cornice3_pre":
         ctx.scale(ctx.scope_sx() + 0.4, ctx.scope_sy() + 0.4)
         ctx.setTag("building:part", "cornice3")
 
-    elif ctx.getTag("building:part") == "pylon_middle_carnice4_pre":
+    elif ctx.getTag("building:part") == "pylon_middle_cornice4_pre":
         ctx.scale(ctx.scope_sx() + 0.9, ctx.scope_sy() + 0.9)
         ctx.setTag("building:part", "cornice4")
 
