@@ -77,24 +77,39 @@ def checkRulesMy(ctx):
         # align local coordinates so that X matches the longest dimension
         ctx.alignScopeToGeometry()
         ctx.alignX2LongerScopeSide()
-        ctx.split_x((("~1", "pylon_pre"), ("~3.5", "arch"), ("~1", "pylon_pre")))
+        ctx.split_x((("~1", "building_outline"),))
         ctx.restore()
+
+    elif ctx.getTag("building:part") == "building_outline":
+        # we need to do offset inside, to compensate cornice, which is huge
+        ctx.scale(ctx.scope_sx() - 2.5, ctx.scope_sy() - 2.5)
+        ctx.split_x((("~0.06", "side_column_block"),("~1", "pylon_pre"), ("~3.5", "arch"), ("~1", "pylon_pre"),("~0.06", "side_column_block")))
 
     elif ctx.getTag("building:part") == "arch":
         ctx.setTag("building:part", "no")
-        ctx.scale(ctx.scope_sx() + 2.5, ctx.scope_sy() - 5)
+        ctx.scale(ctx.scope_sx(), ctx.scope_sy() - 2.0)
         ctx.split_z_preserve_roof((("0.2", "stilobate"),
                                    ("~4", "arch_columns"),
                                    ("~1.5", "pylon_middle"),  # arch_top_pre
                                    ("~1", "NIL")))
 
+
     elif ctx.getTag("building:part") == "pylon_pre":
-        # ctx.setTag("building:part", "no")
-        ctx.scale(ctx.scope_sx() - 2.5, ctx.scope_sy() - 2.5)
-        ctx.split_z_preserve_roof( (("0.2", "stilobate"),
-                                    ("~4", "pylon"),
-                                    ("~1.5", "pylon_middle"),
-                                    ("~1", "pylon_top")))
+        ctx.split_z_preserve_roof((("0.2", "stilobate"),
+                                   ("~4", "pylon"),
+                                   ("~1.5", "pylon_middle"),
+                                   ("~1", "pylon_top")))
+
+    elif ctx.getTag("building:part") == "side_column_block":
+        ctx.rotateScope(90)
+        ctx.split_x((("~1", "NIL"),("~1", "side_column_pre"), ("~1.5", "NIL"), ("~1", "side_column_pre"), ("~1", "NIL")))
+
+    elif ctx.getTag("building:part") == "side_column_pre":
+        ctx.split_z_preserve_roof((("0.2", "stilobate"),
+                                   ("~4", "pylon"),
+                                   ("~1.5", "pylon_middle"),
+                                   ("~1", "NIL")))
+
 
     elif ctx.getTag("building:part") == "pylon_middle":
         ctx.split_z_preserve_roof( (("~1", "pylon_middle_wall"),
@@ -141,14 +156,14 @@ def checkRulesMy(ctx):
     elif ctx.getTag("building:part") == "arch_columns":
         #ctx.setTag("building:part","no")
 
-        ctx.split_x((("~0.4", "semi_column_block"), ("~1.2", "NIL"),
+        ctx.split_x((("~0.2", "semi_column_block"), ("~1.2", "NIL"),
                                                     ("~1", "arch_column_block"), ("~1.1", "NIL"),
                                                     ("~1", "arch_column_block"), ("~1.1", "NIL"),
                                                     ("~1", "arch_column_block"), ("~1.1", "NIL"),
                                                     ("~1", "arch_column_block"), ("~1.1", "NIL"),
                                                     ("~1", "arch_column_block"), ("~1.1", "NIL"),
                                                     ("~1", "arch_column_block"), ("~1.2", "NIL"),
-                                                    ("~0.4", "semi_column_block")))
+                                                    ("~0.2", "semi_column_block")))
 
     elif ctx.getTag("building:part") == "arch_column_block":
         ctx.setTag("building:part", "no")
