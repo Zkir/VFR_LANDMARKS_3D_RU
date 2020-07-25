@@ -65,9 +65,8 @@ bpy.data.scenes["Scene"].blender_osm.osmFilepath = strInputFileName
 bpy.ops.blender_osm.import_data()
 
 #===============================================================
-# create uv-coordinates
-# non-premium version of blender-osm does not create them
-# so we have to do it ourselves.
+# we need new uv-map for baking
+# so we will create uv-coordinates
 #===============================================================
 #we need to select the first and the single object in the scene
 bpy.ops.object.select_all(action='SELECT')
@@ -91,6 +90,8 @@ bpy.context.scene.render.engine = 'CYCLES'
 
 #===============================================================
 # We need to add a nodes for texture for each material
+# this is how baking works in cycles. 
+# Target texture should be active in material node tree.
 #===============================================================
 # https://blender.stackexchange.com/questions/5668/add-nodes-to-material-with-python
 
