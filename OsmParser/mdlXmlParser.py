@@ -17,7 +17,7 @@ class clsXMLparser:
         self.node = self.filehandle.readline().strip()
         if not self.node:
             self.bEOF=True
-        #print(self.node)   
+        #print(self.node)
         
 
     def GetTag(self):
@@ -30,12 +30,29 @@ class clsXMLparser:
         txt=""
         strToken = strAttrName + "=\""
         i = self.node.find(strToken)
+        if i<0:
+            strToken = strAttrName + "='"
+            i = self.node.find(strToken)
         if i>=0:
             txt = self.node[i + len(strToken):len(self.node)]
             #print(txt)
             i = txt.find ("\"")
+            if i<0:
+                i = txt.find("'")
             txt = txt[0:i]
-            txt = txt.replace("&quot;", "\"")
-            txt = txt.replace("&apos;", "'")
-            txt = txt.replace("&#34;", "\"")
+            txt = decodeXmlString(txt)
+
         return(txt)
+
+
+def encodeXmlString(txt):
+    txt = txt.replace("\"","&quot;" )
+    txt = txt.replace("'","&apos;")
+    return txt
+
+
+def decodeXmlString(txt):
+    txt = txt.replace("&quot;", "\"")
+    txt = txt.replace("&apos;", "'")
+    txt = txt.replace("&#34;", "\"")
+    return txt

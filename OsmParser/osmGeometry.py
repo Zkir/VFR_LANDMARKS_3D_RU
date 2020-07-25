@@ -42,7 +42,7 @@ class clsOsmGeometry():
         self.max_way = -1
 
     def AddNode(self, id, lat, lon):
-        #Debug.Print id, lat, lon
+        #print("debug",id, lat, lon)
         aNode=TNode()
         aNode.id = id
         aNode.lat = float(lat)

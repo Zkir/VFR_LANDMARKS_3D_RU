@@ -153,7 +153,7 @@ lstColorCodes=[
 ]
 
 
-def GetColourName(strRgbCode):
+def getColourName(strRgbCode):
     strColorName = "black"
 
     if Left(strRgbCode, 1) != "#":
