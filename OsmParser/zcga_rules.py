@@ -142,8 +142,27 @@ def checkRulesMy(ctx):
                                    ("~1", "pylon_top3_pre")))
 
     elif ctx.getTag("building:part") == "pylon_top1_pre":
-        ctx.scale(ctx.scope_sx() * 0.6, ctx.scope_sy() * 0.6)
+        ctx.split_x((("1.0", "pylon_top1_obelisk_block"),
+                    ("~1", "pylon_top1_pre2"),
+                    ("1.0", "pylon_top1_obelisk_block")))
+
+    elif ctx.getTag("building:part") == "pylon_top1_pre2":
+        ctx.scale((ctx.scope_sx()+2*1.0) * 0.6, ctx.scope_sy() * 0.6)
         ctx.setTag("building:part",  "pylon_top1")
+
+    elif ctx.getTag("building:part") == "pylon_top1_obelisk_block":
+        ctx.rotateScope(90)
+        ctx.split_x((("1", "pylon_top1_obelisk_pre"),
+                    ("~10", "NIL"),
+                    ("1", "pylon_top1_obelisk_pre")))
+
+    elif ctx.getTag("building:part") == "pylon_top1_obelisk_pre":
+        #ctx.scale("'1", "'1", 1.8 )
+        ctx.scale(ctx.scope_sx(), ctx.scope_sy(), 1.8)
+        ctx.setTag("building:part", "obelisk")
+        ctx.setTag("roof:shape", "skillion")
+        ctx.setTag("roof:height", "1.75")
+        ctx.setTag("roof:direction", str(90+ctx.scope_rz()))
 
     elif ctx.getTag("building:part") == "pylon_top2_pre":
         ctx.scale(ctx.scope_sx() * 0.5, ctx.scope_sy() * 0.5)

@@ -267,7 +267,17 @@ def scale(osmObject, objOsmGeom, sx, sy, sz=None):
         raise Exception("todo: relations is not supported")
 
     if sz is not None:
-        raise Exception("Scale Z is not implemented")
+        # Luckily, z-scale is simple. No matrix, no geometry
+        # just update tags
+        height = parseHeightValue(osmObject.getTag("height"))
+        min_height = parseHeightValue(osmObject.getTag("min_height"))
+        roof_height = parseHeightValue(osmObject.getTag("roof:height"))
+        h = height - min_height
+        kz=sz/h
+        #min_height remains, we need to update height and roof height
+        osmObject.osmtags["height"] = str(min_height+sz)
+        osmObject.osmtags["roof:height"] = str(roof_height*kz)
+        #osmObject.scope_sz=sz
 
     kx = sx/osmObject.scope_sx
     ky = sy/osmObject.scope_sy
@@ -335,6 +345,9 @@ class ZCGAContext:
 
     def scope_sz(self):
         return self.current_object.scope_sz
+
+    def scope_rz(self):
+        return self.current_object.scope_rz/pi*180
 
     def alignScopeToGeometry(self):
         self.current_object.alignScopeToGeometry(self.objOsmGeom)
