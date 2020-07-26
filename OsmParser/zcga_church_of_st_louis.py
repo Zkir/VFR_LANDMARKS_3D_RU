@@ -11,6 +11,9 @@ def checkRulesMy(ctx):
         if ctx.getTag("building:levels") != "" and ctx.getTag("height") == 0:
             ctx.setTag("height", str(float(ctx.getTag("building:levels")) * 4))
 
+        ctx.setTag("roof:material","metal")
+        ctx.setTag("roof:colour", "#202020")
+
         # align local coordinates so that X matches the longest dimension
         ctx.alignScopeToGeometry()
         ctx.alignX2LongerScopeSide()
@@ -23,6 +26,8 @@ def checkRulesMy(ctx):
         ctx.split_x(((2.5, "parvise_block"),("~0.75", "entrance_block"), ("~5", "main_block"), ("~1", "apse_block")))
 
     elif ctx.getTag("building:part") == "parvise_block":
+        ctx.setTag("roof:material", "brick")
+        ctx.setTag("roof:colour", "#202020")
         ctx.scale("'1", "'0.9","1.5")
         ctx.split_y(((4, "parvise"), ("~5", "parvise_steps_pre"), (4, "parvise")))
 
@@ -110,6 +115,8 @@ def checkRulesMy(ctx):
         ctx.scale("'1", "'1", "13")
         ctx.setTag("roof:shape", "hipped")
         ctx.setTag("roof:height", "1.5")
+        ctx.split_x((("~1", "dormer_base_main"),))
+        ctx.restore()
 
     elif ctx.getTag("building:part") == "main_side_part_pre":
         ctx.scale("'1","'1","8.5")
@@ -126,6 +133,38 @@ def checkRulesMy(ctx):
         else:
             azimuth = (360+azimuth+90) % 360
         ctx.setTag("roof:direction", azimuth)
+        ctx.split_x((("~1", "dormer_base_side"),))
+        ctx.restore()
+
+    elif ctx.getTag("building:part") == "dormer_base_side":
+        min_height=ctx.getTag("height")-ctx.getTag("roof:height")
+        ctx.setTag("roof:height","")
+        ctx.setTag("roof:direction", "")
+        ctx.setTag("roof:orientation", "")
+
+        ctx.setTag("min_height", min_height)
+        ctx.scale("'1", "'0.9", "1.1")
+        ctx.split_x((("~2.5", "NIL"),("2", "dormer"),
+                     ("~1", "NIL"), ("2", "dormer"),
+                     ("~1", "NIL"), ("2", "dormer"),
+                     ("~1", "NIL"), ("2", "dormer"),
+                     ("~2.5", "NIL")))
+
+    elif ctx.getTag("building:part") == "dormer_base_main":
+        min_height=ctx.getTag("height")-ctx.getTag("roof:height")
+        ctx.setTag("roof:height","")
+        ctx.setTag("roof:direction", "")
+        ctx.setTag("roof:orientation", "")
+
+        ctx.setTag("min_height", min_height)
+        ctx.scale("'1", "'0.9", "1.1")
+        ctx.split_x((("~2.5", "NIL"),("2", "dormer"),
+                     ("~3", "NIL"), ("2", "dormer"),
+                     ("~2.5", "NIL")))
+
+    elif ctx.getTag("building:part") == "dormer":
+        ctx.setTag("roof:shape", "round")
+        ctx.setTag("roof:height", "1.0")
 
     #apse block
     elif ctx.getTag("building:part") == "apse_block":
