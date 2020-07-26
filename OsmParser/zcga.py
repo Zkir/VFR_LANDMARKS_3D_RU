@@ -9,10 +9,10 @@ resulting OSM file can be uploaded to OSM DB
 from copy import copy
 from math import cos, sin, atan, atan2, pi
 from mdlOsmParser import T3DObject,readOsmXml, writeOsmXml, parseHeightValue
-from zcga_rules import checkRulesMy
+#from zcga_gorky_park_entrance import checkRulesMy
+from zcga_church_of_st_louis import checkRulesMy
 
 _id_counter=0
-
 
 # counter for OSM objects.
 # we need negative, because those objects are absent (yet) in OSM DB
@@ -35,14 +35,15 @@ def calculateDimensionsForSplitPattern(h, split_pattern):
     sum_of_explicit_heights = 0
     sum_of_implicit_heights = 0
     for i in range(N):
-        if split_pattern[i][0][0:1] != "~":  # height starts with '~'
+
+        if str(split_pattern[i][0])[0:1] != "~":  # height starts with '~'
             sum_of_explicit_heights = sum_of_explicit_heights + float(split_pattern[i][0])
             Heights[i] = float(split_pattern[i][0])
         else:
             sum_of_implicit_heights = sum_of_implicit_heights + float(split_pattern[i][0][1:])
     # define values for floating segments proportionally
     for i in range(N):
-        if split_pattern[i][0][0:1] != "~":  # height starts with '~'
+        if str(split_pattern[i][0])[0:1] != "~":  # height starts with '~'
             Heights[i] = float(split_pattern[i][0])
         else:
             Heights[i] = (h - sum_of_explicit_heights) * float(split_pattern[i][0][1:]) / sum_of_implicit_heights
@@ -66,6 +67,9 @@ def copyBuildingPartTags(new_object, old_object):
     osmtags["roof:material"] = old_object.getTag("roof:material")
     osmtags["roof:colour"] = old_object.getTag("roof:colour")
     osmtags["roof:height"] = old_object.getTag("roof:height")
+    osmtags["roof:shape"] = old_object.getTag("roof:shape")
+    osmtags["roof:orientation"] = old_object.getTag("roof:orientation")
+    osmtags["roof:direction"] = old_object.getTag("roof:direction")
 
     if new_object.type == "relation":
         osmtags["type"] = old_object.getTag("type")
@@ -116,6 +120,7 @@ def split_z_preserve_roof(osmObject, split_pattern):
             new_obj.osmtags["height"] = str(min_height + Heights[i]+roof_height)
         min_height=min_height+Heights[i]
 
+
         Objects2.append(new_obj)
     return Objects2
 
@@ -153,6 +158,38 @@ def split_x(osmObject, objOsmGeom, split_pattern):
 
     return Objects2
 
+# Split the object along Y axis
+def split_y(osmObject, objOsmGeom, split_pattern):
+    Objects2 = []
+    scope_sx = osmObject.scope_sx
+    scope_sy = osmObject.scope_sy
+
+    Lengths = calculateDimensionsForSplitPattern(scope_sy, split_pattern)
+    n = len(Lengths)
+    y0 = -scope_sy / 2
+
+    for i in range(n):
+        new_obj = T3DObject()
+        new_obj.id = getID()
+        new_obj.type = "way"
+
+        copyBuildingPartTags(new_obj, osmObject)
+        new_obj.osmtags["building:part"] = split_pattern[i][1]
+
+        dy = Lengths[i]
+
+        # todo: cut actual geometry, not bbox only
+        insert_Quad(osmObject, objOsmGeom, new_obj.NodeRefs,  scope_sx, dy, 0, y0+dy/2)
+
+        y0=y0+dy
+
+        new_obj.scope_rz = osmObject.scope_rz  # coordinate system orientation is inherited, but centroid is moved and
+        new_obj.updateBBox(objOsmGeom)         # bbox is updated
+        new_obj.updateScopeBBox(objOsmGeom)  # also Bbbox in local coordinates
+
+        Objects2.append(new_obj)
+
+    return Objects2
 
 # some kind of hybrid between offset and comp(border) operations
 # we create geometry along edges of our roof, to create decorative elements
@@ -262,34 +299,49 @@ def primitiveCircle(osmObject, objOsmGeom, rule_name, nVertices=12, radius=None)
     return Objects2
 
 
+def parseRelativeValue(val, abs_size):
+    if type(val) == str:
+        if val[0:1] == "'":
+            val = float(str(val)[1:]) * abs_size
+    if type(val) == str:
+        val=float(val)
+    return val
+
 def scale(osmObject, objOsmGeom, sx, sy, sz=None):
     if osmObject.type == "relation":
         raise Exception("todo: relations is not supported")
 
     if sz is not None:
+
+
         # Luckily, z-scale is simple. No matrix, no geometry
         # just update tags
         height = parseHeightValue(osmObject.getTag("height"))
         min_height = parseHeightValue(osmObject.getTag("min_height"))
         roof_height = parseHeightValue(osmObject.getTag("roof:height"))
         h = height - min_height
+        sz=parseRelativeValue(sz,h)
+
         kz=sz/h
         #min_height remains, we need to update height and roof height
         osmObject.osmtags["height"] = str(min_height+sz)
         osmObject.osmtags["roof:height"] = str(roof_height*kz)
         #osmObject.scope_sz=sz
 
+    sx = parseRelativeValue(sx, osmObject.scope_sx)
+    sy = parseRelativeValue(sy, osmObject.scope_sy)
+
     kx = sx/osmObject.scope_sx
     ky = sy/osmObject.scope_sy
     # we should not transfer the same node twice
-    if osmObject.NodeRefs[0]==osmObject.NodeRefs[-1]:
+    if osmObject.NodeRefs[0] == osmObject.NodeRefs[-1]:
         closed_way_flag = 1
     else:
         closed_way_flag = 0
 
     new_node_refs =[]
     for i in range(len(osmObject.NodeRefs)-closed_way_flag):
-        node=osmObject.NodeRefs[i]
+        node = osmObject.NodeRefs[i]
         x, y = osmObject.LatLon2LocalXY(objOsmGeom.nodes[node].lat, objOsmGeom.nodes[node].lon)
         x = x*kx
         y = y*ky
@@ -320,7 +372,9 @@ class ZCGAContext:
         self.objOsmGeom= objOsmGeom
         self.Objects = Objects
         self.Objects2 = []
-        #self.current_object_destructed = False
+        for obj in self.Objects:
+            #obj.updateBBox(objOsmGeom)
+            obj.alignScopeToWorld()
 
         # ==================================================================================================================
     # Wrappers for the ZCGA operations
@@ -329,12 +383,12 @@ class ZCGAContext:
     # attributes
     def getTag(self, key):
         value=self.current_object.getTag(key)
-        if key=="height" or key=="min_height" or key=="roof:height":
-            value=parseHeightValue(value)
+        if key == "height" or key == "min_height" or key == "roof:height":
+            value = parseHeightValue(value)
         return value
 
     def setTag(self, key, value):
-        self.current_object.osmtags[key] = value
+        self.current_object.osmtags[key] = str(value)
 
     # Scope
     def scope_sx(self):
@@ -371,6 +425,13 @@ class ZCGAContext:
     # Geometry subdivision
     def split_x(self, split_pattern):
         new_objects = split_x(self.current_object, self.objOsmGeom, split_pattern)
+
+        self.nil()
+        self.Objects2.extend(new_objects)
+        self.unprocessed_rules_exist = True
+
+    def split_y(self, split_pattern):
+        new_objects = split_y(self.current_object, self.objOsmGeom, split_pattern)
 
         self.nil()
         self.Objects2.extend(new_objects)
@@ -426,7 +487,10 @@ class ZCGAContext:
                 # we copy it, but the check rule can remove it, if necessary
                 self.Objects2.append(self.current_object)
                 # check object modification rules
-                checkRules(ctx)
+                if not self.current_object.rules_processed:
+                    #process each object only once.
+                    checkRules(ctx)
+                    self.current_object.rules_processed = True
 
             self.Objects = self.Objects2
             cycles_passed=cycles_passed+1
@@ -439,7 +503,9 @@ class ZCGAContext:
 print("ZCGA utility")
 # objOsmGeom, Objects = readOsmXml("d:\_BLENDER-OSM-TEST\samples\Church-vozdvizhenskoe.osm")
 # objOsmGeom, Objects = readOsmXml("d:\\egorievsk.osm")
-objOsmGeom, Objects = readOsmXml("d:\\original_gorky_park.osm")
+#objOsmGeom, Objects = readOsmXml("d:\\original_gorky_park.osm")
+objOsmGeom, Objects = readOsmXml("d:\\original_church_of_St_Louis.osm")
+
 
 ctx = ZCGAContext(objOsmGeom, Objects)
 ctx.processRules(checkRulesMy)

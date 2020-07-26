@@ -48,6 +48,8 @@ class T3DObject:
         self.scope_sy=0
         self.scope_rz=0
 
+        self.rules_processed = False
+
     def updateBBox(self,objOsmGeom):
         if self.type == "way":
             self.bbox.minLat = objOsmGeom.nodes[self.NodeRefs[0]].lat

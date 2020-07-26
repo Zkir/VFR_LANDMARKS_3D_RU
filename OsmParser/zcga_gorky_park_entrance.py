@@ -1,5 +1,6 @@
 """
-Set of rules to generate some geometry for buildings
+Set of rules to generate some geometry for buildings,
+first of all Gorky Park Entrance
 (c) Zkir 2020
 """
 
@@ -28,11 +29,12 @@ def checkRulesMy(ctx):
 
     elif ctx.getTag("building:part") == "porch_column_pre":
         ctx.split_z_preserve_roof((("~1", "porch_column_main"),
-                                   ("0.25", "porch_column_top")))
+                                   ("0.25", "porch_column_top_pre")))
 
-    elif ctx.getTag("building:part") == "porch_column_top":
+    elif ctx.getTag("building:part") == "porch_column_top_pre":
         top_size = min(ctx.scope_sx(), ctx.scope_sy()) / 1.0
         ctx.scale(top_size, top_size)
+        ctx.setTag("building:part","porch_column_top")
 
     elif ctx.getTag("building:part") == "porch_column_main":
         # osmObject.osmtags["building:colour"] = "green"
@@ -70,7 +72,7 @@ def checkRulesMy(ctx):
             "building:architecture") == "stalinist_neoclassicism":
 
         if ctx.getTag("building:levels") != "" and ctx.getTag("height") == 0:
-            ctx.setTag("height", str(float(ctx("building:levels")) * 4))
+            ctx.setTag("height", str(float(ctx.getTag("building:levels")) * 4))
 
         ctx.setTag("building", "yes")
 
