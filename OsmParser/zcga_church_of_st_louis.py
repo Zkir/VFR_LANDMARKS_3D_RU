@@ -20,7 +20,20 @@ def checkRulesMy(ctx):
 
     elif ctx.getTag("building:part") == "mass_model":
         ctx.scale("'0.9", "'0.95")
-        ctx.split_x((("~0.75", "entrance_block"), ("~5", "main_block"), ("~1", "apse_block")))
+        ctx.split_x(((2.5, "parvise_block"),("~0.75", "entrance_block"), ("~5", "main_block"), ("~1", "apse_block")))
+
+    elif ctx.getTag("building:part") == "parvise_block":
+        ctx.scale("'1", "'0.9","1.5")
+        ctx.split_y(((4, "parvise"), ("~5", "parvise_steps_pre"), (4, "parvise")))
+
+    elif ctx.getTag("building:part") == "parvise_steps_pre":
+        ctx.setTag("building:part", "steps")
+        ctx.setTag("roof:shape","skillion")
+        ctx.setTag("roof:height", ctx.getTag("height")-0.1)
+        azimuth = (360 + 90 - ctx.scope_rz()) % 360  # from mathematical angle to geographical azimuth.
+        # geographical azimuth is counted from north clockwise
+
+        ctx.setTag("roof:direction", (360+180+azimuth)%360)
 
     elif ctx.getTag("building:part") == "entrance_block":
         ctx.scale("'1", "'0.9")
@@ -28,13 +41,17 @@ def checkRulesMy(ctx):
 
     #bell towers
     elif ctx.getTag("building:part") == "bell_tower":
-        ctx.split_z_preserve_roof((("~2", "bell_tower_layer_1"), ("~1", "bell_tower_layer_2"), ("~0.5", "bell_tower_dome_pre")))
+        ctx.scale("'1","'1","11")
+        ctx.split_z_preserve_roof((("7.0", "bell_tower_layer_1"), ("3.8", "bell_tower_layer_2"), ("~0.5", "bell_tower_dome_pre")))
 
     elif ctx.getTag("building:part") == "bell_tower_layer_1":
         pass
 
     elif ctx.getTag("building:part") == "bell_tower_layer_2":
         ctx.scale(ctx.scope_sx()-0.5, ctx.scope_sy()-0.5)
+        ctx.setTag("roof:shape", "pyramidal")
+        ctx.setTag("roof:height", "0.75")
+        ctx.setTag("height", ctx.getTag("height")+0.75)
 
     elif ctx.getTag("building:part") == "bell_tower_dome_pre":
         ctx.scale(ctx.scope_sx() - 1, ctx.scope_sy() - 1,(ctx.scope_sy() - 1)/2*1.2)
@@ -44,19 +61,20 @@ def checkRulesMy(ctx):
 
     # portico
     elif ctx.getTag("building:part") == "portico":
-        ctx.scale("'1" , ctx.scope_sy()+ 1)
+        ctx.scale(ctx.scope_sx()+ 1,"'1", 7+1.5+0.2  )
         ctx.setTag("roof:shape", "gabled")
         ctx.setTag("roof:orientation", "across")
-        ctx.setTag("roof:height", "2")
-        ctx.split_z_preserve_roof((("1", "portico_stilobate"),
+        ctx.setTag("roof:height", "1.5")
+        ctx.split_z_preserve_roof((("1.5", "portico_stilobate"),
                                   ("~5", "portico_columns_block"),
-                                  ("1", "portico_top")))
+                                  ("1.5", "portico_entablement"),
+                                  ("0.2", "portico_top")))
 
     elif ctx.getTag("building:part") == "portico_stilobate":
         pass
 
     elif ctx.getTag("building:part") == "portico_columns_block":
-        ctx.split_x((("~1", "portico_columns"),("~2", "NIL")))
+        ctx.split_x((("~1", "portico_columns"), ("~2", "NIL")))
 
     elif ctx.getTag("building:part") == "portico_columns":
         ctx.split_y((("~1", "porch_column_pre"), ("~0.7", "NIL"),
@@ -79,8 +97,8 @@ def checkRulesMy(ctx):
         # osmObject.osmtags["building:colour"] = "green"
         ctx.primitiveCircle("porch_column", 12, min(ctx.scope_sx(), ctx.scope_sy()) / 3)
 
-    elif ctx.getTag("building:part") == "porch_top":
-        ctx.setTag("building:colour", "blue")
+    elif ctx.getTag("building:part") == "portico_top":
+        ctx.scale (ctx.scope_sx()+1.0, ctx.scope_sy()+1.0)
 
     # main block
     elif ctx.getTag("building:part") == "main_block":
@@ -89,13 +107,25 @@ def checkRulesMy(ctx):
                      ("~1", "main_side_part_pre")))
 
     elif ctx.getTag("building:part") == "main_main":
-        ctx.scale("'1", "'1", "'1.5")
+        ctx.scale("'1", "'1", "13")
         ctx.setTag("roof:shape", "hipped")
-        ctx.setTag("roof:height", "2")
-
+        ctx.setTag("roof:height", "1.5")
 
     elif ctx.getTag("building:part") == "main_side_part_pre":
-        ctx.setTag("roof:shape","skillion")
+        ctx.scale("'1","'1","8.5")
+        ctx.setTag("roof:shape", "skillion")
+        ctx.setTag("roof:height", "1.5")
+        azimuth =(360+90-ctx.scope_rz())%360 # from mathematical angle to geographical azimuth.
+                                             # geographical azimuth is counted from north clockwise
+
+        if ctx.current_object.relative_Oy > 0:
+            # "undocumented" experimenal function
+            # skillion roof should have upper edge from "inside" and lower from "outside"
+            # we try to define what is inside and what is outside by relative location of the split parts (relative to parent)
+            azimuth = (360+azimuth-90) % 360
+        else:
+            azimuth = (360+azimuth+90) % 360
+        ctx.setTag("roof:direction", azimuth)
 
     #apse block
     elif ctx.getTag("building:part") == "apse_block":
@@ -106,14 +136,19 @@ def checkRulesMy(ctx):
                      ("~1", "side_part_2_pre")))
 
     elif ctx.getTag("building:part") == "apse_pre":
+        ctx.setTag("height",10)
         ctx.setTag("roof:shape", "half-dome")
+        ctx.setTag("roof:height", "3")
+        ctx.primitiveHalfCircle("apse", 8 )
+
 
     elif ctx.getTag("building:part") == "side_part_1_pre":
         ctx.split_x((("~1.5", "side_apse"), ("~1", "NIL")))
     elif ctx.getTag("building:part") == "side_part_2_pre":
         ctx.split_x((("~3", "side_apse"), ("~1", "NIL")))
+
     elif ctx.getTag("building:part") == "side_apse":
-        ctx.scale("'1","'1","'0.5")
+        ctx.scale("'1","'1","6.5")
         ctx.setTag("roof:shape", "pyramidal")
         ctx.setTag("roof:height", "1")
 

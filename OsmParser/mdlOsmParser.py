@@ -44,9 +44,12 @@ class T3DObject:
         self.bbox.maxLat = 0
         self.bbox.maxLon = 0
 
-        self.scope_sx=0
-        self.scope_sy=0
-        self.scope_rz=0
+        self.scope_sx = 0
+        self.scope_sy = 0
+        self.scope_rz = 0
+
+        self.relative_Ox = 0
+        self.relative_Oy = 0
 
         self.rules_processed = False
 

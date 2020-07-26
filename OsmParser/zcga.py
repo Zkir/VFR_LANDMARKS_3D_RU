@@ -181,13 +181,16 @@ def split_y(osmObject, objOsmGeom, split_pattern):
         # todo: cut actual geometry, not bbox only
         insert_Quad(osmObject, objOsmGeom, new_obj.NodeRefs,  scope_sx, dy, 0, y0+dy/2)
 
-        y0=y0+dy
+
 
         new_obj.scope_rz = osmObject.scope_rz  # coordinate system orientation is inherited, but centroid is moved and
         new_obj.updateBBox(objOsmGeom)         # bbox is updated
         new_obj.updateScopeBBox(objOsmGeom)  # also Bbbox in local coordinates
+        new_obj.relative_Ox = 0
+        new_obj.relative_Oy = y0+dy/2
 
         Objects2.append(new_obj)
+        y0 = y0 + dy
 
     return Objects2
 
@@ -262,7 +265,7 @@ def insert_Quad(osmObject, objOsmGeom, NodeRefs, width, length, x0, y0):
 # todo: insert_circle should be NON-DESTRUCTIVE OPERATION
 # object remain, but geometry is changed
 def primitiveCircle(osmObject, objOsmGeom, rule_name, nVertices=12, radius=None):
-    Objects2=[]
+    Objects2 = []
     new_obj = T3DObject()
     new_obj.id = getID()
     new_obj.type = "way"
@@ -298,6 +301,43 @@ def primitiveCircle(osmObject, objOsmGeom, rule_name, nVertices=12, radius=None)
     Objects2.append(new_obj)
     return Objects2
 
+
+def primitiveHalfCircle(osmObject, objOsmGeom, rule_name, nVertices=12, radius=None):
+    Objects2 = []
+    new_obj = T3DObject()
+    new_obj.id = getID()
+    new_obj.type = "way"
+
+    new_obj.osmtags = copy(osmObject.osmtags) #tags are inherited
+    new_obj.osmtags["building:part"] = rule_name
+
+    if radius is None:
+        R = min(osmObject.scope_sx, osmObject.scope_sy)
+    else:
+        R = radius
+
+    Lat = [None] * nVertices
+    Lon = [None] * nVertices
+    ids = [None] * nVertices
+
+    for i in range(nVertices):
+        alpha = -pi/2+pi / (nVertices-1) * i
+
+        Lat[i], Lon[i] = osmObject.localXY2LatLon(-osmObject.scope_sx/2+R * cos(alpha), R * sin(alpha))
+        ids[i] = getID()
+        # print(ids[i], x[i], y[i])
+        intNodeNo= objOsmGeom.AddNode(ids[i], Lat[i], Lon[i])
+        new_obj.NodeRefs.append(intNodeNo)
+    # objOsmGeom.AddNode(ids[0], Lat[0], Lon[0])
+    intNodeNo = objOsmGeom.FindNode(ids[0])
+    new_obj.NodeRefs.append(intNodeNo)
+
+    new_obj.scope_rz = osmObject.scope_rz  # coordinate system orientation is inherited, but centroid is moved and
+    new_obj.updateBBox(objOsmGeom)  # bbox is updated
+    new_obj.updateScopeBBox(objOsmGeom)  # also Bbbox in local coordinates
+
+    Objects2.append(new_obj)
+    return Objects2
 
 def parseRelativeValue(val, abs_size):
     if type(val) == str:
@@ -416,7 +456,16 @@ class ZCGAContext:
     # Geometry Creation
     def primitiveCircle(self, rule_name, nVertices=12, radius=None):
         new_objects = primitiveCircle(self.current_object, self.objOsmGeom, rule_name, nVertices,radius)
+        if radius is None:
+            scale(new_objects[0], self.objOsmGeom, self.current_object.scope_sx,self.current_object.scope_sy)
+        self.nil()
+        self.Objects2.extend(new_objects)
 
+        self.unprocessed_rules_exist = True
+
+    def primitiveHalfCircle(self, rule_name, nVertices=12, radius=None):
+        new_objects = primitiveHalfCircle(self.current_object, self.objOsmGeom, rule_name, nVertices,radius)
+        scale(new_objects[0], self.objOsmGeom, self.current_object.scope_sx,self.current_object.scope_sy)
         self.nil()
         self.Objects2.extend(new_objects)
 
