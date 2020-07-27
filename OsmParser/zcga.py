@@ -8,7 +8,7 @@ resulting OSM file can be uploaded to OSM DB
 
 from copy import copy
 from math import cos, sin, atan, atan2, pi
-from mdlOsmParser import T3DObject,readOsmXml, writeOsmXml, parseHeightValue
+from mdlOsmParser import T3DObject,readOsmXml, writeOsmXml, parseHeightValue, roundHeight
 #from zcga_gorky_park_entrance import checkRulesMy
 from zcga_church_of_st_louis import checkRulesMy
 
@@ -610,6 +610,10 @@ objOsmGeom, Objects = readOsmXml("d:\\original_church_of_St_Louis.osm")
 ctx = ZCGAContext(objOsmGeom, Objects)
 ctx.processRules(checkRulesMy)
 
+# round height
+roundHeight(ctx.Objects)
+
 writeOsmXml(ctx.objOsmGeom, ctx.Objects , "D:\\rewrite.osm")
+
 print("Done")
 

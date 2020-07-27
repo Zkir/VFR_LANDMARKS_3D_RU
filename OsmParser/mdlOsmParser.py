@@ -164,7 +164,7 @@ class T3DObject:
         self.scope_sx = (self.bbox.maxLon - self.bbox.minLon) * DEGREE_LENGTH_M * cos(cLat / 360 * 2 * pi)
         self.scope_sy = (self.bbox.maxLat - self.bbox.minLat) * DEGREE_LENGTH_M
 
-        self.scope_rz=0
+        self.scope_rz = 0
 
     # scope is aligned according to geometry
     # we search for the oriented bbox with minimal square
@@ -446,6 +446,16 @@ def writeOsmXml(objOsmGeom, Objects, strOutputOsmFileName):
     fo.write('</osm>' + '\n')
     fo.close()
 
+
+def roundHeight(Objects):
+    for obj in Objects:
+        for key in obj.osmtags:
+            if key == "height" or key == "min_height" or key == "roof:height":
+                height = obj.osmtags[key]
+                if (height != ""):
+                    height = round(parseHeightValue(height), 3)
+                    height = "{:g}".format(height)
+                    obj.osmtags[key] = str(height)
 
 def parseHeightValue(str):
     if Right(str, 2) == ' м':
