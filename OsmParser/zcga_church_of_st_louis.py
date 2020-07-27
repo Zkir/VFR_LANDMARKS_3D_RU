@@ -77,10 +77,10 @@ def checkRulesMy(ctx):
         ctx.setTag("roof:shape", "gabled")
         ctx.setTag("roof:orientation", "across")
         ctx.setTag("roof:height", "1.5")
-        #ctx.split_z_preserve_roof((("1.5", "portico_stilobate"),
-        #                          ("~5", "portico_columns_block"),
-        #                          ("1.5", "portico_entablement"),
-        #                          ("0.2", "portico_top")))
+        ctx.split_z_preserve_roof((("1.5", "portico_stilobate"),
+                                  ("~5", "portico_columns_block"),
+                                  ("1.5", "portico_entablement"),
+                                  ("0.2", "portico_top")))
 
     elif ctx.getTag("building:part") == "portico_stilobate":
         pass
