@@ -352,8 +352,6 @@ def scale(osmObject, objOsmGeom, sx, sy, sz=None):
         raise Exception("todo: relations is not supported")
 
     if sz is not None:
-
-
         # Luckily, z-scale is simple. No matrix, no geometry
         # just update tags
         height = parseHeightValue(osmObject.getTag("height"))
@@ -370,35 +368,79 @@ def scale(osmObject, objOsmGeom, sx, sy, sz=None):
 
     sx = parseRelativeValue(sx, osmObject.scope_sx)
     sy = parseRelativeValue(sy, osmObject.scope_sy)
+    kx = sx / osmObject.scope_sx
+    ky = sy / osmObject.scope_sy
 
-    kx = sx/osmObject.scope_sx
-    ky = sy/osmObject.scope_sy
-    # we should not transfer the same node twice
-    if osmObject.NodeRefs[0] == osmObject.NodeRefs[-1]:
-        closed_way_flag = 1
-    else:
-        closed_way_flag = 0
+    if kx != 1 or ky != 1:
+        # we should not transfer the same node twice
+        if osmObject.NodeRefs[0] == osmObject.NodeRefs[-1]:
+            closed_way_flag = 1
+        else:
+            closed_way_flag = 0
 
-    new_node_refs =[]
-    for i in range(len(osmObject.NodeRefs)-closed_way_flag):
-        node = osmObject.NodeRefs[i]
-        x, y = osmObject.LatLon2LocalXY(objOsmGeom.nodes[node].lat, objOsmGeom.nodes[node].lon)
-        x = x*kx
-        y = y*ky
-        lat, lon=osmObject.localXY2LatLon(x, y)
+        new_node_refs =[]
+        for i in range(len(osmObject.NodeRefs)-closed_way_flag):
+            node = osmObject.NodeRefs[i]
+            x, y = osmObject.LatLon2LocalXY(objOsmGeom.nodes[node].lat, objOsmGeom.nodes[node].lon)
+            x = x*kx
+            y = y*ky
+            lat, lon=osmObject.localXY2LatLon(x, y)
 
-        node_ref=objOsmGeom.AddNode(getID(), lat, lon)
-        new_node_refs.append(node_ref)
+            node_ref=objOsmGeom.AddNode(getID(), lat, lon)
+            new_node_refs.append(node_ref)
 
-    if closed_way_flag == 1:
-        new_node_refs.append(new_node_refs[0])
+        if closed_way_flag == 1:
+            new_node_refs.append(new_node_refs[0])
 
-    osmObject.NodeRefs=new_node_refs
+        osmObject.NodeRefs=new_node_refs
 
     osmObject.updateBBox(objOsmGeom)
     osmObject.updateScopeBBox(objOsmGeom)
 
+def translate (osmObject, objOsmGeom, dx, dy, dz=None):
+    if osmObject.type == "relation":
+        raise Exception("todo: relations is not supported")
 
+    if dz is not None:
+        # Luckily, z-scale is simple. No matrix, no geometry
+        height = parseHeightValue(osmObject.getTag("height"))
+        min_height = parseHeightValue(osmObject.getTag("min_height"))
+        h = height - min_height
+        dz=parseRelativeValue(dz,h)
+
+        #min_height remains, we need to update height and roof height
+        osmObject.osmtags["min_height"] = str(height+dz)
+        osmObject.osmtags["height"] = str(min_height+dz)
+        #osmObject.scope_sz=sz
+
+    dx = parseRelativeValue(dx, osmObject.scope_sx)
+    dy = parseRelativeValue(dy, osmObject.scope_sy)
+
+    if dx != 0 or dy != 0:
+        # we should not transfer the same node twice
+        if osmObject.NodeRefs[0] == osmObject.NodeRefs[-1]:
+            closed_way_flag = 1
+        else:
+            closed_way_flag = 0
+
+        new_node_refs =[]
+        for i in range(len(osmObject.NodeRefs)-closed_way_flag):
+            node = osmObject.NodeRefs[i]
+            x, y = osmObject.LatLon2LocalXY(objOsmGeom.nodes[node].lat, objOsmGeom.nodes[node].lon)
+            x = x + dx
+            y = y + dy
+            lat, lon=osmObject.localXY2LatLon(x, y)
+
+            node_ref=objOsmGeom.AddNode(getID(), lat, lon)
+            new_node_refs.append(node_ref)
+
+        if closed_way_flag == 1:
+            new_node_refs.append(new_node_refs[0])
+
+        osmObject.NodeRefs=new_node_refs
+
+    osmObject.updateBBox(objOsmGeom)
+    osmObject.updateScopeBBox(objOsmGeom)
 # ======================================================================================================================
 class ZCGAContext:
     objOsmGeom = None
@@ -504,6 +546,9 @@ class ZCGAContext:
     # Transformations
     def scale(self, sx, sy, sz=None):
         scale(self.current_object, self.objOsmGeom, sx, sy, sz)
+
+    def translate(self, dx, dy, dz=None):
+        translate(self.current_object, self.objOsmGeom, dx, dy, dz)
 
     # flow operations
     # restores the current object. Can be usefull if it was destuctred by split or comp operation

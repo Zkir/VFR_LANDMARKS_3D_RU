@@ -32,6 +32,8 @@ def checkRulesMy(ctx):
         ctx.split_y(((4, "parvise"), ("~5", "parvise_steps_pre"), (4, "parvise")))
 
     elif ctx.getTag("building:part") == "parvise_steps_pre":
+        ctx.scale(ctx.scope_sx()-0.5,"'1")
+        ctx.translate(-0.25, 0,0)
         ctx.setTag("building:part", "steps")
         ctx.setTag("roof:shape","skillion")
         ctx.setTag("roof:height", ctx.getTag("height")-0.1)
@@ -51,6 +53,10 @@ def checkRulesMy(ctx):
 
     elif ctx.getTag("building:part") == "bell_tower_layer_1":
         pass
+        #ctx.split_z_preserve_roof((("~1","bell_tower_layer_1a"),("0.25","cornice")))
+
+    elif ctx.getTag("building:part") == "cornice":
+        ctx.scale(ctx.scope_sx()+0.75,ctx.scope_sy()+0.75)
 
     elif ctx.getTag("building:part") == "bell_tower_layer_2":
         ctx.scale(ctx.scope_sx()-0.5, ctx.scope_sy()-0.5)
@@ -66,14 +72,15 @@ def checkRulesMy(ctx):
 
     # portico
     elif ctx.getTag("building:part") == "portico":
-        ctx.scale(ctx.scope_sx()+ 1,"'1", 7+1.5+0.2  )
+        ctx.scale(ctx.scope_sx()+ 0.5,"'1", 7+1.5+0.2)
+        ctx.translate(-0.25, 0)
         ctx.setTag("roof:shape", "gabled")
         ctx.setTag("roof:orientation", "across")
         ctx.setTag("roof:height", "1.5")
-        ctx.split_z_preserve_roof((("1.5", "portico_stilobate"),
-                                  ("~5", "portico_columns_block"),
-                                  ("1.5", "portico_entablement"),
-                                  ("0.2", "portico_top")))
+        #ctx.split_z_preserve_roof((("1.5", "portico_stilobate"),
+        #                          ("~5", "portico_columns_block"),
+        #                          ("1.5", "portico_entablement"),
+        #                          ("0.2", "portico_top")))
 
     elif ctx.getTag("building:part") == "portico_stilobate":
         pass
@@ -135,6 +142,7 @@ def checkRulesMy(ctx):
         ctx.setTag("roof:direction", azimuth)
         ctx.split_x((("~1", "dormer_base_side"),))
         ctx.restore()
+        # ctx.split_z_preserve_roof((("~1", "main_side_part"), ("0.25", "cornice")))
 
     elif ctx.getTag("building:part") == "dormer_base_side":
         min_height=ctx.getTag("height")-ctx.getTag("roof:height")
