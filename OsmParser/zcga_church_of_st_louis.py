@@ -23,13 +23,13 @@ def checkRulesMy(ctx):
 
     elif ctx.getTag("building:part") == "mass_model":
         ctx.scale("'0.99", "'0.99")
-        ctx.split_x(((2.5, "parvise_block"),("~0.75", "entrance_block"), ("~5", "main_block"), ("~1", "apse_block")))
+        ctx.split_x(((3, "parvise_block"),("4.4", "entrance_block"), ("~5", "main_block"), ("~1", "apse_block")))
 
     elif ctx.getTag("building:part") == "parvise_block":
         ctx.setTag("roof:material", "brick")
         ctx.setTag("roof:colour", "#202020")
         ctx.scale("'1", "'0.9","1.5")
-        ctx.split_y(((4, "parvise"), ("~5", "parvise_steps_pre"), (4, "parvise")))
+        ctx.split_y(((4.4, "parvise"), ("~5", "parvise_steps_pre"), (4.4, "parvise")))
 
     elif ctx.getTag("building:part") == "parvise_steps_pre":
         ctx.scale(ctx.scope_sx()-0.5,"'1")
@@ -72,7 +72,7 @@ def checkRulesMy(ctx):
 
     # portico
     elif ctx.getTag("building:part") == "portico":
-        ctx.scale(ctx.scope_sx()+ 0.5,"'1", 7+1.5+0.2)
+        ctx.scale(ctx.scope_sx()+ 0.5,"'1", 7+1.5) # +0.2
         ctx.translate(-0.25, 0)
         ctx.setTag("roof:shape", "gabled")
         ctx.setTag("roof:orientation", "across")
@@ -110,7 +110,8 @@ def checkRulesMy(ctx):
         ctx.primitiveCircle("porch_column", 12, min(ctx.scope_sx(), ctx.scope_sy()) / 3)
 
     elif ctx.getTag("building:part") == "portico_top":
-        ctx.scale (ctx.scope_sx()+1.0, ctx.scope_sy()+1.0)
+        ctx.scale (ctx.scope_sx()+0.5, ctx.scope_sy()+1.0)
+        ctx.translate(-0.25,0,0)
 
     # main block
     elif ctx.getTag("building:part") == "main_block":
