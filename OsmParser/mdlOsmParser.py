@@ -48,6 +48,11 @@ class T3DObject:
         self.scope_sy = 0
         self.scope_rz = 0
 
+        self.scope_min_x = 0
+        self.scope_min_y = 0
+        self.scope_max_x = 0
+        self.scope_max_y = 0
+
         self.relative_Ox = 0
         self.relative_Oy = 0
 
@@ -118,9 +123,6 @@ class T3DObject:
                 if y > max_y:
                     max_y = y
 
-            self.scope_sx=max_x - min_x
-            self.scope_sy=max_y - min_y
-
         elif self.type=="relation":
             lat = objOsmGeom.nodes[objOsmGeom.ways[self.WayRefs[0][0]].NodeRefs[0]].lat
             lon = objOsmGeom.nodes[objOsmGeom.ways[self.WayRefs[0][0]].NodeRefs[0]].lon
@@ -145,11 +147,16 @@ class T3DObject:
                     if y > max_y:
                         max_y = y
 
-            self.scope_sx = max_x - min_x
-            self.scope_sy = max_y - min_y
-
         else:
             raise Exception("Unknown object type")
+
+        self.scope_sx = max_x - min_x
+        self.scope_sy = max_y - min_y
+        # in local coords the object may not be exactly symmetrical, due to rotation
+        self.scope_min_x = min_x
+        self.scope_min_y = min_y
+        self.scope_max_x = max_x
+        self.scope_max_y = max_y
 
     def alignScopeToWorld(self):
         cLat = (self.bbox.minLat + self.bbox.maxLat) / 2

@@ -107,6 +107,11 @@ def split_z_preserve_roof(osmObject, split_pattern):
         new_obj.scope_sy = osmObject.scope_sy
         new_obj.scope_rz = osmObject.scope_rz
 
+        new_obj.scope_min_x = osmObject.scope_min_x
+        new_obj.scope_min_y = osmObject.scope_min_y
+        new_obj.scope_max_x = osmObject.scope_max_x
+        new_obj.scope_max_y = osmObject.scope_max_y
+
         # we can assign building part tag, it is identical with rule name
         new_obj.osmtags["building:part"] = split_pattern[i][1]
         if i!=N-1:
@@ -133,7 +138,8 @@ def split_x(osmObject, objOsmGeom, split_pattern):
 
     Lengths = calculateDimensionsForSplitPattern(scope_sx, split_pattern)
     n = len(Lengths)
-    x0 = -scope_sx / 2
+    #x0 = -scope_sx / 2
+    x0 = osmObject.scope_min_x
 
     for i in range(n):
         new_obj = T3DObject()
@@ -146,7 +152,7 @@ def split_x(osmObject, objOsmGeom, split_pattern):
         dx = Lengths[i]
 
         # todo: cut actual geometry, not bbox only
-        insert_Quad(osmObject, objOsmGeom, new_obj.NodeRefs, dx, scope_sy, x0+dx/2, 0)
+        insert_Quad(osmObject, objOsmGeom, new_obj.NodeRefs, dx, scope_sy, x0+dx/2, (osmObject.scope_min_y+osmObject.scope_max_y)/2)
 
         x0=x0+dx
 
@@ -166,7 +172,7 @@ def split_y(osmObject, objOsmGeom, split_pattern):
 
     Lengths = calculateDimensionsForSplitPattern(scope_sy, split_pattern)
     n = len(Lengths)
-    y0 = -scope_sy / 2
+    y0 = osmObject.scope_min_y
 
     for i in range(n):
         new_obj = T3DObject()
@@ -179,7 +185,7 @@ def split_y(osmObject, objOsmGeom, split_pattern):
         dy = Lengths[i]
 
         # todo: cut actual geometry, not bbox only
-        insert_Quad(osmObject, objOsmGeom, new_obj.NodeRefs,  scope_sx, dy, 0, y0+dy/2)
+        insert_Quad(osmObject, objOsmGeom, new_obj.NodeRefs,  scope_sx, dy, (osmObject.scope_min_x+osmObject.scope_max_x)/2, y0+dy/2)
 
 
 
@@ -323,7 +329,7 @@ def primitiveHalfCircle(osmObject, objOsmGeom, rule_name, nVertices=12, radius=N
     for i in range(nVertices):
         alpha = -pi/2+pi / (nVertices-1) * i
 
-        Lat[i], Lon[i] = osmObject.localXY2LatLon(-osmObject.scope_sx/2+R * cos(alpha), R * sin(alpha))
+        Lat[i], Lon[i] = osmObject.localXY2LatLon(osmObject.scope_min_x+R * cos(alpha), R * sin(alpha))
         ids[i] = getID()
         # print(ids[i], x[i], y[i])
         intNodeNo= objOsmGeom.AddNode(ids[i], Lat[i], Lon[i])
@@ -406,11 +412,11 @@ def translate (osmObject, objOsmGeom, dx, dy, dz=None):
         height = parseHeightValue(osmObject.getTag("height"))
         min_height = parseHeightValue(osmObject.getTag("min_height"))
         h = height - min_height
-        dz=parseRelativeValue(dz,h)
+        dz=parseRelativeValue(dz, h)
 
         #min_height remains, we need to update height and roof height
-        osmObject.osmtags["min_height"] = str(height+dz)
-        osmObject.osmtags["height"] = str(min_height+dz)
+        osmObject.osmtags["min_height"] = str(min_height+dz)
+        osmObject.osmtags["height"] = str(height+dz)
         #osmObject.scope_sz=sz
 
     dx = parseRelativeValue(dx, osmObject.scope_sx)

@@ -22,7 +22,7 @@ def checkRulesMy(ctx):
         ctx.restore()
 
     elif ctx.getTag("building:part") == "mass_model":
-        ctx.scale("'0.9", "'0.95")
+        ctx.scale("'0.99", "'0.99")
         ctx.split_x(((2.5, "parvise_block"),("~0.75", "entrance_block"), ("~5", "main_block"), ("~1", "apse_block")))
 
     elif ctx.getTag("building:part") == "parvise_block":
