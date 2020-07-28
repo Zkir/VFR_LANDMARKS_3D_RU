@@ -457,6 +457,13 @@ def roundHeight(Objects):
                     height = "{:g}".format(height)
                     obj.osmtags[key] = str(height)
 
+            if key == "roof:direction":
+                alpha = obj.osmtags[key]
+                if (alpha != ""):
+                    alpha = round(float(alpha), 3)
+                    alpha = "{:g}".format(alpha)
+                    obj.osmtags[key] = str(alpha)
+
 def parseHeightValue(str):
     if Right(str, 2) == ' м':
         str = Left(str, Len(str) - 2)

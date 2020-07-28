@@ -2,6 +2,7 @@
 Set of rules to generate church of St Louis of France, Moscow
 (c) Zkir 2020
 """
+CREATE_CORNICE = True
 
 
 def checkRulesMy(ctx):
@@ -52,8 +53,8 @@ def checkRulesMy(ctx):
         ctx.split_z_preserve_roof((("7.0", "bell_tower_layer_1"), ("3.8", "bell_tower_layer_2"), ("~0.5", "bell_tower_dome_pre")))
 
     elif ctx.getTag("building:part") == "bell_tower_layer_1":
-        pass
-        #ctx.split_z_preserve_roof((("~1","bell_tower_layer_1a"),("0.25","cornice")))
+        if CREATE_CORNICE:
+         ctx.split_z_preserve_roof((("~1","bell_tower_layer_1a"),("0.20","cornice"), ("0.01","roof")))
 
     elif ctx.getTag("building:part") == "cornice":
         ctx.scale(ctx.scope_sx()+0.75,ctx.scope_sy()+0.75)
@@ -72,7 +73,7 @@ def checkRulesMy(ctx):
 
     # portico
     elif ctx.getTag("building:part") == "portico":
-        ctx.scale(ctx.scope_sx()+ 0.5,"'1", 7+1.5) # +0.2
+        ctx.scale(ctx.scope_sx() + 0.5,"'1", 7+1.5) # +0.2
         ctx.translate(-0.25, 0)
         ctx.setTag("roof:shape", "gabled")
         ctx.setTag("roof:orientation", "across")
@@ -125,6 +126,8 @@ def checkRulesMy(ctx):
         ctx.setTag("roof:height", "1.5")
         ctx.split_x((("~1", "dormer_base_main"),))
         ctx.restore()
+        if CREATE_CORNICE:
+            ctx.split_z_preserve_roof((("~1", "main_main_part"), ("0.2", "cornice"),("0.01","roof")))
 
     elif ctx.getTag("building:part") == "main_side_part_pre":
         ctx.scale("'1","'1","8.5")
@@ -143,7 +146,8 @@ def checkRulesMy(ctx):
         ctx.setTag("roof:direction", azimuth)
         ctx.split_x((("~1", "dormer_base_side"),))
         ctx.restore()
-        # ctx.split_z_preserve_roof((("~1", "main_side_part"), ("0.25", "cornice")))
+        if CREATE_CORNICE:
+            ctx.split_z_preserve_roof((("~1", "main_side_part"), ("0.2", "cornice"),("0.01","roof")))
 
     elif ctx.getTag("building:part") == "dormer_base_side":
         min_height=ctx.getTag("height")-ctx.getTag("roof:height")
