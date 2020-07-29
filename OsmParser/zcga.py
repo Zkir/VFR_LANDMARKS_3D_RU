@@ -500,7 +500,8 @@ class ZCGAContext:
         return self.current_object.scope_sy
 
     def scope_sz(self):
-        return self.current_object.scope_sz
+        scope_sz=self.getTag("height")-self.getTag("min_height")
+        return scope_sz
 
     def scope_rz(self):
         return self.current_object.scope_rz/pi*180
@@ -529,6 +530,7 @@ class ZCGAContext:
         if radius is None:
             scale(new_objects[0], self.objOsmGeom, self.current_object.scope_sx,self.current_object.scope_sy)
         self.nil()
+        self.Objects2.extend(new_objects)
         setParentChildRelationship (self.current_object, new_objects)
 
         self.unprocessed_rules_exist = True
