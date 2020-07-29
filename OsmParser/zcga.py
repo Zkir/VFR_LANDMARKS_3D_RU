@@ -448,6 +448,19 @@ def translate (osmObject, objOsmGeom, dx, dy, dz=None):
 
     osmObject.updateBBox(objOsmGeom)
     osmObject.updateScopeBBox(objOsmGeom)
+
+def setParentChildRelationship(old_obj, new_objects):
+    if old_obj.isBuilding():
+        parent_building = old_obj
+    else:
+        parent_building = old_obj.parent_building
+
+    old_obj.children.extend(new_objects)
+    parent_building.parts.extend(new_objects)
+    for new_obj in new_objects:
+        new_obj.parent=old_obj
+        new_obj.parent_building=parent_building
+
 # ======================================================================================================================
 class ZCGAContext:
     objOsmGeom = None
@@ -516,7 +529,7 @@ class ZCGAContext:
         if radius is None:
             scale(new_objects[0], self.objOsmGeom, self.current_object.scope_sx,self.current_object.scope_sy)
         self.nil()
-        self.Objects2.extend(new_objects)
+        setParentChildRelationship (self.current_object, new_objects)
 
         self.unprocessed_rules_exist = True
 
@@ -525,22 +538,23 @@ class ZCGAContext:
         scale(new_objects[0], self.objOsmGeom, self.current_object.scope_sx,self.current_object.scope_sy)
         self.nil()
         self.Objects2.extend(new_objects)
+        setParentChildRelationship(self.current_object, new_objects)
 
         self.unprocessed_rules_exist = True
 
     # Geometry subdivision
     def split_x(self, split_pattern):
         new_objects = split_x(self.current_object, self.objOsmGeom, split_pattern)
-
         self.nil()
         self.Objects2.extend(new_objects)
+        setParentChildRelationship(self.current_object, new_objects)
         self.unprocessed_rules_exist = True
 
     def split_y(self, split_pattern):
         new_objects = split_y(self.current_object, self.objOsmGeom, split_pattern)
-
         self.nil()
         self.Objects2.extend(new_objects)
+        setParentChildRelationship(self.current_object, new_objects)
         self.unprocessed_rules_exist = True
 
     def split_z_preserve_roof(self, split_pattern):
@@ -548,7 +562,7 @@ class ZCGAContext:
 
         self.nil()
         self.Objects2.extend(new_objects)
-        # self.current_object_destructed = True
+        setParentChildRelationship(self.current_object, new_objects)
         self.unprocessed_rules_exist = True
 
     def comp_roof_border(self, rule_name, distance=1):
@@ -556,6 +570,7 @@ class ZCGAContext:
 
         self.nil()
         self.Objects2.extend(new_objects)
+        setParentChildRelationship(self.current_object, new_objects)
         self.unprocessed_rules_exist = True
 
     # Transformations
@@ -572,12 +587,18 @@ class ZCGAContext:
         if self.Objects2.count(osmObject) == 0:
             self.Objects2.append(osmObject)
 
-    # deletes the current shape from the list
+    # deletes the current shape from the list of the shapes
     # useful to create holes via split operations
     def nil(self):
-
+        #safely delete the object from the list of existing shapes
         if self.Objects2.count(self.current_object) > 0:
             self.Objects2.remove(self.current_object)
+
+        #we also need to delete the object from the list of its parent building
+        parent_building=self.current_object.parent_building
+        if parent_building is not None:
+            if parent_building.parts.count(self.current_object)>0:
+                parent_building.parts.remove(self.current_object)
 
     # ==================================================================================================================
     # Main loop for rule processing
@@ -628,6 +649,30 @@ ctx.processRules(checkRulesMy)
 # unlike CE, where building outline is not really used.
 
 # todo: also we need to optimize geometry somehow, remove duplicated nodes and create multypolygons
+
+
+for obj in ctx.Objects:
+    if obj.isBuilding():
+        print (obj.id, obj.name)
+        min_x, min_y, max_x, max_y = obj.parts[0].calculateScopeBBox(objOsmGeom, "building")
+        for child in obj.parts:
+            min_x1, min_y1, max_x1, max_y1 = child.calculateScopeBBox(objOsmGeom,"building")
+            print("    ", child.id, child.getTag("building:part"), child.name) # min_x, min_y, max_x, max_y
+            if min_x1 < min_x:
+                min_x = min_x1
+
+            if min_y1 < min_y:
+                min_y = min_y1
+
+            if max_x1 > max_x:
+                max_x = max_x1
+
+            if max_y1 > max_y:
+                max_y = max_y1
+        obj.NodeRefs=[]
+        insert_Quad(obj, objOsmGeom,obj.NodeRefs,max_x-min_x,max_y-min_y, (max_x+min_x)/2,(max_y+min_y)/2)
+        scale(obj, objOsmGeom,"'1.01","'1.01")
+
 
 # round height
 roundHeight(ctx.Objects)

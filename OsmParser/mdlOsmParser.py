@@ -38,6 +38,10 @@ class T3DObject:
         self.osmtags = {}
         self.size = 0
         self.blnHasBuildingParts = False
+        self.parts = [] # all building parts of this building. For buildings only
+        self.parent_building = None
+        self.parent = None # imidiate parent of this part
+        self.children = [] # children of this part
 
         self.bbox.minLat = 0
         self.bbox.minLon = 0
@@ -99,20 +103,28 @@ class T3DObject:
     def isBuildingPart(self):
         return (self.getTag("building:part") != "")
 
-    def updateScopeBBox(self, objOsmGeom):
+    def calculateScopeBBox(self, objOsmGeom, coordsys="local"):
+        if coordsys == "local":
+            coord_base_obj = self
+        elif coordsys == "building":
+            coord_base_obj = self.parent_building
+        else:
+            raise Exception("Unknown coordinate system selector")
+
         if self.type == "way":
             lat = objOsmGeom.nodes[self.NodeRefs[0]].lat
             lon = objOsmGeom.nodes[self.NodeRefs[0]].lon
-            x, y = self.LatLon2LocalXY(lat, lon)
+
+            x, y = coord_base_obj.LatLon2LocalXY(lat, lon)
             min_x = x
             min_y = y
             max_x = x
             max_y = y
 
             for node_no in self.NodeRefs:
-                lat= objOsmGeom.nodes[node_no].lat
-                lon= objOsmGeom.nodes[node_no].lon
-                x, y = self.LatLon2LocalXY(lat,lon)
+                lat = objOsmGeom.nodes[node_no].lat
+                lon = objOsmGeom.nodes[node_no].lon
+                x, y = coord_base_obj.LatLon2LocalXY(lat, lon)
 
                 if x < min_x:
                     min_x = x
@@ -123,10 +135,10 @@ class T3DObject:
                 if y > max_y:
                     max_y = y
 
-        elif self.type=="relation":
+        elif self.type == "relation":
             lat = objOsmGeom.nodes[objOsmGeom.ways[self.WayRefs[0][0]].NodeRefs[0]].lat
             lon = objOsmGeom.nodes[objOsmGeom.ways[self.WayRefs[0][0]].NodeRefs[0]].lon
-            x, y = self.LatLon2LocalXY(lat, lon)
+            x, y = coord_base_obj.LatLon2LocalXY(lat, lon)
             min_x = x
             min_y = y
             max_x = x
@@ -136,7 +148,7 @@ class T3DObject:
                 for node_no in objOsmGeom.ways[way_no[0]].NodeRefs:
                     lat = objOsmGeom.nodes[node_no].lat
                     lon = objOsmGeom.nodes[node_no].lon
-                    x, y = self.LatLon2LocalXY(lat, lon)
+                    x, y = coord_base_obj.LatLon2LocalXY(lat, lon)
 
                     if x < min_x:
                         min_x = x
@@ -149,6 +161,11 @@ class T3DObject:
 
         else:
             raise Exception("Unknown object type")
+
+        return min_x,min_y, max_x, max_y
+
+    def updateScopeBBox(self, objOsmGeom):
+        min_x,min_y, max_x, max_y = self.calculateScopeBBox(objOsmGeom)
 
         self.scope_sx = max_x - min_x
         self.scope_sy = max_y - min_y
