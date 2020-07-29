@@ -2,7 +2,7 @@
 Set of rules to generate church of St Louis of France, Moscow
 (c) Zkir 2020
 """
-CREATE_CORNICE = True
+CREATE_CORNICE = False
 
 
 def checkRulesMy(ctx):
@@ -15,15 +15,18 @@ def checkRulesMy(ctx):
         ctx.setTag("roof:material","metal")
         ctx.setTag("roof:colour", "#202020")
 
-        # align local coordinates so that X matches the longest dimension
+        # align local coordinates so that X matches the longest dimension, and oriented east
         ctx.alignScopeToGeometry()
         ctx.alignX2LongerScopeSide()
         ctx.rotateScope(180)
-        ctx.split_x((("~1", "mass_model"),))
-        ctx.restore()
+
+        # we will start from the rectangle and will rebuild the form
+        # basing of this very algorithm
+        ctx.outerRectangle("mass_model")
+
 
     elif ctx.getTag("building:part") == "mass_model":
-        ctx.scale("'0.99", "'0.99")
+        #ctx.scale("'0.99", "'0.99")
         ctx.split_x(((3, "parvise_block"),("4.4", "entrance_block"), ("~5", "main_block"), ("~1", "apse_block")))
 
     elif ctx.getTag("building:part") == "parvise_block":

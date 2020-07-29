@@ -10,7 +10,8 @@ from copy import copy
 from math import cos, sin, atan, atan2, pi
 from mdlOsmParser import T3DObject,readOsmXml, writeOsmXml, parseHeightValue, roundHeight
 #from zcga_gorky_park_entrance import checkRulesMy
-from zcga_church_of_st_louis import checkRulesMy
+#from zcga_church_of_st_louis import checkRulesMy
+from zcga_main_cathedral_of_russian_armed_forces import checkRulesMy
 
 _id_counter=0
 
@@ -154,13 +155,13 @@ def split_x(osmObject, objOsmGeom, split_pattern):
         # todo: cut actual geometry, not bbox only
         insert_Quad(osmObject, objOsmGeom, new_obj.NodeRefs, dx, scope_sy, x0+dx/2, (osmObject.scope_min_y+osmObject.scope_max_y)/2)
 
-        x0=x0+dx
-
         new_obj.scope_rz = osmObject.scope_rz  # coordinate system orientation is inherited, but centroid is moved and
         new_obj.updateBBox(objOsmGeom)         # bbox is updated
         new_obj.updateScopeBBox(objOsmGeom)  # also Bbbox in local coordinates
-
+        new_obj.relative_Ox = x0 + dx / 2
+        new_obj.relative_Oy = 0
         Objects2.append(new_obj)
+        x0 = x0 + dx
 
     return Objects2
 
@@ -464,7 +465,7 @@ class ZCGAContext:
             #obj.updateBBox(objOsmGeom)
             obj.alignScopeToWorld()
 
-        # ==================================================================================================================
+    # ==================================================================================================================
     # Wrappers for the ZCGA operations
     # ==================================================================================================================
 
@@ -502,6 +503,14 @@ class ZCGAContext:
         self.current_object.rotateScope(zAngle, self.objOsmGeom)
 
     # Geometry Creation
+    def outerRectangle(self, rule_name):
+        """Creates an outer (bbox) rectangle of the current shape"""
+        self.split_x((("~1", rule_name),))
+
+        if self.current_object.isBuilding:
+            # we cannot really delete building outline.
+            self.restore()
+
     def primitiveCircle(self, rule_name, nVertices=12, radius=None):
         new_objects = primitiveCircle(self.current_object, self.objOsmGeom, rule_name, nVertices,radius)
         if radius is None:
@@ -566,6 +575,7 @@ class ZCGAContext:
     # deletes the current shape from the list
     # useful to create holes via split operations
     def nil(self):
+
         if self.Objects2.count(self.current_object) > 0:
             self.Objects2.remove(self.current_object)
 
@@ -592,6 +602,10 @@ class ZCGAContext:
                     checkRules(ctx)
                     self.current_object.rules_processed = True
 
+                if self.current_object.isBuilding() and self.Objects2.count(self.current_object) == 0:
+                    #we cannot delete building outline, it is required as part of the model
+                    raise Exception("Destruction of the building outline is not allowed")
+
             self.Objects = self.Objects2
             cycles_passed=cycles_passed+1
 
@@ -604,15 +618,19 @@ print("ZCGA utility")
 # objOsmGeom, Objects = readOsmXml("d:\_BLENDER-OSM-TEST\samples\Church-vozdvizhenskoe.osm")
 # objOsmGeom, Objects = readOsmXml("d:\\egorievsk.osm")
 #objOsmGeom, Objects = readOsmXml("d:\\original_gorky_park.osm")
-objOsmGeom, Objects = readOsmXml("d:\\original_church_of_St_Louis.osm")
-
+#objOsmGeom, Objects = readOsmXml("d:\\original_church_of_St_Louis.osm")
+objOsmGeom, Objects = readOsmXml("d:\\original_temple_RF_VS.osm")
 
 ctx = ZCGAContext(objOsmGeom, Objects)
 ctx.processRules(checkRulesMy)
 
+# todo: we need to rebuild building outline, because it should match parts
+# unlike CE, where building outline is not really used.
+
+# todo: also we need to optimize geometry somehow, remove duplicated nodes and create multypolygons
+
 # round height
 roundHeight(ctx.Objects)
-
 writeOsmXml(ctx.objOsmGeom, ctx.Objects , "D:\\rewrite.osm")
 
 print("Done")
