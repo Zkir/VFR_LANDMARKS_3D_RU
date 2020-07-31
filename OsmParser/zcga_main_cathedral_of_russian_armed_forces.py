@@ -60,10 +60,10 @@ def checkRulesMy(ctx):
         ctx.primitiveCircle("belltower_layer3")
 
     if ctx.getTag("building:part") == "main_block_pre":
-        ctx.split_x((("~1","apse_block"), ("~4", "main_block"), ("~1","apse_block")))
+        ctx.split_x((("~1","west_apse_block"), ("~4", "main_block"), ("~1","apse_block")))
 
     if ctx.getTag("building:part") == "apse_block":
-        ctx.scale("'1", "'0.3")
+        ctx.scale("'1", "'0.4")
         if ctx.current_object.relative_Ox < 0:
             ctx.rotateScope(180)
         ctx.split_z_preserve_roof((("~1", "apse_1_pre"), ("~1", "apse_2_pre"),("~2", "NIL")))
@@ -78,18 +78,38 @@ def checkRulesMy(ctx):
 
     if ctx.getTag("building:part") == "apse_2_pre":
         ctx.translate("'-0.2",0)
-        ctx.scale("'0.6","'0.6")
+        ctx.scale("'0.6","'0.45")
         ctx.setTag("roof:shape", "half-dome")
         ctx.setTag("roof:height", "6")
         ctx.setTag("roof:colour", "gold")
         ctx.setTag("roof:material", "metal")
         ctx.primitiveHalfCircle("apse")
 
+    if ctx.getTag("building:part") == "west_apse_block":
+        ctx.scale("'1", "'0.4")
+        if ctx.current_object.relative_Ox < 0:
+            ctx.rotateScope(180)
+        ctx.split_z_preserve_roof((("~1", "west_apse_1_pre"), ("~1", "west_apse_2_pre"),("~2", "NIL")))
 
+    if ctx.getTag("building:part") == "west_apse_1_pre":
+        ctx.scale("'1", "'1", ctx.scope_sz() + 5)
+        ctx.setTag("roof:shape", "half-dome")
+        ctx.setTag("roof:height", "5")
+        ctx.setTag("roof:material", "glass")
+        ctx.setTag("roof:colour", "gray")
+        ctx.bevel(6,[0,3])
 
+    if ctx.getTag("building:part") == "west_apse_2_pre":
+        ctx.translate("'-0.2",0)
+        ctx.scale("'0.6","'0.45")
+        ctx.setTag("roof:shape", "half-dome")
+        ctx.setTag("roof:height", "6")
+        ctx.setTag("roof:colour", "gold")
+        ctx.setTag("roof:material", "metal")
+        ctx.primitiveHalfCircle("apse")
 
     if ctx.getTag("building:part") == "main_block":
-        ctx.split_y((("~1", "entrance"), ("~4", "cube"), ("~1", "entrance")))
+        ctx.split_y((("~0.4", "NIL"),("~0.6", "entrance"), ("~4", "cube"), ("~0.6", "entrance"),("~0.4", "NIL")))
 
     if ctx.getTag("building:part") == "entrance":
         ctx.scale("'0.3","'1","18")
