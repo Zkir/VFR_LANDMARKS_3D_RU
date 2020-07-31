@@ -446,7 +446,7 @@ def translate (osmObject, objOsmGeom, dx, dy, dz=None):
     osmObject.updateScopeBBox(objOsmGeom)
 
 
-def bevel(osmObject, objOsmGeom, r):
+def bevel(osmObject, objOsmGeom, r, node_list=None):
 
     if osmObject.type == "relation":
         raise Exception("todo: relations is not supported")
@@ -460,45 +460,51 @@ def bevel(osmObject, objOsmGeom, r):
 
     new_node_refs = []
     #print (osmObject.NodeRefs)
+    if node_list is None:
+        node_list = range(len(osmObject.NodeRefs) - closed_way_flag)
     for i in range(len(osmObject.NodeRefs) - closed_way_flag):
-        if i == 0:
-            magic = 1
+        if i in node_list:
+            if i == 0:
+                magic = 1
+            else:
+                magic = 0
+            nodeA = osmObject.NodeRefs[i-1-magic]
+            nodeO = osmObject.NodeRefs[i]
+            nodeB = osmObject.NodeRefs[i+1]
+            #print (nodeA,nodeO, nodeB)
+
+            x0, y0 = osmObject.LatLon2LocalXY(objOsmGeom.nodes[nodeO].lat, objOsmGeom.nodes[nodeO].lon)
+            xa, ya = osmObject.LatLon2LocalXY(objOsmGeom.nodes[nodeA].lat, objOsmGeom.nodes[nodeA].lon)
+            xb, yb = osmObject.LatLon2LocalXY(objOsmGeom.nodes[nodeB].lat, objOsmGeom.nodes[nodeB].lon)
+            dxa = xa - x0
+            dya = ya - y0
+            ra = (dxa*dxa+dya*dya)**0.5
+            dxa = dxa / ra
+            dya = dya / ra
+
+            dxb = xb - x0
+            dyb = yb - y0
+            rb = (dxb*dxb+dyb*dyb)**0.5
+
+            dxb = dxb/rb
+            dyb = dyb/rb
+
+            x1 = x0 + (dxa) * r
+            y1 = y0 + (dya) * r
+
+            x2 = x0 + (dxb) * r
+            y2 = y0 + (dyb) * r
+
+            lat, lon = osmObject.localXY2LatLon(x1, y1)
+            node_ref = objOsmGeom.AddNode(getID(), lat, lon)
+            new_node_refs.append(node_ref)
+
+            lat, lon = osmObject.localXY2LatLon(x2, y2)
+            node_ref = objOsmGeom.AddNode(getID(), lat, lon)
+            new_node_refs.append(node_ref)
         else:
-            magic = 0
-        nodeA = osmObject.NodeRefs[i-1-magic]
-        nodeO = osmObject.NodeRefs[i]
-        nodeB = osmObject.NodeRefs[i+1]
-        #print (nodeA,nodeO, nodeB)
-
-        x0, y0 = osmObject.LatLon2LocalXY(objOsmGeom.nodes[nodeO].lat, objOsmGeom.nodes[nodeO].lon)
-        xa, ya = osmObject.LatLon2LocalXY(objOsmGeom.nodes[nodeA].lat, objOsmGeom.nodes[nodeA].lon)
-        xb, yb = osmObject.LatLon2LocalXY(objOsmGeom.nodes[nodeB].lat, objOsmGeom.nodes[nodeB].lon)
-        dxa = xa - x0
-        dya = ya - y0
-        ra = (dxa*dxa+dya*dya)**0.5
-        dxa = dxa / ra
-        dya = dya / ra
-
-        dxb = xb - x0
-        dyb = yb - y0
-        rb = (dxb*dxb+dyb*dyb)**0.5
-
-        dxb = dxb/rb
-        dyb = dyb/rb
-
-        x1 = x0 + (dxa) * r
-        y1 = y0 + (dya) * r
-
-        x2 = x0 + (dxb) * r
-        y2 = y0 + (dyb) * r
-
-        lat, lon = osmObject.localXY2LatLon(x1, y1)
-        node_ref = objOsmGeom.AddNode(getID(), lat, lon)
-        new_node_refs.append(node_ref)
-
-        lat, lon = osmObject.localXY2LatLon(x2, y2)
-        node_ref = objOsmGeom.AddNode(getID(), lat, lon)
-        new_node_refs.append(node_ref)
+            node_ref=osmObject.NodeRefs[i]
+            new_node_refs.append(node_ref)
 
     if closed_way_flag == 1:
         new_node_refs.append(new_node_refs[0])
@@ -519,6 +525,32 @@ def setParentChildRelationship(old_obj, new_objects):
     for new_obj in new_objects:
         new_obj.parent=old_obj
         new_obj.parent_building=parent_building
+
+
+def rebuildBuildingOutline(Objects,objOsmGeom):
+    """Rebuild the building outline. Currently mock-up, no polygon intersections, just bbox"""
+    for obj in Objects:
+        if obj.isBuilding():
+            print(obj.id, obj.name)
+            min_x, min_y, max_x, max_y = obj.parts[0].calculateScopeBBox(objOsmGeom, "building")
+            for child in obj.parts:
+                min_x1, min_y1, max_x1, max_y1 = child.calculateScopeBBox(objOsmGeom, "building")
+                print("    ", child.id, child.getTag("building:part"), child.name)  # min_x, min_y, max_x, max_y
+                if min_x1 < min_x:
+                    min_x = min_x1
+
+                if min_y1 < min_y:
+                    min_y = min_y1
+
+                if max_x1 > max_x:
+                    max_x = max_x1
+
+                if max_y1 > max_y:
+                    max_y = max_y1
+            obj.NodeRefs = []
+            insert_Quad(obj, objOsmGeom, obj.NodeRefs, max_x - min_x, max_y - min_y, (max_x + min_x) / 2,
+                        (max_y + min_y) / 2)
+            scale(obj, objOsmGeom, "'1.01", "'1.01")
 
 # ======================================================================================================================
 class ZCGAContext:
@@ -645,9 +677,9 @@ class ZCGAContext:
         raise Exception("rotate operation is non implemented yet")
 
     # Geometry modifications
-    def bevel(self, r):
+    def bevel(self, r, node_list=None):
         """bevel operation -- """
-        bevel(self.current_object, self.objOsmGeom, r)
+        bevel(self.current_object, self.objOsmGeom, r, node_list)
 
     # flow operations
     # restores the current object. Can be usefull if it was destuctred by split or comp operation
@@ -716,34 +748,14 @@ ctx.processRules(checkRulesMy)
 
 # todo: we need to rebuild building outline, because it should match parts
 # unlike CE, where building outline is not really used.
+rebuildBuildingOutline(ctx.Objects, ctx.objOsmGeom)
 
-for obj in ctx.Objects:
-    if obj.isBuilding():
-        print (obj.id, obj.name)
-        min_x, min_y, max_x, max_y = obj.parts[0].calculateScopeBBox(objOsmGeom, "building")
-        for child in obj.parts:
-            min_x1, min_y1, max_x1, max_y1 = child.calculateScopeBBox(objOsmGeom,"building")
-            print("    ", child.id, child.getTag("building:part"), child.name) # min_x, min_y, max_x, max_y
-            if min_x1 < min_x:
-                min_x = min_x1
-
-            if min_y1 < min_y:
-                min_y = min_y1
-
-            if max_x1 > max_x:
-                max_x = max_x1
-
-            if max_y1 > max_y:
-                max_y = max_y1
-        obj.NodeRefs=[]
-        insert_Quad(obj, objOsmGeom,obj.NodeRefs,max_x-min_x,max_y-min_y, (max_x+min_x)/2,(max_y+min_y)/2)
-        scale(obj, objOsmGeom,"'1.01","'1.01")
 
 # todo: also we need to optimize geometry somehow, remove duplicated nodes and create multypolygons
 
 # round height
 roundHeight(ctx.Objects)
-writeOsmXml(ctx.objOsmGeom, ctx.Objects , "D:\\rewrite.osm")
+writeOsmXml(ctx.objOsmGeom, ctx.Objects , "D:\\rewrite.osm", False)
 
 print("Done")
 

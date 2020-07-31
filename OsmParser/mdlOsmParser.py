@@ -401,7 +401,7 @@ def readOsmXml(strSrcOsmFile):
     return objOsmGeom, Objects
 
 #osm file is rewritten  from Objects list and OsmGeom
-def writeOsmXml(objOsmGeom, Objects, strOutputOsmFileName):
+def writeOsmXml(objOsmGeom, Objects, strOutputOsmFileName, blnUpdatable):
     fo = open(strOutputOsmFileName, 'w', encoding="utf-8")
 
     # Print #fo, "<?xml version='1.0' encoding='UTF-8'?>"
@@ -426,7 +426,7 @@ def writeOsmXml(objOsmGeom, Objects, strOutputOsmFileName):
                 break
 
         if node_used:
-            if int(obj_id)<0:
+            if int(obj_id)<0 and blnUpdatable:
                 action=' action="modify" '
             else:
                 action=''
@@ -436,7 +436,7 @@ def writeOsmXml(objOsmGeom, Objects, strOutputOsmFileName):
 
     for osmObject in Objects:
         if osmObject.type == "way":
-            if int(osmObject.id) < 0:
+            if int(osmObject.id) < 0 and blnUpdatable:
                 action = ' action="modify" '
             else:
                 action = ''
@@ -445,7 +445,7 @@ def writeOsmXml(objOsmGeom, Objects, strOutputOsmFileName):
                 fo.write('    <nd ref="' + objOsmGeom.GetNodeID(node) + '" />' + '\n')
 
         if osmObject.type == "relation":
-            if int(osmObject.id) < 0:
+            if int(osmObject.id) < 0 and blnUpdatable:
                 action = ' action="modify" '
             else:
                 action = ''

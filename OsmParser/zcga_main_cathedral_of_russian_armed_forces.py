@@ -11,7 +11,7 @@ def checkRulesMy(ctx):
         # align local coordinates so that X matches the longest dimension, and oriented east
         ctx.rotateScope(10.52)
 
-        ctx.setTag("building:colour","#106010")
+        ctx.setTag("building:colour","#103010")
         ctx.setTag("building:material","plaster")
 
         # we will start from the rectangle and will rebuild the form
@@ -131,11 +131,11 @@ def checkRulesMy(ctx):
 
     if ctx.getTag("building:part") == "main_head":
         ctx.setTag("roof:shape", "onion")
-        ctx.setTag("roof:height", "16")
+        ctx.setTag("roof:height", "20")
         ctx.setTag("roof:colour", "gold")
         ctx.setTag("roof:material", "metal")
         ctx.split_z_preserve_roof(
-            (("22", "side_head_layer1"), ("~1", "main_head_layer2_pre"), (1, "side_head_onion_base_pre")))
+            (("22", "main_head_layer1"), ("~1", "main_head_layer2_pre"), (1, "side_head_onion_base_pre")))
 
     if ctx.getTag("building:part") == "main_head_layer2_pre":
         ctx.scale("'0.8", "'0.8")
@@ -151,7 +151,7 @@ def checkRulesMy(ctx):
         ctx.split_z_preserve_roof((("22","side_head_layer1"),("~1","side_head_layer2"),(1,"side_head_onion_base_pre")))
 
     if ctx.getTag("building:part") == "side_head_layer1":
-        ctx.bevel(2.5)
+        ctx.bevel(2.5, [0])
 
     if ctx.getTag("building:part") == "side_head_layer2":
         ctx.scale("'0.8", "'0.8")
@@ -183,7 +183,7 @@ def checkRulesMy(ctx):
         #ctx.translate(ctx.current_object.parent.parent.parent.scope_sx*0.3-ctx.scope_sx(), 0)
         ctx.scale(ctx.scope_sx()+6.10, "'1")
         ctx.translate(-6.10/2, 0)
-        ctx.bevel(3)
+        ctx.bevel(3.5,[0,3])
 
     if ctx.getTag("building:part") == "NIL":
         ctx.nil()
