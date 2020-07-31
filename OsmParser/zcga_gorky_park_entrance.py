@@ -9,7 +9,7 @@ def checkRulesMy(ctx):
     if ctx.getTag("building:part") == "porch":
         # align local coordinates so that X matches the longest dimension
         ctx.alignScopeToGeometry()
-        ctx.alignX2LongerScopeSide()
+        ctx.alignXToLongerScopeSide()
 
         # we want to remove it, and replace with 3 orther objects: porch_base, porch_columns, porch_top
         # Split Z, preserve roof,  {1:porch_base| ~1:porch_columns | 1: porch_top}
@@ -78,7 +78,7 @@ def checkRulesMy(ctx):
 
         # align local coordinates so that X matches the longest dimension
         ctx.alignScopeToGeometry()
-        ctx.alignX2LongerScopeSide()
+        ctx.alignXToLongerScopeSide()
         ctx.split_x((("~1", "building_outline"),))
         ctx.restore()
 

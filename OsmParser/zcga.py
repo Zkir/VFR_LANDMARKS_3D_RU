@@ -36,7 +36,6 @@ def calculateDimensionsForSplitPattern(h, split_pattern):
     sum_of_explicit_heights = 0
     sum_of_implicit_heights = 0
     for i in range(N):
-
         if str(split_pattern[i][0])[0:1] != "~":  # height starts with '~'
             sum_of_explicit_heights = sum_of_explicit_heights + float(split_pattern[i][0])
             Heights[i] = float(split_pattern[i][0])
@@ -48,9 +47,7 @@ def calculateDimensionsForSplitPattern(h, split_pattern):
             Heights[i] = float(split_pattern[i][0])
         else:
             Heights[i] = (h - sum_of_explicit_heights) * float(split_pattern[i][0][1:]) / sum_of_implicit_heights
-
-        if Heights[
-            i] < 0:  # todo: more precise check for negative height. Such elements probably should be excluded from generaion.
+        if Heights[i] < 0:  # todo: more precise check for negative height. Such elements probably should be excluded from generaion.
             Heights[i] = 0
     return Heights
 
@@ -76,8 +73,6 @@ def copyBuildingPartTags(new_object, old_object):
         osmtags["type"] = old_object.getTag("type")
 
     new_object.osmtags=osmtags
-
-
 
 # split object in vertical direction.
 # since we have only 2.5, it's easy
@@ -346,6 +341,7 @@ def primitiveHalfCircle(osmObject, objOsmGeom, rule_name, nVertices=12, radius=N
     Objects2.append(new_obj)
     return Objects2
 
+
 def parseRelativeValue(val, abs_size):
     if type(val) == str:
         if val[0:1] == "'":
@@ -368,10 +364,9 @@ def scale(osmObject, objOsmGeom, sx, sy, sz=None):
         sz=parseRelativeValue(sz,h)
 
         kz=sz/h
-        #min_height remains, we need to update height and roof height
+        # min_height remains, we need to update height and roof height
         osmObject.osmtags["height"] = str(min_height+sz)
         osmObject.osmtags["roof:height"] = str(roof_height*kz)
-        #osmObject.scope_sz=sz
 
     sx = parseRelativeValue(sx, osmObject.scope_sx)
     sy = parseRelativeValue(sy, osmObject.scope_sy)
@@ -403,6 +398,7 @@ def scale(osmObject, objOsmGeom, sx, sy, sz=None):
 
     osmObject.updateBBox(objOsmGeom)
     osmObject.updateScopeBBox(objOsmGeom)
+
 
 def translate (osmObject, objOsmGeom, dx, dy, dz=None):
     if osmObject.type == "relation":
@@ -448,6 +444,69 @@ def translate (osmObject, objOsmGeom, dx, dy, dz=None):
 
     osmObject.updateBBox(objOsmGeom)
     osmObject.updateScopeBBox(objOsmGeom)
+
+
+def bevel(osmObject, objOsmGeom, r):
+
+    if osmObject.type == "relation":
+        raise Exception("todo: relations is not supported")
+        # we should not transfer the same node twice
+
+    if osmObject.NodeRefs[0] == osmObject.NodeRefs[-1]:
+        closed_way_flag = 1
+    else:
+        closed_way_flag = 0
+        raise Exception ("Bevel is allowed only for closed polygons")
+
+    new_node_refs = []
+    #print (osmObject.NodeRefs)
+    for i in range(len(osmObject.NodeRefs) - closed_way_flag):
+        if i == 0:
+            magic = 1
+        else:
+            magic = 0
+        nodeA = osmObject.NodeRefs[i-1-magic]
+        nodeO = osmObject.NodeRefs[i]
+        nodeB = osmObject.NodeRefs[i+1]
+        #print (nodeA,nodeO, nodeB)
+
+        x0, y0 = osmObject.LatLon2LocalXY(objOsmGeom.nodes[nodeO].lat, objOsmGeom.nodes[nodeO].lon)
+        xa, ya = osmObject.LatLon2LocalXY(objOsmGeom.nodes[nodeA].lat, objOsmGeom.nodes[nodeA].lon)
+        xb, yb = osmObject.LatLon2LocalXY(objOsmGeom.nodes[nodeB].lat, objOsmGeom.nodes[nodeB].lon)
+        dxa = xa - x0
+        dya = ya - y0
+        ra = (dxa*dxa+dya*dya)**0.5
+        dxa = dxa / ra
+        dya = dya / ra
+
+        dxb = xb - x0
+        dyb = yb - y0
+        rb = (dxb*dxb+dyb*dyb)**0.5
+
+        dxb = dxb/rb
+        dyb = dyb/rb
+
+        x1 = x0 + (dxa) * r
+        y1 = y0 + (dya) * r
+
+        x2 = x0 + (dxb) * r
+        y2 = y0 + (dyb) * r
+
+        lat, lon = osmObject.localXY2LatLon(x1, y1)
+        node_ref = objOsmGeom.AddNode(getID(), lat, lon)
+        new_node_refs.append(node_ref)
+
+        lat, lon = osmObject.localXY2LatLon(x2, y2)
+        node_ref = objOsmGeom.AddNode(getID(), lat, lon)
+        new_node_refs.append(node_ref)
+
+    if closed_way_flag == 1:
+        new_node_refs.append(new_node_refs[0])
+
+    osmObject.NodeRefs = new_node_refs
+    osmObject.updateBBox(objOsmGeom)
+    osmObject.updateScopeBBox(objOsmGeom)
+
 
 def setParentChildRelationship(old_obj, new_objects):
     if old_obj.isBuilding():
@@ -509,14 +568,14 @@ class ZCGAContext:
     def alignScopeToGeometry(self):
         self.current_object.alignScopeToGeometry(self.objOsmGeom)
 
-    def alignX2LongerScopeSide(self):
+    def alignXToLongerScopeSide(self):
         if self.current_object.scope_sx < self.current_object.scope_sy:
             self.current_object.rotateScope(90, self.objOsmGeom)
 
     def rotateScope(self, zAngle):
         self.current_object.rotateScope(zAngle, self.objOsmGeom)
 
-    # Geometry Creation
+    # Geometry creation
     def outerRectangle(self, rule_name):
         """Creates an outer (bbox) rectangle of the current shape"""
         self.split_x((("~1", rule_name),))
@@ -581,6 +640,14 @@ class ZCGAContext:
 
     def translate(self, dx, dy, dz=None):
         translate(self.current_object, self.objOsmGeom, dx, dy, dz)
+
+    def rotate(self, rz):
+        raise Exception("rotate operation is non implemented yet")
+
+    # Geometry modifications
+    def bevel(self, r):
+        """bevel operation -- """
+        bevel(self.current_object, self.objOsmGeom, r)
 
     # flow operations
     # restores the current object. Can be usefull if it was destuctred by split or comp operation
@@ -650,9 +717,6 @@ ctx.processRules(checkRulesMy)
 # todo: we need to rebuild building outline, because it should match parts
 # unlike CE, where building outline is not really used.
 
-# todo: also we need to optimize geometry somehow, remove duplicated nodes and create multypolygons
-
-
 for obj in ctx.Objects:
     if obj.isBuilding():
         print (obj.id, obj.name)
@@ -675,6 +739,7 @@ for obj in ctx.Objects:
         insert_Quad(obj, objOsmGeom,obj.NodeRefs,max_x-min_x,max_y-min_y, (max_x+min_x)/2,(max_y+min_y)/2)
         scale(obj, objOsmGeom,"'1.01","'1.01")
 
+# todo: also we need to optimize geometry somehow, remove duplicated nodes and create multypolygons
 
 # round height
 roundHeight(ctx.Objects)

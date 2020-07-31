@@ -41,14 +41,18 @@ def checkRulesMy(ctx):
     if ctx.getTag("building:part") == "belltower_layer2_x":
         ctx.split_y((("~1","belltower_layer2_portico"),("~6","belltower_layer2"),("~1","belltower_layer2_portico")))
 
+    if ctx.getTag("building:part") == "belltower_layer2":
+        ctx.bevel(2)
+
     if ctx.getTag("building:part") == "belltower_layer2_portico_pre":
         ctx.split_y(
             (("~1", "NIL"), ("~6", "belltower_layer2_portico"), ("~1", "NIL")))
 
     if ctx.getTag("building:part") == "belltower_layer2_portico":
-        ctx.scale("'1", "'1","'0.8")
+        ctx.alignXToLongerScopeSide()
+        ctx.scale(ctx.scope_sx()-2, "'1.2","'0.8")
         ctx.setTag("roof:shape","gabled")
-        ctx.setTag("roof:height", "3")
+        ctx.setTag("roof:height", "2")
         ctx.setTag("roof:orientation", "across")
 
     if ctx.getTag("building:part") == "belltower_layer3_pre":
@@ -68,6 +72,8 @@ def checkRulesMy(ctx):
         ctx.scale("'1", "'1", ctx.scope_sz() + 5)
         ctx.setTag("roof:shape", "half-dome")
         ctx.setTag("roof:height", "5")
+        ctx.setTag("roof:material", "glass")
+        ctx.setTag("roof:colour", "gray")
         ctx.primitiveHalfCircle("apse")
 
     if ctx.getTag("building:part") == "apse_2_pre":
@@ -75,7 +81,11 @@ def checkRulesMy(ctx):
         ctx.scale("'0.6","'0.6")
         ctx.setTag("roof:shape", "half-dome")
         ctx.setTag("roof:height", "6")
+        ctx.setTag("roof:colour", "gold")
+        ctx.setTag("roof:material", "metal")
         ctx.primitiveHalfCircle("apse")
+
+
 
 
     if ctx.getTag("building:part") == "main_block":
@@ -96,6 +106,7 @@ def checkRulesMy(ctx):
 
     if ctx.getTag("building:part") == "cube1":
         ctx.scale("'1", "'1", ctx.scope_sz() + 5)
+        ctx.bevel(6)
         ctx.setTag("roof:shape","dome")
         ctx.setTag("roof:height", "5")
         ctx.setTag("roof:material", "glass")
@@ -139,8 +150,12 @@ def checkRulesMy(ctx):
         ctx.setTag("roof:height", "12")
         ctx.split_z_preserve_roof((("22","side_head_layer1"),("~1","side_head_layer2"),(1,"side_head_onion_base_pre")))
 
+    if ctx.getTag("building:part") == "side_head_layer1":
+        ctx.bevel(2.5)
+
     if ctx.getTag("building:part") == "side_head_layer2":
         ctx.scale("'0.8", "'0.8")
+        ctx.bevel(1.5)
 
     if ctx.getTag("building:part") == "side_head_onion_base_pre":
         ctx.scale("'0.775", "'0.775")
@@ -168,6 +183,7 @@ def checkRulesMy(ctx):
         #ctx.translate(ctx.current_object.parent.parent.parent.scope_sx*0.3-ctx.scope_sx(), 0)
         ctx.scale(ctx.scope_sx()+6.10, "'1")
         ctx.translate(-6.10/2, 0)
+        ctx.bevel(3)
 
     if ctx.getTag("building:part") == "NIL":
         ctx.nil()

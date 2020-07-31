@@ -17,7 +17,7 @@ def checkRulesMy(ctx):
 
         # align local coordinates so that X matches the longest dimension, and oriented east
         ctx.alignScopeToGeometry()
-        ctx.alignX2LongerScopeSide()
+        ctx.alignXToLongerScopeSide()
         ctx.rotateScope(180)
 
         # we will start from the rectangle and will rebuild the form
