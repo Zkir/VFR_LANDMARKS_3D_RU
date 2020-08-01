@@ -29,10 +29,15 @@ def checkRulesMy(ctx):
         ctx.setTag("roof:height", "12")
         ctx.setTag("roof:colour", "gold")
         ctx.setTag("roof:material", "metal")
-        ctx.split_z_preserve_roof((("~1.5", "belltower_layer1"), ("~1.25", "belltower_layer2_pre"), ("~0.7", "belltower_layer3_pre")))
+        ctx.split_z_preserve_roof((("~1.1", "belltower_layer1"),("~0.4", "belltower_layer1a"),
+                                   ("~1.25", "belltower_layer2_pre"),
+                                   ("~0.7", "belltower_layer3_pre")))
 
     if ctx.getTag("building:part") == "belltower_layer1":
         pass
+
+    if ctx.getTag("building:part") == "belltower_layer1a":
+        ctx.bevel(2)
 
     if ctx.getTag("building:part") == "belltower_layer2_pre":
         ctx.scale("'0.8","'0.8")
@@ -42,7 +47,7 @@ def checkRulesMy(ctx):
         ctx.split_y((("~1","belltower_layer2_portico"),("~6","belltower_layer2"),("~1","belltower_layer2_portico")))
 
     if ctx.getTag("building:part") == "belltower_layer2":
-        ctx.bevel(2)
+        ctx.bevel(2.5)
 
     if ctx.getTag("building:part") == "belltower_layer2_portico_pre":
         ctx.split_y(
@@ -63,10 +68,9 @@ def checkRulesMy(ctx):
         ctx.split_x((("~1","west_apse_block"), ("~4", "main_block"), ("~1","apse_block")))
 
     if ctx.getTag("building:part") == "apse_block":
-        ctx.scale("'1", "'0.4")
         if ctx.current_object.relative_Ox < 0:
             ctx.rotateScope(180)
-        ctx.split_z_preserve_roof((("~1", "apse_1_pre"), ("~1", "apse_2_pre"),("~2", "NIL")))
+        ctx.split_z_preserve_roof((("~1", "apse_1_pre"), ("~1", "apse_2_pre"),("~3", "NIL")))
 
     if ctx.getTag("building:part") == "apse_1_pre":
         ctx.scale("'1", "'1", ctx.scope_sz() + 5)
@@ -77,8 +81,8 @@ def checkRulesMy(ctx):
         ctx.primitiveHalfCircle("apse")
 
     if ctx.getTag("building:part") == "apse_2_pre":
-        ctx.translate("'-0.2",0)
-        ctx.scale("'0.6","'0.45")
+        ctx.translate("-4.30",0)
+        ctx.scale("'0.9","'0.741")
         ctx.setTag("roof:shape", "half-dome")
         ctx.setTag("roof:height", "6")
         ctx.setTag("roof:colour", "gold")
@@ -89,7 +93,7 @@ def checkRulesMy(ctx):
         ctx.scale("'1", "'0.4")
         if ctx.current_object.relative_Ox < 0:
             ctx.rotateScope(180)
-        ctx.split_z_preserve_roof((("~1", "west_apse_1_pre"), ("~1", "west_apse_2_pre"),("~2", "NIL")))
+        ctx.split_z_preserve_roof((("~1", "west_apse_1_pre"), ("~1", "apse_2_pre"),("~3", "NIL")))
 
     if ctx.getTag("building:part") == "west_apse_1_pre":
         ctx.scale("'1", "'1", ctx.scope_sz() + 5)
@@ -98,15 +102,6 @@ def checkRulesMy(ctx):
         ctx.setTag("roof:material", "glass")
         ctx.setTag("roof:colour", "gray")
         ctx.bevel(6,[0,3])
-
-    if ctx.getTag("building:part") == "west_apse_2_pre":
-        ctx.translate("'-0.2",0)
-        ctx.scale("'0.6","'0.45")
-        ctx.setTag("roof:shape", "half-dome")
-        ctx.setTag("roof:height", "6")
-        ctx.setTag("roof:colour", "gold")
-        ctx.setTag("roof:material", "metal")
-        ctx.primitiveHalfCircle("apse")
 
     if ctx.getTag("building:part") == "main_block":
         ctx.split_y((("~0.4", "NIL"),("~0.6", "entrance"), ("~4", "cube"), ("~0.6", "entrance"),("~0.4", "NIL")))
@@ -122,7 +117,7 @@ def checkRulesMy(ctx):
         ctx.setTag("roof:height", "6")
 
     if ctx.getTag("building:part") == "cube":
-        ctx.split_z_preserve_roof((("~1", "cube1"), ("~3", "cube2")))
+        ctx.split_z_preserve_roof((("~1", "cube1"), ("~4", "cube2")))
 
     if ctx.getTag("building:part") == "cube1":
         ctx.scale("'1", "'1", ctx.scope_sz() + 5)
@@ -135,23 +130,21 @@ def checkRulesMy(ctx):
 
     if ctx.getTag("building:part") == "cube2":
         ctx.scale("'0.8", "'0.8")
-
-    if ctx.getTag("building:part") == "cube2":
         ctx.split_x((("~1", "sideL"), ("~2.5", "cube3"), ("~1", "sideR")))
 
 
     if ctx.getTag("building:part") == "sideL":
-        ctx.split_y((("~1", "side_head"), ("~2.5", "side_erkerL"), ("~1", "side_head")))
+        ctx.split_y((("~1", "side_head_L1"), ("~2.5", "side_erkerL"), ("~1", "side_head_L2")))
 
     if ctx.getTag("building:part") == "sideR":
-        ctx.split_y((("~1", "side_head"), ("~2.5", "side_erkerR"), ("~1", "side_head")))
+        ctx.split_y((("~1", "side_head_R2"), ("~2.5", "side_erkerR"), ("~1", "side_head_R1")))
 
     if ctx.getTag("building:part") == "cube3":
         ctx.split_y((("~1", "side_erkerF"), ("~2.5", "main_head"), ("~1", "side_erkerB")))
 
     if ctx.getTag("building:part") == "main_head":
-        ctx.setTag("roof:shape", "onion")
-        ctx.setTag("roof:height", "20")
+        ctx.setTag("roof:shape", "onion") # onion
+        ctx.setTag("roof:height", "25")
         ctx.setTag("roof:colour", "gold")
         ctx.setTag("roof:material", "metal")
         ctx.split_z_preserve_roof(
@@ -162,15 +155,32 @@ def checkRulesMy(ctx):
         ctx.rotateScope(22.5)
         ctx.primitiveCircle("main_head_layer2",8)
 
+    if ctx.getTag("building:part") == "side_head_L1":
+        ctx.split_x((("~1","side_head"),))
+
+    if ctx.getTag("building:part") == "side_head_L2":
+        ctx.rotateScope(-90)
+        ctx.split_x((("~1", "side_head"),))
+
+    if ctx.getTag("building:part") == "side_head_R1":
+        ctx.rotateScope(180)
+        ctx.split_x((("~1", "side_head"),))
+
+    if ctx.getTag("building:part") == "side_head_R2":
+        ctx.rotateScope(-270)
+        ctx.split_x((("~1", "side_head"),))
+
     if ctx.getTag("building:part") == "side_head":
         ctx.scale("'1","'1", "'0.75")
-        ctx.setTag("roof:shape","onion")
+        ctx.setTag("roof:shape","onion") # onion
         ctx.setTag("roof:colour", "gold")
         ctx.setTag("roof:material", "metal")
         ctx.setTag("roof:height", "12")
+        #ctx.setTag("roof:height", ctx.scope_sx()/2)
         ctx.split_z_preserve_roof((("22","side_head_layer1"),("~1","side_head_layer2"),(1,"side_head_onion_base_pre")))
 
     if ctx.getTag("building:part") == "side_head_layer1":
+
         ctx.bevel(2.5, [0])
 
     if ctx.getTag("building:part") == "side_head_layer2":
@@ -195,7 +205,7 @@ def checkRulesMy(ctx):
         ctx.split_x((("~1", "side_erker"),))
 
     if ctx.getTag("building:part") in ("side_erker"):
-        ctx.scale("'1","'1", "'0.4")
+        ctx.scale("'1","'1", "'0.3")
         ctx.setTag("roof:shape", "gabled")
         ctx.setTag("roof:height", "3")
         ctx.setTag("roof:orientation", "across")
