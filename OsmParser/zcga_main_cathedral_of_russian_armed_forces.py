@@ -68,6 +68,7 @@ def checkRulesMy(ctx):
         ctx.split_x((("~1","west_apse_block"), ("~4", "main_block"), ("~1","apse_block")))
 
     if ctx.getTag("building:part") == "apse_block":
+        ctx.scale("'1", "'0.4")
         if ctx.current_object.relative_Ox < 0:
             ctx.rotateScope(180)
         ctx.split_z_preserve_roof((("~1", "apse_1_pre"), ("~1", "apse_2_pre"),("~3", "NIL")))

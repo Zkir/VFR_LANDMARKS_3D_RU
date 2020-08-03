@@ -527,15 +527,15 @@ def setParentChildRelationship(old_obj, new_objects):
         new_obj.parent_building=parent_building
 
 
-def rebuildBuildingOutline(Objects,objOsmGeom):
+def rebuildBuildingOutline(Objects, objOsmGeom):
     """Rebuild the building outline. Currently mock-up, no polygon intersections, just bbox"""
     for obj in Objects:
         if obj.isBuilding():
-            print(obj.id, obj.name)
+            # print(obj.id, obj.name)
             min_x, min_y, max_x, max_y = obj.parts[0].calculateScopeBBox(objOsmGeom, "building")
             for child in obj.parts:
                 min_x1, min_y1, max_x1, max_y1 = child.calculateScopeBBox(objOsmGeom, "building")
-                print("    ", child.id, child.getTag("building:part"), child.name)  # min_x, min_y, max_x, max_y
+                # print("    ", child.id, child.getTag("building:part"), child.name)  # min_x, min_y, max_x, max_y
                 if min_x1 < min_x:
                     min_x = min_x1
 
@@ -551,6 +551,7 @@ def rebuildBuildingOutline(Objects,objOsmGeom):
             insert_Quad(obj, objOsmGeom, obj.NodeRefs, max_x - min_x, max_y - min_y, (max_x + min_x) / 2,
                         (max_y + min_y) / 2)
             scale(obj, objOsmGeom, "'1.01", "'1.01")
+
 
 # ======================================================================================================================
 class ZCGAContext:
