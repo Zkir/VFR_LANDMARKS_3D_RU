@@ -196,6 +196,7 @@ def split_y(osmObject, objOsmGeom, split_pattern):
 
     return Objects2
 
+
 # some kind of hybrid between offset and comp(border) operations
 # we create geometry along edges of our roof, to create decorative elements
 def comp_roof_border(osmObject, objOsmGeom, rule_name, distance=1):
@@ -245,6 +246,26 @@ def comp_roof_border(osmObject, objOsmGeom, rule_name, distance=1):
         Objects2.append(new_obj)
     return Objects2
 
+
+#  we cannot really do comp, because building parts are individable,
+#  but we will create one more object with the same geometry and height by roof height
+def comp_roof(osmObject, objOsmGeom, rule_name):
+    Objects2 = []
+    if osmObject.type == "relation":
+        raise Exception("relation is not supported in the comp_roof_border operation")
+
+    new_obj = T3DObject()
+    new_obj.id = getID()
+    new_obj.type = "way"
+    copyBuildingPartTags(new_obj, osmObject)
+    new_obj.NodeRefs = copy(osmObject.NodeRefs) # same nodes.
+
+    new_obj.osmtags["min_height"] = str(parseHeightValue(osmObject.osmtags["height"])- parseHeightValue(osmObject.osmtags["roof:height"]))
+    new_obj.osmtags["building:part"] = rule_name
+    new_obj.updateBBox(objOsmGeom)
+    new_obj.updateScopeBBox(objOsmGeom)
+    Objects2.append(new_obj)
+    return Objects2
 
 def insert_Quad(osmObject, objOsmGeom, NodeRefs, width, length, x0, y0):
     # 1
@@ -365,8 +386,12 @@ def scale(osmObject, objOsmGeom, sx, sy, sz=None):
 
         kz=sz/h
         # min_height remains, we need to update height and roof height
-        osmObject.osmtags["height"] = str(min_height+sz)
-        osmObject.osmtags["roof:height"] = str(roof_height*kz)
+        height=min_height+sz
+        roof_height =roof_height*kz
+        if round(roof_height, 3) > round(height,3) - round(min_height,3):
+            roof_height = round(height,3) - round(min_height,3)-0.01
+        osmObject.osmtags["height"] = str(height)
+        osmObject.osmtags["roof:height"] = str(roof_height)
 
     sx = parseRelativeValue(sx, osmObject.scope_sx)
     sy = parseRelativeValue(sy, osmObject.scope_sy)
@@ -660,14 +685,20 @@ class ZCGAContext:
         self.unprocessed_rules_exist = True
 
     def comp_roof_border(self, rule_name, distance=1):
-        new_objects = comp_roof_border(ctx.current_object, ctx.objOsmGeom, rule_name, distance)
+        new_objects = comp_roof_border(self.current_object, self.objOsmGeom, rule_name, distance)
 
         self.nil()
         self.Objects2.extend(new_objects)
         setParentChildRelationship(self.current_object, new_objects)
         self.unprocessed_rules_exist = True
 
-    # Transformations
+    def comp_roof(self, rule_name):
+        new_objects = comp_roof(self.current_object, self.objOsmGeom, rule_name)
+        self.Objects2.extend(new_objects)
+        setParentChildRelationship(self.current_object, new_objects)
+        self.unprocessed_rules_exist = True
+
+        # Transformations
     def scale(self, sx, sy, sz=None):
         scale(self.current_object, self.objOsmGeom, sx, sy, sz)
 
