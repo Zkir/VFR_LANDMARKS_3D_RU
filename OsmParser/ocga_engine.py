@@ -7,11 +7,11 @@ resulting OSM file can be uploaded to OSM DB
 """
 
 from copy import copy
-from math import cos, sin, atan, atan2, pi
+from math import cos, sin, atan2, pi
 from mdlOsmParser import T3DObject,readOsmXml, writeOsmXml, parseHeightValue, roundHeight
 #from zcga_gorky_park_entrance import checkRulesMy
 #from zcga_church_of_st_louis import checkRulesMy
-from zcga_main_cathedral_of_russian_armed_forces import checkRulesMy
+
 
 _id_counter=0
 
@@ -373,7 +373,7 @@ def parseRelativeValue(val, abs_size):
 
 def scale(osmObject, objOsmGeom, sx, sy, sz=None):
     if osmObject.type == "relation":
-        raise Exception("todo: relations is not supported")
+        raise Exception("todo: relations is not supported in scale operation")
 
     if sz is not None:
         # Luckily, z-scale is simple. No matrix, no geometry
@@ -554,8 +554,9 @@ def setParentChildRelationship(old_obj, new_objects):
 
 def rebuildBuildingOutline(Objects, objOsmGeom):
     """Rebuild the building outline. Currently mock-up, no polygon intersections, just bbox"""
+    Objects2=[]
     for obj in Objects:
-        if obj.isBuilding():
+        if obj.isBuilding() and len(obj.parts) > 0:
             # print(obj.id, obj.name)
             min_x, min_y, max_x, max_y = obj.parts[0].calculateScopeBBox(objOsmGeom, "building")
             for child in obj.parts:
@@ -572,10 +573,31 @@ def rebuildBuildingOutline(Objects, objOsmGeom):
 
                 if max_y1 > max_y:
                     max_y = max_y1
-            obj.NodeRefs = []
-            insert_Quad(obj, objOsmGeom, obj.NodeRefs, max_x - min_x, max_y - min_y, (max_x + min_x) / 2,
+
+            if obj.type=="way":
+                new_obj=obj
+                new_obj.NodeRefs = []
+            else:
+                new_obj = T3DObject()
+                new_obj.id = getID()
+                new_obj.type = "way"
+                new_obj.osmtags = obj.osmtags
+                new_obj.parts = obj.parts
+                new_obj.scope_sx = obj.scope_sx
+                new_obj.scope_sy = obj.scope_sy
+                new_obj.scope_rz = obj.scope_rz
+                new_obj.bbox = obj.bbox
+
+
+            insert_Quad(new_obj, objOsmGeom, new_obj.NodeRefs, max_x - min_x, max_y - min_y, (max_x + min_x) / 2,
                         (max_y + min_y) / 2)
-            scale(obj, objOsmGeom, "'1.01", "'1.01")
+            new_obj.updateBBox(objOsmGeom)
+            new_obj.updateScopeBBox(objOsmGeom)
+            scale(new_obj, objOsmGeom, "'1.01", "'1.01")
+            Objects2.append(new_obj)
+        else:
+            Objects2.append(obj)
+    return Objects2
 
 
 # ======================================================================================================================
@@ -753,7 +775,7 @@ class ZCGAContext:
                 # check object modification rules
                 if not self.current_object.rules_processed:
                     #process each object only once.
-                    checkRules(ctx)
+                    checkRules(self)
                     self.current_object.rules_processed = True
 
                 if self.current_object.isBuilding() and self.Objects2.count(self.current_object) == 0:
@@ -768,26 +790,24 @@ class ZCGAContext:
 
 
 # =============== main part
-print("ZCGA utility")
-# objOsmGeom, Objects = readOsmXml("d:\_BLENDER-OSM-TEST\samples\Church-vozdvizhenskoe.osm")
-# objOsmGeom, Objects = readOsmXml("d:\\egorievsk.osm")
-#objOsmGeom, Objects = readOsmXml("d:\\original_gorky_park.osm")
-#objOsmGeom, Objects = readOsmXml("d:\\original_church_of_St_Louis.osm")
-objOsmGeom, Objects = readOsmXml("d:\\original_temple_RF_VS.osm")
+def ocga_process(input_file, output_file, checkRulesMy):
+    print("processing file ", input_file)
 
-ctx = ZCGAContext(objOsmGeom, Objects)
-ctx.processRules(checkRulesMy)
+    objOsmGeom, Objects = readOsmXml(input_file)
 
-# todo: we need to rebuild building outline, because it should match parts
-# unlike CE, where building outline is not really used.
-rebuildBuildingOutline(ctx.Objects, ctx.objOsmGeom)
+    ctx = ZCGAContext(objOsmGeom, Objects)
+    ctx.processRules(checkRulesMy)
 
+    # todo: we need to rebuild building outline, because it should match parts
+    # unlike CE, where building outline is not really used.
 
-# todo: also we need to optimize geometry somehow, remove duplicated nodes and create multypolygons
+    ctx.Objects=rebuildBuildingOutline(ctx.Objects, ctx.objOsmGeom)
 
-# round height
-roundHeight(ctx.Objects)
-writeOsmXml(ctx.objOsmGeom, ctx.Objects , "D:\\rewrite.osm", False)
+    # todo: also we need to optimize geometry somehow, remove duplicated nodes and create multypolygons
 
-print("Done")
+    # round height
+    roundHeight(ctx.Objects)
+    writeOsmXml(ctx.objOsmGeom, ctx.Objects , output_file, False)
+
+    print("Done")
 

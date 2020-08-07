@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <bounds minlat='55.7311367' minlon='37.6028699' maxlat='55.7316895' maxlon='37.6040286' origin='CGImap 0.8.2 (11009 thorn-02.openstreetmap.org)' />
+  <bounds minlat='55.7311304' minlon='37.6026812' maxlat='55.7316955' maxlon='37.6042163' origin='CGImap 0.8.2 (21927 thorn-02.openstreetmap.org)' />
+  <node id='605942625' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='6' changeset='88408340' lat='55.7315155' lon='37.6029111' />
+  <node id='605942627' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='6' changeset='88408340' lat='55.7316412' lon='37.6030348' />
+  <node id='605942642' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='6' changeset='88408340' lat='55.7312454' lon='37.6037696' />
+  <node id='605942645' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='6' changeset='88408340' lat='55.7313714' lon='37.6038947' />
+  <node id='1907467796' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='4' changeset='88408340' lat='55.731389' lon='37.6033455' />
+  <node id='1907467798' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='4' changeset='88408340' lat='55.7314996' lon='37.6034555' />
+  <node id='4634780886' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='3' changeset='88408340' lat='55.7313007' lon='37.6038245' />
+  <node id='4634780887' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='3' changeset='88408340' lat='55.7315784' lon='37.6029726' />
+  <node id='7738162034' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='2' changeset='88408340' lat='55.731475' lon='37.6030723' />
+  <node id='7738162042' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='2' changeset='88408340' lat='55.7314668' lon='37.6030642' />
+  <node id='7738162045' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='2' changeset='88408340' lat='55.7315931' lon='37.6031908' />
+  <node id='7738162058' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='2' changeset='88408340' lat='55.7313009' lon='37.6036253' />
+  <node id='7738162060' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='2' changeset='88408340' lat='55.7315854' lon='37.6031831' />
+  <node id='7738162061' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='2' changeset='88408340' lat='55.7314115' lon='37.6037353' />
+  <node id='7738162087' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='2' changeset='88408340' lat='55.7312933' lon='37.6036177' />
+  <node id='7738162088' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='2' changeset='88408340' lat='55.7314192' lon='37.6037431' />
+  <way id='47615624' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='7' changeset='88408340'>
+    <nd ref='4634780886' />
+    <nd ref='605942642' />
+    <nd ref='7738162087' />
+    <nd ref='7738162058' />
+    <nd ref='1907467796' />
+    <nd ref='7738162034' />
+    <nd ref='7738162042' />
+    <nd ref='605942625' />
+    <nd ref='4634780887' />
+  </way>
+  <way id='469067556' timestamp='2020-07-23T14:00:09Z' uid='100812' user='Zkir' visible='true' version='2' changeset='88408340'>
+    <nd ref='4634780887' />
+    <nd ref='605942627' />
+    <nd ref='7738162045' />
+    <nd ref='7738162060' />
+    <nd ref='1907467798' />
+    <nd ref='7738162061' />
+    <nd ref='7738162088' />
+    <nd ref='605942645' />
+    <nd ref='4634780886' />
+  </way>
+  <relation id='6913335' timestamp='2020-07-20T23:38:52Z' uid='100812' user='Zkir' visible='true' version='9' changeset='88268619'>
+    <member type='way' ref='47615624' role='outer' />
+    <member type='way' ref='469067556' role='outer' />
+    <tag k='addr:housenumber' v='9' />
+    <tag k='addr:postcode' v='119049' />
+    <tag k='addr:street' v='улица Крымский Вал' />
+    <tag k='building' v='triumphal_arch' />
+    <tag k='building:architecture' v='stalinist_neoclassicism' />
+    <tag k='building:levels' v='4' />
+    <tag k='email' v='pgmuseum@park-gorkogo.com' />
+    <tag k='fee' v='no' />
+    <tag k='height' v='21.6' />
+    <tag k='name' v='Музей Парка Горького' />
+    <tag k='name:en' v='Gorky Park Museum' />
+    <tag k='opening_hours' v='Tu-Su 11:00-22:00' />
+    <tag k='phone' v='+7 495 995-00-20' />
+    <tag k='start_date:building' v='1955' />
+    <tag k='tourism' v='museum' />
+    <tag k='type' v='multipolygon' />
+    <tag k='website' v='https://park-gorkogo.com/' />
+    <tag k='wheelchair' v='no' />
+  </relation>
+</osm>

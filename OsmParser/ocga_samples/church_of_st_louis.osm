@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='640149916' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='4' changeset='88619596' lat='55.7625886' lon='37.6309447' />
+  <node id='640149928' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='4' changeset='88619596' lat='55.7627714' lon='37.6310027' />
+  <node id='640149931' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='4' changeset='88619596' lat='55.7627175' lon='37.6316437' />
+  <node id='640149935' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='4' changeset='88619596' lat='55.7625158' lon='37.6315656' />
+  <node id='669942707' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='4' changeset='88619596' lat='55.7626769' lon='37.6315606' />
+  <node id='669942708' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='4' changeset='88619596' lat='55.7625633' lon='37.6315807' />
+  <node id='669942709' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='4' changeset='88619596' lat='55.7626057' lon='37.6316306' />
+  <node id='669942710' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='4' changeset='88619596' lat='55.7625885' lon='37.6316066' />
+  <node id='669942711' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='4' changeset='88619596' lat='55.7626477' lon='37.6316254' />
+  <node id='7761260998' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7627244' lon='37.6315757' />
+  <node id='7761260999' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7626701' lon='37.6316286' />
+  <node id='7761261000' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7626641' lon='37.6315972' />
+  <node id='7761261001' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7626268' lon='37.6316373' />
+  <node id='7761261002' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7625786' lon='37.6315701' />
+  <node id='7761261003' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7625777' lon='37.6315292' />
+  <node id='7761261004' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7625687' lon='37.6315263' />
+  <node id='7761261007' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7627325' lon='37.6309903' />
+  <node id='7761261009' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7627699' lon='37.6311224' />
+  <node id='7761261011' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7626736' lon='37.6315596' />
+  <node id='7761261012' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.762572' lon='37.6315274' />
+  <node id='7761261014' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7625213' lon='37.6315113' />
+  <node id='7761261015' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7625668' lon='37.631058' />
+  <node id='7761261016' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7627597' lon='37.6311192' />
+  <node id='7761261019' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7625769' lon='37.6310612' />
+  <node id='7761261020' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7627667' lon='37.6310499' />
+  <node id='7761261021' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7626276' lon='37.630957' />
+  <node id='7761261023' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88619596' lat='55.7625839' lon='37.6309919' />
+  <way id='50380252' timestamp='2020-07-28T12:15:59Z' uid='100812' user='Zkir' visible='true' version='16' changeset='88619596'>
+    <nd ref='640149931' />
+    <nd ref='7761260999' />
+    <nd ref='669942707' />
+    <nd ref='7761261011' />
+    <nd ref='7761261000' />
+    <nd ref='669942711' />
+    <nd ref='7761261001' />
+    <nd ref='669942709' />
+    <nd ref='669942710' />
+    <nd ref='7761261002' />
+    <nd ref='7761261003' />
+    <nd ref='7761261012' />
+    <nd ref='7761261004' />
+    <nd ref='669942708' />
+    <nd ref='640149935' />
+    <nd ref='7761261014' />
+    <nd ref='7761261015' />
+    <nd ref='7761261019' />
+    <nd ref='7761261023' />
+    <nd ref='640149916' />
+    <nd ref='7761261021' />
+    <nd ref='7761261007' />
+    <nd ref='640149928' />
+  </way>
+  <way id='539272374' timestamp='2020-07-28T12:30:33Z' uid='100812' user='Zkir' visible='true' version='3' changeset='88620728'>
+    <nd ref='640149928' />
+    <nd ref='7761261020' />
+    <nd ref='7761261016' />
+    <nd ref='7761261009' />
+  </way>
+  <way id='831224610' timestamp='2020-07-28T12:30:33Z' uid='100812' user='Zkir' visible='true' version='1' changeset='88620728'>
+    <nd ref='7761261009' />
+    <nd ref='7761260998' />
+    <nd ref='640149931' />
+  </way>
+  <relation id='7719252' timestamp='2020-07-28T12:30:33Z' uid='100812' user='Zkir' visible='true' version='4' changeset='88620728'>
+    <member type='way' ref='50380252' role='outer' />
+    <member type='way' ref='539272374' role='outer' />
+    <member type='way' ref='831224610' role='outer' />
+    <tag k='addr:country' v='RU' />
+    <tag k='addr:housenumber' v='12/7 с8' />
+    <tag k='addr:housenumber2' v='7/12 с8' />
+    <tag k='addr:street' v='улица Малая Лубянка' />
+    <tag k='addr:street2' v='Милютинский переулок' />
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='building' v='church' />
+    <tag k='building:architecture' v='neoclassicism' />
+    <tag k='building:colour' v='yellow' />
+    <tag k='building:levels' v='2' />
+    <tag k='building:material' v='plaster' />
+    <tag k='denomination' v='catholic' />
+    <tag k='name' v='Храм Святого Людовика Французского' />
+    <tag k='religion' v='christian' />
+    <tag k='start_date' v='1827..1830' />
+    <tag k='type' v='multipolygon' />
+    <tag k='wikidata' v='Q1742812' />
+    <tag k='wikipedia' v='ru:Храм Святого Людовика Французского (Москва)' />
+  </relation>
+</osm>
