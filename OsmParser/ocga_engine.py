@@ -201,7 +201,7 @@ def split_y(osmObject, objOsmGeom, split_pattern):
 # we create geometry along edges of our roof, to create decorative elements
 def comp_border(osmObject, objOsmGeom, rule_name, distance=1, roof_only=False):
     Objects2 = []
-    if osmObject.type=="relation":
+    if osmObject.type == "relation":
         raise Exception("relation is not supported in the comp_roof_border operation")
 
     for i in range(len(osmObject.NodeRefs) - 1):
@@ -210,7 +210,7 @@ def comp_border(osmObject, objOsmGeom, rule_name, distance=1, roof_only=False):
         new_obj.type = "way"
         new_obj.split_index=i
 
-        new_obj.osmtags = copy(osmObject.osmtags)  # tags are inherited
+        copyBuildingPartTags(new_obj, osmObject) # tags are inherited
 
         lat0 = objOsmGeom.nodes[osmObject.NodeRefs[i]].lat
         lon0 = objOsmGeom.nodes[osmObject.NodeRefs[i]].lon
@@ -229,7 +229,7 @@ def comp_border(osmObject, objOsmGeom, rule_name, distance=1, roof_only=False):
         # we need to move the created shape "inwards", so that outer edges coincide.
         # todo: individual shift for each vertex/edge
         rc = (xc * xc + yc * yc) ** 0.5
-        dlat, dlon = osmObject.localXY2LatLon(xc / rc * 0.5, yc / rc * 0.5)
+        dlat, dlon = osmObject.localXY2LatLon(xc / rc * distance/2, yc / rc * distance/2)
         dlat = dlat - (osmObject.bbox.minLat + osmObject.bbox.maxLat) / 2
         dlon = dlon - (osmObject.bbox.minLon + osmObject.bbox.maxLon) / 2
 
@@ -238,7 +238,7 @@ def comp_border(osmObject, objOsmGeom, rule_name, distance=1, roof_only=False):
         new_obj.bbox.minLon = min(lon0, lon1) - dlon
         new_obj.bbox.maxLon = max(lon0, lon1) - dlon
 
-        insert_Quad(new_obj, objOsmGeom, new_obj.NodeRefs, facade_len, 1, 0, 0)
+        insert_Quad(new_obj, objOsmGeom, new_obj.NodeRefs,  facade_len, distance, 0, 0)
         new_obj.updateScopeBBox(objOsmGeom)
         copyBuildingPartTags(new_obj, osmObject)
         new_obj.osmtags["building:part"] = rule_name
