@@ -199,7 +199,7 @@ def split_y(osmObject, objOsmGeom, split_pattern):
 
 # some kind of hybrid between offset and comp(border) operations
 # we create geometry along edges of our roof, to create decorative elements
-def comp_roof_border(osmObject, objOsmGeom, rule_name, distance=1):
+def comp_border(osmObject, objOsmGeom, rule_name, distance=1, roof_only=False):
     Objects2 = []
     if osmObject.type=="relation":
         raise Exception("relation is not supported in the comp_roof_border operation")
@@ -208,6 +208,7 @@ def comp_roof_border(osmObject, objOsmGeom, rule_name, distance=1):
         new_obj = T3DObject()
         new_obj.id = getID()
         new_obj.type = "way"
+        new_obj.split_index=i
 
         new_obj.osmtags = copy(osmObject.osmtags)  # tags are inherited
 
@@ -239,10 +240,11 @@ def comp_roof_border(osmObject, objOsmGeom, rule_name, distance=1):
 
         insert_Quad(new_obj, objOsmGeom, new_obj.NodeRefs, facade_len, 1, 0, 0)
         new_obj.updateScopeBBox(objOsmGeom)
-        new_obj.osmtags = copyBuildingPartTags(osmObject)
+        copyBuildingPartTags(new_obj, osmObject)
         new_obj.osmtags["building:part"] = rule_name
-        new_obj.osmtags["min_height"] = str(
-            parseHeightValue(osmObject.osmtags["height"]) - parseHeightValue(osmObject.osmtags["roof:height"]))
+        if roof_only:
+            new_obj.osmtags["min_height"] = str(
+                osmObject.osmtags["height"] - osmObject.osmtags["roof:height"])
         Objects2.append(new_obj)
     return Objects2
 
@@ -631,7 +633,9 @@ class ZCGAContext:
     def setTag(self, key, value):
         self.current_object.osmtags[key] = str(value)
 
+    # ========================================================================
     # Scope
+    # ========================================================================
     def scope_sx(self):
         return self.current_object.scope_sx
 
@@ -655,12 +659,14 @@ class ZCGAContext:
     def rotateScope(self, zAngle):
         self.current_object.rotateScope(zAngle, self.objOsmGeom)
 
+    # ===========================================================================
     # Geometry creation
+    # ===========================================================================
     def outerRectangle(self, rule_name):
         """Creates an outer (bbox) rectangle of the current shape"""
         self.split_x((("~1", rule_name),))
 
-        if self.current_object.isBuilding:
+        if self.current_object.isBuilding():
             # we cannot really delete building outline.
             self.restore()
 
@@ -683,7 +689,9 @@ class ZCGAContext:
 
         self.unprocessed_rules_exist = True
 
+    # ===========================================================================
     # Geometry subdivision
+    # ===========================================================================
     def split_x(self, split_pattern):
         new_objects = split_x(self.current_object, self.objOsmGeom, split_pattern)
         self.nil()
@@ -706,9 +714,15 @@ class ZCGAContext:
         setParentChildRelationship(self.current_object, new_objects)
         self.unprocessed_rules_exist = True
 
-    def comp_roof_border(self, rule_name, distance=1):
-        new_objects = comp_roof_border(self.current_object, self.objOsmGeom, rule_name, distance)
+    def comp_roof_border(self, distance, rule_name ):
+        new_objects = comp_border(self.current_object, self.objOsmGeom, rule_name, distance, True)
+        self.nil()
+        self.Objects2.extend(new_objects)
+        setParentChildRelationship(self.current_object, new_objects)
+        self.unprocessed_rules_exist = True
 
+    def comp_border(self, distance, rule_name):
+        new_objects = comp_border(self.current_object, self.objOsmGeom, rule_name, distance)
         self.nil()
         self.Objects2.extend(new_objects)
         setParentChildRelationship(self.current_object, new_objects)
@@ -720,7 +734,9 @@ class ZCGAContext:
         setParentChildRelationship(self.current_object, new_objects)
         self.unprocessed_rules_exist = True
 
-        # Transformations
+    # ===========================================================================
+    # Transformations
+    # ===========================================================================
     def scale(self, sx, sy, sz=None):
         scale(self.current_object, self.objOsmGeom, sx, sy, sz)
 
@@ -730,26 +746,42 @@ class ZCGAContext:
     def rotate(self, rz):
         raise Exception("rotate operation is non implemented yet")
 
+    # ===========================================================================
     # Geometry modifications
+    # ===========================================================================
     def bevel(self, r, node_list=None):
         """bevel operation -- """
         bevel(self.current_object, self.objOsmGeom, r, node_list)
 
-    # flow operations
-    # restores the current object. Can be usefull if it was destuctred by split or comp operation
+    # ===========================================================================
+    # flow control operations
+    # ===========================================================================
+    def massModel(self, rule_name):
+        """Creates a building part with the height specified in the parent building
+           applicable only to building outline"""
+        if not self.current_object.isBuilding():
+            raise Exception("massModel operation is allowed only for buildings")
+
+        self.split_z_preserve_roof((("~1", rule_name),))
+        self.restore()
+
+
+
+
     def restore(self):
+        """restores the current shape. Can be useful if it was destructed by split or comp operation"""
         osmObject=self.current_object
         if self.Objects2.count(osmObject) == 0:
             self.Objects2.append(osmObject)
 
     # deletes the current shape from the list of the shapes
-    # useful to create holes via split operations
     def nil(self):
-        #safely delete the object from the list of existing shapes
+        """safely deletes the object from the list of existing shapes
+            useful to create holes via split operations"""
         if self.Objects2.count(self.current_object) > 0:
             self.Objects2.remove(self.current_object)
 
-        #we also need to delete the object from the list of its parent building
+        # we also need to delete the object from the list of its parent building
         parent_building=self.current_object.parent_building
         if parent_building is not None:
             if parent_building.parts.count(self.current_object)>0:

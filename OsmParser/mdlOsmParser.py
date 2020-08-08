@@ -59,6 +59,7 @@ class T3DObject:
 
         self.relative_Ox = 0
         self.relative_Oy = 0
+        self.split_index = 0
 
         self.rules_processed = False
 

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='1490199576' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.7252217' lon='37.5940285' />
+  <node id='1490199577' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.7252189' lon='37.5940503' />
+  <node id='1490199578' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.725221' lon='37.5940724' />
+  <node id='1490199579' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.7252397' lon='37.5939983' />
+  <node id='1490199580' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.7252734' lon='37.5940938' />
+  <node id='1490199582' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.7252807' lon='37.5940755' />
+  <node id='1490199583' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.7252502' lon='37.5941094' />
+  <node id='1490199584' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.7252521' lon='37.5939946' />
+  <node id='1490199588' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.7252747' lon='37.5940126' />
+  <node id='1490199590' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.7252277' lon='37.5940914' />
+  <node id='1490199591' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.7252814' lon='37.5940316' />
+  <node id='1490199592' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.7252835' lon='37.5940537' />
+  <node id='1490199593' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.7252379' lon='37.5941044' />
+  <node id='1490199594' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.725229' lon='37.5940102' />
+  <node id='1490199595' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.7252627' lon='37.5941057' />
+  <node id='1490199596' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='5' changeset='89140000' lat='55.7252644' lon='37.5939996' />
+  <way id='135732792' timestamp='2020-08-08T22:13:54Z' uid='100812' user='Zkir' visible='true' version='7' changeset='89140000'>
+    <nd ref='1490199596' />
+    <nd ref='1490199584' />
+    <nd ref='1490199579' />
+    <nd ref='1490199594' />
+    <nd ref='1490199576' />
+    <nd ref='1490199577' />
+    <nd ref='1490199578' />
+    <nd ref='1490199590' />
+    <nd ref='1490199593' />
+    <nd ref='1490199583' />
+    <nd ref='1490199595' />
+    <nd ref='1490199580' />
+    <nd ref='1490199582' />
+    <nd ref='1490199592' />
+    <nd ref='1490199591' />
+    <nd ref='1490199588' />
+    <nd ref='1490199596' />
+    <tag k='amenity' v='shelter' />
+    <tag k='building' v='gazebo' />
+    <tag k='description' v='Ротонда' />
+    <tag k='start_date' v='1802' />
+    <tag k='tourism' v='attraction' />
+  </way>
+</osm>

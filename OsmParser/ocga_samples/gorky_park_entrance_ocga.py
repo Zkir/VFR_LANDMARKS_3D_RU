@@ -53,7 +53,7 @@ def checkRulesMy(ctx):
         # for each edge of the tholobate we create kokoshnik.
         # remove the kokoshniks tag, to prevent dead loops.
         ctx.setTag("building:roof:kokoshniks", "")
-        ctx.comp_roof_border("kokoshnik_pre")
+        ctx.comp_border("kokoshnik_pre")
         ctx.restore()
 
     elif ctx.getTag("building:part") == "kokoshnik_pre":

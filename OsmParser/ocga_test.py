@@ -3,6 +3,7 @@ from ocga_engine import ocga_process
 from ocga_samples.main_cathedral_of_russian_army_ocga import checkRulesMy as checkRules1
 from ocga_samples.church_of_st_louis_ocga import checkRulesMy as checkRules2
 from ocga_samples.gorky_park_entrance_ocga import checkRulesMy as checkRules3
+from ocga_samples.gorky_park_rotunda_ocga import checkRulesMy as checkRules4
 
 print("ocga test")
 SAMPLES_DIR="d:\\_VFR_LANDMARKS_3D_RU\\OsmParser\\ocga_samples"
@@ -22,5 +23,9 @@ ocga_process(SAMPLES_DIR + "/church_of_st_louis.osm",
 ocga_process(SAMPLES_DIR + "/gorky_park_entrance.osm",
              OUTPUT_DIR + "/gorky_park_entrance-rewrite.osm",
              checkRules3)
+
+ocga_process(SAMPLES_DIR + "/gorky_park_rotunda.osm",
+             OUTPUT_DIR + "/gorky_park_rotunda-rewrite.osm",
+             checkRules4)
 
 print("done")

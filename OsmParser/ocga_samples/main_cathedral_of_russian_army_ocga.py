@@ -1,4 +1,5 @@
 """
+OCGA/PY rules example
 Main Cathedral of the Russian Armed Forces
 (c) Zkir 2020
 """
@@ -17,8 +18,6 @@ def checkRulesMy(ctx):
         # we will start from the rectangle and will rebuild the form
         # basing of this very algorithm
         ctx.outerRectangle("mass_model")
-
-        #ctx.nil()
 
     if ctx.getTag("building:part") == "mass_model":
         ctx.split_x((("~1","belltower_block"),(ctx.scope_sy()+5, "main_block_pre")))
