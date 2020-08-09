@@ -6,9 +6,9 @@ Gorky Park Rotunda
 
 def checkRulesMy(ctx):
     if ctx.getTag("building") != "":
-        height =  ctx.scope_sx()*1.3
-        print (height)
-        ctx.setTag("height", height)
+        if ctx.scope_sz() == 0:
+            height =  ctx.scope_sx()*1.3
+            ctx.setTag("height", height)
         ctx.massModel("mass_model")
 
     if ctx.getTag("building:part") == "mass_model":

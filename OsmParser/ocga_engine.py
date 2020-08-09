@@ -822,7 +822,7 @@ class ZCGAContext:
 
 
 # =============== main part
-def ocga_process(input_file, output_file, checkRulesMy):
+def ocga_process(input_file, output_file, checkRulesMy, updatable=False, rebuild_outline=True):
     print("processing file ", input_file)
 
     objOsmGeom, Objects = readOsmXml(input_file)
@@ -832,14 +832,14 @@ def ocga_process(input_file, output_file, checkRulesMy):
 
     # todo: we need to rebuild building outline, because it should match parts
     # unlike CE, where building outline is not really used.
-
-    ctx.Objects=rebuildBuildingOutline(ctx.Objects, ctx.objOsmGeom)
+    if rebuild_outline:
+        ctx.Objects=rebuildBuildingOutline(ctx.Objects, ctx.objOsmGeom)
 
     # todo: also we need to optimize geometry somehow, remove duplicated nodes and create multypolygons
 
     # round height
     roundHeight(ctx.Objects)
-    writeOsmXml(ctx.objOsmGeom, ctx.Objects , output_file, False)
+    writeOsmXml(ctx.objOsmGeom, ctx.Objects, output_file, updatable)
 
     print("Done")
 
