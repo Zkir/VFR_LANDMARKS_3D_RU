@@ -6,7 +6,7 @@ Gorky Park Rotunda
 
 def checkRulesMy(ctx):
     if ctx.getTag("building") != "":
-        ctx.setTag("height", 8)
+        ctx.setTag("height", 7.25)
         ctx.massModel("mass_model")
 
     if ctx.getTag("building:part") == "mass_model":
@@ -15,10 +15,10 @@ def checkRulesMy(ctx):
         ctx.setTag("building:material", "plaster")
 
         ctx.split_z_preserve_roof((("0.75","stilobate"),
-                                    ("~10", "collonade"),
+                                    ("~9.5", "collonade"),
                                     ("~1.5", "entablement"),
                                     ("~0.3", "cornice"),
-                                    ("~4.2", "roof")))
+                                    ("~4.7", "roof")))
 
     if ctx.getTag("building:part") == "stilobate":
         ctx.setTag("roof:colour", "#101010")
@@ -51,7 +51,8 @@ def checkRulesMy(ctx):
 
     if ctx.getTag("building:part") == "collonade":
         ctx.scale("'0.7", "'0.7")
-        ctx.comp_border(0.5, "column_pre")
+
+        ctx.comp_border(ctx.current_object.size/7.3, "column_pre")
 
     if ctx.getTag("building:part") == "entablement":
         ctx.scale("'0.7", "'0.7")
@@ -72,14 +73,14 @@ def checkRulesMy(ctx):
         ctx.setTag("roof:height", roof_height)
 
     if ctx.getTag("building:part") == "roof4":
-        ctx.scale("'0.3","'0.3","'2")
+        ctx.scale("'0.2","'0.2","'2")
         ctx.translate(0,0,"'-0.7")
 
     if ctx.getTag("building:part") == "column_pre":
         ctx.scale(ctx.scope_sy(),"'1")
         ctx.scale("'1.2", "'1.2")
         if ctx.current_object.split_index%2 == 0:
-            ctx.split_z_preserve_roof((("~1","column_trunk_pre"),(ctx.scope_sx()/5,"column_top1")))
+            ctx.split_z_preserve_roof((("~1", "column_trunk_pre"), (ctx.scope_sx()/5,"column_top1")))
         else:
             ctx.nil()
 
