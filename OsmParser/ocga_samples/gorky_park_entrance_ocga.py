@@ -38,7 +38,7 @@ def checkRulesMy(ctx):
 
     elif ctx.getTag("building:part") == "porch_column_main":
         # osmObject.osmtags["building:colour"] = "green"
-        ctx.primitiveCircle("porch_column", 12, min(ctx.scope_sx(), ctx.scope_sy()) / 3)
+        ctx.primitiveCylinder(12, min(ctx.scope_sx(), ctx.scope_sy()) / 3)
 
     elif ctx.getTag("building:part") == "porch_top":
         ctx.setTag("building:colour","blue")
@@ -208,7 +208,7 @@ def checkRulesMy(ctx):
     elif ctx.getTag("building:part") == "semi_column_block":
         ctx.setTag("building:part", "no")
         ctx.rotateScope(90)
-        # split(x){ {~sy:porch_column_pre| ~sy:Nil}* | ~sy:porch_column_pre }
+
         ctx.split_x( (("~1", "semi_column_pre"),
                       ("~0.2", "NIL"),
                       ("~1", "semi_column_pre"),

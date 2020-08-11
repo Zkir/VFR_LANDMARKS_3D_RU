@@ -72,7 +72,7 @@ def checkRulesMy(ctx):
         ctx.scale(ctx.scope_sx() - 1, ctx.scope_sy() - 1,(ctx.scope_sy() - 1)/2*1.2)
         ctx.setTag("roof:shape", "dome")
         ctx.setTag("roof:height", ctx.scope_sy()/2 )
-        ctx.primitiveCircle("bell_tower_dome")
+        ctx.primitiveCylinder() #"bell_tower_dome"
 
     # portico
     elif ctx.getTag("building:part") == "portico":
@@ -111,7 +111,7 @@ def checkRulesMy(ctx):
 
     elif ctx.getTag("building:part") == "porch_column_main":
         # osmObject.osmtags["building:colour"] = "green"
-        ctx.primitiveCircle("porch_column", 12, min(ctx.scope_sx(), ctx.scope_sy()) / 3)
+        ctx.primitiveCylinder(12, min(ctx.scope_sx(), ctx.scope_sy()) / 3) # "porch_column"
 
     elif ctx.getTag("building:part") == "portico_top":
         ctx.scale (ctx.scope_sx()+0.5, ctx.scope_sy()+1.0)
@@ -194,7 +194,7 @@ def checkRulesMy(ctx):
         ctx.setTag("height",10)
         ctx.setTag("roof:shape", "half-dome")
         ctx.setTag("roof:height", "3")
-        ctx.primitiveHalfCircle("apse", 8 )
+        ctx.primitiveHalfCylinder(8)
 
 
     elif ctx.getTag("building:part") == "side_part_1_pre":

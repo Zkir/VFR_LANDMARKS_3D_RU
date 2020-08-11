@@ -289,14 +289,15 @@ def insert_Quad(osmObject, objOsmGeom, NodeRefs, width, length, x0, y0):
 
 # todo: insert_circle should be NON-DESTRUCTIVE OPERATION
 # object remain, but geometry is changed
-def primitiveCircle(osmObject, objOsmGeom, rule_name, nVertices=12, radius=None):
-    Objects2 = []
-    new_obj = T3DObject()
-    new_obj.id = getID()
-    new_obj.type = "way"
+def primitiveCircle(osmObject, objOsmGeom,  nVertices=12, radius=None):
 
-    new_obj.osmtags = copy(osmObject.osmtags) #tags are inherited
-    new_obj.osmtags["building:part"] = rule_name
+    new_obj = osmObject
+    #new_obj = T3DObject()
+    #new_obj.id = getID()
+    #new_obj.type = "way"
+    new_obj.NodeRefs = []
+    if new_obj.type == "relation":
+        raise Exception ("relation is not supported")
 
     if radius is None:
         R = min(osmObject.scope_sx, osmObject.scope_sy)/2 #osmObject.size / 3
@@ -323,18 +324,16 @@ def primitiveCircle(osmObject, objOsmGeom, rule_name, nVertices=12, radius=None)
     new_obj.updateBBox(objOsmGeom)  # bbox is updated
     new_obj.updateScopeBBox(objOsmGeom)  # also Bbbox in local coordinates
 
-    Objects2.append(new_obj)
-    return Objects2
 
+def primitiveHalfCircle(osmObject, objOsmGeom, nVertices=12, radius=None):
 
-def primitiveHalfCircle(osmObject, objOsmGeom, rule_name, nVertices=12, radius=None):
-    Objects2 = []
-    new_obj = T3DObject()
-    new_obj.id = getID()
-    new_obj.type = "way"
-
-    new_obj.osmtags = copy(osmObject.osmtags) #tags are inherited
-    new_obj.osmtags["building:part"] = rule_name
+    new_obj = osmObject
+    # new_obj = T3DObject()
+    # new_obj.id = getID()
+    # new_obj.type = "way"
+    new_obj.NodeRefs = []
+    if new_obj.type == "relation":
+        raise Exception("relation is not supported")
 
     if radius is None:
         R = min(osmObject.scope_sx, osmObject.scope_sy)
@@ -360,9 +359,7 @@ def primitiveHalfCircle(osmObject, objOsmGeom, rule_name, nVertices=12, radius=N
     new_obj.scope_rz = osmObject.scope_rz  # coordinate system orientation is inherited, but centroid is moved and
     new_obj.updateBBox(objOsmGeom)  # bbox is updated
     new_obj.updateScopeBBox(objOsmGeom)  # also Bbbox in local coordinates
-
-    Objects2.append(new_obj)
-    return Objects2
+    return
 
 
 def parseRelativeValue(val, abs_size):
@@ -670,24 +667,17 @@ class ZCGAContext:
             # we cannot really delete building outline.
             self.restore()
 
-    def primitiveCircle(self, rule_name, nVertices=12, radius=None):
-        new_objects = primitiveCircle(self.current_object, self.objOsmGeom, rule_name, nVertices,radius)
+    def primitiveCylinder(self, nVertices=12, radius=None):
+        """replaces the geometry of the current object with cylinder/circle"""
+
+        primitiveCircle(self.current_object, self.objOsmGeom, nVertices,radius)
         if radius is None:
-            scale(new_objects[0], self.objOsmGeom, self.current_object.scope_sx,self.current_object.scope_sy)
-        self.nil()
-        self.Objects2.extend(new_objects)
-        setParentChildRelationship (self.current_object, new_objects)
+            scale(self.current_object, self.objOsmGeom, self.current_object.scope_sx,self.current_object.scope_sy)
 
-        self.unprocessed_rules_exist = True
-
-    def primitiveHalfCircle(self, rule_name, nVertices=12, radius=None):
-        new_objects = primitiveHalfCircle(self.current_object, self.objOsmGeom, rule_name, nVertices,radius)
-        scale(new_objects[0], self.objOsmGeom, self.current_object.scope_sx,self.current_object.scope_sy)
-        self.nil()
-        self.Objects2.extend(new_objects)
-        setParentChildRelationship(self.current_object, new_objects)
-
-        self.unprocessed_rules_exist = True
+    def primitiveHalfCylinder(self, nVertices=12, radius=None):
+        """replaces the geometry of the current object with half of cylinder/circle"""
+        primitiveHalfCircle(self.current_object, self.objOsmGeom, nVertices,radius)
+        scale(self.current_object, self.objOsmGeom, self.current_object.scope_sx,self.current_object.scope_sy)
 
     # ===========================================================================
     # Geometry subdivision

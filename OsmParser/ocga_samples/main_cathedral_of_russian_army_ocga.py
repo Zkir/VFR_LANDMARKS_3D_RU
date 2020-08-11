@@ -61,9 +61,7 @@ def checkRulesMy(ctx):
 
     if ctx.getTag("building:part") == "belltower_layer3_pre":
         ctx.scale("'0.5", "'0.5")
-        ctx.primitiveCircle("belltower_layer3")
-
-    if ctx.getTag("building:part") == "belltower_layer3":
+        ctx.primitiveCylinder()
         ctx.setTag("roof:shape", "dome")  # onion
         ctx.setTag("roof:height", ctx.scope_sx() / 2)
         ctx.comp_roof("belltower_layer3a")
@@ -90,7 +88,7 @@ def checkRulesMy(ctx):
         ctx.setTag("roof:height", "5")
         ctx.setTag("roof:material", "glass")
         ctx.setTag("roof:colour", "gray")
-        ctx.primitiveHalfCircle("apse")
+        ctx.primitiveHalfCylinder()
 
     if ctx.getTag("building:part") == "apse_2_pre":
         ctx.translate("-4.30",0)
@@ -99,7 +97,7 @@ def checkRulesMy(ctx):
         ctx.setTag("roof:height", "6")
         ctx.setTag("roof:colour", "gold")
         ctx.setTag("roof:material", "metal")
-        ctx.primitiveHalfCircle("apse")
+        ctx.primitiveHalfCylinder()
 
     if ctx.getTag("building:part") == "west_apse_block":
         ctx.scale("'1", "'0.4")
@@ -165,7 +163,7 @@ def checkRulesMy(ctx):
     if ctx.getTag("building:part") == "main_head_layer2_pre":
         ctx.scale("'0.8", "'0.8")
         ctx.rotateScope(22.5)
-        ctx.primitiveCircle("main_head_layer2",8)
+        ctx.primitiveCylinder(8)
 
     if ctx.getTag("building:part") == "side_head_L1":
         ctx.split_x((("~1","side_head"),))
@@ -200,9 +198,7 @@ def checkRulesMy(ctx):
         ctx.bevel(1.5)
 
     if ctx.getTag("building:part") == "side_head_onion_base_pre":
-        ctx.primitiveCircle("side_head_onion_base")
-
-    if ctx.getTag("building:part") == "side_head_onion_base":
+        ctx.primitiveCylinder()
         ctx.scale("'0.8", "'0.8")
         ctx.setTag("roof:shape", "dome")  # onion
         ctx.setTag("roof:height", ctx.scope_sx()/2)

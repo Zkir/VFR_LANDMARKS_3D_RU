@@ -88,9 +88,7 @@ def checkRulesMy(ctx):
             ctx.nil()
 
     if ctx.getTag("building:part") == "column_trunk_pre":
-        ctx.primitiveCircle("column_pre2")
-
-    if ctx.getTag("building:part") == "column_pre2":
+        ctx.primitiveCylinder()
         ctx.split_z_preserve_roof((("~1", "column_trunk"), (ctx.scope_sx() / 10, "column_top2")))
 
     if ctx.getTag("building:part") == "column_trunk":
