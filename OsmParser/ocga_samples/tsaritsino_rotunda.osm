@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='1209042149' action='modify' timestamp='2016-03-13T08:08:32Z' uid='382604' user='MosKartograf' visible='true' version='4' changeset='37795465' lat='55.60884673955' lon='37.68737506017' />
+  <node id='1209042151' action='modify' timestamp='2016-03-13T08:08:31Z' uid='382604' user='MosKartograf' visible='true' version='4' changeset='37795465' lat='55.60885588549' lon='37.68741155946' />
+  <node id='1209042167' action='modify' timestamp='2016-03-13T08:08:31Z' uid='382604' user='MosKartograf' visible='true' version='4' changeset='37795465' lat='55.60885485028' lon='37.68733780173' />
+  <node id='1209042182' action='modify' timestamp='2016-03-13T08:08:31Z' uid='382604' user='MosKartograf' visible='true' version='4' changeset='37795465' lat='55.60887546651' lon='37.68732160962' />
+  <node id='1209042196' action='modify' timestamp='2017-02-26T03:10:44Z' uid='3580412' user='Alexander-II' visible='true' version='5' changeset='46407018' lat='55.60890313491' lon='37.6873526082' />
+  <node id='1209042202' action='modify' timestamp='2017-02-26T03:10:44Z' uid='3580412' user='Alexander-II' visible='true' version='5' changeset='46407018' lat='55.60887693053' lon='37.68742591881' />
+  <node id='1209042205' action='modify' timestamp='2017-02-26T03:10:44Z' uid='3580412' user='Alexander-II' visible='true' version='5' changeset='46407018' lat='55.60889754675' lon='37.6874097267' />
+  <node id='1209042207' action='modify' timestamp='2017-02-26T03:10:44Z' uid='3580412' user='Alexander-II' visible='true' version='5' changeset='46407018' lat='55.60890369517' lon='37.6873925256' />
+  <node id='1209042222' action='modify' timestamp='2016-03-13T08:08:31Z' uid='382604' user='MosKartograf' visible='true' version='4' changeset='37795465' lat='55.60890565747' lon='37.68737246825' />
+  <node id='1209042224' action='modify' timestamp='2016-03-13T08:08:31Z' uid='382604' user='MosKartograf' visible='true' version='4' changeset='37795465' lat='55.60889651154' lon='37.68733596896' />
+  <node id='1209042230' action='modify' timestamp='2017-02-26T03:10:44Z' uid='3580412' user='Alexander-II' visible='true' version='5' changeset='46407018' lat='55.60884870185' lon='37.68735500282' />
+  <node id='1209042234' action='modify' timestamp='2017-02-26T03:10:44Z' uid='3580412' user='Alexander-II' visible='true' version='5' changeset='46407018' lat='55.60888679569' lon='37.68732508371' />
+  <node id='1209042242' action='modify' timestamp='2017-02-26T03:10:44Z' uid='3580412' user='Alexander-II' visible='true' version='5' changeset='46407018' lat='55.60886424877' lon='37.68732607559' />
+  <node id='1209042245' action='modify' timestamp='2017-02-26T03:10:44Z' uid='3580412' user='Alexander-II' visible='true' version='5' changeset='46407018' lat='55.60888814826' lon='37.68742145283' />
+  <node id='4052978257' action='modify' timestamp='2017-02-26T03:10:47Z' uid='3580412' user='Alexander-II' visible='true' version='3' changeset='46407018' lat='55.60884926211' lon='37.68739492022' />
+  <node id='4052978400' action='modify' timestamp='2017-02-26T03:10:47Z' uid='3580412' user='Alexander-II' visible='true' version='3' changeset='46407018' lat='55.60886560135' lon='37.68742244472' />
+  <way id='104820755' timestamp='2020-08-11T20:39:58Z' uid='100812' user='Zkir' visible='true' version='18' changeset='89269242'>
+    <nd ref='1209042196' />
+    <nd ref='1209042224' />
+    <nd ref='1209042234' />
+    <nd ref='1209042182' />
+    <nd ref='1209042242' />
+    <nd ref='1209042167' />
+    <nd ref='1209042230' />
+    <nd ref='1209042149' />
+    <nd ref='4052978257' />
+    <nd ref='1209042151' />
+    <nd ref='4052978400' />
+    <nd ref='1209042202' />
+    <nd ref='1209042245' />
+    <nd ref='1209042205' />
+    <nd ref='1209042207' />
+    <nd ref='1209042222' />
+    <nd ref='1209042196' />
+    <tag k='addr:housenumber' v='1 с17' />
+    <tag k='addr:street' v='Дольская улица' />
+    <tag k='alt_name' v='Храм Цереры' />
+    <tag k='amenity' v='shelter' />
+    <tag k='building' v='yes' />
+    <tag k='building:architecture' v='neoclassicism' />
+    <tag k='building:colour' v='white' />
+    <tag k='building:material' v='plaster' />
+    <tag k='historic' v='yes' />
+    <tag k='name' v='Павильон Золотой сноп' />
+    <tag k='start_date' v='1805' />
+    <tag k='website' v='http://tsaritsyno-museum.ru/park/locations/besedka-hram-tserery/' />
+    <tag k='wikidata' v='Q61983153' />
+  </way>
+</osm>
