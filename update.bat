@@ -20,7 +20,6 @@ IF EXIST "%WORK_FOLDER%\%QUADRANT%_new.pbf" (
   md "%WORK_FOLDER%"
   md "%WORK_FOLDER%/../osm_3dmodels"
   osmconvert %PLANET% -B=%BBOX% -o="%WORK_FOLDER%\%QUADRANT%_new.pbf"
-  rem goto end
 )
 
 ren "%WORK_FOLDER%\%QUADRANT%_new.pbf" "%QUADRANT%.pbf"

@@ -186,7 +186,12 @@ def readOsmXml(strSrcOsmFile):
             osmObject.size = objOsmGeom.CalculateWaySize(intWayNo)
 
         if strTag == '/relation':
-            osmObject.size = objOsmGeom.CalculateRelationSize(osmObject.WayRefs, osmObject.way_count)
+
+            try:
+                osmObject.size = objOsmGeom.CalculateRelationSize(osmObject.WayRefs, osmObject.way_count)
+            except:
+                print('Relation ' +  osmObject.id + ' : unable to determine size')
+                osmObject.size = 0
             # bbox is already calculated above
 
         # Closing node

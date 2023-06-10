@@ -248,6 +248,8 @@ class clsOsmGeometry():
                     else:
                         PrevFirstNodeId = firstNodeId
                         PrevLastNodeId = lastNodeId
+                    if len(w_NodeRefs)<1:
+                        print("Relation is strangely broken")
                     firstNodeId = w_NodeRefs[0]
                     lastNodeId = w_NodeRefs[w_node_count - 1]
                     if k == 0:

@@ -15,4 +15,7 @@
 /OsmParser/__pycache__/*.*
 *.pyc
 
+/3dcheck.bak
+/work_folder.bak
+
 
