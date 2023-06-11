@@ -26,4 +26,4 @@ work_folder\Quadrants.dat: | work_folder
 	
 .PHONY: everything_else 
 everything_else: d:\_planet.osm\russia-latest.o5m | work_folder work_folder\Quadrants.dat
-	osmparser\planner.py	
+	python osmparser\planner.py	
