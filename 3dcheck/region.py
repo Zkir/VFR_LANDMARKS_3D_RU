@@ -125,7 +125,7 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     print( '<h2>Объекты</h2>'+ '\n')
     print( '<p><small>Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</small><p>'+ '\n')
     print( '<table class="sortable">'+ '\n')
-    print( '<tr><th>OSM ID</th><th>Название</th><th>Год постройки</th><th>Temples.ru</th><th>Размер, м</th><th>Высота, м</th><th>Цвет</th><th>Материал</th>' + '<th>Стиль</th><th>Город</th> <th>Район</th> <th>Область</th><th>OSM 3D </th><th>Число частей</th><th>J</th></tr>'+ '\n')
+    print( '<tr><th>OSM ID</th><th>Название</th><th>Год постройки</th><th>Temples.ru</th><th>Размер, м</th><th>Высота, м</th><th>Цвет</th><th>Материал</th>' + '<th>Стиль</th><th>Город</th> <th>Район</th> <th>Область</th><th>OSM 3D </th><th>Число частей</th><th>Послед. редактир.</th><th>J</th></tr>'+ '\n')
    
     for i in range(len(cells)):
 
@@ -195,6 +195,10 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
             print('<td>' + cells[i][22].replace('область', 'обл') + '</td>'+ '\n')
             print('<td><a href="' + strF4url + '">' + cells[i][23] + '</a></td>'+ '\n')
             print('<td>' + cells[i][24] + '</td>' )
+            if len(cells[i])>25:
+                print('<td>' + cells[i][25] + '</td>' )
+            else:
+                print('<td>' + "" + '</td>' )
             print('<td><a href="' + strJOSMurl + '" target = "josm" >' + 'J' + '</a></td>'+ '\n')
             print('</tr>'+ '\n')
     print( '</table>'+ '\n')

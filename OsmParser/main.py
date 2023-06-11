@@ -39,8 +39,9 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFi
         blnFence = (osmObject.tagBarrier == 'fence') or (osmObject.tagBarrier == 'wall')
 
         # Rewrite osmObject as osm file!
+        touched_date = ""
         if not blnFence:
-            heightbyparts, numberofparts = rewriteOsmFile(osmObject, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH)
+            heightbyparts, numberofparts, touched_date = rewriteOsmFile(osmObject, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH)
             osmObject.blnHasBuildingParts = (heightbyparts > 0)
 
             if heightbyparts > osmObject.dblHeight:
@@ -49,6 +50,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFi
                 intModelsCreated = intModelsCreated + 1
                 print('3d model created ' + Left(osmObject.type, 1) + ':' + osmObject.id + ' ' + safeString(
                     osmObject.name) + ' ' + safeString(osmObject.descr))
+                print(' last edit date: '+touched_date)
 
         # fill report
         strBuildingType = calculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType,
@@ -71,7 +73,8 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFi
                  + parseStartDateValue( osmObject.tagStartDate) + '|' + osmObject.tagWikipedia + '|'
                  + osmObject.tagAddrStreet + '|' + osmObject.tagAddrHouseNumber + '|' + osmObject.tagAddrCity + '|'
                  + osmObject.tagAddrDistrict + '|' + osmObject.tagAddrRegion + '|'
-                 + str(osmObject.blnHasBuildingParts and (osmObject.dblHeight > 0)) + '|' + str(numberofparts)
+                 + str(osmObject.blnHasBuildingParts and (osmObject.dblHeight > 0)) + '|' + str(numberofparts) + '|'
+                 + touched_date
                  + '\n')
     fo.close()
 
@@ -276,13 +279,10 @@ def rewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
     intNodeNo = 0
     intWayNo = 0
     blnCompleteObject = False
-    strOutputOsmFileName = ""
+    touched_date = "1900-01-01"
 
-    fo = 0
 
-    blnHasBuildingParts = False
 
-    height = 0
     objOsmGeom = clsOsmGeometry()
     objXML = clsXMLparser()
     blnHasBuildingParts = False
@@ -304,6 +304,7 @@ def rewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
             #common for all object types
             obj_id = objXML.GetAttribute('id')
             obj_ver = objXML.GetAttribute('version')
+            obj_date = objXML.GetAttribute('timestamp')
             # something should be cleared
             osmtags =[]
             tag_count = 0
@@ -336,6 +337,8 @@ def rewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
                 #or node id belongs to set of known nodes!
                 objOsmGeom.AddNode(obj_id, node_lat, node_lon)
                 fo.write( '<node id="' + obj_id + '" version="' + obj_ver + '"  lat="' + str(node_lat) + '" lon="' + str(node_lon) + '"/>'+ '\n')
+                if obj_date > touched_date:
+                    touched_date = obj_date
         #we need to find whole ways, because we are interested in ways inside outline!
         if strTag == 'nd':
             node_id = objXML.GetAttribute('ref')
@@ -377,6 +380,8 @@ def rewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
                         print("Error: building part has zero heigh. W:" + str(obj_id) )
                     if obj_height > height:
                         height = obj_height
+                if obj_date > touched_date:
+                    touched_date = obj_date
         if strTag == '/relation':
             if  ( blnCompleteObject )  and  ( way_count > 0 ) :
                 fo.write( '<relation id="' + obj_id + '" version="' + obj_ver + '" >' + '\n')
@@ -394,13 +399,15 @@ def rewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
                         print("Error: building part has zero heigh. R:" + str(obj_id) )
                     if obj_height > height:
                         height = obj_height
+                if obj_date > touched_date:
+                    touched_date=obj_date
     fo.write( '</osm>'+ '\n')
     fo.close()
     objXML.CloseFile()
 
     if not ( blnHasBuildingParts and  ( height > 0 ) ) :
         Kill(strOutputOsmFileName)
-    fn_return_value = [height, numberofparts]
+    fn_return_value = [height, numberofparts,touched_date]
     return fn_return_value
 
 
