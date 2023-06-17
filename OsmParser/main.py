@@ -79,7 +79,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFi
     fo.close()
 
     # miracle: update totals file
-    totals = loadDatFile("d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\Quadrants.dat")
+    totals = loadDatFile(BUILD_PATH + '\\work_folder\\Quadrants.dat')
     # filter by quadrant name
     for i in range(len(totals)):
         if totals[i][0] == strQuadrantName:
@@ -88,7 +88,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFi
             totals[i][4] = getTimeStamp()
             break
 
-    saveDatFile(totals, "d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\Quadrants.dat")
+    saveDatFile(totals, BUILD_PATH + '\\work_folder\\Quadrants.dat')
     print(str(j) + ' objects detected, ' + str(intModelsCreated) + ' 3d models created')
 
 
@@ -417,27 +417,22 @@ def processQuadrant(strQuadrantName):
     t1 = time.time()
     strWorkingFolder = ""
 
-    strWorkingFolder = BUILD_PATH + '\\work_folder\\' + strQuadrantName
+    strWorkingFolder = BUILD_PATH + '\\work_folder\\' ### + strQuadrantName
 
-    subprocess.call(BUILD_PATH + '\\cleanup.bat', cwd=strWorkingFolder + '\\osm_3dmodels')
-
-    objOsmGeom, Objects = readOsmXml(strWorkingFolder + '\\osm_data\\objects-all.osm')
+    objOsmGeom, Objects = readOsmXml(strWorkingFolder + '\\10_osm_extracts\\'+ strQuadrantName + '\\objects-all.osm')
     processBuildings(objOsmGeom, Objects, strQuadrantName,
-                     strWorkingFolder + '\\osm_data\\objects-with-parts.osm',
-                     strWorkingFolder + '\\' + strQuadrantName + '.dat',
-                     strWorkingFolder + '\\osm_3dmodels'
+                     strWorkingFolder + '\\10_osm_extracts\\'+ strQuadrantName +'\\objects-with-parts.osm',
+                     strWorkingFolder + '\\10_osm_extracts\\' + strQuadrantName + '.dat',
+                     strWorkingFolder + '\\20_osm_3dmodels'
                      )
     t2 = time.time()
     print("Quadrant " + strQuadrantName + " processed in "+str(t2-t1)+" seconds")
 
-    subprocess.call(BUILD_PATH + '\\convert-all-obj.bat', cwd=strWorkingFolder + '\\osm_3dmodels')
-    subprocess.call(BUILD_PATH + '\\convert-all-x3d.bat', cwd=strWorkingFolder + '\\osm_3dmodels')
-    # subprocess.call(BUILD_PATH + '\\upload.bat', cwd=strWorkingFolder + '\\osm_3dmodels')
+        
     t3=time.time()
-    print ("Osm models converted to obj/x3d in " + str(t3-t2) +" seconds")
+    ###print ("Osm models converted to obj/x3d in " + str(t3-t2) +" seconds")
 
-
-    strInputFile = "d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\" + strQuadrantName + "\\" + strQuadrantName + ".dat"
+    strInputFile = strWorkingFolder + '\\10_osm_extracts\\' + strQuadrantName + '.dat'
     DoGeocodingForDatFile(strInputFile)
     #CreateRegionSummaryPage(strQuadrantName, strInputFile, True, True )
     #CreateIndexPage("d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\Quadrants.dat")

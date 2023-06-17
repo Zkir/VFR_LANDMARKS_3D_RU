@@ -1,6 +1,6 @@
 @echo off
 echo Updating planet osm
-SET WORK_FOLDER=d:\_planet.osm
+SET WORK_FOLDER=%1
 cd %WORK_FOLDER%
 
 

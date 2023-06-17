@@ -1,18 +1,14 @@
 @echo off
-set WORK_FOLDER=d:\_VFR_LANDMARKS_3D_RU\work_folder
 
-rem SET QUADRANT=+56+038
 SET QUADRANT=%1
 
-set WORK_FOLDER=%WORK_FOLDER%\%QUADRANT%\osm_data
+set WORK_FOLDER=work_folder\10_osm_extracts\%QUADRANT%
 
-SET SOURCE_FILE="%WORK_FOLDER%\%QUADRANT%.o5m"
+SET SOURCE_FILE="%work_folder%\%QUADRANT%.o5m"
 
 
 echo Quadrant: %QUADRANT%
 echo Working folder: %WORK_FOLDER%
-
-md %WORK_FOLDER%
 
 osmfilter %SOURCE_FILE% --keep="amenity=place_of_worship building=church =cathedral =bell_tower =chapel =shrine =temple =mosque =synagogue tower:type=bell_tower" >%WORK_FOLDER%\churches.osm
 osmfilter %SOURCE_FILE% --keep="tower:type=defensive =fortification" >%WORK_FOLDER%\towers.osm

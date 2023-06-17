@@ -14,7 +14,8 @@ strInputFileName=sys.argv[5]
 #strInputFileName='d:\\models-osm\\test.osm'
 
 #WorkDir = os.path.dirname(os.path.realpath(__file__))
-WorkDir =os.getcwd()
+#WorkDir =os.getcwd()
+WorkDir = os.path.join(os.getcwd(), sys.argv[6])
 print("we will load osm file " + strInputFileName)
 print("current directory: " + WorkDir ) 
 
@@ -33,7 +34,7 @@ if k!=-1:
 
 strOutputFileName =  os.path.join(WorkDir, strObjectName +".blend")
 strMainTextureName = os.path.join(WorkDir, strObjectName +".png")
-print(strMainTextureName)
+print("main texture file: " + strMainTextureName)
 
 
 

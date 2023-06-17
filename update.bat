@@ -1,12 +1,10 @@
 @echo off
 echo Updating quadrant data from osm
-set WORK_FOLDER=d:\_VFR_LANDMARKS_3D_RU\work_folder
-rem SET QUADRANT=+56+038
-rem SET BBOX=38,56,39,57
+
 SET QUADRANT=%1
 SET BBOX=poly\%~2
-set WORK_FOLDER=%WORK_FOLDER%\%QUADRANT%\osm_data
-set PLANET= d:\_planet.osm\russia-latest.osm.pbf
+set WORK_FOLDER=work_folder\10_osm_extracts\%QUADRANT%
+set PLANET= work_folder\00_planet.osm\russia-latest.osm.pbf
 
 echo Quadrant: %QUADRANT%
 echo BBOX: %BBOX%
@@ -18,7 +16,6 @@ IF EXIST "%WORK_FOLDER%\%QUADRANT%_new.pbf" (
 ) ELSE (
   echo %QUADRANT%_new.pbf is missing
   md "%WORK_FOLDER%"
-  md "%WORK_FOLDER%/../osm_3dmodels"
   osmconvert %PLANET% -B=%BBOX% -o="%WORK_FOLDER%\%QUADRANT%_new.pbf"
 )
 

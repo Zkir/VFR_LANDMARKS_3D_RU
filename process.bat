@@ -11,9 +11,6 @@ if errorlevel 1 goto error
 OsmParser\main.py %QUADRANT%
 if errorlevel 1 goto error
 
-call upload %QUADRANT%
-if errorlevel 1 goto error
-
 echo all done
 
 goto end

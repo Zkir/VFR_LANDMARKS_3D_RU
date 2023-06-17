@@ -19,7 +19,7 @@ class TSummaryRec:
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 GEOCODER_SOURCE_OSM = "d:\\_planet.osm\\geocoder.osm"
-GEOCODER_SOURCE_TXT  = "d:\\_planet.osm\\geocoder.txt"
+GEOCODER_SOURCE_TXT  = "work_folder\\05_geocoder\\geocoder.txt"
 
 
 #========================================================================
