@@ -74,7 +74,71 @@ work_folder\30_3dmodels\convert_osm_to_obj: work_folder\10_osm_extracts\extract_
 work_folder\30_3dmodels\convert_obj_to_x3d: work_folder\30_3dmodels\convert_osm_to_obj              ##Convert x-plane obj files to x3d, to be used on website.  		
 	for %%v in (work_folder\30_3dmodels\*.obj) do obj2x3d.py "%%v"
 	touch $@		
+
+#****************************************************************************************************************************
+#* create x-plane specific files, e.g dsf per quadrant. 
+#****************************************************************************************************************************	
+work_folder\all-objects.dat: work_folder\10_osm_extracts\extract_building_models_osm
+	python scripts\joindats.py work_folder\all-objects.dat work_folder\10_osm_extracts  
 	
+work_folder\50_DSF :
+	mkdir work_folder\50_DSF
+
+work_folder\50_DSF\+56+038.dat : work_folder\all-objects.dat | work_folder\50_DSF
+	python scripts\filterdat.py work_folder\50_DSF\+56+038.dat work_folder\all-objects.dat +56+038   
+	
+work_folder\50_DSF\+56+038.dsf.txt: work_folder\50_DSF\+56+038.dat	
+	python osmparser\mdlDSF.py
+	
+work_folder\50_DSF\+56+038.dsf: work_folder\50_DSF\+56+038.dsf.txt 
+	d:\tools\xplane_tools\tools\dsftool --text2dsf  "$<" "$@"	
+	
+	
+#****************************************************************************************************************************
+#* Build X-Plane scenery package
+#****************************************************************************************************************************		
+x_plane_buildpath = work_folder\80_xplane_release\VFR_LANDMARKS_3D_RU
+x_plane_workpath =  work_folder\50_DSF\+56+038
+  
+$(x_plane_buildpath):
+	mkdir "$(x_plane_buildpath)"	
+  
+work_folder\clean_x_plane_release_folder: $(x_plane_buildpath)
+	echo Cleaning the $(x_plane_buildpath)
+	rmdir /S /Q $(x_plane_buildpath)
+	touch $@
+  
+work_folder\init_x_plane_release_folder: work_folder\clean_x_plane_release_folder
+	echo Creating the build directory structure
+	mkdir "$(x_plane_buildpath)"
+	mkdir "$(x_plane_buildpath)\Objects"
+	mkdir "$(x_plane_buildpath)\Objects-osm"
+	mkdir "$(x_plane_buildpath)\Facades"
+	mkdir "$(x_plane_buildpath)\Earth nav data"
+	mkdir "$(x_plane_buildpath)\Earth nav data\+50+030"
+	touch $@
+	
+work_folder\copy_x_plane_files: work_folder\50_DSF\+56+038.dsf work_folder\30_3dmodels\convert_osm_to_obj  work_folder\init_x_plane_release_folder
+	xcopy /Y /Q readme.txt $(x_plane_buildpath)
+	xcopy /Y /Q "Custom_models\*.obj" $(x_plane_buildpath)\Objects
+	xcopy /Y /Q "Custom_models\*.png" $(x_plane_buildpath)\Objects
+	
+	xcopy /Y /Q "Facades\*.fac" $(x_plane_buildpath)\Facades
+	xcopy /Y /Q "Facades\*.png" $(x_plane_buildpath)\Facades
+
+	xcopy /Y /Q "work_folder\30_3dmodels\*.obj" $(x_plane_buildpath)\Objects-osm
+	xcopy /Y /Q "work_folder\30_3dmodels\*.png" $(x_plane_buildpath)\Objects-osm
+	
+	xcopy /Y /Q "work_folder\50_DSF\+56+038.dsf" "$(x_plane_buildpath)\Earth nav data\+50+030"	
+	touch $@
+
+
+work_folder\81_xplane_release_zip:
+	mkdir work_folder\81_xplane_release_zip
+
+work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip: work_folder\copy_x_plane_files  | work_folder\81_xplane_release_zip
+	7z a $@ work_folder\80_xplane_Release
+
 
 #****************************************************************************************************************************
 #* Upload resulting data and models to web 
@@ -85,6 +149,14 @@ work_folder\90_uploads: | work_folder
 work_folder\90_uploads\upload_models_to_web: work_folder\30_3dmodels\convert_obj_to_x3d | work_folder\90_uploads 	##Upload models and dat files to web  
 	upload.bat
 	touch $@		
+
+work_folder\90_uploads\upload_xplane_release_to_web : work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip	| work_folder\90_uploads
+	xcopy /Y /Q "work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip"   "3dcheck\downloads"
+	touch $@
 	
-fin: work_folder\90_uploads\upload_models_to_web
+#****************************************************************************************************************************
+#* Finish 
+#****************************************************************************************************************************	
+	
+fin: work_folder\90_uploads\upload_models_to_web work_folder\90_uploads\upload_xplane_release_to_web
 	echo "All done"

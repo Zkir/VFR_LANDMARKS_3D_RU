@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project name="VFR_Landmarks_3d_ru" basedir="." default="full_build"> 
 
-  <property name="buildpath"      location=".\..\Release\VFR_LANDMARKS_3D_RU" />
-  <property name="workpath"       location=".\work_folder\+56+038" />
+  <property name="buildpath"      location=".\work_folder\89_Xpane_Release\VFR_LANDMARKS_3D_RU" />
+  <property name="workpath"       location=".\work_folder\50_DSF\+56+038" />
   <property name="deploypath"     location="O:\Custom Scenery\VFR_LANDMARKS_3D_RU" />
   <property name="dsftool"        location="d:\tools\xplane_tools\tools\dsftool"/>  
   
@@ -29,8 +29,8 @@
         <fileset file="Custom_models\*.png"  />
     </copy>
     <copy todir="${buildpath}\Objects-osm" includeEmptyDirs="false" >
-        <fileset file="${workpath}\osm_3dmodels\*.obj"  />
-        <fileset file="${workpath}\osm_3dmodels\*.png"  />
+        <fileset file=".\work_folder\30_3dmodels\*.obj"  />
+        <fileset file=".\work_folder\30_3dmodels\*.png"  />
     </copy>
     <copy todir="${buildpath}\Facades" includeEmptyDirs="false" >
         <fileset file="Facades\*.fac"  />

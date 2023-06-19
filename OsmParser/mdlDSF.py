@@ -468,17 +468,20 @@ def main(dsfLat, dsfLon):
     strQuadrantName = composeQuadrantName(dsfLat, dsfLon)
     print("processing quadrant: " + strQuadrantName)
 
-    strFolderName = BUILD_PATH + '\\work_folder\\' + strQuadrantName
+    dsf_folder_name = BUILD_PATH + '\\work_folder\\50_DSF\\' 
+    quadrant_dat_file_name = dsf_folder_name + '\\'+strQuadrantName+'.dat'
+    osm_models_folder = BUILD_PATH + '\\work_folder\\30_3dmodels'
 
-    objOsmGeom=None
 
-    custom_models = loadDatFile( BUILD_PATH + "\\custom_models_list.txt", encoding="cp1251")
+    objOsmGeom = None
+
+    custom_models = loadDatFile(BUILD_PATH + "\\custom_models_list.txt", encoding="cp1251")
     custom_facades = loadDatFile(BUILD_PATH + "\\custom_facade_list.txt", encoding="cp1251")
 
-    Sheet1 = loadDatFile(strFolderName+"\\+56+038.dat")
-    osm_models = readOsmModelList(Sheet1, strFolderName + "\\osm_3dmodels")
-    WriteDSF(Sheet1, strFolderName, dsfLat, dsfLon, objOsmGeom)
+    Sheet1 = loadDatFile(quadrant_dat_file_name)
+    osm_models = readOsmModelList(Sheet1, osm_models_folder)
+    WriteDSF(Sheet1, dsf_folder_name, dsfLat, dsfLon, objOsmGeom)
 
-    print ("DSF.txt for quadrant " + strQuadrantName + " created successfully")
+    print("DSF.txt for quadrant " + strQuadrantName + " created successfully")
 
 main(56, 38)
