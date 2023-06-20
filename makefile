@@ -1,6 +1,6 @@
 
 #(c)2023 3d building validator pipeline
-all: fin
+all: fin ##ultimate target 
 	echo "that's all, folks!"
 	
 work_folder: ## make the working folder 
@@ -16,26 +16,26 @@ work_folder\00_planet.osm\russia-latest.osm.pbf: | work_folder\00_planet.osm ##d
 	echo "download source osm file"
 	scripts\planet_download.bat $(@D)
 
-work_folder\00_planet.osm\russia.poly: | work_folder\00_planet.osm
+work_folder\00_planet.osm\russia.poly: | work_folder\00_planet.osm ## prepare poly file 
 	copy poly\russia.poly work_folder\00_planet.osm
 	
 #update osm file 
-work_folder\00_planet.osm\russia-latest.o5m: work_folder\00_planet.osm\russia-latest.osm.pbf work_folder\00_planet.osm\russia.poly  	
+work_folder\00_planet.osm\russia-latest.o5m: work_folder\00_planet.osm\russia-latest.osm.pbf work_folder\00_planet.osm\russia.poly  ## update source osm file	
 	echo "update osm file" 
 	scripts\planet_update.bat $(@D)
 
 #****************************************************************************************************************************
 #* Create geocoder files 
 #****************************************************************************************************************************
-work_folder\05_geocoder: | work_folder
+work_folder\05_geocoder: | work_folder ## prepare geocoder folder 
 	mkdir work_folder\05_geocoder
 	
-work_folder\05_geocoder\geocoder.osm: work_folder\00_planet.osm\russia-latest.o5m	 | work_folder\05_geocoder
+work_folder\05_geocoder\geocoder.osm: work_folder\00_planet.osm\russia-latest.o5m | work_folder\05_geocoder ## create geocoder osm file
 	echo "create geocoder files work_folder\05_geocoder work_folder\00_planet.osm" 
 	scripts\geocoder_extract.bat work_folder\05_geocoder work_folder\00_planet.osm
 
-#actually geocoder txt should be created from geocode.osm, but the script was lost. 	
-work_folder\05_geocoder\geocoder.txt: work_folder\05_geocoder\geocoder.osm	
+
+work_folder\05_geocoder\geocoder.txt: work_folder\05_geocoder\geocoder.osm  ##create geocoder mp file. Actually geocoder txt should be created from geocode.osm, but the script was lost. 	
 	copy geocoder.txt work_folder\05_geocoder
 	touch $@
 
@@ -45,7 +45,7 @@ work_folder\05_geocoder\geocoder.txt: work_folder\05_geocoder\geocoder.osm
 work_folder\10_osm_extracts: | work_folder ## make folder for extracted osm buildings 
 	mkdir work_folder\10_osm_extracts	
 	
-work_folder\Quadrants.dat: | work_folder
+work_folder\Quadrants.dat: | work_folder ## initialize quadrant summary file 
 	copy Quadrants.dat work_folder
 
 work_folder\20_osm_3dmodels: ## make folder for extracted 3d buildings 
@@ -57,14 +57,14 @@ work_folder\20_osm_3dmodels: ## make folder for extracted 3d buildings
 #	touch $@
 
 
-work_folder\10_osm_extracts\extract_building_models_osm: work_folder\00_planet.osm\russia-latest.o5m work_folder\05_geocoder\geocoder.txt work_folder\Quadrants.dat |  work_folder\10_osm_extracts work_folder\20_osm_3dmodels
+work_folder\10_osm_extracts\extract_building_models_osm: work_folder\00_planet.osm\russia-latest.o5m work_folder\05_geocoder\geocoder.txt work_folder\Quadrants.dat |  work_folder\10_osm_extracts work_folder\20_osm_3dmodels ## extract osm buildings 
 	python osmparser\planner.py
 	touch $@	
 
 #****************************************************************************************************************************
 #* Convert models to x-plane obj and x3d 
 #****************************************************************************************************************************		
-work_folder\30_3dmodels: | work_folder
+work_folder\30_3dmodels: | work_folder ## Prepare folder for 3d models (obj/x3d)
 	mkdir work_folder\30_3dmodels 
 	
 work_folder\30_3dmodels\convert_osm_to_obj: work_folder\10_osm_extracts\extract_building_models_osm | work_folder\30_3dmodels 	##Convert 3d objects from osm files to blender and x-plane obj 
@@ -78,79 +78,79 @@ work_folder\30_3dmodels\convert_obj_to_x3d: work_folder\30_3dmodels\convert_osm_
 #****************************************************************************************************************************
 #* create x-plane specific files, e.g dsf per quadrant. 
 #****************************************************************************************************************************	
-work_folder\all-objects.dat: work_folder\10_osm_extracts\extract_building_models_osm
+work_folder\all-objects.dat: work_folder\10_osm_extracts\extract_building_models_osm ##join object lists from different quadrants
 	python scripts\joindats.py work_folder\all-objects.dat work_folder\10_osm_extracts  
 	
-work_folder\50_DSF :
+work_folder\50_DSF : ## Prepare folder for DSFs
 	mkdir work_folder\50_DSF
 
-work_folder\50_DSF\+56+038.dat : work_folder\all-objects.dat | work_folder\50_DSF
+work_folder\50_DSF\+56+038.dat : work_folder\all-objects.dat | work_folder\50_DSF ## recreate object list for x-plane quadrant(s)
 	python scripts\filterdat.py work_folder\50_DSF\+56+038.dat work_folder\all-objects.dat +56+038   
 	
-work_folder\50_DSF\+56+038.dsf.txt: work_folder\50_DSF\+56+038.dat	
+work_folder\50_DSF\+56+038.dsf.txt: work_folder\50_DSF\+56+038.dat	## generate dsf.txt from quadrant object list 
 	python osmparser\mdlDSF.py
 	
-work_folder\50_DSF\+56+038.dsf: work_folder\50_DSF\+56+038.dsf.txt 
+work_folder\50_DSF\+56+038.dsf: work_folder\50_DSF\+56+038.dsf.txt ## compile binary dsf from dsf-txt 
 	d:\tools\xplane_tools\tools\dsftool --text2dsf  "$<" "$@"	
 	
 	
 #****************************************************************************************************************************
 #* Build X-Plane scenery package
 #****************************************************************************************************************************		
-x_plane_buildpath = work_folder\80_xplane_release\VFR_LANDMARKS_3D_RU
-x_plane_workpath =  work_folder\50_DSF\+56+038
+xplane_buildpath = work_folder\80_xplane_release\VFR_LANDMARKS_3D_RU
+xplane_workpath =  work_folder\50_DSF\+56+038
   
-$(x_plane_buildpath):
-	mkdir "$(x_plane_buildpath)"	
+$(xplane_buildpath):
+	mkdir "$(xplane_buildpath)"	
   
-work_folder\clean_x_plane_release_folder: $(x_plane_buildpath)
-	echo Cleaning the $(x_plane_buildpath)
-	rmdir /S /Q $(x_plane_buildpath)
+work_folder\clean_xplane_release_folder: $(xplane_buildpath) ## clean up x-plane scenery folder 
+	echo Cleaning the $(xplane_buildpath)
+	rmdir /S /Q $(xplane_buildpath)
 	touch $@
   
-work_folder\init_x_plane_release_folder: work_folder\clean_x_plane_release_folder
+work_folder\init_xplane_release_folder: work_folder\clean_xplane_release_folder ## create subdirectories for x-plane scenery folder
 	echo Creating the build directory structure
-	mkdir "$(x_plane_buildpath)"
-	mkdir "$(x_plane_buildpath)\Objects"
-	mkdir "$(x_plane_buildpath)\Objects-osm"
-	mkdir "$(x_plane_buildpath)\Facades"
-	mkdir "$(x_plane_buildpath)\Earth nav data"
-	mkdir "$(x_plane_buildpath)\Earth nav data\+50+030"
+	mkdir "$(xplane_buildpath)"
+	mkdir "$(xplane_buildpath)\Objects"
+	mkdir "$(xplane_buildpath)\Objects-osm"
+	mkdir "$(xplane_buildpath)\Facades"
+	mkdir "$(xplane_buildpath)\Earth nav data"
+	mkdir "$(xplane_buildpath)\Earth nav data\+50+030"
 	touch $@
 	
-work_folder\copy_x_plane_files: work_folder\50_DSF\+56+038.dsf work_folder\30_3dmodels\convert_osm_to_obj  work_folder\init_x_plane_release_folder
-	xcopy /Y /Q readme.txt $(x_plane_buildpath)
-	xcopy /Y /Q "Custom_models\*.obj" $(x_plane_buildpath)\Objects
-	xcopy /Y /Q "Custom_models\*.png" $(x_plane_buildpath)\Objects
+work_folder\copy_xplane_files: work_folder\50_DSF\+56+038.dsf work_folder\30_3dmodels\convert_osm_to_obj  work_folder\init_xplane_release_folder ## collect all the files, both generated and pre-produced into x-plane scenery folder 
+	xcopy /Y /Q readme.txt $(xplane_buildpath)
+	xcopy /Y /Q "Custom_models\*.obj" $(xplane_buildpath)\Objects
+	xcopy /Y /Q "Custom_models\*.png" $(xplane_buildpath)\Objects
 	
-	xcopy /Y /Q "Facades\*.fac" $(x_plane_buildpath)\Facades
-	xcopy /Y /Q "Facades\*.png" $(x_plane_buildpath)\Facades
+	xcopy /Y /Q "Facades\*.fac" $(xplane_buildpath)\Facades
+	xcopy /Y /Q "Facades\*.png" $(xplane_buildpath)\Facades
 
-	xcopy /Y /Q "work_folder\30_3dmodels\*.obj" $(x_plane_buildpath)\Objects-osm
-	xcopy /Y /Q "work_folder\30_3dmodels\*.png" $(x_plane_buildpath)\Objects-osm
+	xcopy /Y /Q "work_folder\30_3dmodels\*.obj" $(xplane_buildpath)\Objects-osm
+	xcopy /Y /Q "work_folder\30_3dmodels\*.png" $(xplane_buildpath)\Objects-osm
 	
-	xcopy /Y /Q "work_folder\50_DSF\+56+038.dsf" "$(x_plane_buildpath)\Earth nav data\+50+030"	
+	xcopy /Y /Q "work_folder\50_DSF\+56+038.dsf" "$(xplane_buildpath)\Earth nav data\+50+030"	
 	touch $@
 
 
-work_folder\81_xplane_release_zip:
+work_folder\81_xplane_release_zip: ## prepare folder for zipped x-plane scenery package 
 	mkdir work_folder\81_xplane_release_zip
 
-work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip: work_folder\copy_x_plane_files  | work_folder\81_xplane_release_zip
+work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip: work_folder\copy_xplane_files  | work_folder\81_xplane_release_zip ## zip x-plane scenery 
 	7z a $@ work_folder\80_xplane_Release
 
 
 #****************************************************************************************************************************
 #* Upload resulting data and models to web 
 #****************************************************************************************************************************	
-work_folder\90_uploads: | work_folder
+work_folder\90_uploads: | work_folder ## prepare uploads folder 
 	mkdir work_folder\90_uploads
 	
-work_folder\90_uploads\upload_models_to_web: work_folder\30_3dmodels\convert_obj_to_x3d | work_folder\90_uploads 	##Upload models and dat files to web  
+work_folder\90_uploads\upload_models_to_web: work_folder\30_3dmodels\convert_obj_to_x3d | work_folder\90_uploads 	##Upload 3d models and dat files to web (validator)  
 	upload.bat
 	touch $@		
 
-work_folder\90_uploads\upload_xplane_release_to_web : work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip	| work_folder\90_uploads
+work_folder\90_uploads\upload_xplane_release_to_web : work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip	| work_folder\90_uploads ## upload x-plane scenery package to web
 	xcopy /Y /Q "work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip"   "3dcheck\downloads"
 	touch $@
 	
@@ -158,5 +158,5 @@ work_folder\90_uploads\upload_xplane_release_to_web : work_folder\81_xplane_rele
 #* Finish 
 #****************************************************************************************************************************	
 	
-fin: work_folder\90_uploads\upload_models_to_web work_folder\90_uploads\upload_xplane_release_to_web
+fin: work_folder\90_uploads\upload_models_to_web work_folder\90_uploads\upload_xplane_release_to_web ##final target
 	echo "All done"
