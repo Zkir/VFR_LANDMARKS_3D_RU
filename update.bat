@@ -10,17 +10,9 @@ echo Quadrant: %QUADRANT%
 echo BBOX: %BBOX%
 echo Working folder: %WORK_FOLDER%
 
-IF EXIST "%WORK_FOLDER%\%QUADRANT%_new.pbf" (
-  del "%WORK_FOLDER%\%QUADRANT%.pbf"
-  
-) ELSE (
-  echo %QUADRANT%_new.pbf is missing
-  md "%WORK_FOLDER%"
-  osmconvert %PLANET% -B=%BBOX% -o="%WORK_FOLDER%\%QUADRANT%_new.pbf"
-)
+mkdir %WORK_FOLDER%
 
-ren "%WORK_FOLDER%\%QUADRANT%_new.pbf" "%QUADRANT%.pbf"
-osmupd "%WORK_FOLDER%\%QUADRANT%.pbf" "%WORK_FOLDER%\%QUADRANT%_new.pbf" -B=%BBOX% -v --keep-tempfiles
+osmconvert %PLANET% -B=%BBOX% -o="%WORK_FOLDER%\%QUADRANT%_new.pbf"
 osmconvert "%WORK_FOLDER%\%QUADRANT%_new.pbf" -o="%WORK_FOLDER%\%QUADRANT%.o5m"
 
 :end

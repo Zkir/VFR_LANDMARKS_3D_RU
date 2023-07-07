@@ -418,11 +418,13 @@ def processQuadrant(strQuadrantName):
     strWorkingFolder = ""
 
     strWorkingFolder = BUILD_PATH + '\\work_folder\\' ### + strQuadrantName
+    strQuadrantObjectsListFileName = strWorkingFolder + '\\11_osm_objects_list\\' + strQuadrantName + '.dat'
+    
 
     objOsmGeom, Objects = readOsmXml(strWorkingFolder + '\\10_osm_extracts\\'+ strQuadrantName + '\\objects-all.osm')
     processBuildings(objOsmGeom, Objects, strQuadrantName,
                      strWorkingFolder + '\\10_osm_extracts\\'+ strQuadrantName +'\\objects-with-parts.osm',
-                     strWorkingFolder + '\\10_osm_extracts\\' + strQuadrantName + '.dat',
+                     strQuadrantObjectsListFileName,
                      strWorkingFolder + '\\20_osm_3dmodels'
                      )
     t2 = time.time()
@@ -432,12 +434,12 @@ def processQuadrant(strQuadrantName):
     t3=time.time()
     ###print ("Osm models converted to obj/x3d in " + str(t3-t2) +" seconds")
 
-    strInputFile = strWorkingFolder + '\\10_osm_extracts\\' + strQuadrantName + '.dat'
-    DoGeocodingForDatFile(strInputFile)
+    
+    DoGeocodingForDatFile(strQuadrantObjectsListFileName)
     #CreateRegionSummaryPage(strQuadrantName, strInputFile, True, True )
     #CreateIndexPage("d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\Quadrants.dat")
     t4=time.time()
-    print ("Summary pages created " + str(t4-t3) +" seconds")
+    #print ("Summary pages created " + str(t4-t3) +" seconds")
     print ("Quadrant done")
 
 

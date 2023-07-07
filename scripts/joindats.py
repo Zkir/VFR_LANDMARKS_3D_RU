@@ -5,10 +5,14 @@
 #*********************************************************************
 
 import os
+import sys 
 import zDatInterface as zdi
 
-source_path = "work_folder\\10_osm_extracts"
-output_file_name = "work_folder\\all-objects.dat" 
+source_path = sys.argv[2] #"work_folder\\10_osm_extracts"
+output_file_name = sys.argv[1] #"work_folder\\all-objects.dat" 
+
+print ("  source path:" + source_path)
+print ("  output file:" + output_file_name)
 
 
 with os.scandir(source_path) as entries:

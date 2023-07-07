@@ -3,8 +3,6 @@
 
 from osmGeometry import *
 from mdlXmlParser import *
-from mdlMisc import getColourName
-from vbFunctions import Left
 
 class T3DObject:
     def __init__(self):
@@ -15,36 +13,14 @@ class T3DObject:
         self.NodeRefs = []
         self.way_count = 0
         self.WayRefs = []
-        self.name = ""
-        self.descr = ""
-        self.key_tags = ""
-        self.strWikipediaName = ""
-        self.tagBuilding = ""
-        self.tagArchitecture = ""
-        self.tagManMade = ""
-        self.tagBarrier = ""
-        self.tagTowerType = ""
-        self.tagAmenity = ""
-        self.tagDenomination = ""
-        self.tagStartDate = ""
-        self.tagRuins = ""
-        self.tagWikipedia = ""
-        self.tagAddrStreet = ""
-        self.tagAddrHouseNumber = ""
-        self.tagAddrCity = ""
-        self.tagAddrDistrict = ""
-        self.tagAddrRegion = ""
-        self.material = ""
-        self.colour = ""
-        self.dblHeight = 0
         self.osmtags = {}
-        self.size = 0
-        self.blnHasBuildingParts = False
 
         self.bbox.minLat = 0
         self.bbox.minLon = 0
         self.bbox.maxLat = 0
         self.bbox.maxLon = 0
+
+        self.timestamp = ""
 
     def getTag(self ,strKey):
         return self.osmtags.get(strKey,'')
@@ -79,11 +55,16 @@ def readOsmXml(strSrcOsmFile):
             osmObject = T3DObject()
             osmObject.type = strTag
             osmObject.id = objXML.GetAttribute('id')
+            osmObject.timestamp = objXML.GetAttribute('timestamp')
             blnObjectIncomplete= False
 
         if strTag == 'node':
-
             objOsmGeom.AddNode(osmObject.id, objXML.GetAttribute('lat'), objXML.GetAttribute('lon'))
+            osmObject.bbox.minLat = float( objXML.GetAttribute('lat'))
+            osmObject.bbox.minLon = float( objXML.GetAttribute('lon'))
+            osmObject.bbox.maxLat = float( objXML.GetAttribute('lat'))
+            osmObject.bbox.maxLon = float( objXML.GetAttribute('lon'))
+
         # references to nodes in ways. we need to find coordinates
         if strTag == 'nd':
             node_id = objXML.GetAttribute('ref')
@@ -129,75 +110,21 @@ def readOsmXml(strSrcOsmFile):
             osmObject.osmtags[StrKey] = strValue
 
 
-            if StrKey == 'name':
-                osmObject.name = strValue
-            if StrKey == 'description':
-                osmObject.descr = strValue
-            if StrKey == 'building':
-                osmObject.tagBuilding = strValue
-                osmObject.key_tags = osmObject.key_tags + ' building=' + osmObject.tagBuilding
-            if StrKey == 'building:architecture':
-                osmObject.tagArchitecture = strValue
-            if StrKey == 'start_date':
-                osmObject.tagStartDate = strValue
-            if StrKey == 'man_made':
-                osmObject.tagManMade = strValue
-                osmObject.key_tags = osmObject.key_tags + ' man_made=' + osmObject.tagManMade
-            if StrKey == 'barrier':
-                osmObject.tagBarrier = strValue
-                osmObject.key_tags = osmObject.key_tags + ' barrier=' + osmObject.tagBarrier
-            # wikipedia
-            if StrKey == 'wikipedia':
-                osmObject.tagWikipedia = strValue
-            if StrKey == 'addr:street':
-                osmObject.tagAddrStreet = strValue
-            if StrKey == 'addr:housenumber':
-                osmObject.tagAddrHouseNumber = strValue
-            if StrKey == 'addr:city':
-                osmObject.tagAddrCity = strValue
-            if StrKey == 'addr:district':
-                osmObject.tagAddrDistrict = strValue
-            if StrKey == 'addr:region':
-                osmObject.tagAddrRegion = strValue
-            #ref_temples_ru
-            if StrKey == 'ref:temples.ru':
-                ref_temples_ru = strValue
-                #print ref_temples_ru
-            if StrKey == 'amenity':
-                osmObject.tagAmenity = strValue
-            if StrKey == 'denomination':
-                osmObject.tagDenomination = strValue
-            if StrKey == 'tower:type':
-                osmObject.tagTowerType = strValue
-            if StrKey == 'building:material':
-                osmObject.material = strValue
-            #for buildings we have building:colour, for other objects, e.g. fences, just colour
-            if ( StrKey == 'building:colour' )  or  ( StrKey == 'colour' ) :
-                osmObject.colour = strValue
-                if Left(strValue, 1) == '#':
-                    osmObject.colour = getColourName(strValue)
-            if StrKey == 'ruins':
-                osmObject.tagRuins = strValue
-
-
         if strTag == '/way':
             intWayNo = objOsmGeom.AddWay(osmObject.id, osmObject.NodeRefs, osmObject.node_count)
             osmObject.bbox = objOsmGeom.GetWayBBox(intWayNo)
-            osmObject.size = objOsmGeom.CalculateWaySize(intWayNo)
+
+            #osmObject.size = objOsmGeom.CalculateWaySize(intWayNo)
 
         if strTag == '/relation':
-
-            try:
-                osmObject.size = objOsmGeom.CalculateRelationSize(osmObject.WayRefs, osmObject.way_count)
-            except:
-                print('Relation ' +  osmObject.id + ' : unable to determine size')
-                osmObject.size = 0
+            pass
+            # osmObject.size = objOsmGeom.CalculateRelationSize(osmObject.WayRefs, osmObject.way_count)
             # bbox is already calculated above
 
         # Closing node
         if strTag == '/node' or strTag == '/way' or strTag == '/relation':
-            if (blnObjectIncomplete != True) and (osmObject.type != 'node'):
-                # we will return only completed objects, and we will skip nodes (to save CPU time)
+            if (blnObjectIncomplete != True) and (len(osmObject.osmtags)>0 ):
+                # we will return only completed objects, and we will objects w/o tags, they cannot make features (to save CPU time)
                 Objects.append(osmObject)
             else:
                 #print('Object is incomplete ' + osmObject.type +' ' +  osmObject.id)

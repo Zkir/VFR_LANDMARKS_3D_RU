@@ -31,7 +31,6 @@ work_folder\05_geocoder: | work_folder ## prepare geocoder folder
 	mkdir work_folder\05_geocoder
 	
 work_folder\05_geocoder\geocoder.osm: work_folder\00_planet.osm\russia-latest.o5m | work_folder\05_geocoder ## create geocoder osm file
-	echo "create geocoder files work_folder\05_geocoder work_folder\00_planet.osm" 
 	scripts\geocoder_extract.bat work_folder\05_geocoder work_folder\00_planet.osm
 
 
@@ -45,6 +44,9 @@ work_folder\05_geocoder\geocoder.txt: work_folder\05_geocoder\geocoder.osm  ##cr
 work_folder\10_osm_extracts: | work_folder ## make folder for extracted osm buildings 
 	mkdir work_folder\10_osm_extracts	
 	
+work_folder\11_osm_objects_list: | work_folder ## make folder for osm object list (dat)
+	mkdir work_folder\11_osm_objects_list
+	
 work_folder\Quadrants.dat: | work_folder ## initialize quadrant summary file 
 	copy Quadrants.dat work_folder
 
@@ -57,9 +59,15 @@ work_folder\20_osm_3dmodels: ## make folder for extracted 3d buildings
 #	touch $@
 
 
-work_folder\10_osm_extracts\extract_building_models_osm: work_folder\00_planet.osm\russia-latest.o5m work_folder\05_geocoder\geocoder.txt work_folder\Quadrants.dat |  work_folder\10_osm_extracts work_folder\20_osm_3dmodels ## extract osm buildings 
-	python osmparser\planner.py
+work_folder\10_osm_extracts\extract_osm_data: work_folder\00_planet.osm\russia-latest.o5m  | work_folder\Quadrants.dat work_folder\10_osm_extracts ## extract osm data per region
+#	python osmparser\planner.py
+	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do update.bat %%i %%i.poly
+	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do extract.bat %%i
 	touch $@	
+
+work_folder\20_osm_3dmodels\extract_building_models_osm: work_folder\10_osm_extracts\extract_osm_data work_folder\05_geocoder\geocoder.txt | work_folder\11_osm_objects_list work_folder\20_osm_3dmodels ## extract osm buildings  into separate osm files
+	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do python OsmParser\main.py %%i
+	touch $@
 
 #****************************************************************************************************************************
 #* Convert models to x-plane obj and x3d 
@@ -67,7 +75,7 @@ work_folder\10_osm_extracts\extract_building_models_osm: work_folder\00_planet.o
 work_folder\30_3dmodels: | work_folder ## Prepare folder for 3d models (obj/x3d)
 	mkdir work_folder\30_3dmodels 
 	
-work_folder\30_3dmodels\convert_osm_to_obj: work_folder\10_osm_extracts\extract_building_models_osm | work_folder\30_3dmodels 	##Convert 3d objects from osm files to blender and x-plane obj 
+work_folder\30_3dmodels\convert_osm_to_obj: work_folder\20_osm_3dmodels\extract_building_models_osm | work_folder\30_3dmodels 	##Convert 3d objects from osm files to blender and x-plane obj 
 	for %%v in (work_folder\20_osm_3dmodels\*.osm) do osm2blend.bat "%%v" work_folder\30_3dmodels
 	touch $@		
 	
@@ -78,14 +86,17 @@ work_folder\30_3dmodels\convert_obj_to_x3d: work_folder\30_3dmodels\convert_osm_
 #****************************************************************************************************************************
 #* create x-plane specific files, e.g dsf per quadrant. 
 #****************************************************************************************************************************	
-work_folder\all-objects.dat: work_folder\10_osm_extracts\extract_building_models_osm ##join object lists from different quadrants
-	python scripts\joindats.py work_folder\all-objects.dat work_folder\10_osm_extracts  
+work_folder\12_all_osm_objects_list : | work_folder
+	mkdir work_folder\12_all_osm_objects_list
+	
+work_folder\12_all_osm_objects_list\all-objects.dat: work_folder\20_osm_3dmodels\extract_building_models_osm | work_folder\12_all_osm_objects_list ##join object lists from different quadrants
+	python scripts\joindats.py $@ work_folder\11_osm_objects_list 
 	
 work_folder\50_DSF : ## Prepare folder for DSFs
 	mkdir work_folder\50_DSF
 
-work_folder\50_DSF\+56+038.dat : work_folder\all-objects.dat | work_folder\50_DSF ## recreate object list for x-plane quadrant(s)
-	python scripts\filterdat.py work_folder\50_DSF\+56+038.dat work_folder\all-objects.dat +56+038   
+work_folder\50_DSF\+56+038.dat : work_folder\12_all_osm_objects_list\all-objects.dat | work_folder\50_DSF ## recreate object list for x-plane quadrant(s)
+	python scripts\filterdat.py $@ $< +56+038   
 	
 work_folder\50_DSF\+56+038.dsf.txt: work_folder\50_DSF\+56+038.dat	## generate dsf.txt from quadrant object list 
 	python osmparser\mdlDSF.py

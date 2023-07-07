@@ -24,3 +24,5 @@ geocoder.txt
 make.svg
 3dcheck/downloads/VFR_LANDMARKS_3D_RU.zip
 3dcheck/pipeline/
+
+/zOsm2GeoJSON/.idea/*.*
