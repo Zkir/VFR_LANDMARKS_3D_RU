@@ -61,5 +61,15 @@ work_folder\40_osm_extracts_1x1\+56+038\places-points.geojson: 	work_folder\40_o
 	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\places-poi.osm  $@  --action=write_poi  --keep="place= " 	
 	
 
-	
-fin: work_folder\40_osm_extracts_1x1\+56+038\create_geojsons work_folder\40_osm_extracts_1x1\+56+038\highways.geojson work_folder\40_osm_extracts_1x1\+56+038\leisures.geojson work_folder\40_osm_extracts_1x1\+56+038\amenities.geojson work_folder\40_osm_extracts_1x1\+56+038\places.geojson work_folder\40_osm_extracts_1x1\+56+038\places-points.geojson work_folder\40_osm_extracts_1x1\+56+038\naturals.geojson work_folder\40_osm_extracts_1x1\+56+038\landuses.geojson
+work_folder\40_osm_extracts_1x1\+56+038\landuses-clipped.geojson : work_folder\40_osm_extracts_1x1\+56+038\create_geojsons work_folder\40_osm_extracts_1x1\+56+038\highways.geojson work_folder\40_osm_extracts_1x1\+56+038\leisures.geojson work_folder\40_osm_extracts_1x1\+56+038\amenities.geojson work_folder\40_osm_extracts_1x1\+56+038\places.geojson work_folder\40_osm_extracts_1x1\+56+038\places-points.geojson work_folder\40_osm_extracts_1x1\+56+038\naturals.geojson work_folder\40_osm_extracts_1x1\+56+038\landuses.geojson
+	python clip_dsf_layers.py
+
+work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf.txt:  work_folder\40_osm_extracts_1x1\+56+038\landuses-clipped.geojson
+	python json2dsf.py $< $@
+
+work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf: work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf.txt 
+	dsftool --text2dsf $< $@
+	xcopy /Q /Y $@ "d:\SteamLibrary\steamapps\common\X-Plane 11\Custom Scenery\zzz_zkir_global_scenery0\Earth nav data\+50+030"
+
+
+fin: work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf

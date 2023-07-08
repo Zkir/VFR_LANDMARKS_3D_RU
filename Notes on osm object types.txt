@@ -1,0 +1,303 @@
+Objects that would be interesting to see in X-plane, first priority.
+
+
+===========================================================
+====  landuses with buildings, in city/towns/willages  ====
+===========================================================
+
+== residential ==
+
+landuse=residential
+residential = rural
+residential = urban
+
+There are good autogens in x-plane for residential areas.
+they are classified by density and height 
+
+lib/g10/autogen/urban_low_broken_0.ags
+lib/g10/autogen/urban_low_broken_1.ags
+lib/g10/autogen/urban_low_broken_2.ags
+lib/g10/autogen/urban_low_broken_3.ags
+
+lib/g10/autogen/urban_low_solid_30_v0.ags
+lib/g10/autogen/urban_low_solid_30_v1.ags
+lib/g10/autogen/urban_low_solid_30_v2.ags
+lib/g10/autogen/urban_low_solid_30_v3.ags
+lib/g10/autogen/urban_low_solid_60_v0.ags
+lib/g10/autogen/urban_low_solid_60_v1.ags
+lib/g10/autogen/urban_low_solid_60_v2.ags
+lib/g10/autogen/urban_low_solid_60_v3.ags
+
+
+lib/g10/autogen/urban_med_broken_0.ags
+lib/g10/autogen/urban_med_broken_1.ags
+lib/g10/autogen/urban_med_broken_2.ags
+lib/g10/autogen/urban_med_broken_3.ags
+
+lib/g10/autogen/urban_med_solid_f_30_v0.agb
+lib/g10/autogen/urban_med_solid_30_v0.ags
+lib/g10/autogen/urban_med_solid_30_v3.ags
+lib/g10/autogen/urban_med_solid_60_v1.ags
+
+
+lib/g10/autogen/urban_high_ireg_80.fac
+lib/g10/autogen/urban_high_ireg_40.fac
+
+lib/g10/autogen/urban_high_solid_60x40_v0.ags
+lib/g10/autogen/urban_high_solid_30x32_v0.ags
+
+
+separate or "point" buildings. Should be subtracted from other areas.
+
+lib/g10/autogen/point_building_60x60_120.fac
+lib/g10/autogen/point_building_60x60_80.fac
+lib/g10/autogen/point_building_30x30_40.fac
+lib/g10/autogen/point_building_30x30_32.fac
+lib/g10/autogen/point_radio_tower_30x30_200.fac
+
+this should be treated as rural_low_xxxx
+
+lib/g10/autogen/natural.ags
+
+===== allotments =====
+landuse = allotments.
+allotments are some kind of seasonal residential areas in Russia. 
+
+lib/g10/autogen/natural.ags
+
+as for rural residential.
+However it should be a bit different -- those are summer(!) houses.
+
+===== industrial ====
+osm: 
+landuse=industrial
+
+x-plane:
+There are good autogens in x-plane for industrial areas.
+they are classified by density and height 
+
+lib/g10/autogen/ind_low_broken_0.ags
+lib/g10/autogen/ind_low_broken_1.ags
+lib/g10/autogen/ind_low_broken_2.ags
+lib/g10/autogen/ind_low_broken_3.ags
+
+lib/g10/autogen/ind_high_broken_0.ags
+lib/g10/autogen/ind_high_broken_1.ags
+lib/g10/autogen/ind_high_broken_2.ags
+lib/g10/autogen/ind_high_broken_3.ags
+
+lib/g10/autogen/ind_low_solid_f_30_v0.agb
+lib/g10/autogen/ind_low_solid_30_v0.ags
+lib/g10/autogen/ind_low_solid_30_v3.ags
+lib/g10/autogen/ind_low_solid_60_v1.ags
+
+lib/g10/autogen/ind_high_solid_f_30_v0.agb
+lib/g10/autogen/ind_high_solid_30_v1.ags
+lib/g10/autogen/ind_high_solid_30_v3.ags
+lib/g10/autogen/ind_high_solid_f_60_v0.agb
+lib/g10/autogen/ind_high_solid_f_60_v1.agb
+lib/g10/autogen/ind_high_solid_60_v1.ags
+lib/g10/autogen/ind_high_solid_60_v2.ags
+lib/g10/autogen/ind_high_solid_f_90_v0.agb
+
+
+==== commercial ====
+landuse=commercial
+landuse=retail
+
+standard x-plane: nothing
+x-europe: various point-objects (obj)
+
+some new autogen is needed.
+
+== religeous ==
+landuse = religious -- дворы церквей. Возможно должно процесситься вручную.
+
+osm: 
+landuse=religious
+amenity=monastery
+
+x-plane: nothing
+x-europe: some western-looking church buildings (*.obj)
+
+
+Probably should be excluded form all other/autogen areas and buildins placed individually.
+
+==== Cemetries ============
+osm: 
+landuse = cemetry
+
+in Russia it's usually not just tombs, but also trees. 
+in USA it's normaly grassland.
+
+natural=*  should be  checked, especially natural=wood.
+probably new autogen should be created combining tomb, crosses and trees
+
+
+================================================
+====  Other landuses                        ====
+================================================
+
+landuse = construction -- стройки
+landuse = farmyard -- дворы ферм. На них надо поднимать дома! 
+landuse = garages -- гаражи 
+landuse = landfill -- мусорные полигоны.
+
+landuse = quarry - карьеры. Кажется, x-plane такого не разрешает.
+
+
+================================================
+====  landuses to drop                      ====
+================================================
+
+landuse = logging -- вырубки. Само по себе это ничто!!
+на нем должен быть тег natural 
+
+landuse = military -- тоже ничто. Возможно
+military=* помогло бы, но его нет.
+
+landuse = railway -- не используется по назначению.
+
+
+================================================
+====  Naturals                              ====
+================================================
+
+=====Forests=========
+natural = wood, natural = forest.
+
+great variety of forests in x-plane.
+
+lib/g8/broad_cld_sdry.for
+lib/g8/broad_sp_cld_sdry.for
+lib/g8/broad_tmp_sdry.for
+lib/g8/broad_sp_tmp_sdry.for
+
+lib/g8/mixed_cld_sdry.for
+lib/g8/mixed_sp_cld_sdry.for
+lib/g8/mixed_tmp_sdry.for
+lib/g8/mixed_sp_tmp_sdry.for
+
+lib/g8/coni_cld_sdry.for
+lib/g8/coni_sp_cld_sdry.for
+lib/g8/coni_tmp_sdry.for
+lib/g8/coni_sp_tmp_sdry.for
+
+==== scrub ====
+natural=scrub
+
+??? lib/g8/shrb_tmp_sdry.for ???
+
+==== grassland ====
+natural=grass
+natural=grassland
+natural=heath
+natural=meadow
+
+Seems it is not needed in x-plane as overlay object.
+
+==== farmland ====
+
+natural=farmland -- пашня!
+
+Seems it is not needed in x-plane as overlay object.
+
+==== beaches ====
+natural=beach
+
+lib/g8/beaches.bch
+
+==== sand =====
+natural=sand
+
+==== wetland ====
+natural=wetland
+
+x-plane ???
+
+==== Lakes and rivers ===
+
+natural=water
+seams that the beach can imrove visual apperance of water bodies
+
+some buffer arround water bodies.
+
+lib/g8/beaches.bch
+
+================================================
+====  Amenities and Leisures                ====
+================================================
+
+== Parks ==
+leisure=park
+leisure=garden
+
+probably this should be related to natural. What this park is?
+
+there is still a question how it should be excuded from landuses
+
+lib/g10/autogen/park_0.ags
+lib/g10/autogen/park_1.ags
+lib/g10/autogen/park_2.ags
+
+Note: seems that those parks are all the same.
+
+== Stadiums and pitches ==
+leisure=stadium
+leisure=pitch
+leisure=sport_center
+
+=== Hospitals ===
+amenity=hospital
+
+note: hospitals, schools kindergartens and universities are usually diffferent type of landcover.
+
+=== Kindergartens ===
+amenity=kindergarten
+
+=== Schools ===
+amenity=school
+
+=== Universities ===
+amenity=university
+
+
+
+===== Parkings ========
+OSM:
+  amenity=parking
+
+x-plane: 
+   no such feature in  in standard.
+x-europe: 
+   simheaven/ground/parking_cars.fac
+
+
+
+==== Fuel Stations ===
+osm:
+  amenity=fuel
+
+x-europe: 
+  simheaven/commercial/petrol_28x20.obj
+
+  note this is point object, not a landcover.
+
+
+==== other important objects ====
+
+railway stations
+
+very important, but nothing about in x-plane and x-europe library
+
+osm -- not really clear
+building = train_station
+
+amenity=bus_station, building=?
+
+
+
+
+
+=======================================================
+mega прятки.
