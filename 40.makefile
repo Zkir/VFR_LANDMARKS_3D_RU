@@ -3,11 +3,9 @@ all: fin
 work_folder\40_osm_extracts_1x1:
 	mkdir work_folder\40_osm_extracts_1x1
 	
-	
 
 work_folder\40_osm_extracts_1x1\+56+038: | work_folder\40_osm_extracts_1x1
 	mkdir work_folder\40_osm_extracts_1x1\+56+038	
-	
 	
 	
 work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m :  work_folder\00_planet.osm\russia-latest.osm.pbf | work_folder\40_osm_extracts_1x1\+56+038
@@ -74,7 +72,8 @@ work_folder\40_osm_extracts_1x1\+56+038\landuses_clipped_enriched.geojson: work_
 	python enrich_landuses.py
 
 work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf.txt:  work_folder\40_osm_extracts_1x1\+56+038\landuses_clipped_enriched.geojson
-	python json2dsf.py $< $@
+	python geojson2dsftxt.py $< $@
+	python dsftxt2geojson.py $@ work_folder\40_osm_extracts_1x1\+56+038\+56+038.decompiled.geojson
 
 work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf: work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf.txt 
 	dsftool --text2dsf $< $@

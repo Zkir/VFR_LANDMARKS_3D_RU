@@ -21,8 +21,26 @@ def classify(properties):
         object_asset = "lib/g10/autogen/natural.ags"
         param = 257
 
+    elif properties.get("landuse", "") == "residential":
+
+        if properties.get("max_level", None) is not None:
+            max_level = properties.get("max_level", None)
+            if max_level < 3:
+                object_asset = "lib/g10/autogen/urban_low_solid_30_v0.ags"
+            elif max_level < 6:
+                object_asset = "lib/g10/autogen/urban_med_broken_0.ags"
+            elif max_level < 10:
+                object_asset = "lib/g10/autogen/urban_med_broken_0.ags"
+            else:
+                object_asset = "lib/g10/autogen/urban_high_broken_tall_0.ags"
+
+            param = 256*int((max_level+1)*2.7/4)+1
+        else:
+            object_asset = "lib/g10/autogen/urban_low_broken_0.ags"
+            param = 257
     else:
-        object_asset = "lib/g10/autogen/urban_med_broken_0.ags"
+        object_asset = "lib/g10/autogen/natural.ags"
+        print("unknown object type: " + properties.get("landuse", ""))
         param = 257
 
     return object_asset, param
