@@ -17,7 +17,7 @@ ds_building_areas = df_buildings.geometry.area
 
 for index, row in df_landuses.iterrows():
 
-    m = df_buildings.geometry.within(row.geometry).loc[lambda x: x == True]
+    m = df_buildings.geometry.intersects(row.geometry).loc[lambda x: x == True]
     n = m.size
     df_landuses.at[index, 'number_of_buildings'] = n  # number of buildings within the area
     landuse_area = row.geometry.area
