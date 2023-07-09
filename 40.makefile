@@ -19,17 +19,15 @@ work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m :  work_folder\00_planet.osm
 		-o="work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m"
 	
 	
-work_folder\40_osm_extracts_1x1\+56+038\extract_polygons: work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m 	
+work_folder\40_osm_extracts_1x1\+56+038\buildings.geojson: work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m 	
 	osmfilter work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m --keep="building=*" >work_folder\40_osm_extracts_1x1\+56+038\buildings.osm	
+	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\buildings.osm work_folder\40_osm_extracts_1x1\+56+038\buildings.geojson \
+        --action=write_poly --keep="building=" --required-tags="height building:* roof:*"	
+		
 	osmfilter work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m --keep="man_made=*" --drop="building=*" >work_folder\40_osm_extracts_1x1\+56+038\manmades.osm	
-	
-	touch $@
-	
-	
-work_folder\40_osm_extracts_1x1\+56+038\create_geojsons : work_folder\40_osm_extracts_1x1\+56+038\extract_polygons	
-	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\buildings.osm work_folder\40_osm_extracts_1x1\+56+038\buildings.geojson --action=write_poly --keep="building="
-	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\manmades.osm  work_folder\40_osm_extracts_1x1\+56+038\manmades.geojson  --action=write_poly --keep="man_made="
-	touch $@ 
+	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\manmades.osm  work_folder\40_osm_extracts_1x1\+56+038\manmades.geojson \
+        --action=write_poly --keep="man_made="
+
 
 work_folder\40_osm_extracts_1x1\+56+038\landuses.geojson: work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m	
 	osmfilter work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m --keep="landuse=*" --drop="landuse=military" >work_folder\40_osm_extracts_1x1\+56+038\landuses.osm	
@@ -61,10 +59,20 @@ work_folder\40_osm_extracts_1x1\+56+038\places-points.geojson: 	work_folder\40_o
 	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\places-poi.osm  $@  --action=write_poi  --keep="place= " 	
 	
 
-work_folder\40_osm_extracts_1x1\+56+038\landuses-clipped.geojson : work_folder\40_osm_extracts_1x1\+56+038\create_geojsons work_folder\40_osm_extracts_1x1\+56+038\highways.geojson work_folder\40_osm_extracts_1x1\+56+038\leisures.geojson work_folder\40_osm_extracts_1x1\+56+038\amenities.geojson work_folder\40_osm_extracts_1x1\+56+038\places.geojson work_folder\40_osm_extracts_1x1\+56+038\places-points.geojson work_folder\40_osm_extracts_1x1\+56+038\naturals.geojson work_folder\40_osm_extracts_1x1\+56+038\landuses.geojson
+work_folder\40_osm_extracts_1x1\+56+038\landuses-clipped.geojson : \
+                     work_folder\40_osm_extracts_1x1\+56+038\highways.geojson \
+                     work_folder\40_osm_extracts_1x1\+56+038\leisures.geojson \
+                     work_folder\40_osm_extracts_1x1\+56+038\amenities.geojson \
+                     work_folder\40_osm_extracts_1x1\+56+038\places.geojson \
+                     work_folder\40_osm_extracts_1x1\+56+038\places-points.geojson \
+                     work_folder\40_osm_extracts_1x1\+56+038\naturals.geojson \
+                     work_folder\40_osm_extracts_1x1\+56+038\landuses.geojson
 	python clip_dsf_layers.py
 
-work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf.txt:  work_folder\40_osm_extracts_1x1\+56+038\landuses-clipped.geojson
+work_folder\40_osm_extracts_1x1\+56+038\landuses_clipped_enriched.geojson: work_folder\40_osm_extracts_1x1\+56+038\landuses-clipped.geojson work_folder\40_osm_extracts_1x1\+56+038\buildings.geojson
+	python enrich_landuses.py
+
+work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf.txt:  work_folder\40_osm_extracts_1x1\+56+038\landuses_clipped_enriched.geojson
 	python json2dsf.py $< $@
 
 work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf: work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf.txt 
