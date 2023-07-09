@@ -48,7 +48,8 @@ work_folder\40_osm_extracts_1x1\+56+038\leisures.geojson: work_folder\40_osm_ext
 
 work_folder\40_osm_extracts_1x1\+56+038\amenities.geojson: work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m 	
 	osmfilter work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m --keep="amenity=*" --drop="building=*"  >work_folder\40_osm_extracts_1x1\+56+038\amenities.osm	
-	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\amenities.osm  $@  --action=write_poly --keep="amenity=park =parking =school =kindergarten =university =hospital and not landuse=" 
+	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\amenities.osm  $@  --action=write_poly --keep="amenity=park =school =kindergarten =university =hospital and not landuse=" 
+#		=parking
 	
 work_folder\40_osm_extracts_1x1\+56+038\places.geojson: 	work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m
 	osmfilter $< --keep="place=city =town =village =hamlet"   >work_folder\40_osm_extracts_1x1\+56+038\places.osm	
