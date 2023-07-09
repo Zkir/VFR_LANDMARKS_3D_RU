@@ -3,6 +3,7 @@ import sys
 from datetime import datetime
 import os
 import argparse
+import re
 
 from mdlOsmParser    import readOsmXml
 from mdlFilterParser import parse_filter
@@ -170,6 +171,18 @@ def filterObjects(Objects, object_filter, strAction):
  
     return SelectedObjects, last_known_edit
 
+
+def match_tags(tag, tags):
+    result = False
+    for t1 in tags:
+        # we need to replace osm-style wildcard with regexp wildcards
+        pattern = "^" + t1.replace("*",".*") + "$"
+        if re.search(pattern, tag):
+            result = True
+            break
+    return result
+
+
 def writeTagStatistics(strOutputFileName, Objects, min_tag_frequency, mandatory_tags, restricted_tags):
     tags_stat = {}
     tags_stat_filtered = []
@@ -192,7 +205,7 @@ def writeTagStatistics(strOutputFileName, Objects, min_tag_frequency, mandatory_
         
         #Фильтрация 1% персентиль 
         for tag in tags_stat_sorted.keys():
-            if (tags_stat[tag]/max_count >= min_tag_frequency or tag in mandatory_tags) and tag not in restricted_tags:
+            if (tags_stat[tag]/max_count >= min_tag_frequency or match_tags(tag, mandatory_tags)) and not match_tags(tag, restricted_tags):
                 tags_stat_filtered.append(tag)
         
         #вывод 
@@ -299,11 +312,10 @@ def main():
         for item in args.required_tags.split(' '):
             required_tags.append(item.strip())
 
-    prohibited_tags = ['addr:country', 'addr:region','addr:city', 'addr:municipality', 'addr:district', 'addr:ward', 'addr:subward', 'addr:street',
-                       'addr:housenumber', 'source', 'source:date', 'fixme' ,'type']  # 'addr:*','source:*'
+    prohibited_tags = ['addr:*', 'source', 'source:date', 'fixme', 'type']
 
     createJson(strInputFileName, strOutputFileName, strAction, strFilter, min_tag_frequency, required_tags, prohibited_tags)
-    print('Thats all, folks!')
+    print("That's all, folks!")
 
 
 main()
