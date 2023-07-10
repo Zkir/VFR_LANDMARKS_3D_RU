@@ -67,11 +67,17 @@ work_folder\40_osm_extracts_1x1\+56+038\landuses-clipped.geojson : \
                      work_folder\40_osm_extracts_1x1\+56+038\naturals.geojson \
                      work_folder\40_osm_extracts_1x1\+56+038\landuses.geojson
 	python clip_dsf_layers.py
+	
+work_folder\40_osm_extracts_1x1\+56+038\landuses-clipped-all.geojson: work_folder\40_osm_extracts_1x1\+56+038\landuses-clipped.geojson work_folder\40_osm_extracts_1x1\+56+038\amenities-clipped.geojson
+	python join_geojsons.py $@ $^
 
-work_folder\40_osm_extracts_1x1\+56+038\landuses_clipped_enriched.geojson: work_folder\40_osm_extracts_1x1\+56+038\landuses-clipped.geojson work_folder\40_osm_extracts_1x1\+56+038\buildings.geojson
+work_folder\40_osm_extracts_1x1\+56+038\landuses-clipped-enriched.geojson: work_folder\40_osm_extracts_1x1\+56+038\landuses-clipped-all.geojson work_folder\40_osm_extracts_1x1\+56+038\buildings.geojson
 	python enrich_landuses.py
+	
+work_folder\40_osm_extracts_1x1\+56+038\+56+038.geojson	:  work_folder\40_osm_extracts_1x1\+56+038\landuses-clipped-enriched.geojson work_folder\40_osm_extracts_1x1\+56+038\naturals-clipped.geojson
+	python join_geojsons.py $@ $^
 
-work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf.txt:  work_folder\40_osm_extracts_1x1\+56+038\landuses_clipped_enriched.geojson
+work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf.txt:  work_folder\40_osm_extracts_1x1\+56+038\+56+038.geojson
 	python geojson2dsftxt.py $< $@
 	python dsftxt2geojson.py $@ work_folder\40_osm_extracts_1x1\+56+038\+56+038.decompiled.geojson
 

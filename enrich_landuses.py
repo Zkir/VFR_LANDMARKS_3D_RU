@@ -11,7 +11,7 @@ workfolder = "work_folder\\40_osm_extracts_1x1\\+56+038\\"
 QUADARANT = (38, 56, 39, 57)
 # Latitude is also hardcoded below, beware!!!!
 
-df_landuses = gpd.read_file(workfolder+"landuses-clipped.geojson")
+df_landuses = gpd.read_file(workfolder+"landuses-clipped-all.geojson")
 df_buildings = gpd.read_file(workfolder+"buildings.geojson")
 ds_building_areas = df_buildings.geometry.area
 
@@ -67,4 +67,4 @@ for index, row in df_landuses.iterrows():
         # there are no buildings
         pass  # no means no!
 
-df_landuses.to_file(workfolder+'landuses_clipped_enriched.geojson')
+df_landuses.to_file(workfolder+'landuses-clipped-enriched.geojson')
