@@ -9,6 +9,9 @@
 
 /osmupdate_temp
 /work_folder
+.idea/*.*
+.idea/inspectionProfiles/*.*
+
 /OsmParser/.idea/*.*
 /OsmParser/.idea/dictionaries/*.*
 /OsmParser/.idea/inspectionProfiles/*.*
@@ -26,3 +29,4 @@ make.svg
 3dcheck/pipeline/
 
 /zOsm2GeoJSON/.idea/*.*
+
