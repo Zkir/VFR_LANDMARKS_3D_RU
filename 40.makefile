@@ -7,9 +7,10 @@ work_folder\40_osm_extracts_1x1:
 work_folder\40_osm_extracts_1x1\+56+038: | work_folder\40_osm_extracts_1x1
 	mkdir work_folder\40_osm_extracts_1x1\+56+038	
 	
-	
-work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m :  work_folder\00_planet.osm\russia-latest.osm.pbf | work_folder\40_osm_extracts_1x1\+56+038
-#	osmconvert work_folder\00_planet.osm\russia-latest.osm.pbf -B=poly\+56+038.poly -o="work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m"
+work_folder\40_osm_extracts_1x1\+56+038\+56+038.osm.pbf:  work_folder\00_planet.osm\russia-latest.osm.pbf | work_folder\40_osm_extracts_1x1\+56+038
+	osmconvert work_folder\00_planet.osm\russia-latest.osm.pbf -B=poly\+56+038.poly --complete-multipolygons  -o="work_folder\40_osm_extracts_1x1\+56+038\+56+038.osm.pbf"	
+
+work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m:  work_folder\40_osm_extracts_1x1\+56+038\+56+038.osm.pbf | work_folder\40_osm_extracts_1x1\+56+038
 	osmconvert work_folder\40_osm_extracts_1x1\+56+038\+56+038.osm.pbf -o="work_folder\40_osm_extracts_1x1\+56+038\+56+038-pre.o5m"
 	osmfilter work_folder\40_osm_extracts_1x1\+56+038\+56+038-pre.o5m \
 	    --drop-tags="landuse=logging =peat_cutting =basin =village_green" \

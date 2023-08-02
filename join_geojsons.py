@@ -8,11 +8,11 @@ def main():
     strInputFileName2 = sys.argv[3]
     
 
-    fo1 = open(strInputFileName1)
+    fo1 = open(strInputFileName1,'r', encoding='UTF-8')
     geojson1 = json.load(fo1)
     fo1.close()
     
-    fo2 = open(strInputFileName2)
+    fo2 = open(strInputFileName2,'r', encoding='UTF-8')
     geojson2 = json.load(fo2)
     fo2.close()
 
