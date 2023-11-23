@@ -42,6 +42,7 @@ def writeGeoJson(Objects, objOsmGeom, strOutputFile, strAction, allowed_tags, st
         fo.write('            "type": "Feature",\n')
         fo.write('            "properties": { \n') 
         fo.write('                "@id": "osm/'+osmObject.type +"/"+osmObject.id +'",\n')
+        fo.write('                "@date": "'+osmObject.timestamp +'",\n')
 
         i = 0
         for tag in osmObject.osmtags:
