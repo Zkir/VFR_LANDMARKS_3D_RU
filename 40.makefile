@@ -37,9 +37,17 @@ work_folder\40_osm_extracts_1x1\+56+038\naturals.geojson: work_folder\40_osm_ext
 	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\naturals.osm  work_folder\40_osm_extracts_1x1\+56+038\naturals.geojson  --action=write_poly --keep="natural= and not landuse= " --required-tags="landuse"	
 	
 work_folder\40_osm_extracts_1x1\+56+038\highways.geojson: work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m 	
-	osmfilter work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m --keep="highway=*" --drop="highway=path =service =footway =steps =construction =proposed" >work_folder\40_osm_extracts_1x1\+56+038\highways.osm	
+	osmfilter work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m --keep="highway=*" --drop="highway=path =service =footway =steps =construction =proposed or area=yes" >work_folder\40_osm_extracts_1x1\+56+038\highways.osm	
 	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\highways.osm  $@  --action=write_lines --keep="highway=" 
 	
+work_folder\40_osm_extracts_1x1\+56+038\highways-area.geojson: work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m 	
+	osmfilter work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m --keep="( highway=* and area=yes ) or area:highway= " >work_folder\40_osm_extracts_1x1\+56+038\highways-area.osm	
+	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\highways-area.osm  $@  --action=write_poly --keep=" ( highway= and area=yes ) or area:highway= " 
+
+work_folder\40_osm_extracts_1x1\+56+038\highways2.geojson: work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m 	
+	osmfilter work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m --keep="highway=path =service =footway =steps =construction =proposed" --drop="area=yes" >work_folder\40_osm_extracts_1x1\+56+038\highways2.osm	
+	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\highways2.osm  $@  --action=write_lines --keep="highway=" 
+
 
 work_folder\40_osm_extracts_1x1\+56+038\leisures.geojson: work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m
 	osmfilter work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m --keep="leisure=*" --drop="building=*"  >work_folder\40_osm_extracts_1x1\+56+038\leisures.osm	
@@ -48,7 +56,10 @@ work_folder\40_osm_extracts_1x1\+56+038\leisures.geojson: work_folder\40_osm_ext
 work_folder\40_osm_extracts_1x1\+56+038\amenities.geojson: work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m 	
 	osmfilter work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m --keep="amenity=*" --drop="building=*"  >work_folder\40_osm_extracts_1x1\+56+038\amenities.osm	
 	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\amenities.osm  $@  --action=write_poly --keep="amenity=park =school =kindergarten =university =hospital and not landuse=" 
-#		=parking
+
+work_folder\40_osm_extracts_1x1\+56+038\parkings.geojson: work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m 	
+	osmfilter work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m --keep="amenity=parking" --drop="building=*"  >work_folder\40_osm_extracts_1x1\+56+038\parkings.osm	
+	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\parkings.osm  $@  --action=write_poly --keep="amenity=parking and not landuse=" 		
 	
 work_folder\40_osm_extracts_1x1\+56+038\places.geojson: 	work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m
 	osmfilter $< --keep="place=city =town =village =hamlet"   >work_folder\40_osm_extracts_1x1\+56+038\places.osm	
@@ -57,6 +68,19 @@ work_folder\40_osm_extracts_1x1\+56+038\places.geojson: 	work_folder\40_osm_extr
 work_folder\40_osm_extracts_1x1\+56+038\places-points.geojson: 	work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m
 	osmfilter $< --keep= --keep-nodes="place=city =town =village =hamlet"   >work_folder\40_osm_extracts_1x1\+56+038\places-poi.osm	
 	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\places-poi.osm  $@  --action=write_poi  --keep="place= " 	
+
+
+work_folder\40_osm_extracts_1x1\+56+038\waterways.geojson: work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m
+	osmfilter $< --keep="waterway=*"   >work_folder\40_osm_extracts_1x1\+56+038\waterways.osm	
+	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\waterways.osm  $@  --action=write_lines  --keep="waterway= " 	
+
+work_folder\40_osm_extracts_1x1\+56+038\railways.geojson: work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m
+	osmfilter $< --keep="railway=*"   >work_folder\40_osm_extracts_1x1\+56+038\railways.osm	
+	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\railways.osm  $@  --action=write_lines  --keep="railway= " 	
+
+work_folder\40_osm_extracts_1x1\+56+038\barriers.geojson: work_folder\40_osm_extracts_1x1\+56+038\+56+038.o5m
+	osmfilter $< --keep="barrier=*"   >work_folder\40_osm_extracts_1x1\+56+038\barriers.osm	
+	python zOsm2GeoJSON\zOsm2GeoJSON.py work_folder\40_osm_extracts_1x1\+56+038\barriers.osm  $@  --action=write_lines  --keep="barrier= " 	
 	
 
 work_folder\40_osm_extracts_1x1\+56+038\landuses-clipped.geojson : \
