@@ -1,4 +1,4 @@
-﻿#!c:\Program Files\Python37\python.exe
+﻿#!c:\Program Files\Python312\python.exe
 import urllib.parse as urlparse
 import os
 import sys
