@@ -7,7 +7,8 @@ echo Working folder: %WORK_FOLDER%
 xcopy /Y /Q %WORK_FOLDER%\30_3dmodels\*.x3d  d:\_VFR_LANDMARKS_3D_RU\3dcheck\models
 xcopy /Y /Q %WORK_FOLDER%\30_3dmodels\*.png  d:\_VFR_LANDMARKS_3D_RU\3dcheck\models
 
-xcopy /Y /Q %WORK_FOLDER%\11_osm_objects_list\*.dat d:\_VFR_LANDMARKS_3D_RU\3dcheck\data
+xcopy /Y /Q %WORK_FOLDER%\21_osm_objects_list\*.dat d:\_VFR_LANDMARKS_3D_RU\3dcheck\data
+xcopy /Y /Q %WORK_FOLDER%\22_all_osm_objects_list\RUS_TOP.dat d:\_VFR_LANDMARKS_3D_RU\3dcheck\data
 xcopy /Y /Q %WORK_FOLDER%\Quadrants.dat d:\_VFR_LANDMARKS_3D_RU\3dcheck\data
 
 

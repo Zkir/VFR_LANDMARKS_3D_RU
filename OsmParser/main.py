@@ -418,7 +418,7 @@ def processQuadrant(strQuadrantName):
     strWorkingFolder = ""
 
     strWorkingFolder = BUILD_PATH + '\\work_folder\\' ### + strQuadrantName
-    strQuadrantObjectsListFileName = strWorkingFolder + '\\11_osm_objects_list\\' + strQuadrantName + '.dat'
+    strQuadrantObjectsListFileName = strWorkingFolder + '\\21_osm_objects_list\\' + strQuadrantName + '.dat'
     
 
     objOsmGeom, Objects = readOsmXml(strWorkingFolder + '\\10_osm_extracts\\'+ strQuadrantName + '\\objects-all.osm')

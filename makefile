@@ -3,11 +3,18 @@
 all: fin ##ultimate target 
 	echo "that's all, folks!"
 	
+	
+#****************************************************************************************************************************
+#* __ Prepare quadrants/regions list
+#****************************************************************************************************************************		
 work_folder: ## make the working folder 
 	mkdir work_folder	
 	
+work_folder\Quadrants.dat: | work_folder ## initialize quadrant summary file 
+	copy Quadrants.dat work_folder	
+	
 #****************************************************************************************************************************
-#* fetch and update source OSM data  
+#* 00 fetch and update source OSM data  
 #****************************************************************************************************************************
 work_folder\00_planet.osm:  | work_folder ## make folder for source osm data
 	mkdir work_folder\00_planet.osm	
@@ -25,7 +32,7 @@ work_folder\00_planet.osm\russia-latest.o5m: work_folder\00_planet.osm\russia-la
 	scripts\planet_update.bat $(@D)
 
 #****************************************************************************************************************************
-#* Create geocoder files 
+#* 05 Create geocoder files 
 #****************************************************************************************************************************
 work_folder\05_geocoder: | work_folder ## prepare geocoder folder 
 	mkdir work_folder\05_geocoder
@@ -33,44 +40,45 @@ work_folder\05_geocoder: | work_folder ## prepare geocoder folder
 work_folder\05_geocoder\geocoder.osm: work_folder\00_planet.osm\russia-latest.o5m | work_folder\05_geocoder ## create geocoder osm file
 	scripts\geocoder_extract.bat work_folder\05_geocoder work_folder\00_planet.osm
 
-
 work_folder\05_geocoder\geocoder.txt: work_folder\05_geocoder\geocoder.osm  ##create geocoder mp file. Actually geocoder txt should be created from geocode.osm, but the script was lost. 	
 	copy geocoder.txt work_folder\05_geocoder
 	touch $@
-
+	
 #****************************************************************************************************************************
-#* Extract objects from OSM
+#* 10 Make region/quadrant extracts
 #****************************************************************************************************************************	
 work_folder\10_osm_extracts: | work_folder ## make folder for extracted osm buildings 
 	mkdir work_folder\10_osm_extracts	
-	
-work_folder\11_osm_objects_list: | work_folder ## make folder for osm object list (dat)
-	mkdir work_folder\11_osm_objects_list
-	
-work_folder\Quadrants.dat: | work_folder ## initialize quadrant summary file 
-	copy Quadrants.dat work_folder
-
-work_folder\20_osm_3dmodels: ## make folder for extracted 3d buildings 
-	mkdir work_folder\20_osm_3dmodels
-
-#cleanup_20_osm_3dmodels_folder: | work_folder\20_osm_3dmodels ##cleanup folder with output models
-#	echo stange cleanup of 3d models, worth removal
-#	cleanup.bat work_folder\20_osm_3dmodels
-#	touch $@
-
 
 work_folder\10_osm_extracts\extract_osm_data: work_folder\00_planet.osm\russia-latest.o5m  | work_folder\Quadrants.dat work_folder\10_osm_extracts ## extract osm data per region
-#	python osmparser\planner.py
 	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do update.bat %%i %%i.poly
 	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do extract.bat %%i
-	touch $@	
-
-work_folder\20_osm_3dmodels\extract_building_models_osm: work_folder\10_osm_extracts\extract_osm_data work_folder\05_geocoder\geocoder.txt | work_folder\11_osm_objects_list work_folder\20_osm_3dmodels ## extract osm buildings  into separate osm files
-	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do python OsmParser\main.py %%i
-	touch $@
+	touch $@		
 
 #****************************************************************************************************************************
-#* Convert models to x-plane obj and x3d 
+#* 20 Extract objects from OSM
+#****************************************************************************************************************************		
+work_folder\20_osm_3dmodels: | work_folder ## make folder for extracted 3d buildings 
+	mkdir work_folder\20_osm_3dmodels
+	
+work_folder\21_osm_objects_list: | work_folder ## make folder for osm object list (dat)
+	mkdir work_folder\21_osm_objects_list
+	
+work_folder\22_all_osm_objects_list : | work_folder
+	mkdir work_folder\22_all_osm_objects_list
+
+work_folder\20_osm_3dmodels\extract_building_models_osm: work_folder\10_osm_extracts\extract_osm_data work_folder\05_geocoder\geocoder.txt | work_folder\21_osm_objects_list work_folder\20_osm_3dmodels ## extract osm buildings  into separate osm files
+	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do python OsmParser\main.py %%i
+	touch $@
+	
+work_folder\22_all_osm_objects_list\all-objects.dat: work_folder\20_osm_3dmodels\extract_building_models_osm | work_folder\22_all_osm_objects_list ##join object lists from different quadrants
+	python scripts\joindats.py $@ work_folder\21_osm_objects_list
+
+work_folder\22_all_osm_objects_list\RUS_TOP.dat: work_folder\22_all_osm_objects_list\all-objects.dat
+	python OsmParser\make_tops.py $@ $<
+
+#****************************************************************************************************************************
+#* 30 Convert models to x-plane obj and x3d 
 #****************************************************************************************************************************		
 work_folder\30_3dmodels: | work_folder ## Prepare folder for 3d models (obj/x3d)
 	mkdir work_folder\30_3dmodels 
@@ -84,18 +92,13 @@ work_folder\30_3dmodels\convert_obj_to_x3d: work_folder\30_3dmodels\convert_osm_
 	touch $@		
 
 #****************************************************************************************************************************
-#* create x-plane specific files, e.g dsf per quadrant. 
+#* 50 create x-plane specific files, e.g dsf per quadrant. 
 #****************************************************************************************************************************	
-work_folder\12_all_osm_objects_list : | work_folder
-	mkdir work_folder\12_all_osm_objects_list
-	
-work_folder\12_all_osm_objects_list\all-objects.dat: work_folder\20_osm_3dmodels\extract_building_models_osm | work_folder\12_all_osm_objects_list ##join object lists from different quadrants
-	python scripts\joindats.py $@ work_folder\11_osm_objects_list 
 	
 work_folder\50_DSF : ## Prepare folder for DSFs
 	mkdir work_folder\50_DSF
 
-work_folder\50_DSF\+56+038.dat : work_folder\12_all_osm_objects_list\all-objects.dat | work_folder\50_DSF ## recreate object list for x-plane quadrant(s)
+work_folder\50_DSF\+56+038.dat : work_folder\22_all_osm_objects_list\all-objects.dat | work_folder\50_DSF ## recreate object list for x-plane quadrant(s)
 	python scripts\filterdat.py $@ $< +56+038   
 	
 work_folder\50_DSF\+56+038.dsf.txt: work_folder\50_DSF\+56+038.dat	## generate dsf.txt from quadrant object list 
@@ -106,7 +109,7 @@ work_folder\50_DSF\+56+038.dsf: work_folder\50_DSF\+56+038.dsf.txt ## compile bi
 	
 	
 #****************************************************************************************************************************
-#* Build X-Plane scenery package
+#* 80 Build X-Plane scenery package
 #****************************************************************************************************************************		
 xplane_buildpath = work_folder\80_xplane_release\VFR_LANDMARKS_3D_RU
 xplane_workpath =  work_folder\50_DSF\+56+038
@@ -152,12 +155,12 @@ work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip: work_folder\copy_xpla
 
 
 #****************************************************************************************************************************
-#* Upload resulting data and models to web 
+#* 90 Upload resulting data and models to web 
 #****************************************************************************************************************************	
 work_folder\90_uploads: | work_folder ## prepare uploads folder 
 	mkdir work_folder\90_uploads
 	
-work_folder\90_uploads\upload_models_to_web: work_folder\30_3dmodels\convert_obj_to_x3d | work_folder\90_uploads 	##Upload 3d models and dat files to web (validator)  
+work_folder\90_uploads\upload_models_to_web: work_folder\30_3dmodels\convert_obj_to_x3d work_folder\22_all_osm_objects_list\RUS_TOP.dat | work_folder\90_uploads 	##Upload 3d models and dat files to web (validator)  
 	upload.bat
 	touch $@		
 
