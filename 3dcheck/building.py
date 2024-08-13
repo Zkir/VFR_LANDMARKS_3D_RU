@@ -3,12 +3,13 @@ import urllib.parse as urlparse
 import os
 import sys
 import codecs
+import time 
 from mdlMisc import *
 
 #========================================================================
 #  Web Page for individual object, with 3d model
 #========================================================================
-def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
+def CreateObjectPage(strQuadrantName,cells, intObjectIndex,page_time_stamp):
     strHTMLPage = ""
     strOsmID = ""
     strOSMurl = ""
@@ -89,7 +90,7 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
     print( '  <div class=\'page-content\'>'+ '\n')
 
     print( '  <div class=\'descr\'  >'+ '\n')
-    print( '  <table style=\'padding-left:15px\'>'+ '\n')
+    print( '  <table style=\'padding:15px;\'>'+ '\n')
     print( '  <tr><td>Тип здания:  </td><td>' + cells[intObjectIndex][10] + '</td></tr>'+ '\n')
     print( '  <tr><td>Описание:  </td><td>' + cells[intObjectIndex][8] + '</td></tr>'+ '\n')
     print( '  <tr><td>Год постройки: </td><td>' + cells[intObjectIndex][16] + '</td></tr>'+ '\n')
@@ -111,6 +112,7 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
     print( '  <tr><td>F4 Map</td><td><a target=\'_blank\' href=\'' + strF4url + '\'>' + 'demo.f4map.com' + '</a></td></tr>'+ '\n')
     print( '  <tr><td>Osm Buildings</td><td><a target=\'_blank\' href=\'' + strOsmBurl + '\'>' + 'osmbuildings.org' + '</a></td></tr>'+ '\n')
     print( '  <tr><td>Число частей:</td><td>'+cells[intObjectIndex][24]+strStars+'</td></tr>'+ '\n')
+    print( '  <tr><td>Дата редактирования:</td><td>'+cells[intObjectIndex][25][0:10]+'</td></tr>'+ '\n')
 
     print( '  <tr><td colspan="2"><br/><b><center>*<a target="josm" href="' + strJOSMurl + '">Редактировать в JOSM</a>*</center></b></td></tr>'+ '\n')
     print( '  </table>'+ '\n')
@@ -143,7 +145,7 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex):
     #zero frame for josm links
     print( '<div style="display: none;"><iframe name="josm"></iframe></div>'+ '\n')
     print( '<hr />'+ '\n')
-    print( '<p>Дата формирования страницы: ' + getTimeStamp() + '</p>'+ '\n')
+    print( '<p>Дата формирования страницы: ' + page_time_stamp + '</p>'+ '\n')
     print( '  </div>'+ '\n')
     print( '<!-- open/close -->'+ '\n')
     print( '    <div class="overlay overlay-scale">'+ '\n')
@@ -203,10 +205,14 @@ else:
     strQuadrantName="RU-MOW"
     intObjectIndex="R3030568"
 
-cells = loadDatFile("data\\"+strQuadrantName+".dat")
+strInputFile = "data\\"+strQuadrantName+".dat"
+cells = loadDatFile(strInputFile)
+page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(strInputFile)))
+page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)
+    
 for i in range(len(cells)):
     if UCase(Left(cells[i][1],1)) + cells[i][2] == intObjectIndex:
        intObjectIndex=i
        break  
     
-CreateObjectPage(strQuadrantName, cells, intObjectIndex)
+CreateObjectPage(strQuadrantName, cells, intObjectIndex, page_time_stamp)

@@ -32,7 +32,7 @@
    div.descr {
        /*border: solid 1px black;*/
        float: right;
-       width: 300px;
+       width: 350px;
    }
    div.scene {
      /*  background: #e3e8cc;
@@ -41,7 +41,7 @@
        top:85px;
        bottom:90px;
        left:0px;
-       right:300px; 
+       right:350px; 
 
    }
    div.x3d-content {

@@ -3,12 +3,16 @@ import urllib.parse as urlparse
 import os
 import sys
 import codecs
+import time
 from mdlMisc import *
 
 def CreateIndexPage(strInputFile):
 
 
     cells = loadDatFile(strInputFile)
+    
+    page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(strInputFile)))
+    page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)
   
 
     print( '<html>' + '\n')
@@ -52,7 +56,7 @@ def CreateIndexPage(strInputFile):
     print( '    <li><a href="https://demo.f4map.com/#lat=56.3099201&amp;lon=38.1301151&amp;zoom=18&amp;camera.theta=58.228&amp;camera.phi=-41.93">3D карта, ака F4map</a></li>' + '\n')
     print( '  </ul>' + '\n')
     print( '  <hr />' + '\n')
-    print( '  <p>Дата формирования страницы: ' + getTimeStamp() + '</p>' + '\n')
+    print( '  <p>Дата формирования страницы: ' + page_time_stamp + '</p>' + '\n')
     print( '  <div style="display: none;"><iframe name="josm"></iframe></div>' + '\n')
     print('''<!-- Yandex.Metrika counter -->
              <script type="text/javascript" >

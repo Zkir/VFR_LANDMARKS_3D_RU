@@ -5,7 +5,7 @@ import sys
 import codecs
 from mdlMisc import *
 import cgi
-
+import time
 
 class TSummaryRec:
 
@@ -66,6 +66,9 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
 
 
     cells = loadDatFile(strInputFile)
+    
+    page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(strInputFile)))
+    page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)
 
 
    
@@ -203,7 +206,7 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
             print('</tr>'+ '\n')
     print( '</table>'+ '\n')
     print( '<hr />'+ '\n')
-    print( '<p>Дата формирования страницы: ' + getTimeStamp() + '</p>' + '\n')
+    print( '<p>Дата формирования страницы: ' + page_time_stamp + '</p>' + '\n')
     #zero frame for josm links
     print( '<div style="display: none;"><iframe name="josm"></iframe></div>' + '\n')
     print('''<!-- Yandex.Metrika counter -->
