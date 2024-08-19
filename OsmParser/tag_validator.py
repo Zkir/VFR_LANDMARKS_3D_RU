@@ -1,5 +1,5 @@
 import json
-from mdlStartDate import parseStartDateValue
+from mdlStartDate import parseStartDate
 
 
 """
@@ -69,7 +69,7 @@ def validate_tags(part_id, osmtags, is_building_part):
         tags[tag[0]] = tag[1]
         
     if "start_date" in tags: 
-        if parseStartDateValue(tags["start_date"], False)=='':    
+        if tags["start_date"] != "" and parseStartDate(tags["start_date"]) is None:    
            errors.append(log_error('Unparsed start_date value: ' + tags["start_date"], part_id))    
    
     
