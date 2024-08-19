@@ -36,17 +36,21 @@ def parseStartDate(strDate:str) -> int:
         tokens = strDate.split("..",1) # 1 equals 2 in python. split in two!
         s1 = parseStartDateValue(tokens[0].strip())
         s2 = parseStartDateValue(tokens[1].strip())
-        #print("ÏNTERVAL: " ,s1, s2)
+        #print("INTERVAL: " ,int(s1), int(s2))
         try:
-            strResult= (int(s1)+int(s2))/2 
+            strResult = (int(s1)+int(s2))/2 
+           
+            strResult = int(strResult)
         except:
             strResult = None          
         return strResult
         
-    ####1234 - 4321
-    ###myRegExp.Pattern = '^[0-9]{4}\\s?[-]\\s?[0-9]{4}$'
-    ###if myRegExp.Test(strDate):
-    ###    strResult = Left(strDate, 4)
+    #1941-1945
+    myRegExp.Pattern = '^[0-9]{4}\\s?[-]\\s?[0-9]{4}$'
+    if myRegExp.Test(strDate):
+        y1 = int(Left(strDate, 4))
+        y2 = int(Right(strDate, 4))
+        return  int((y1+y2)/2)
   
     #BC 
     myRegExp.Pattern = r'^.*\s?BC$'
@@ -168,6 +172,7 @@ def tests():
     assert psd("late 1920s") == 1927             #   
     assert psd("~C13") == 1250                   # (probably in the 13th century)
     assert psd("1914..1918") == 1916             # indicates some time during WW1.
+    assert psd("1914-1918") == 1916              # non standart, but used too frequently to ignore
     assert psd("2008-08-08..2008-08-24") == 2008 # indicates some time during the Beijing Olympics.
     assert psd("C13..C15") == 1350               #
     assert psd("mid C17..late C17") == 1670      #
