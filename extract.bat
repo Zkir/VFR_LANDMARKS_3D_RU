@@ -21,9 +21,11 @@ osmfilter %SOURCE_FILE% --keep="building:part=*" >%WORK_FOLDER%\building_parts.o
 osmfilter %SOURCE_FILE% --keep="building=* and historic=*" >%WORK_FOLDER%\historic.osm
 osmfilter %SOURCE_FILE% --keep="building=* and wikipedia=*" >%WORK_FOLDER%\wikipedia.osm
 osmfilter %SOURCE_FILE% --keep="building=* and tourism=attraction" >%WORK_FOLDER%\attractions.osm
+osmfilter %SOURCE_FILE% --keep="building=* and height>90" >%WORK_FOLDER%\tall.osm
+
 
 rem osmfilter %SOURCE_FILE% --keep-nodes="place=*" --keep-ways= --keep-relations=  >%WORK_FOLDER%\geocoder.osm
 rem osmfilter %SOURCE_FILE% --keep="boundary=administrative"   >%WORK_FOLDER%\geocoder1.osm
 
-call osmosis --rx %WORK_FOLDER%\churches.osm --rx %WORK_FOLDER%\towers.osm --rx %WORK_FOLDER%\water_tower.osm --rx %WORK_FOLDER%\walls.osm --rx %WORK_FOLDER%\walls2.osm --rx %WORK_FOLDER%\church_fences.osm --rx %WORK_FOLDER%\wikipedia.osm --rx %WORK_FOLDER%\historic.osm --rx %WORK_FOLDER%\attractions.osm  --merge --merge --merge --merge --merge --merge --merge --merge --wx %WORK_FOLDER%\objects-all.osm
+call osmosis --rx %WORK_FOLDER%\churches.osm --rx %WORK_FOLDER%\towers.osm --rx %WORK_FOLDER%\water_tower.osm --rx %WORK_FOLDER%\walls.osm --rx %WORK_FOLDER%\walls2.osm --rx %WORK_FOLDER%\church_fences.osm --rx %WORK_FOLDER%\wikipedia.osm --rx %WORK_FOLDER%\historic.osm --rx %WORK_FOLDER%\attractions.osm --rx %WORK_FOLDER%\tall.osm  --merge --merge --merge --merge --merge --merge --merge --merge --merge --wx %WORK_FOLDER%\objects-all.osm
 call osmosis --rx %WORK_FOLDER%\objects-all.osm --rx %WORK_FOLDER%\building_parts.osm  --merge --wx %WORK_FOLDER%\objects-with-parts.osm

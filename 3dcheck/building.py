@@ -5,50 +5,49 @@ import sys
 import codecs
 import time 
 from mdlMisc import *
+import os.path
+import json
 
 #========================================================================
 #  Web Page for individual object, with 3d model
 #========================================================================
-def CreateObjectPage(strQuadrantName,cells, intObjectIndex,page_time_stamp):
+def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors):
     strHTMLPage = ""
-    strOsmID = ""
     strOSMurl = ""
     strF4url = ""
     strTemplesUrl = ""
     strTemplesID = ""
-    i = 0
     strJOSMurl = ""
-    strWikipediaLink = ""
-    i = intObjectIndex
+    strWikipediaLink = ""    
 
-    lat=(float(cells[i][3])+float(cells[i][5]))/2
-    lon=(float(cells[i][4])+float(cells[i][6]))/2
+    lat=(float(obj_rec[3])+float(obj_rec[5]))/2
+    lon=(float(obj_rec[4])+float(obj_rec[6]))/2
 
-    strOsmID = UCase(Left(cells[intObjectIndex][1],1)) + cells[intObjectIndex][2]
+    strOsmID = UCase(Left(obj_rec[1],1)) + obj_rec[2]
 
-    strOSMurl = 'https://www.openstreetmap.org/' + LCase(cells[i][1]) + '/' + cells[i][2]
+    strOSMurl = 'https://www.openstreetmap.org/' + LCase(obj_rec[1]) + '/' + obj_rec[2]
     strF4url = 'http://demo.f4map.com/#lat=' + str(lat) + '&lon=' + str(lon) + '&zoom=19'
     strOsmBurl = 'http://osmbuildings.org/?lat='+ str(lat) +'&lon=' + str(lon) + '&zoom=19.0'
 
-    strJOSMurl = "http://localhost:8111/load_and_zoom?left="+ cells[i][4] + "&right="+ cells[i][6] + "&top="+ cells[i][5] +"&bottom="+ cells[i][3] #"&select=object"
-    strTemplesID = cells[i][9]
+    strJOSMurl = "http://localhost:8111/load_and_zoom?left="+ obj_rec[4] + "&right="+ obj_rec[6] + "&top="+ obj_rec[5] +"&bottom="+ obj_rec[3] #"&select=object"
+    strTemplesID = obj_rec[9]
     if strTemplesID !="":
         strTemplesUrl = "http://temples.ru/card.php?ID=" + strTemplesID
 
     strWikipediaLink = ''
 
-    if Trim(cells[intObjectIndex][17]) != '':
-        strWikipediaLink = 'http://ru.wikipedia.org/wiki/' + cells[intObjectIndex][17]
+    if Trim(obj_rec[17]) != '':
+        strWikipediaLink = 'http://ru.wikipedia.org/wiki/' + obj_rec[17]
     
     #name of wikipedia article. we need to remove object name
-    strWikipediaName=Mid(cells[intObjectIndex][17], 4)
+    strWikipediaName=Mid(obj_rec[17], 4)
     
-    strObjectName=cells[intObjectIndex][7]
+    strObjectName=obj_rec[7]
     if strObjectName=="" and strWikipediaName!="":
         strObjectName=strWikipediaName
     
     strStars=''
-    intNumberOfParts=int(cells[intObjectIndex][24])
+    intNumberOfParts=int(obj_rec[24])
     if intNumberOfParts>25:
        strStars='★'
     if intNumberOfParts>100:
@@ -91,36 +90,36 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex,page_time_stamp):
 
     print( '  <div class=\'descr\'  >'+ '\n')
     print( '  <table style=\'padding:15px;\'>'+ '\n')
-    print( '  <tr><td>Тип здания:  </td><td>' + cells[intObjectIndex][10] + '</td></tr>'+ '\n')
-    print( '  <tr><td>Описание:  </td><td>' + cells[intObjectIndex][8] + '</td></tr>'+ '\n')
-    print( '  <tr><td>Год постройки: </td><td>' + cells[intObjectIndex][16] + '</td></tr>'+ '\n')
-    print( '  <tr><td>Стиль: </td><td>' + cells[intObjectIndex][15] + '</td></tr>'+ '\n')
-    print( '  <tr><td>Размер, м : </td><td>' + cells[intObjectIndex][11] + '</td></tr>'+ '\n')
-    print( '  <tr><td>Высота, м : </td><td>' + cells[intObjectIndex][12] + '</td></tr>'+ '\n')
-    print( '  <tr><td>Цвет:  </td><td>' + cells[intObjectIndex][13] + '</td></tr>'+ '\n')
-    print( '  <tr><td>Материал: </td><td>' + cells[intObjectIndex][14] + '</td></tr>'+ '\n')
-    print( '  <tr><td>Адрес:</td><td>' + cells[intObjectIndex][18] + ' ' + cells[intObjectIndex][19] + '</td></tr>'+ '\n')
-    print( '  <tr><td>Город:</td><td>' + cells[intObjectIndex][20] + '</td></tr>'+ '\n')
-    print( '  <tr><td>Район:</td><td>' + cells[intObjectIndex][21] + '</td></tr>'+ '\n')
-    print( '  <tr><td>Область:</td><td>' + cells[intObjectIndex][22] + '</td></tr>'+ '\n')
+    print( '  <tr><td>Тип здания:  </td><td>' + obj_rec[10] + '</td></tr>'+ '\n')
+    print( '  <tr><td>Описание:  </td><td>' + obj_rec[8] + '</td></tr>'+ '\n')
+    print( '  <tr><td>Год постройки: </td><td>' + obj_rec[16] + '</td></tr>'+ '\n')
+    print( '  <tr><td>Стиль: </td><td>' + obj_rec[15] + '</td></tr>'+ '\n')
+    print( '  <tr><td>Размер, м : </td><td>' + obj_rec[11] + '</td></tr>'+ '\n')
+    print( '  <tr><td>Высота, м : </td><td>' + obj_rec[12] + '</td></tr>'+ '\n')
+    print( '  <tr><td>Цвет:  </td><td>' + obj_rec[13] + '</td></tr>'+ '\n')
+    print( '  <tr><td>Материал: </td><td>' + obj_rec[14] + '</td></tr>'+ '\n')
+    print( '  <tr><td>Адрес:</td><td>' + obj_rec[18] + ' ' + obj_rec[19] + '</td></tr>'+ '\n')
+    print( '  <tr><td>Город:</td><td>' + obj_rec[20] + '</td></tr>'+ '\n')
+    print( '  <tr><td>Район:</td><td>' + obj_rec[21] + '</td></tr>'+ '\n')
+    print( '  <tr><td>Область:</td><td>' + obj_rec[22] + '</td></tr>'+ '\n')
     print( '  <tr><td>Lat: </td><td>' + str(lat) + '</td></tr>'+ '\n')
     print( '  <tr><td>Lon: </td><td>' + str(lon) + '</td></tr>'+ '\n')
     print( '  <tr><td>Osm Id: </td><td><a href=\'' + strOSMurl + '\'> ' + strOsmID + '</a></td></tr>'+ '\n')
     if strWikipediaLink != '':
-        print( '  <tr><td>Википедия:</td><td><a target=\'_blank\' href=\'' + strWikipediaLink + '\'>' + Mid(cells[intObjectIndex][17], 4) + '</a></td></tr>'+ '\n')
+        print( '  <tr><td>Википедия:</td><td><a target=\'_blank\' href=\'' + strWikipediaLink + '\'>' + Mid(obj_rec[17], 4) + '</a></td></tr>'+ '\n')
     print( '  <tr><td>temples.ru:</td><td><a target=\'_blank\' href=\'' + strTemplesUrl + '\'>' + strTemplesID + '</a></td></tr>'+ '\n')
     print( '  <tr><td>F4 Map</td><td><a target=\'_blank\' href=\'' + strF4url + '\'>' + 'demo.f4map.com' + '</a></td></tr>'+ '\n')
     print( '  <tr><td>Osm Buildings</td><td><a target=\'_blank\' href=\'' + strOsmBurl + '\'>' + 'osmbuildings.org' + '</a></td></tr>'+ '\n')
-    print( '  <tr><td>Число частей:</td><td>'+cells[intObjectIndex][24]+strStars+'</td></tr>'+ '\n')
-    print( '  <tr><td>Дата редактирования:</td><td>'+cells[intObjectIndex][25][0:10]+'</td></tr>'+ '\n')
-
+    print( '  <tr><td>Число частей:</td><td>'+obj_rec[24]+strStars+'</td></tr>'+ '\n')
+    print( '  <tr><td>Дата редактирования:</td><td>'+obj_rec[25][0:10]+'</td></tr>'+ '\n')
+    print( '  <tr><td>Ошибки валидации:</td><td><a href="'+strOsmID+'.errors.html"> '+str(len(validation_errors))+'</a></td></tr>'+ '\n')
     print( '  <tr><td colspan="2"><br/><b><center>*<a target="josm" href="' + strJOSMurl + '">Редактировать в JOSM</a>*</center></b></td></tr>'+ '\n')
     print( '  </table>'+ '\n')
     print( '   '+ '\n')
     print( '  </div>'+ '\n')
 
     print( '    <div class=\'scene\' >'+ '\n')
-    if cells[i][23] == "True":
+    if obj_rec[23] == "True":
         print( '      <div class=\'x3d-content\'>'+ '\n')
         print( '        <x3d id=\'x3dElem\' x=\'0px\' y=\'0px\' width=\'100%\' height=\'100%\'>'+ '\n')
         print( '          <scene>'+ '\n')
@@ -145,15 +144,15 @@ def CreateObjectPage(strQuadrantName,cells, intObjectIndex,page_time_stamp):
     #zero frame for josm links
     print( '<div style="display: none;"><iframe name="josm"></iframe></div>'+ '\n')
     print( '<hr />'+ '\n')
-    print( '<p>Дата формирования страницы: ' + page_time_stamp + '</p>'+ '\n')
+    print( '<p>Дата формирования страницы: ' + page_time_stamp + '</p>'+ '\n')    
     print( '  </div>'+ '\n')
     print( '<!-- open/close -->'+ '\n')
     print( '    <div class="overlay overlay-scale">'+ '\n')
     print( '      <button type="button" class="overlay-close">Close</button>'+ '\n')
     print( '      <div style="position: absolute;top:5px;  left:20px; color: black; z-index: 100;">'+ '\n')
     print( '       <h1>' + strObjectName + ' (' + strOsmID + ') ' +strStars+ '</h1>'+ '\n')
-    print( '       <p>'+cells[intObjectIndex][22]+', '+cells[intObjectIndex][20]+', '+ cells[intObjectIndex][18]+' '+  cells[intObjectIndex][19]+'</p>  '+ '\n')
-    print( '       <p>Число частей:'+cells[intObjectIndex][24]+'</p>'+ '\n')
+    print( '       <p>'+obj_rec[22]+', '+obj_rec[20]+', '+ obj_rec[18]+' '+  obj_rec[19]+'</p>  '+ '\n')
+    print( '       <p>Число частей:'+obj_rec[24]+'</p>'+ '\n')
     print( '      </div>'+ '\n')
     print( '      <x3d id=\'x3dElem2\' x=\'0px\' y=\'0px\' width=\'100%\' height=\'100%\'>'+ '\n')
     print( '               <scene>'+ '\n')
@@ -205,14 +204,28 @@ else:
     strQuadrantName="RU-MOW"
     intObjectIndex="R3030568"
 
-strInputFile = "data\\"+strQuadrantName+".dat"
+strInputFile = "data\\quadrants\\"+strQuadrantName+".dat"
 cells = loadDatFile(strInputFile)
 page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(strInputFile)))
 page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)
     
-for i in range(len(cells)):
-    if UCase(Left(cells[i][1],1)) + cells[i][2] == intObjectIndex:
-       intObjectIndex=i
+for rec in cells:
+    if UCase(Left(rec[1],1)) + rec[2] == intObjectIndex:
+       obj_rec = rec
        break  
+       
+        
+#validation errors
+validation_errors_file_name = "data\\errors\\" + UCase(Left(obj_rec[1],1)) + obj_rec[2] +'.errors.dat'
+
+
+
+
+if os.path.exists(validation_errors_file_name):
+    with open(validation_errors_file_name) as f:
+        validation_errors = json.load(f)
+else:
+    validation_errors = []
+      
     
-CreateObjectPage(strQuadrantName, cells, intObjectIndex, page_time_stamp)
+CreateObjectPage(strQuadrantName, obj_rec, page_time_stamp, validation_errors)

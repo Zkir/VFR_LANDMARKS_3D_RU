@@ -6,6 +6,8 @@
 /3dcheck/index.html
 /3dcheck/models
 /3dcheck/data/*.dat
+/3dcheck/data/quadrants/*.dat
+/3dcheck/data/errors/*.dat
 /3dcheck/landcovers
 /3dcheck/blogposts
 

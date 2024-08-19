@@ -3,3 +3,4 @@ RewriteRule ^test$ test.py
 RewriteRule ^([A-Z0-9\-\+_]+).html$  region.py?param=$1
 RewriteRule ^rus-top.html$ region.py?param=RUS_TOP
 RewriteRule ^([A-Z0-9\-\+_]+)/([RWN0-9]+).html$  building.py?quadrant=$1&object=$2
+RewriteRule ^([A-Z0-9\-\+_]+)/([RWN0-9]+).errors.html$  building_errors.py?quadrant=$1&object=$2

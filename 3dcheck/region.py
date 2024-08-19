@@ -128,13 +128,20 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     print( '<h2>Объекты</h2>'+ '\n')
     print( '<p><small>Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</small><p>'+ '\n')
     print( '<table class="sortable">'+ '\n')
-    print( '<tr><th>OSM ID</th><th>Название</th><th>Год постройки</th><th>Temples.ru</th><th>Размер, м</th><th>Высота, м</th><th>Цвет</th><th>Материал</th>' + '<th>Стиль</th><th>Город</th> <th>Район</th> <th>Область</th><th>OSM 3D </th><th>Число частей</th><th>Послед. редактир.</th><th>J</th></tr>'+ '\n')
+    print( '<tr><th>OSM ID</th><th>Название</th><th>Год постройки</th><th>Temples.ru</th><th>Размер, м</th><th>Высота, м</th><th>Цвет</th><th>Материал</th>'
+           + '<th>Стиль</th><th>Город</th> <th>Район</th> <th>Область</th><th>OSM 3D </th><th>Число частей</th><th>Послед. редактир.</th><th>Ошибки</th><th>J</th></tr>'+ '\n')
    
     for i in range(len(cells)):
 
         if ( cells[i][10] != 'DEFENSIVE WALL' )  and  ( cells[i][10] != 'CHURCH FENCE' )  and  ( cells[i][10] != 'WATER TOWER' )  and  ( cells[i][10] != 'HISTORIC WALL' ) :
+        
+            if len(cells[i])>26:
+                number_of_errors = int(cells[i][26])
+            else:
+                number_of_errors = 0
+              
             if cells[i][23]=="True":
-                if int(cells[i][24])>1: 
+                if (int(cells[i][24])>1) and (number_of_errors==0): 
                     #there is model, and there are more than one building part   
                     print( '<tr style="background: #DDFFCC" > '+ '\n')
                 else:
@@ -147,6 +154,7 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
                 else:
                     #there are no building parts and a model is not created. Sad, but it's not an error
                     print( '<tr>'+ '\n')
+                    
             strOSMurl = 'https://www.openstreetmap.org/' + LCase(cells[i][1]) + '/' + cells[i][2]
             lat=(float(cells[i][3])+float(cells[i][5]))/2
             lon=(float(cells[i][4])+float(cells[i][6]))/2
@@ -167,6 +175,8 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
             #ID and link to osm site
             strOsmID = Left(UCase(cells[i][1] ), 1) + ':' + cells[i][2]
             strModelUrl = strQuadrantName + '/' + Left(UCase(cells[i][1] ), 1) + cells[i][2]  + '.html'
+            strErrorsUrl = strQuadrantName + '/' + Left(UCase(cells[i][1] ), 1) + cells[i][2]  + '.errors.html'
+            
             print( '<td><a href="' + strOSMurl + '">' + strOsmID + '</a></td>'+ '\n')
             #Print #3, "<td>" & strOsmID & "</td>"
             #Name/description
@@ -199,9 +209,15 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
             print('<td><a href="' + strF4url + '">' + cells[i][23] + '</a></td>'+ '\n')
             print('<td>' + cells[i][24] + '</td>' )
             if len(cells[i])>25:
-                print('<td>' + cells[i][25] + '</td>' )
+                print('<td>' + cells[i][25][0:10] + '</td>' )
             else:
                 print('<td>' + "" + '</td>' )
+                
+            if len(cells[i])>26:
+                print('<td><a href="'+strErrorsUrl+'">' + cells[i][26] + '</a></td>' )
+            else:
+                print('<td>' + "??" + '</td>' )
+                
             print('<td><a href="' + strJOSMurl + '" target = "josm" >' + 'J' + '</a></td>'+ '\n')
             print('</tr>'+ '\n')
     print( '</table>'+ '\n')
@@ -240,4 +256,4 @@ strParam=urlparse.parse_qs(parsed.query).get('param','')
 strQuadrantName=cgi.FieldStorage().getvalue('param')
 
 #print(strQuadrantName)
-CreateRegionSummaryPage(strQuadrantName, "data/"+strQuadrantName+".dat", False, False)
+CreateRegionSummaryPage(strQuadrantName, "data/quadrants/"+strQuadrantName+".dat", False, False)

@@ -28,8 +28,8 @@ def CreateIndexPage(strInputFile):
     print( '</head>' + '\n')
     print( '<body>' + '\n')
     print( '  <h1>Валидатор 3D: Церкви и другие здания</h1>' + '\n')
-    print( '  <p>Данный валидатор проверяет <b>наличие</b> 3d-моделей для церквей и некоторых других исторических зданий.' + '\n')
-    print( '     Почему церкви? Потому что это наиболее заметные объекты и для их моделирования есть фотографии на temples.ru.</p>' + '\n')
+    print( '  <p>Данный валидатор проверяет <b>наличие</b> 3d-моделей для церквей и некоторых других исторических зданий.</p>' + '\n')
+    print( '     <p>Почему церкви? Потому что это наиболее заметные объекты и для их моделирования есть фотографии на temples.ru.</p>' + '\n')
     print( '  <!-- <p>Данные нарезаются по квадратным градусам (этот валидатор таким родился)</p> -->' + '\n')
     print( '  <h2>Разделы</h2>' + '\n')
     print( '  <p>1. <a href="/">Россия, по регионам</a>. </p>' + '\n')
@@ -38,14 +38,14 @@ def CreateIndexPage(strInputFile):
 
     print( '  <h2>Список областей</h2>' + '\n')
     print( '  <table class="sortable">' + '\n')
-    print( '    <tr><th>Квадрат</th><th>Описание</th><th>Всего объектов</th><th>С 3D моделью</th><th>Процент</th><th>Дата последнего обновления</th></tr>' + '\n')
+    print( '    <tr><th>Квадрат</th><th>Описание</th><th>Всего объектов</th><th>С 3D моделью</th><th>Процент</th><th>Дата последнего обновления</th><th>Ошибки</th></tr>' + '\n')
     
     for i in range(len(cells)):
         if cells[i][4]>'1900.01.01 00:00:00': 
             intRate=0
             if int(cells[i][2]) !=0:
                 intRate = Round(100.0*int(cells[i][3])/int(cells[i][2])) 
-            print( '    <tr><td>'+cells[i][0]+'</td><td><a href="'+cells[i][0]+'.html">'+ cells[i][1] +'</a> </td><td>'+cells[i][2]+'</td><td>' + cells[i][3]+ '</td><td>' + str(intRate)+ '</td><td>' + cells[i][4]+ '</td></tr>' + '\n')
+            print( '    <tr><td>'+cells[i][0]+'</td><td><a href="'+cells[i][0]+'.html">'+ cells[i][1] +'</a> </td><td>'+cells[i][2]+'</td><td>' + cells[i][3]+ '</td><td>' + str(intRate)+ '</td><td>' + cells[i][4]+ '</td> <td>' + cells[i][5]+ '</td> </tr>' + '\n')
 
     print( '  </table>' + '\n')
     print( '  <h2>Полезные ссылки</h2>' + '\n')
@@ -81,6 +81,5 @@ sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 print ("Content-Type: text/html; charset=utf-8 \n\n")
 print
 
-#CreateIndexPage("data/Regions.dat")
-CreateIndexPage("data/Quadrants.dat")
+CreateIndexPage("data/quadrants/Quadrants.dat")
 

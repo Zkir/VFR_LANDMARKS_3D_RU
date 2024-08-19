@@ -7,12 +7,16 @@ from mdlOsmParser import readOsmXml, encodeXmlString
 from osmGeometry import clsOsmGeometry
 from mdlXmlParser import clsXMLparser
 from mdlSite import DoGeocodingForDatFile
+from mdlStartDate import parseStartDateValue
+
+from  tag_validator import validate_tags, dump_errors
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 
 def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFileName, strOutputFile, OSM_3D_MODELS_PATH):
     j = 0
-    intModelsCreated=0
+    intModelsCreated = 0
+    intValidationErrorsTotal = 0
 
     # lets's filter out something, we are interested only in buildings and fences.
     SelectedObjects = []
@@ -41,8 +45,9 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFi
         # Rewrite osmObject as osm file!
         touched_date = ""
         if not blnFence:
-            heightbyparts, numberofparts, touched_date = rewriteOsmFile(osmObject, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH)
+            heightbyparts, numberofparts, touched_date, numberofvalidationerrors = rewriteOsmFile(osmObject, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH)
             osmObject.blnHasBuildingParts = (heightbyparts > 0)
+            intValidationErrorsTotal += numberofvalidationerrors
 
             if heightbyparts > osmObject.dblHeight:
                 osmObject.dblHeight = heightbyparts
@@ -50,7 +55,8 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFi
                 intModelsCreated = intModelsCreated + 1
                 print('3d model created ' + Left(osmObject.type, 1) + ':' + osmObject.id + ' ' + safeString(
                     osmObject.name) + ' ' + safeString(osmObject.descr))
-                print(' last edit date: '+touched_date)
+                if numberofvalidationerrors > 0:    
+                    print("    " + str(numberofvalidationerrors) + " errors detected")
 
         # fill report
         strBuildingType = calculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType,
@@ -74,18 +80,22 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFi
                  + osmObject.tagAddrStreet + '|' + osmObject.tagAddrHouseNumber + '|' + osmObject.tagAddrCity + '|'
                  + osmObject.tagAddrDistrict + '|' + osmObject.tagAddrRegion + '|'
                  + str(osmObject.blnHasBuildingParts and (osmObject.dblHeight > 0)) + '|' + str(numberofparts) + '|'
-                 + touched_date
+                 + touched_date + '|' 
+                 + str(numberofvalidationerrors)
                  + '\n')
     fo.close()
 
     # miracle: update totals file
     totals = loadDatFile(BUILD_PATH + '\\work_folder\\Quadrants.dat')
+
     # filter by quadrant name
     for i in range(len(totals)):
+       
         if totals[i][0] == strQuadrantName:
             totals[i][2] = str(j)
             totals[i][3] = str(intModelsCreated)
             totals[i][4] = getTimeStamp()
+            totals[i][5] = str(intValidationErrorsTotal)
             break
 
     saveDatFile(totals, BUILD_PATH + '\\work_folder\\Quadrants.dat')
@@ -105,76 +115,9 @@ def parseHeightValue(str):
     if str == "":
         str = '0'
     if not IsNumeric(str):
-        print ("Unparsed height value: " + str)
+        #print ("Unparsed height value: " + str)
         str = '0'
     fn_return_value = float(str)
-    return fn_return_value
-
-
-def parseStartDateValue(strDate):
-
-    strResult = ""
-    strModifier = ""
-    fn_return_value=""
-    myRegExp = RegExp()
-    if strDate == '':
-        return fn_return_value
-    #Julian Calendar prefix
-    #just ignore it.
-    if Left(strDate, 2) == 'j:':
-        strDate = Mid(strDate, 3)
-    #Modifiers
-    if Left(strDate, 1) == '~':
-        strDate = Mid(strDate, 2)
-    if Left(strDate, 7) == 'before ':
-        strDate = Mid(strDate, 8)
-    #we do not need "mid", because we use a middle of the interval anyway.
-    if Left(strDate, 4) == 'mid ':
-        strDate = Mid(strDate, 5)
-    if Left(strDate, 6) == 'early ':
-        strDate = Mid(strDate, 7)
-        strModifier = 'early'
-    if Left(strDate, 5) == 'late ':
-        strDate = strDate[5:len(strDate)]
-        strModifier = 'late'
-    #C18
-    myRegExp.Pattern = '^C[0-9]{2}$'
-    if myRegExp.Test(strDate):
-
-        strDate = str(int(Mid(strDate, 2)) - 1)   + '50'
-    #1234
-    myRegExp.Pattern = '^[0-9]{4}$'
-    if myRegExp.Test(strDate):
-        strResult = strDate
-    else:
-        #1234..4321
-        myRegExp.Pattern = '^[0-9]{4}\\.\\.[0-9]{4}$'
-        if myRegExp.Test(strDate):
-            strResult = Left(strDate, 4)
-        else:
-            #1234 - 4321
-            myRegExp.Pattern = '^[0-9]{4}\\s?[-]\\s?[0-9]{4}$'
-            if myRegExp.Test(strDate):
-                strResult = Left(strDate, 4)
-            else:
-                #1990s
-                myRegExp.Pattern = '^[0-9]{3}0s$'
-                if myRegExp.Test(strDate):
-                    select_variable_0 = strModifier
-                    if (select_variable_0 == 'early'):
-                        strResult = Left(strDate, 3) + '2'
-                    elif (select_variable_0 == 'late'):
-                        strResult = Left(strDate, 3) + '7'
-                    else:
-                        strResult = Left(strDate, 3) + '5'
-                else:
-                    myRegExp.Pattern = '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
-                    if myRegExp.Test(strDate):
-                        strResult = Left(strDate, 4)
-                    else:
-                        print('unparsed start_date value: ' + strDate)
-                        strResult = strDate
-    fn_return_value = strResult
     return fn_return_value
 
 
@@ -289,7 +232,10 @@ def rewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
     height = 0
     obj_levels=0
     numberofparts = 0
+    Errors = []
+    
     strOutputOsmFileName = OSM_3D_MODELS_PATH + '\\' + UCase(Left(object1.type, 1)) + object1.id + '.osm'
+    strValidationErrorsFileName = OSM_3D_MODELS_PATH + '\\' + UCase(Left(object1.type, 1)) + object1.id + '.errors.dat'
 
     fo=open(strOutputOsmFileName, 'w',encoding="utf-8" )
     objXML.OpenFile(strObjectsWithPartsFileName)
@@ -376,12 +322,11 @@ def rewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
                     numberofparts = numberofparts + 1
                     if obj_height == 0:
                         obj_height= float(obj_levels) * 3   
-                    if obj_height == 0:
-                        print("Error: building part has zero heigh. W:" + str(obj_id) )
                     if obj_height > height:
                         height = obj_height
                 if obj_date > touched_date:
                     touched_date = obj_date
+                Errors += validate_tags("W:" + str(obj_id), osmtags, obj_is_building_part)    
         if strTag == '/relation':
             if  ( blnCompleteObject )  and  ( way_count > 0 ) :
                 fo.write( '<relation id="' + obj_id + '" version="' + obj_ver + '" >' + '\n')
@@ -395,20 +340,27 @@ def rewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
                     numberofparts = numberofparts + 1 
                     if obj_height == 0:
                         obj_height= float(obj_levels) * 3   
-                    if obj_height == 0:
-                        print("Error: building part has zero heigh. R:" + str(obj_id) )
                     if obj_height > height:
                         height = obj_height
                 if obj_date > touched_date:
                     touched_date=obj_date
+                    
+                Errors += validate_tags("R:" + str(obj_id), osmtags, obj_is_building_part)    
     fo.write( '</osm>'+ '\n')
     fo.close()
     objXML.CloseFile()
 
+
     if not ( blnHasBuildingParts and  ( height > 0 ) ) :
         Kill(strOutputOsmFileName)
-    fn_return_value = [height, numberofparts,touched_date]
-    return fn_return_value
+        #numberofvalidationerrors = 0
+    
+    numberofvalidationerrors = len(Errors)
+    if numberofvalidationerrors > 0:
+        dump_errors(strValidationErrorsFileName, Errors)    
+       
+        
+    return [height, numberofparts,touched_date,numberofvalidationerrors]
 
 
 def processQuadrant(strQuadrantName):
