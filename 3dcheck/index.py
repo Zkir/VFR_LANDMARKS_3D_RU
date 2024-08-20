@@ -45,7 +45,8 @@ def CreateIndexPage(strInputFile):
             intRate=0
             if int(cells[i][2]) !=0:
                 intRate = Round(100.0*int(cells[i][3])/int(cells[i][2])) 
-            print( '    <tr><td>'+cells[i][0]+'</td><td><a href="'+cells[i][0]+'.html">'+ cells[i][1] +'</a> </td><td>'+cells[i][2]+'</td><td>' + cells[i][3]+ '</td><td>' + str(intRate)+ '</td><td>' + cells[i][4]+ '</td> <td>' + cells[i][5]+ '</td> </tr>' + '\n')
+            print( '    <tr><td>'+cells[i][0]+'</td><td><a href="'+cells[i][0]+'.html">'+ cells[i][1] +'</a> </td><td>'+cells[i][2]+'</td><td>' + cells[i][3]+ '</td>' + 
+                           '<td>' + str(intRate)+ '</td><td>' + cells[i][4]+ '</td> <td><a href="'+cells[i][0]+'.errors.html">' + cells[i][5]+ '</a></td> </tr>' + '\n')
 
     print( '  </table>' + '\n')
     print( '  <h2>Полезные ссылки</h2>' + '\n')
