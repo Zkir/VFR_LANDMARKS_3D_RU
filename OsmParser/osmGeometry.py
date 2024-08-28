@@ -16,22 +16,44 @@ class TBbox:
         self.maxLat = 0
         self.minLon = 0
         self.maxLon = 0
+        
+    def __str__(self):
+        return str(self.minLat) + ", " + str(self.minLon) + ", " + str(self.maxLat) + ", " + str(self.maxLon) 
 
 class TNode:
     def __init__(self):
-        self.id = ""
+        self.id = "-1"
         self.lat = 0.0
         self.lon = 0.0
+        self.version = '-1' 
+        self.timestamp = '1900-01-01'
+        self.osmtags = {}
 
 class TWay:
     def __init__(self):
-        self.id = ""
+        self.id = "-1"
         self.node_count = 0
         self.NodeRefs = []
         self.minLat = 0.0
         self.maxLat = 0.0
         self.minLon = 0.0
         self.maxLon = 0.0
+        self.version = '-1' 
+        self.timestamp = '1900-01-01'
+        self.osmtags = {}
+        
+class TRelation:
+    def __init__(self):
+        self.id = "-1"
+        self.way_count = 0
+        self.WayRefs = []
+        self.minLat = 0.0
+        self.maxLat = 0.0
+        self.minLon = 0.0
+        self.maxLon = 0.0
+        self.version = '-1' 
+        self.timestamp = '1900-01-01'
+        self.osmtags = {}        
 
 class clsOsmGeometry():
     """coordinates of nodes"""
@@ -42,15 +64,25 @@ class clsOsmGeometry():
         self.nodehash = {}
         self.ways = []
         self.wayhash = {}
+        
+        self.relations = []
+        self.relationhash = {}
+        
         self.max_node = -1
         self.max_way = -1
+        self.max_relation = -1
+        
 
-    def AddNode(self, id, lat, lon):
+    def AddNode(self, id, lat, lon, version, timestamp ):
         #print("debug",id, lat, lon)
         aNode=TNode()
         aNode.id = id
         aNode.lat = float(lat)
         aNode.lon = float(lon)
+        
+        aNode.version = version 
+        aNode.timestamp = timestamp
+        
         self.nodes.append(aNode)
 
         self.max_node = self.max_node + 1
@@ -71,7 +103,7 @@ class clsOsmGeometry():
         fn_return_value = self.nodes[intNodeNo].lon
         return fn_return_value
 
-    def AddWay(self, id, NodeRefs, node_count):
+    def AddWay(self, id, version, timestamp, osmtags, NodeRefs):
         i = 0
 
         lat = 0
@@ -80,21 +112,22 @@ class clsOsmGeometry():
         minLon = 0
         maxLat = 0
         maxLon = 0
-        #save id
-        aWay= TWay()
-        self.ways.append(aWay)
-        self.max_way = self.max_way + 1
-        self.ways[self.max_way].id = id
-        self.wayhash[id] = self.max_way
-        #save node refs
-        self.ways[self.max_way].NodeRefs = []
-        for i in range(node_count):
-            self.ways[self.max_way].NodeRefs.append( NodeRefs[i])
-        self.ways[self.max_way].node_count = node_count
+        node_count = len(NodeRefs)
+        
+        aWay = TWay()
+        
+        #save basic attibutes
+        aWay.id = id
+        aWay.version = version 
+        aWay.timestamp = timestamp
+        aWay.osmtags = osmtags
+        aWay.NodeRefs = NodeRefs
+        aWay.node_count = node_count
+        
         #calculate bbox
         for i in range(node_count):
-            lat = self.nodes[self.ways[self.max_way].NodeRefs[i]].lat
-            lon = self.nodes[self.ways[self.max_way].NodeRefs[i]].lon
+            lat = self.nodes[aWay.NodeRefs[i]].lat
+            lon = self.nodes[aWay.NodeRefs[i]].lon
             if i == 0:
                 minLat = lat
                 minLon = lon
@@ -109,13 +142,19 @@ class clsOsmGeometry():
                     minLon = lon
                 if lon > maxLon:
                     maxLon = lon
+                    
         #store bbox
-        self.ways[self.max_way].minLat = minLat
-        self.ways[self.max_way].minLon = minLon
-        self.ways[self.max_way].maxLat = maxLat
-        self.ways[self.max_way].maxLon = maxLon
-        fn_return_value = self.max_way
-        return fn_return_value
+        aWay.minLat = minLat
+        aWay.minLon = minLon
+        aWay.maxLat = maxLat
+        aWay.maxLon = maxLon
+        
+        self.ways.append(aWay)
+        
+        self.max_way = self.max_way + 1
+        self.wayhash[id] = self.max_way
+        
+        return self.max_way
 
     def GetWayBBox(self, intWayNo):
         bbox = TBbox()
@@ -123,8 +162,7 @@ class clsOsmGeometry():
         bbox.minLon = self.ways[intWayNo].minLon
         bbox.maxLat = self.ways[intWayNo].maxLat
         bbox.maxLon = self.ways[intWayNo].maxLon
-        fn_return_value = bbox
-        return fn_return_value
+        return bbox
 
     def FindWay(self, id):
         return self.wayhash.get(id,-1)
@@ -321,3 +359,59 @@ class clsOsmGeometry():
         else:
             print('Empty relation. Probably members with outer role is missing or no closed rings ')
         return size
+        
+        
+    def AddRelation(self, id, version, timestamp, osmtags, WayRefs):
+
+        way_count = len(WayRefs)
+        aRelation = TRelation()
+        aRelation.id = id
+        aRelation.version = version 
+        aRelation.timestamp = timestamp
+        aRelation.osmtags = osmtags
+        aRelation.WayRefs =  WayRefs
+        aRelation.way_count = way_count
+
+        #calculate bbox
+        minLat = 0
+        minLon = 0
+        maxLat = 0
+        maxLon = 0  
+        
+        for i in range(way_count):
+            waybbox = self.GetWayBBox(WayRefs[i][0])
+            
+            if i == 0:
+                minLat = waybbox.minLat
+                minLon = waybbox.minLon
+                maxLat = waybbox.maxLat
+                maxLon = waybbox.maxLon
+            else:
+                if waybbox.minLat < minLat:
+                    minLat = waybbox.minLat
+                if waybbox.maxLat > maxLat:
+                    maxLat = waybbox.maxLat
+                if waybbox.minLon < minLon:
+                    minLon = waybbox.minLon
+                if waybbox.maxLon > maxLon:
+                    maxLon = waybbox.maxLon
+                    
+        #store bbox
+        aRelation.minLat = minLat
+        aRelation.minLon = minLon
+        aRelation.maxLat = maxLat
+        aRelation.maxLon = maxLon        
+        
+        self.relations.append(aRelation)
+        self.max_relation = self.max_relation + 1
+        self.relationhash[id] = self.max_relation
+        
+        return self.max_relation
+        
+    def GetRelationBBox(self, intRelationNo):
+        bbox = TBbox()
+        bbox.minLat = self.relations[intRelationNo].minLat
+        bbox.minLon = self.relations[intRelationNo].minLon
+        bbox.maxLat = self.relations[intRelationNo].maxLat
+        bbox.maxLon = self.relations[intRelationNo].maxLon
+        return bbox    

@@ -57,16 +57,18 @@ def checkMeter(s):
     return checkFloat(s)    
     
 def log_error(s, part_id):
-    print("Error: " + s + ", building part "+ str(part_id)) 
+    #print("Error: " + s + ", building part "+ str(part_id)) 
     return {"error":s, "part_id":part_id}
     
     
 def validate_tags(part_id, osmtags, is_building_part):
     tags = {} 
     errors = []
-    # convert to dictionary 
-    for tag in osmtags:
-        tags[tag[0]] = tag[1]
+    ## convert to dictionary 
+    #for tag in osmtags:
+    #    tags[tag[0]] = tag[1]
+    
+    tags = osmtags
         
     if "start_date" in tags: 
         if tags["start_date"] != "" and parseStartDate(tags["start_date"]) is None:    
