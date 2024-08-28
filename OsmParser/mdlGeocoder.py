@@ -354,7 +354,7 @@ class Geocoder:
 
         
         for region in self.regions:
-            if region.ISO3166_2 != "" : 
+            if region.ISO3166_2 != "" and region.adminlevel == "4" : 
                 filehandle = open("d:\\_VFR_LANDMARKS_3D_RU\\poly\\" + region.ISO3166_2 + '.poly', 'w', encoding="utf-8")
                 filehandle.write(region.id + ' ' + region.name+ '\n')
                 j=0
