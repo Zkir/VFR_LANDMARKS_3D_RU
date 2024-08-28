@@ -2,7 +2,21 @@
 #(c)2023 3d building validator pipeline
 all: fin ##ultimate target 
 	echo "that's all, folks!"
+
+.PHONY: clean
+clean: 
+	RMDIR "work_folder\05_geocoder" /S /Q	
+	RMDIR "work_folder\10_osm_extracts" /S /Q	
+	RMDIR "work_folder\20_osm_3dmodels" /S /Q
+	RMDIR "work_folder\21_osm_objects_list" /S /Q	
+	RMDIR "work_folder\22_all_osm_objects_list" /S /Q	
+	RMDIR "work_folder\30_3dmodels" /S /Q	
 	
+
+.PHONY: planet-update
+planet-update :  ## update source osm file	
+	echo "update osm file" 
+	scripts\planet_update.bat work_folder\00_planet.osm	
 	
 #****************************************************************************************************************************
 #* __ Prepare quadrants/regions list
