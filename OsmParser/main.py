@@ -411,7 +411,6 @@ def main():
         strQuadrantName = composeQuadrantName(52, 41)
 
     processQuadrant(strQuadrantName)
-    print('Thats all, folks!')
 
 
 main()
