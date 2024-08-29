@@ -2,6 +2,7 @@
 from mdlMisc import *
 from osmGeometry import *
 from mdlXmlParser import *
+from rtree import index
 
 #===================================================================
 # Проверка принадлежности точки полигону методом испускания луча
@@ -72,9 +73,17 @@ class GeoRegion:
         else:
             return False
 
+
 class Geocoder:
     def __init__(self):
-        self.regions=[]    
+        self.regions=[]   
+        
+        #p = index.Property(leaf_capacity=200, index_capacity=100000, storage=0)  
+        #p = index.Property(fill_factor=0.1)
+        #self.spatial_index = index.Index(properties=p) 
+        self.spatial_index = index.Index() 
+
+        
     def loadDataFromPoly(self):
         #Load Poly
         boundary=[]
@@ -249,7 +258,9 @@ class Geocoder:
                         else:
                             print("relation " + id + " is somehow broken" )
                             print(" " + Tags.get("name", ""))
-        print(str(len(self.regions))+" relations loaded into geocoder")
+        
+        self.createSpatialIndex()
+        print(str(len(self.regions))+" regions loaded into geocoder")
         return True
 
 
@@ -276,6 +287,7 @@ class Geocoder:
             filehandle.write('[END]' + '\n\n')
         filehandle.write('# That\'s all, folks!')
         filehandle.close()
+
 
     def loadDataFromTextFile(self, strInputFile):
         fh = open(strInputFile, 'r', encoding="utf-8")
@@ -325,13 +337,10 @@ class Geocoder:
             line = line.replace("\n", "")
 
 
-
-            #lon,lat=line.split(" ")
-            #lat=float(lat)
-            #lon=float(lon)
-            #boundary.append([lat,lon])
-
         fh.close()
+        self.createSpatialIndex()
+        print(str(len(self.regions))+" regions loaded into geocoder")
+        
 
     def saveDataToPolyFile(self, strOutputFile, strId):
 
@@ -350,9 +359,8 @@ class Geocoder:
         #filehandle.write('# That\'s all, folks!')
         filehandle.close()
 
-    def saveDataToPolyFiles(self):
 
-        
+    def saveDataToPolyFiles(self):
         for region in self.regions:
             if region.ISO3166_2 != "" and region.adminlevel == "4" : 
                 filehandle = open("d:\\_VFR_LANDMARKS_3D_RU\\poly\\" + region.ISO3166_2 + '.poly', 'w', encoding="utf-8")
@@ -368,6 +376,13 @@ class Geocoder:
                 filehandle.close()
 
 
+    # spatial index (rtree)
+    def createSpatialIndex(self):
+        i = 0
+        for region in self.regions:
+            self.spatial_index.insert(i, (region.bbox.minLat, region.bbox.minLon,  region.bbox.maxLat,  region.bbox.maxLon)) # ,obj=self.regions[i]
+            i += 1
+        
 # ===================================================================================================================
 # Задача обратного геокодинга.
 # по координате найдем адрес.
@@ -377,12 +392,23 @@ class Geocoder:
 
     def getGeoCodes(self,lat,lon):
         geocodes={}
-        for i in range(len(self.regions)):
-            if self.regions[i].checkPointBelongs(lat,lon):
-                if self.regions[i].adminlevel !='place':
-                    geocodes['adminlevel_'+ str(self.regions[i].adminlevel)]=self.regions[i].name
+        
+        # we will get regions matching coordinates from spatial index (rtree)
+        
+        #indexed_regions = [n.object for n in self.spatial_index.intersection((lat, lon, lat, lon), objects=True)] #slow!
+        ids=list(self.spatial_index.intersection((lat, lon, lat, lon)))
+        
+        #print(ids)
+        
+        #for region in self.regions:
+        for i in ids :
+            region = self.regions[i]
+            if region.checkPointBelongs(lat,lon):
+                if region.adminlevel !='place':
+                    geocodes['adminlevel_'+ str(region.adminlevel)]=region.name
                 else:
-                    geocodes[ str(self.regions[i].adminlevel)]=self.regions[i].name
+                    geocodes[ str(region.adminlevel)]=region.name
+                    
         return geocodes
     
 
