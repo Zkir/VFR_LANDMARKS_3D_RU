@@ -14,7 +14,7 @@ clean:
 	
 
 .PHONY: planet-update
-planet-update :  ## update source osm file	
+planet-update: work_folder\00_planet.osm\russia-latest.osm.pbf work_folder\00_planet.osm\russia.poly  ## update source osm file	
 	echo "update osm file" 
 	scripts\planet_update.bat work_folder\00_planet.osm	
 	

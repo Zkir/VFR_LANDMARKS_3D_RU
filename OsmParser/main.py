@@ -13,7 +13,7 @@ from  tag_validator import validate_tags, dump_errors
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 
-def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFileName, strOutputFile, OSM_3D_MODELS_PATH):
+def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     j = 0
     intModelsCreated = 0
     intValidationErrorsTotal = 0
@@ -45,7 +45,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strObjectsWithPartsFi
         # Rewrite osmObject as osm file!
         touched_date = ""
         if not blnFence:
-            heightbyparts, numberofparts, touched_date, numberofvalidationerrors = rewriteOsmFile(osmObject, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH)
+            heightbyparts, numberofparts, touched_date, numberofvalidationerrors = rewriteOsmFile(osmObject, OSM_3D_MODELS_PATH,objOsmGeomParts, ObjectsParts)
             osmObject.blnHasBuildingParts = (heightbyparts > 0)
             intValidationErrorsTotal += numberofvalidationerrors
 
@@ -198,158 +198,164 @@ def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
 
 
 
-def rewriteOsmFile(object1, strObjectsWithPartsFileName, OSM_3D_MODELS_PATH):
-    i = 0
-
-    objOsmGeom = clsOsmGeometry()
-    objXML = clsXMLparser()
-    NodeRefs = []
-    node_count = 0
-    WayRefs = []
-    way_count = 0
-    osmtags = []
-    strTag = ""
-    obj_id = ""
-    obj_ver = ""
-    obj_is_building_part = False
-    obj_height = 0
-    node_lat = 0
-    node_lon = 0
-    node_id = ""
-    way_id = ""
-    StrKey = ""
-    strValue = ""
-    intNodeNo = 0
-    intWayNo = 0
-    blnCompleteObject = False
-    touched_date = "1900-01-01"
-
-
-
-    objOsmGeom = clsOsmGeometry()
-    objXML = clsXMLparser()
-    blnHasBuildingParts = False
+def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
+    
     height = 0
-    obj_levels=0
     numberofparts = 0
+    touched_date = "1900-01-01"
+    numberofvalidationerrors = 0
+    
+    # we need exclude broken objects without nodes
+    # bboxes for them are wrong
+    
+    if object1.bbox.minLat == 0 and object1.bbox.maxLat == 0 and object1.bbox.minLon == 0 and object1.bbox.maxLon == 0:
+        return [height, numberofparts, touched_date, numberofvalidationerrors]
+    
+    #objOsmGeom = clsOsmGeometry()
+    
+    blnHasBuildingParts = False
+    
     Errors = []
+    
     
     strOutputOsmFileName = OSM_3D_MODELS_PATH + '\\' + UCase(Left(object1.type, 1)) + object1.id + '.osm'
     strValidationErrorsFileName = OSM_3D_MODELS_PATH + '\\' + UCase(Left(object1.type, 1)) + object1.id + '.errors.dat'
 
     fo=open(strOutputOsmFileName, 'w',encoding="utf-8" )
-    objXML.OpenFile(strObjectsWithPartsFileName)
-    #Print #fo, "<?xml version='1.0' encoding='UTF-8'?>"
+    
     fo.write('<?xml version=\'1.0\' encoding=\'utf-8\'?>' + '\n')
     fo.write( '<osm version="0.6" generator="zkir manually">' + '\n')
     fo.write( '  <bounds minlat="' + str(object1.bbox.minLat) + '" minlon="' + str(object1.bbox.minLon) + '" maxlat="' + str(object1.bbox.maxLat) + '" maxlon="' + str(object1.bbox.maxLon) + '"/> ' + '\n')
-    while not objXML.bEOF:
-        objXML.ReadNextNode()
-        strTag = objXML.GetTag()
-        if strTag == 'node' or strTag == 'way' or strTag == 'relation':
-            #common for all object types
-            obj_id = objXML.GetAttribute('id')
-            obj_ver = objXML.GetAttribute('version')
-            obj_date = objXML.GetAttribute('timestamp')
-            # something should be cleared
-            osmtags =[]
-            tag_count = 0
-            NodeRefs =[]
-            node_count = 0
-            WayRefs = []
-            way_count = 0
-            blnCompleteObject = True
-            obj_is_building_part = False
-            obj_height = 0
-            obj_levels = 0
-        #get object osm tags
-        if strTag == 'tag':
-            StrKey = objXML.GetAttribute('k')
-            strValue = objXML.GetAttribute('v')
-            osmtags.append( [StrKey, strValue])
-            #check particular osm-tags
-            if StrKey == 'building:part' and strValue != 'no':
-                obj_is_building_part = True
-            if StrKey == 'height':
-                obj_height = parseHeightValue(strValue)
-            if StrKey == 'building:levels':
-                obj_levels = strValue
-                 
-        #node can be written immediately
-        if strTag == 'node':
-            node_lat = float(objXML.GetAttribute('lat'))
-            node_lon = float(objXML.GetAttribute('lon'))
-            if node_lat >= object1.bbox.minLat and node_lat <= object1.bbox.maxLat and node_lon >= object1.bbox.minLon and node_lon <= object1.bbox.maxLon:
-                #or node id belongs to set of known nodes!
-                objOsmGeom.AddNode(obj_id, node_lat, node_lon)
-                fo.write( '<node id="' + obj_id + '" version="' + obj_ver + '"  lat="' + str(node_lat) + '" lon="' + str(node_lon) + '"/>'+ '\n')
-                if obj_date > touched_date:
+    
+    # write nodes inside BBOX  
+    for node in objOsmGeomParts.nodes: 
+        obj_id = node.id 
+        obj_ver = node.version 
+        obj_date = node.timestamp
+        
+        node_lat = float(node.lat)
+        node_lon = float(node.lon)
+        
+        if node_lat >= object1.bbox.minLat and node_lat <= object1.bbox.maxLat and node_lon >= object1.bbox.minLon and node_lon <= object1.bbox.maxLon:
+            #or node id belongs to set of known nodes!
+            #objOsmGeom.AddNode(obj_id, node_lat, node_lon, obj_ver, obj_date)
+            fo.write( '<node id="' + obj_id + '" version="' + obj_ver + '"  lat="' + str(node_lat) + '" lon="' + str(node_lon) + '"/>'+ '\n')
+            if obj_date > touched_date:
                     touched_date = obj_date
-        #we need to find whole ways, because we are interested in ways inside outline!
-        if strTag == 'nd':
-            node_id = objXML.GetAttribute('ref')
-            intNodeNo = objOsmGeom.FindNode(node_id)
-            if intNodeNo != - 1:
-                NodeRefs.append(intNodeNo)
-                node_count = node_count + 1
-            else:
-                #' way incomplete
-                blnCompleteObject = False
-        #the same with relations. if members were not filtered out on the previous step, it should be considered as whole.
-        if strTag == 'member':
-            if objXML.GetAttribute('type') == 'way':
-                way_id = objXML.GetAttribute('ref')
-                intWayNo = objOsmGeom.FindWay(way_id)
-                if intWayNo != - 1:
-                    WayRefs.append ([intWayNo,objXML.GetAttribute('role')])
-                    way_count = way_count + 1
-                else:
-                    #' relation incomplete
-                    blnCompleteObject = False
-        #object is closed
-        if strTag == '/way':
-            if blnCompleteObject:
-                intWayNo = objOsmGeom.AddWay(obj_id, NodeRefs, node_count)
-                #print way with node refs and tags
-                fo.write( '<way id="' + obj_id + '" version="' + obj_ver + '" >' + '\n')
-                for i in range(node_count):
-                    fo.write( '  <nd ref="' + objOsmGeom.GetNodeID(NodeRefs[i]) + '" />' + '\n')
-                for tag in osmtags:
-                    fo.write( '  <tag k="' + tag[0]+ '" v="' + encodeXmlString(tag[1]) + '" />' + '\n')
-                fo.write( '</way>' + '\n')
-                if obj_is_building_part:
-                    blnHasBuildingParts = True
-                    numberofparts = numberofparts + 1
-                    if obj_height == 0:
-                        obj_height= float(obj_levels) * 3   
-                    if obj_height > height:
-                        height = obj_height
-                if obj_date > touched_date:
-                    touched_date = obj_date
-                Errors += validate_tags("W:" + str(obj_id), osmtags, obj_is_building_part)    
-        if strTag == '/relation':
-            if  ( blnCompleteObject )  and  ( way_count > 0 ) :
-                fo.write( '<relation id="' + obj_id + '" version="' + obj_ver + '" >' + '\n')
-                for way in WayRefs:
-                    fo.write( '    <member type="way" ref="' + objOsmGeom.GetWayID( way[0]) + '" role="' + way[1] + '"  />' + '\n')
-                for tag  in osmtags:
-                    fo.write( '  <tag k="' + tag[0] + '" v="' + encodeXmlString(tag[1]) + '" />' + '\n')
-                fo.write( '</relation>' + '\n')
-                if obj_is_building_part:
-                    blnHasBuildingParts = True
-                    numberofparts = numberofparts + 1 
-                    if obj_height == 0:
-                        obj_height= float(obj_levels) * 3   
-                    if obj_height > height:
-                        height = obj_height
-                if obj_date > touched_date:
-                    touched_date=obj_date
                     
-                Errors += validate_tags("R:" + str(obj_id), osmtags, obj_is_building_part)    
+   
+   # write ways inside BBOX                
+    for way in objOsmGeomParts.ways:
+        
+        blnCompleteObject = False
+        if way.minLat >= object1.bbox.minLat and way.maxLat <= object1.bbox.maxLat and way.minLon >= object1.bbox.minLon and way.maxLon <= object1.bbox.maxLon:
+            blnCompleteObject = True
+        
+            #TODO: we NEED to check that way is complete, and all it's nodes inside BBOX (or objOsmGeom Nodes)             
+            
+        if not blnCompleteObject or  len(way.NodeRefs) == 0:
+            continue 
+        
+        
+        obj_id =      way.id
+        obj_ver =     way.version 
+        obj_date =    way.timestamp
+        
+        osmtags =  way.osmtags
+        
+        obj_is_building_part = (osmtags.get('building:part', 'no') != 'no')
+        obj_height = parseHeightValue(osmtags.get('height', '0'))
+        obj_levels = osmtags.get('building:levels', '0')
+       
+
+        ####intWayNo = objOsmGeom.AddWay(obj_id, NodeRefs, obj_ver, obj_date)
+        
+        #print way with node refs and tags
+        fo.write( '<way id="' + obj_id + '" version="' + obj_ver + '" >' + '\n')
+        for node_ref in way.NodeRefs:
+            fo.write( '  <nd ref="' + objOsmGeomParts.GetNodeID(node_ref) + '" />' + '\n')
+            
+        for tag in osmtags:
+            fo.write( '  <tag k="' + tag+ '" v="' + encodeXmlString(osmtags[tag]) + '" />' + '\n')
+        fo.write( '</way>' + '\n')
+        
+        if obj_is_building_part:
+            blnHasBuildingParts = True
+            numberofparts = numberofparts + 1
+            if obj_height == 0:
+                obj_height= float(obj_levels) * 3   
+            if obj_height > height:
+                height = obj_height
+        if obj_date > touched_date:
+            touched_date = obj_date
+            
+        Errors += validate_tags("W:" + str(obj_id), osmtags, obj_is_building_part)  
+
+
+    # write relations inside BBOX                              
+    
+    for relation in objOsmGeomParts.relations:
+        
+        way_count =   len(relation.WayRefs)
+        
+        blnCompleteObject = False 
+        if relation.minLat >= object1.bbox.minLat and relation.maxLat <= object1.bbox.maxLat and relation.minLon >= object1.bbox.minLon and relation.maxLon <= object1.bbox.maxLon:
+            blnCompleteObject = True
+        
+            #TODO: we NEED to check that way is complete, and all it's nodes inside BBOX (or objOsmGeom Nodes)             
+        
+        if not blnCompleteObject or  way_count == 0:
+            continue 
+        
+        obj_id =      relation.id
+        obj_ver =     relation.version 
+        obj_date =    relation.timestamp
+        
+        osmtags =  relation.osmtags
+        
+        obj_is_building_part = (osmtags.get('building:part', 'no') != 'no')
+        obj_height = parseHeightValue(osmtags.get('height', '0'))
+        obj_levels = osmtags.get('building:levels', '0')
+        
+        fo.write( '<relation id="' + obj_id + '" version="' + obj_ver + '" >' + '\n')
+        
+        for way in relation.WayRefs:
+            fo.write( '    <member type="way" ref="' + objOsmGeomParts.GetWayID( way[0]) + '" role="' + way[1] + '"  />' + '\n')
+            
+        for tag  in osmtags:
+            fo.write( '  <tag k="' + tag + '" v="' + encodeXmlString(osmtags[tag]) + '" />' + '\n')
+            
+        fo.write( '</relation>' + '\n')
+        
+        if obj_is_building_part:
+            blnHasBuildingParts = True
+            numberofparts = numberofparts + 1 
+            if obj_height == 0:
+                obj_height= float(obj_levels) * 3   
+            if obj_height > height:
+                height = obj_height
+        if obj_date > touched_date:
+            touched_date=obj_date
+            
+        Errors += validate_tags("R:" + str(obj_id), osmtags, obj_is_building_part)    
+    
+
     fo.write( '</osm>'+ '\n')
     fo.close()
-    objXML.CloseFile()
+                    
 
+    ### #the same with relations. if members were not filtered out on the previous step, it should be considered as whole.
+    ###if strTag == 'member':
+    ###    if objXML.GetAttribute('type') == 'way':
+    ###        way_id = objXML.GetAttribute('ref')
+    ###        intWayNo = objOsmGeom.FindWay(way_id)
+    ###        if intWayNo != - 1:
+    ###            WayRefs.append ([intWayNo,objXML.GetAttribute('role')])
+    ###            way_count = way_count + 1
+    ###        else:
+    ###            #' relation incomplete
+    ###            blnCompleteObject = False
+    
 
     if not ( blnHasBuildingParts and  ( height > 0 ) ) :
         Kill(strOutputOsmFileName)
@@ -374,10 +380,12 @@ def processQuadrant(strQuadrantName):
     
 
     objOsmGeom, Objects = readOsmXml(strWorkingFolder + '\\10_osm_extracts\\'+ strQuadrantName + '\\objects-all.osm')
+    objOsmGeomParts, ObjectsParts = readOsmXml(strWorkingFolder + '\\10_osm_extracts\\'+ strQuadrantName + '\\objects-with-parts.osm')
+    
     processBuildings(objOsmGeom, Objects, strQuadrantName,
-                     strWorkingFolder + '\\10_osm_extracts\\'+ strQuadrantName +'\\objects-with-parts.osm',
                      strQuadrantObjectsListFileName,
-                     strWorkingFolder + '\\20_osm_3dmodels'
+                     strWorkingFolder + '\\20_osm_3dmodels',
+                     objOsmGeomParts, ObjectsParts
                      )
     t2 = time.time()
     print("Quadrant " + strQuadrantName + " processed in "+str(t2-t1)+" seconds")
@@ -403,7 +411,6 @@ def main():
         strQuadrantName = composeQuadrantName(52, 41)
 
     processQuadrant(strQuadrantName)
-    print('Thats all, folks!')
 
 
 main()

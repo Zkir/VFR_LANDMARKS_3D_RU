@@ -79,11 +79,13 @@ def readOsmXml(strSrcOsmFile):
             osmObject = T3DObject()
             osmObject.type = strTag
             osmObject.id = objXML.GetAttribute('id')
+            osmObject.version =  objXML.GetAttribute('version')
+            osmObject.timestamp = objXML.GetAttribute('timestamp')
             blnObjectIncomplete= False
 
         if strTag == 'node':
-
-            objOsmGeom.AddNode(osmObject.id, objXML.GetAttribute('lat'), objXML.GetAttribute('lon'))
+            objOsmGeom.AddNode(osmObject.id, objXML.GetAttribute('lat'), objXML.GetAttribute('lon'),  osmObject.version, osmObject.timestamp)
+            
         # references to nodes in ways. we need to find coordinates
         if strTag == 'nd':
             node_id = objXML.GetAttribute('ref')
@@ -103,23 +105,12 @@ def readOsmXml(strSrcOsmFile):
                     #raise Exception('FindWay', 'way not found! ' + way_id)
                     blnObjectIncomplete=True
                 else:
-                    waybbox = objOsmGeom.GetWayBBox(intWayNo)
                     osmObject.WayRefs.append([intWayNo, objXML.GetAttribute('role')])
-                    if osmObject.way_count == 0:
-                        osmObject.bbox.minLat = waybbox.minLat
-                        osmObject.bbox.minLon = waybbox.minLon
-                        osmObject.bbox.maxLat = waybbox.maxLat
-                        osmObject.bbox.maxLon = waybbox.maxLon
-                    else:
-                        if waybbox.minLat < osmObject.bbox.minLat:
-                            osmObject.bbox.minLat = waybbox.minLat
-                        if waybbox.maxLat > osmObject.bbox.maxLat:
-                            osmObject.bbox.maxLat = waybbox.maxLat
-                        if waybbox.minLon < osmObject.bbox.minLon:
-                            osmObject.bbox.minLon = waybbox.minLon
-                        if waybbox.maxLon > osmObject.bbox.maxLon:
-                            osmObject.bbox.maxLon = waybbox.maxLon
                     osmObject.way_count = osmObject.way_count + 1
+                    
+            else:
+                # we ignore nodes to save CPU time
+                pass                
 
         #get osmObject osm tags
         if strTag == 'tag':
@@ -181,7 +172,7 @@ def readOsmXml(strSrcOsmFile):
 
 
         if strTag == '/way':
-            intWayNo = objOsmGeom.AddWay(osmObject.id, osmObject.NodeRefs, osmObject.node_count)
+            intWayNo = objOsmGeom.AddWay(osmObject.id, osmObject.version, osmObject.timestamp, osmObject.osmtags, osmObject.NodeRefs)
             osmObject.bbox = objOsmGeom.GetWayBBox(intWayNo)
             osmObject.size = objOsmGeom.CalculateWaySize(intWayNo)
 
@@ -192,7 +183,10 @@ def readOsmXml(strSrcOsmFile):
             except:
                 print('Relation ' +  osmObject.id + ' : unable to determine size')
                 osmObject.size = 0
-            # bbox is already calculated above
+            
+            intRelationNo = objOsmGeom.AddRelation(osmObject.id,osmObject.version, osmObject.timestamp, osmObject.osmtags, osmObject.WayRefs)
+            osmObject.bbox = objOsmGeom.GetRelationBBox(intRelationNo)
+            
 
         # Closing node
         if strTag == '/node' or strTag == '/way' or strTag == '/relation':
