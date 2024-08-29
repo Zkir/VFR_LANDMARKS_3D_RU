@@ -158,10 +158,14 @@ def getColourName(strRgbCode):
 
     if Left(strRgbCode, 1) != "#":
         raise Exception ("wrong color format")
-
-    r1 = int(strRgbCode[1: 3],16)
-    g1 = int(strRgbCode[3: 5],16)
-    b1 = int(strRgbCode[5: 7],16)
+    if len(strRgbCode) == 4:
+        r1 = int(strRgbCode[1: 2],16) * 16
+        g1 = int(strRgbCode[2: 3],16) * 16
+        b1 = int(strRgbCode[3: 4],16) * 16
+    else:    
+        r1 = int(strRgbCode[1: 3],16)
+        g1 = int(strRgbCode[3: 5],16)
+        b1 = int(strRgbCode[5: 7],16)
     minDistance = (r1 * r1) + g1 * g1 + b1 * b1
 
     for color in lstColorCodes:
