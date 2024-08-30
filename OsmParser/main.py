@@ -38,12 +38,14 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
     for osmObject in SelectedObjects:
         heightbyparts = 0
         numberofparts = 0
+        touched_date = ""
+        numberofvalidationerrors = 0
+        
         strHeight = osmObject.getTag('height')
         osmObject.dblHeight = parseHeightValue(strHeight)
         blnFence = (osmObject.tagBarrier == 'fence') or (osmObject.tagBarrier == 'wall')
 
         # Rewrite osmObject as osm file!
-        touched_date = ""
         if not blnFence:
             heightbyparts, numberofparts, touched_date, numberofvalidationerrors = rewriteOsmFile(osmObject, OSM_3D_MODELS_PATH,objOsmGeomParts, ObjectsParts)
             osmObject.blnHasBuildingParts = (heightbyparts > 0)

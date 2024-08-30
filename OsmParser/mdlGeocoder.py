@@ -68,8 +68,7 @@ class GeoRegion:
         #Check BBOX
         if lat<self.bbox.minLat or lat>self.bbox.maxLat or lon<self.bbox.minLon or lon>self.bbox.maxLon:
             return False
-
-        return True
+        
         #Check OUTLINE(S)
         if checkPointInPolygon(lat,lon, self.boundary):
             return True
