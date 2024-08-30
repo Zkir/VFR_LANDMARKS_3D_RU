@@ -83,7 +83,10 @@ def validate_tags(part_id, osmtags, is_building_part):
             errors.append(log_error("Height tag is missing", part_id))
     else: 
         if tags.get("height","") == "0" or  tags.get("building:levels","") == "0":
-            errors.append(log_error("Zero height is not allowed for building parts", part_id))
+            if is_building_part:
+                errors.append(log_error("Zero height is not allowed for building parts", part_id))
+            else:
+                errors.append(log_error("Zero height is not recommended for buildings", part_id))
         
         
     if "roof:orientation" in tags: #=along/across  
