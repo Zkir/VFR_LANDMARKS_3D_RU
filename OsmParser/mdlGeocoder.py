@@ -2,7 +2,9 @@
 from mdlMisc import *
 from osmGeometry import *
 from mdlXmlParser import *
-from rtree import index
+import rtree
+import geohash2
+import os
 
 #===================================================================
 # Проверка принадлежности точки полигону методом испускания луча
@@ -67,21 +69,117 @@ class GeoRegion:
         if lat<self.bbox.minLat or lat>self.bbox.maxLat or lon<self.bbox.minLon or lon>self.bbox.maxLon:
             return False
 
+        return True
         #Check OUTLINE(S)
         if checkPointInPolygon(lat,lon, self.boundary):
             return True
         else:
             return False
 
+# just a dummy, no indexing 
+class SpatialIndexDummy: 
+    def __init__(self):
+        self.regions = []
+        
+    def insert(self, ix, bbox):
+        self.regions.append(ix)
+    
+    # should return objects which bboxes intersects with the given point(bbox)         
+    def intersection(self, lat, lon):
+        return self.regions 
+
+# Rtree
+class SpatialIndexRtree: 
+    def __init__(self):
+        self.sp_ix = rtree.index.Index()
+        
+    def insert(self, ix, bbox):
+        self.sp_ix.insert(ix, (bbox.minLat, bbox.minLon, bbox.maxLat, bbox.maxLon)) # ,obj=self.regions[i]
+        
+    
+    # should return objects which bboxes intersects with the given point(bbox)         
+    def intersection(self, lat, lon):
+        # for rtree 
+        ids = list(self.sp_ix.intersection((lat, lon, lat, lon)))    
+        return ids
+    
+# Geohash        
+class SpatialIndex: 
+    def __init__(self):
+        self.ix = self.IndexNode("")
+        
+    def commonprefix(self, s1, s2):
+        return os.path.commonprefix([s1, s2])        
+
+    def IndexNode(self, name):
+        node = {}
+        #node["name"] = name
+        node["childs"] = {}
+        node["leafs"] = []
+        
+        return node
+    
+        
+    def insert(self, id, bbox):
+        s1 = geohash2.encode(bbox.minLat, bbox.minLon)
+        s2 = geohash2.encode(bbox.maxLat, bbox.maxLon)
+        s = self.commonprefix(s1,s2)
+        node = self.ix
+        
+        if s != "":          
+            for l in s:
+                if l not in node["childs"]:
+                    node["childs"][l] = self.IndexNode(l)
+                
+                node = node["childs"][l]
+                leafs = node["leafs"]
+            
+            leafs.append([id,(bbox.minLat, bbox.minLon, bbox.maxLat, bbox.maxLon)])
+            
+        else:
+           # add leaf directly to root node
+           # rectangle seems to be too large            
+           leafs = node["leafs"]
+           leafs.append([id,(bbox.minLat, bbox.minLon, bbox.maxLat, bbox.maxLon)])                  
+        
+    
+    # should return objects which bboxes intersects with the given point(bbox)         
+    def intersection(self, lat, lon):
+
+        s = geohash2.encode(lat, lon)
+        #print(s)
+        node = self.ix
+        
+        region_ids = []
+        ids = []
+        region_ids += node["leafs"]
+        for l in s:
+            if l in node["childs"]:
+                node = node["childs"][l]
+                region_ids += node["leafs"]
+            else:
+                #geohash of a point can be longer than one of regions, so we have to stop. 
+                break
+                
+        #print("regions found:", len(region_ids))                
+        
+        for region in  region_ids:
+            if lat>=region[1][0] and lat<=region[1][2] and lon>=region[1][1] and lon<=region[1][3]:
+              ids.append(region[0])
+            
+        #print(ids)
+        #print("regions instersects:", len(ids))
+        
+        return ids         
+        
+        
 
 class Geocoder:
     def __init__(self):
+        self.load_time = 0
+        self.index_creation_time = 0        
         self.regions=[]   
-        
-        #p = index.Property(leaf_capacity=200, index_capacity=100000, storage=0)  
-        #p = index.Property(fill_factor=0.1)
-        #self.spatial_index = index.Index(properties=p) 
-        self.spatial_index = index.Index() 
+        self.spatial_index = SpatialIndex() #rtree.index.Index() 
 
         
     def loadDataFromPoly(self):
@@ -120,6 +218,7 @@ class Geocoder:
 
         
     def loadDataFromOsmFile(self,strSrcOsmFile):
+        t0 = time.time() 
         objOsmGeom = clsOsmGeometry()
         objXML = clsXMLparser()
         objXML.OpenFile(strSrcOsmFile)
@@ -259,8 +358,14 @@ class Geocoder:
                             print("relation " + id + " is somehow broken" )
                             print(" " + Tags.get("name", ""))
         
-        self.createSpatialIndex()
         print(str(len(self.regions))+" regions loaded into geocoder")
+        t1 = time.time()
+        self.createSpatialIndex()
+        t2 = time.time()
+        
+        self.load_time = round(t1 - t0, 3)
+        self.index_creation_time = round(t2 - t1, 3)
+        
         return True
 
 
@@ -290,6 +395,7 @@ class Geocoder:
 
 
     def loadDataFromTextFile(self, strInputFile):
+        t0 = time.time()
         fh = open(strInputFile, 'r', encoding="utf-8")
         line=fh.readline().strip()
         line=line.replace("\n","")
@@ -338,8 +444,14 @@ class Geocoder:
 
 
         fh.close()
-        self.createSpatialIndex()
+        
         print(str(len(self.regions))+" regions loaded into geocoder")
+        t1 = time.time()
+        self.createSpatialIndex()
+        t2 = time.time()
+        
+        self.load_time = round(t1 - t0, 3)
+        self.index_creation_time = round(t2 - t1, 3)
         
 
     def saveDataToPolyFile(self, strOutputFile, strId):
@@ -380,7 +492,7 @@ class Geocoder:
     def createSpatialIndex(self):
         i = 0
         for region in self.regions:
-            self.spatial_index.insert(i, (region.bbox.minLat, region.bbox.minLon,  region.bbox.maxLat,  region.bbox.maxLon)) # ,obj=self.regions[i]
+            self.spatial_index.insert(i, region.bbox) # ,obj=self.regions[i]
             i += 1
         
 # ===================================================================================================================
@@ -396,7 +508,7 @@ class Geocoder:
         # we will get regions matching coordinates from spatial index (rtree)
         
         #indexed_regions = [n.object for n in self.spatial_index.intersection((lat, lon, lat, lon), objects=True)] #slow!
-        ids=list(self.spatial_index.intersection((lat, lon, lat, lon)))
+        ids=self.spatial_index.intersection(lat, lon)
         
         #print(ids)
         
@@ -411,82 +523,4 @@ class Geocoder:
                     
         return geocodes
     
-
-def CreateQuandrantListRu():
-    #Cycle over quadrants.
-    #corners of russia
-    # N 81°50′35″
-    # S 41°11′07″
-    # W 19°38′19″
-    # E 180°  / 169°01′ w. lon.
-
-    print ("Loading geocoder...")
-    t1 = time.time()
-    geocoder=Geocoder()
-    #geocoder.loadDataFromPoly()
-    geocoder.loadDataFromOsmFile("d:\\_planet.osm\\geocoder.osm")
-    t2 = time.time()
-    print("Geocoder loaded in " + str(t2 - t1) + " seconds")
-
-    #print(geocoder.getGeoCodes(0,0))
-    print(geocoder.getGeoCodes(55, 37)) # угол московской области
-    print(geocoder.getGeoCodes(56.3068839, 38.1251472)) # Сергиев Посад
-    print(geocoder.getGeoCodes(61.6685237, 50.8352024)) # Сывтывкар (Коми)
-    print(geocoder.getGeoCodes(54.7744826, 20.5705741)) # Калининград
-    print(geocoder.getGeoCodes(55.3995684, 57.9281070)) # Аракулово
-
-    t3 = time.time()
-    print("5 geocoding queries in  average " + str((t3 - t2)/5) + " seconds")
-
-
-    fo=open("D:\\Quadrants_Ru.dat", 'w', encoding="utf-8")
-    fo1=open("D:\\reverse_index.dat", 'w', encoding="utf-8")
-    reverse_index={}
-    for i in range(0,89):
-        for j in range(0,179):
-            strQuadrant = composeQuadrantName(i,j)
-            geocodes=[]
-            for k in range(5):
-                if k==0:
-                    lat=i
-                    lon=j
-                if k==1:
-                    lat=i+1
-                    lon=j
-                if k==2:
-                    lat=i
-                    lon=j+1
-                if k==3:
-                    lat=i+1
-                    lon=j+1
-                if k==4:
-                    lat=i+0.5
-                    lon=j+0.5
-                regcode=geocoder.getGeoCodes(lat,lon).get('adminlevel_4','??') # Предполагается, что мы получили название/код области
-                if regcode!='??':
-                    #добавим в обратный индекс квадрантов
-                    rev_ind_quads=reverse_index.get(regcode, [])
-                    if not (strQuadrant in rev_ind_quads):
-                        rev_ind_quads.append(strQuadrant)
-                        reverse_index[regcode]=rev_ind_quads
-
-                    # добавим в геокоды квадранта. Квадрант очевидно может принадлежать нескольким областям
-                    if not (regcode in geocodes):
-                        geocodes.append(regcode)
-
-            if len(geocodes)!=0:
-               #print(strQuadrant,geocodes )
-               fo.write(strQuadrant +'|' + str(geocodes) + '|0|0|1900.01.01 00:00:00' +'\n')
-    fo.close()
-
-    #print reverse index
-
-    for key in reverse_index:
-        if key !='??':
-            for quadrant in reverse_index[key]:
-                fo1.write(str(key) + '|' + str(quadrant) + '\n')
-
-    fo1.close()
-
-    print("done")
 

@@ -17,6 +17,86 @@ def compareRegionsNames(strRegion1, strRegion2 ):
 dsfLat=52
 dsfLon=41
 
+
+def CreateQuandrantListRu():
+    #Cycle over quadrants.
+    #corners of russia
+    # N 81°50′35″
+    # S 41°11′07″
+    # W 19°38′19″
+    # E 180°  / 169°01′ w. lon.
+
+    print ("Loading geocoder...")
+    t1 = time.time()
+    geocoder=Geocoder()
+    #geocoder.loadDataFromPoly()
+    geocoder.loadDataFromOsmFile("d:\\_planet.osm\\geocoder.osm")
+    t2 = time.time()
+    print("Geocoder loaded in " + str(t2 - t1) + " seconds")
+
+    #print(geocoder.getGeoCodes(0,0))
+    print(geocoder.getGeoCodes(55, 37)) # угол московской области
+    print(geocoder.getGeoCodes(56.3068839, 38.1251472)) # Сергиев Посад
+    print(geocoder.getGeoCodes(61.6685237, 50.8352024)) # Сывтывкар (Коми)
+    print(geocoder.getGeoCodes(54.7744826, 20.5705741)) # Калининград
+    print(geocoder.getGeoCodes(55.3995684, 57.9281070)) # Аракулово
+
+    t3 = time.time()
+    print("5 geocoding queries in  average " + str((t3 - t2)/5) + " seconds")
+
+
+    fo=open("D:\\Quadrants_Ru.dat", 'w', encoding="utf-8")
+    fo1=open("D:\\reverse_index.dat", 'w', encoding="utf-8")
+    reverse_index={}
+    for i in range(0,89):
+        for j in range(0,179):
+            strQuadrant = composeQuadrantName(i,j)
+            geocodes=[]
+            for k in range(5):
+                if k==0:
+                    lat=i
+                    lon=j
+                if k==1:
+                    lat=i+1
+                    lon=j
+                if k==2:
+                    lat=i
+                    lon=j+1
+                if k==3:
+                    lat=i+1
+                    lon=j+1
+                if k==4:
+                    lat=i+0.5
+                    lon=j+0.5
+                regcode=geocoder.getGeoCodes(lat,lon).get('adminlevel_4','??') # Предполагается, что мы получили название/код области
+                if regcode!='??':
+                    #добавим в обратный индекс квадрантов
+                    rev_ind_quads=reverse_index.get(regcode, [])
+                    if not (strQuadrant in rev_ind_quads):
+                        rev_ind_quads.append(strQuadrant)
+                        reverse_index[regcode]=rev_ind_quads
+
+                    # добавим в геокоды квадранта. Квадрант очевидно может принадлежать нескольким областям
+                    if not (regcode in geocodes):
+                        geocodes.append(regcode)
+
+            if len(geocodes)!=0:
+               #print(strQuadrant,geocodes )
+               fo.write(strQuadrant +'|' + str(geocodes) + '|0|0|1900.01.01 00:00:00' +'\n')
+    fo.close()
+
+    #print reverse index
+
+    for key in reverse_index:
+        if key !='??':
+            for quadrant in reverse_index[key]:
+                fo1.write(str(key) + '|' + str(quadrant) + '\n')
+
+    fo1.close()
+
+    print("done")
+
+
 #CreateRegionSummaryPage(dsfLat, dsfLon)
 
 #CreateQuandrantListRu()
