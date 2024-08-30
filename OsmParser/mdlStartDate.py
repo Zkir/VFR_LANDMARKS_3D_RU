@@ -3,8 +3,18 @@
 # for start_date syntax
 
 from vbFunctions import *
+import re
 # we really extract just YEAR from the start date.
 # and it would be nice to extract also interval, to recieve smth like 1978 ± 2
+
+#tests prefix and returns the remainer of the string, if any
+def test_prefix(s, prefix):
+    remainder = ''
+    if s.startswith(prefix):
+        l = len(prefix)
+        remainder = s[l:]
+        
+    return remainder.strip()     
 
 #wrapper -- the code expects, that result is string, 
 # and original value is returned if unable to parse
@@ -24,6 +34,12 @@ def parseStartDate(strDate:str) -> int:
     strResult = ""
     strModifier = ""
     myRegExp = RegExp()
+    
+    # remove parenthesis (xxx), especially (xxx ?)
+    X = re.findall(r"\(.*\?\)", strDate) 
+    for x in X:
+        strDate=strDate.replace(x,'').strip() 
+    
     
     # empty
     if strDate == '':
@@ -73,24 +89,63 @@ def parseStartDate(strDate:str) -> int:
 
     
     #Modifiers
-    if Left(strDate, 1) == '~':
-        strDate = Mid(strDate, 2)
+    if  s:=test_prefix(strDate, "~"):
+        strDate = s
         
-    if Left(strDate, 7) == 'before ':
-        strDate = Mid(strDate, 8)
+    if  s:=test_prefix(strDate, "before "):        
+        strDate = s
         
-    if Left(strDate, 6) == 'after ':
-        strDate = Mid(strDate, 7)    
+    if  s:=test_prefix(strDate, "after "):        
+        strDate = s    
     
     #we do not need "mid", because we use a middle of the interval anyway.
-    if Left(strDate, 4) == 'mid ':
-        strDate = Mid(strDate, 5)
-    if Left(strDate, 6) == 'early ':
-        strDate = Mid(strDate, 7)
+    if  s:=test_prefix(strDate, "mid "):        
+        strDate = s
+        
+    if  s:=test_prefix(strDate, "early "):
+        strDate = s
         strModifier = 'early'
-    if Left(strDate, 5) == 'late ':
-        strDate = strDate[5:len(strDate)]
+    
+    if  s:=test_prefix(strDate, "late "):
+        strDate = s
         strModifier = 'late'
+    
+    if  s:=test_prefix(strDate, "1-я пол."):        
+        strDate = s
+        strModifier = 'first_half'
+    
+    if  s:=test_prefix(strDate, "2-я пол."):        
+        strDate = s
+        strModifier = 'second_half'
+    
+    if  s:=test_prefix(strDate, "1-я треть "):
+        strDate = s
+        strModifier = 'first_third'
+
+    if  s:=test_prefix(strDate, "2-я треть "):
+        strDate = s
+        strModifier = 'second_third'
+        
+    if  s:=test_prefix(strDate, "3-я треть "):
+        strDate = s
+        strModifier = 'third_third'
+        
+    if  s:=test_prefix(strDate, "1-я четв."):
+        strDate = s
+        strModifier = 'first_quarter'
+
+    if  s:=test_prefix(strDate, "2-я четв."):
+        strDate = s
+        strModifier = 'second_quarter'
+        
+    if  s:=test_prefix(strDate, "3-я четв."):
+        strDate = s
+        strModifier = 'third_quarter'        
+        
+    if  s:=test_prefix(strDate, "4-я четв."):
+        strDate = s
+        strModifier = 'forth_quarter'            
+        
     
     
     #1234
@@ -115,12 +170,38 @@ def parseStartDate(strDate:str) -> int:
     #C18
     myRegExp.Pattern = '^C[0-9]{2}$'
     if myRegExp.Test(strDate):
+        century_digits = str(int(Mid(strDate, 2)) - 1) 
         if strModifier == "early":
-            strResult = str(int(Mid(strDate, 2)) - 1)   + '10'
+            strResult = century_digits + '10'
         elif strModifier == "late":
-            strResult = str(int(Mid(strDate, 2)) - 1)   + '90'
+            strResult = century_digits + '90'
+        
+        elif strModifier == "first_half":
+            strResult = century_digits + '25'  
+            
+        elif strModifier == "second_half":
+            strResult = century_digits + '75'
+
+
+        elif strModifier == "first_third":
+            strResult = century_digits + '17'
+        elif strModifier == "second_third":
+            strResult = century_digits + '50'
+        elif strModifier == "third_third":
+            strResult = century_digits + '84'
+
+        elif strModifier == "first_quarter":
+            strResult = century_digits + '12'
+        elif strModifier == "second_quarter":
+            strResult = century_digits + '38'
+        elif strModifier == "third_quarter":
+            strResult = century_digits + '62'              
+        elif strModifier == "forth_quarter":
+            strResult = century_digits + '88'                  
+                     
+            
         else: 
-            strResult = str(int(Mid(strDate, 2)) - 1)   + '50'
+            strResult = century_digits + '50'
         return int(strResult)    
 
 
@@ -153,7 +234,11 @@ def psd(s):
 def tests():
     print("Tests:")
     
-    #exect dates 
+    assert psd("") == ""                             # blank value is still blank
+    assert psd("Abrakadabra") == "Abrakadabra"       # the original string if unable to parse
+    assert psd("Abrak..adabra") == "Abrak..adabra"   # the original string if unable to parse    
+    
+    #exact dates 
     assert psd("2010") == 2010                   # where the year is known, but no more
     assert psd("0897") == 897                    #(for 897 CE)
     assert psd("1848-07") == 1848                # where the year and month are known
@@ -179,9 +264,24 @@ def tests():
     assert psd("j:1918-01-31") == 1918           # (a date using the Julian calendar, equivalent to 1918-02-13 in the Gregorian calendar)
     #assert psd("jd:2455511") == #(Using the Julian day system, equivalent to 2010-11-10 in the Gregorian calendar)
     assert psd("753 BC..476") == -138            # ancient Rome period
-    assert psd("") == ""                         # blank value is still blank
-    assert psd("Abrakadabra") == "Abrakadabra"   # the original string if unable to parse
-    assert psd("Abrak..adabra") == "Abrak..adabra"   # the original string if unable to parse    
+    
+    # Non standard, but used in Russia
+    assert psd("C15 (?)") ==  1450 
+    assert psd("C18 (1730 ?)") ==  1750 
+    
+    
+    assert psd("1-я пол. C19") ==  1825 
+    assert psd("2-я пол. C19") ==  1875
+    
+    assert psd("1-я треть C16") ==  1517 
+    assert psd("2-я треть C16") ==  1550 
+    assert psd("3-я треть C16") ==  1584 
+    
+    assert psd("1-я четв. C16") ==  1512 
+    assert psd("2-я четв. C16") ==  1538 
+    assert psd("3-я четв. C16") ==  1562
+    assert psd("4-я четв. C16") ==  1588 
+
    
     print("Tests OK")
     
