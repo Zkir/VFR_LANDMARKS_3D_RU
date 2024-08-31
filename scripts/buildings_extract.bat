@@ -1,13 +1,9 @@
 @echo off
 
-SET QUADRANT=%1
+set WORK_FOLDER=work_folder\07_building_data
 
-set WORK_FOLDER=work_folder\10_osm_extracts\%QUADRANT%
+SET SOURCE_FILE="work_folder\00_planet.osm\russia-latest.o5m"
 
-SET SOURCE_FILE="%work_folder%\%QUADRANT%.o5m"
-
-
-echo Quadrant: %QUADRANT%
 echo Working folder: %WORK_FOLDER%
 
 osmfilter %SOURCE_FILE% --keep="amenity=place_of_worship building=church =cathedral =bell_tower =chapel =shrine =temple =mosque =synagogue tower:type=bell_tower" >%WORK_FOLDER%\churches.osm

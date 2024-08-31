@@ -2,10 +2,10 @@
 SET QUADRANT=%1
 SET BBOX=%2
 
-call update %QUADRANT% %BBOX%
-if errorlevel 1 goto error
+rem call update2 RU
+rem if errorlevel 1 goto error
 
-call extract %QUADRANT%
+call scripts\buildings_extract-per-region %QUADRANT% %QUADRANT%.poly
 if errorlevel 1 goto error
 
 OsmParser\main.py %QUADRANT%

@@ -5,13 +5,13 @@ all: fin ##ultimate target
 
 .PHONY: clean
 clean: 
-	RMDIR "work_folder\05_geocoder" /S /Q	
-	RMDIR "work_folder\10_osm_extracts" /S /Q	
-	RMDIR "work_folder\20_osm_3dmodels" /S /Q
-	RMDIR "work_folder\21_osm_objects_list" /S /Q	
-	RMDIR "work_folder\22_all_osm_objects_list" /S /Q	
-	RMDIR "work_folder\30_3dmodels" /S /Q	
-	
+	IF EXIST "work_folder\05_geocoder" RMDIR "work_folder\05_geocoder" /S /Q	
+	IF EXIST "work_folder\07_building_data" RMDIR "work_folder\07_building_data" /S /Q	
+	IF EXIST "work_folder\10_osm_extracts" RMDIR "work_folder\10_osm_extracts" /S /Q	
+	IF EXIST "work_folder\20_osm_3dmodels" RMDIR "work_folder\20_osm_3dmodels" /S /Q
+	IF EXIST "work_folder\21_osm_objects_list" RMDIR "work_folder\21_osm_objects_list" /S /Q	
+	IF EXIST "work_folder\22_all_osm_objects_list" RMDIR "work_folder\22_all_osm_objects_list" /S /Q	
+	IF EXIST "work_folder\30_3dmodels" RMDIR "work_folder\30_3dmodels" /S /Q	
 
 .PHONY: planet-update
 planet-update: work_folder\00_planet.osm\russia-latest.osm.pbf work_folder\00_planet.osm\russia.poly  ## update source osm file	
@@ -57,6 +57,15 @@ work_folder\05_geocoder\geocoder.osm: work_folder\00_planet.osm\russia-latest.o5
 work_folder\05_geocoder\geocoder.txt: work_folder\05_geocoder\geocoder.osm  ##create geocoder mp file. Actually geocoder txt should be created from geocode.osm, but the script was lost. 	
 	copy geocoder.txt work_folder\05_geocoder
 	touch $@
+
+#****************************************************************************************************************************
+#* 07 Extract building data 
+#****************************************************************************************************************************	
+work_folder\07_building_data: | work_folder ## make folder for building data
+	mkdir work_folder\07_building_data	
+
+work_folder\07_building_data\objects-with-parts.osm: work_folder\00_planet.osm\russia-latest.o5m |  work_folder\07_building_data
+	scripts\buildings_extract.bat
 	
 #****************************************************************************************************************************
 #* 10 Make region/quadrant extracts
@@ -64,13 +73,12 @@ work_folder\05_geocoder\geocoder.txt: work_folder\05_geocoder\geocoder.osm  ##cr
 work_folder\10_osm_extracts: | work_folder ## make folder for extracted osm buildings 
 	mkdir work_folder\10_osm_extracts	
 
-work_folder\10_osm_extracts\extract_osm_data: work_folder\00_planet.osm\russia-latest.o5m  | work_folder\Quadrants.dat work_folder\10_osm_extracts ## extract osm data per region
-	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do update.bat %%i %%i.poly
-	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do extract.bat %%i
+work_folder\10_osm_extracts\extract_osm_data: work_folder\07_building_data\objects-with-parts.osm  | work_folder\Quadrants.dat work_folder\10_osm_extracts ## extract osm data per region
+	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do scripts\buildings_extract-per-region.bat %%i %%i.poly
 	touch $@		
 
 #****************************************************************************************************************************
-#* 20 Extract objects from OSM
+#* 20 Extract individual osm-files for 3d objecs
 #****************************************************************************************************************************		
 work_folder\20_osm_3dmodels: | work_folder ## make folder for extracted 3d buildings 
 	mkdir work_folder\20_osm_3dmodels
@@ -175,7 +183,7 @@ work_folder\90_uploads: | work_folder ## prepare uploads folder
 	mkdir work_folder\90_uploads
 	
 work_folder\90_uploads\upload_models_to_web: work_folder\30_3dmodels\convert_obj_to_x3d work_folder\22_all_osm_objects_list\RUS_TOP.dat | work_folder\90_uploads 	##Upload 3d models and dat files to web (validator)  
-	upload.bat
+	scripts\upload.bat
 	touch $@		
 
 work_folder\90_uploads\upload_xplane_release_to_web : work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip	| work_folder\90_uploads ## upload x-plane scenery package to web
