@@ -4,8 +4,6 @@ from mdlStartDate import parseStartDate
 
 """
 
-start_date  -- too difficult. 
-
 -- statistics only
 building:part 
 roof:colour, 
@@ -26,6 +24,7 @@ roof_shapes = [ "flat",	"gabled", "gabled_height_moved", "skillion",
                 ]
                 
 roof_orientations = ["along", "across"]
+roof_directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
 
 #we have several groups of tags. 
 #1. tags which reflect heigth, probably with unit. Blender-osm does not understand units though. 
@@ -33,7 +32,7 @@ roof_orientations = ["along", "across"]
 #3. tags of integer value, like leveles.
 
 meter_value_tags = ["height", "min_height","roof:height"]
-float_value_tags = ["roof:angle", "roof:direction"]
+float_value_tags = ["roof:angle" ]
 integer_value_tags = [ "building:levels" , "building:min_level", "roof:levels"]
 
 
@@ -92,7 +91,13 @@ def validate_tags(part_id, osmtags, is_building_part):
     if "roof:orientation" in tags: #=along/across  
         if tags["roof:orientation"] not in roof_orientations: 
             errors.append(log_error("Unknown roof orientation " + tags["roof:orientation"], part_id))
-        
+
+           
+    if "roof:direction" in tags: #roof direction can be angle or direction code (NNW, SE etc)  
+        if tags["roof:direction"] not in roof_directions and not (checkFloat(tags["roof:direction"])): 
+            errors.append(log_error("Invalid value for roof direction: " + tags["roof:direction"], part_id))            
+
+    
     if "roof:shape" in tags: 
         if tags["roof:shape"] not in roof_shapes: 
             if tags["roof:shape"] == "many":
@@ -116,7 +121,10 @@ def validate_tags(part_id, osmtags, is_building_part):
                 
         if key in integer_value_tags:
             if not checkInt(tags[key]):
-                errors.append(log_error("Invalid value for "+ key + " tag: "+tags[key], part_id))                
+                errors.append(log_error("Invalid value for "+ key + " tag: "+tags[key], part_id)) 
+    
+    if "building:height" in tags:
+        errors.append(log_error("building:height is deprecated, use height instead", part_id)) 
         
     return errors
 
