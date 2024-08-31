@@ -48,11 +48,17 @@ class clsXMLparser:
 def encodeXmlString(txt):
     txt = txt.replace("\"","&quot;" )
     txt = txt.replace("'","&apos;")
+    txt = txt.replace("<","&lt;")
+    txt = txt.replace(">","&gt;")
+    #ampersend symbol is not encoded, to avoid double encoding   &   &amp;
     return txt
 
 
 def decodeXmlString(txt):
     txt = txt.replace("&quot;", "\"")
-    txt = txt.replace("&apos;", "'")
     txt = txt.replace("&#34;", "\"")
+    txt = txt.replace("&apos;", "'")
+    txt = txt.replace("&#39;", "'")
+    txt = txt.replace("&lt;","<")
+    txt = txt.replace("&gt;",">")
     return txt
