@@ -228,13 +228,15 @@ class Geocoder:
             if strTag == 'node' or strTag == 'way' or strTag == 'relation':
                 type = strTag
                 id = objXML.GetAttribute('id')
-                blnObjectIncomplete=False 
+                version = objXML.GetAttribute('version')
+                timestamp =objXML.GetAttribute('timestamp')
+                blnObjectIncomplete = False 
                 Tags={}
                 NodeRefs=[]
                 WayRefs=[]
             
             if strTag == 'node':
-                objOsmGeom.AddNode(id, objXML.GetAttribute('lat'), objXML.GetAttribute('lon'))
+                objOsmGeom.AddNode(id, objXML.GetAttribute('lat'), objXML.GetAttribute('lon'), version, timestamp) 
                 
             #references to nodes in ways. we need to find coordinates
             if strTag == 'nd':
@@ -264,7 +266,7 @@ class Geocoder:
                 Tags[strKey]=strValue
 
             if strTag == '/way':
-                intWayNo = objOsmGeom.AddWay(id, NodeRefs, len(NodeRefs))
+                intWayNo = objOsmGeom.AddWay(id, version, timestamp, Tags, NodeRefs)
                 if NodeRefs[0] == NodeRefs[-1]: #closed way
 
                     if Tags.get("place","") !="":
