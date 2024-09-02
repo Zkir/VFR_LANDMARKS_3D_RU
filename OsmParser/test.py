@@ -53,6 +53,8 @@ def CreateQuandrantListRu():
             strQuadrant = composeQuadrantName(i,j)
             geocodes=[]
             for k in range(5):
+                lat = None
+                lon = None
                 if k==0:
                     lat=i
                     lon=j

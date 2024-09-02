@@ -3,7 +3,7 @@
 from mdlSite import *
 from mdlGeocoder import *
 from mdlDBMetadata import *
-import json
+import pickle
 
 MIN_DATE='1900.01.01 00:00:00'
 
@@ -37,7 +37,22 @@ print("Spatial Index created in " + str(geocoder.index_creation_time) + " second
 
 ##with open("spatial_index.txt", 'w', encoding="utf-8") as f:
 ##    json.dump(geocoder.spatial_index.ix, f, indent=4)        
-       
+
+with open('geocoder.pickle', 'wb') as f:
+    pickle.dump(geocoder, f)
+    
+print("geocoder saved to pickle file")    
+t0 = time.time()       
+
+with open('geocoder.pickle', 'rb') as f:
+     geocoder_new = pickle.load(f)
+
+t1 = time.time()
+print("Geocoder loaded from PICKLE in " + str(round(t1-t0,3)) + " seconds")     
+print(geocoder_new)
+
+geocoder = geocoder_new
+
 
 t0 = time.time()
 

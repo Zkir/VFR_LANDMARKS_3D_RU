@@ -3,9 +3,8 @@ from mdlSite import *
 from mdlGeocoder import *
 from mdlDBMetadata import *
 
-GEOCODER_OSM_FILE = "../work_folder/05_geocoder/geocoder.osm"
-GEOCODER_TXT_FILE = "../work_folder/05_geocoder/geocoder.txt"
-GEOCODER_TXT_2_FILE = "../work_folder/05_geocoder/geocoder2.txt"
+GEOCODER_OSM_FILE = "work_folder/05_geocoder/geocoder.osm"
+GEOCODER_TXT_FILE = "work_folder/05_geocoder/geocoder.txt"
 POLY_DIR = "../poly"
 
 print("Loading geocoder...")
@@ -17,12 +16,9 @@ t4 = time.time()
 print("Geocoder loaded in " + str(t4 - t3) + " seconds")
 
 print("save geocoder as mp-text file")
-geocoder.saveDataToTextFile(GEOCODER_TXT_2_FILE)
+geocoder.saveDataToTextFile(GEOCODER_TXT_FILE)
 
-
-print("Saving poly")
-
-geocoder.saveDataToPolyFiles()
-
+##print("Saving poly")
+##geocoder.saveDataToPolyFiles()
 
 print("Done!")

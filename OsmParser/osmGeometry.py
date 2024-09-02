@@ -42,6 +42,14 @@ class TWay:
         self.timestamp = '1900-01-01'
         self.osmtags = {}
         
+    def getBbox(self):
+        bbox = TBbox()
+        bbox.minLat = self.minLat
+        bbox.minLon = self.minLon
+        bbox.maxLat = self.maxLat
+        bbox.maxLon = self.maxLon    
+        return bbox
+        
 class TRelation:
     def __init__(self):
         self.id = "-1"
@@ -54,11 +62,17 @@ class TRelation:
         self.version = '-1' 
         self.timestamp = '1900-01-01'
         self.osmtags = {}        
+        
+    def getBbox(self):
+        bbox = TBbox()
+        bbox.minLat = self.minLat
+        bbox.minLon = self.minLon
+        bbox.maxLat = self.maxLat
+        bbox.maxLon = self.maxLon    
+        return bbox    
 
 class clsOsmGeometry():
     """coordinates of nodes"""
-
-
     def __init__(self):
         self.nodes = []
         self.nodehash = {}
@@ -73,7 +87,7 @@ class clsOsmGeometry():
         self.max_relation = -1
         
 
-    def AddNode(self, id, lat, lon, version, timestamp ):
+    def AddNode(self, id, lat, lon, version, timestamp):
         #print("debug",id, lat, lon)
         aNode=TNode()
         aNode.id = id
@@ -82,6 +96,7 @@ class clsOsmGeometry():
         
         aNode.version = version 
         aNode.timestamp = timestamp
+        
         
         self.nodes.append(aNode)
 
@@ -103,7 +118,7 @@ class clsOsmGeometry():
         fn_return_value = self.nodes[intNodeNo].lon
         return fn_return_value
 
-    def AddWay(self, id, version, timestamp, osmtags, NodeRefs):
+    def AddWay(self, id, version, timestamp, osmtags, NodeRefs, object_incomplete):
         i = 0
 
         lat = 0
@@ -123,6 +138,7 @@ class clsOsmGeometry():
         aWay.osmtags = osmtags
         aWay.NodeRefs = NodeRefs
         aWay.node_count = node_count
+        aWay.object_incomplete = object_incomplete
         
         #calculate bbox
         for i in range(node_count):
@@ -149,19 +165,16 @@ class clsOsmGeometry():
         aWay.maxLat = maxLat
         aWay.maxLon = maxLon
         
-        self.ways.append(aWay)
+        aWay.size = self.CalculateWaySize(aWay)
         
+        self.ways.append(aWay)
         self.max_way = self.max_way + 1
         self.wayhash[id] = self.max_way
         
         return self.max_way
 
     def GetWayBBox(self, intWayNo):
-        bbox = TBbox()
-        bbox.minLat = self.ways[intWayNo].minLat
-        bbox.minLon = self.ways[intWayNo].minLon
-        bbox.maxLat = self.ways[intWayNo].maxLat
-        bbox.maxLon = self.ways[intWayNo].maxLon
+        bbox = self.ways[intWayNo].getBbox()
         return bbox
 
     def FindWay(self, id):
@@ -177,9 +190,9 @@ class clsOsmGeometry():
 
     def CalculateBBoxSize(self, minLat, minLon, maxLat, maxLon):
         #Debug.Print DEGREE_LENGTH_M * (maxLat - minLat), DEGREE_LENGTH_M * (maxLon - minLon) * cos(minLatn / 180 * Pi)
-        CalculateSize = self.DEGREE_LENGTH_M * Sqr(abs(maxLat - minLat) * abs(maxLon - minLon) * cos(minLat / 180 * self.Pi))
-        CalculateSize = Round(CalculateSize)
-        return fn_return_value
+        CalculateSize = DEGREE_LENGTH_M * Sqr(abs(maxLat - minLat) * abs(maxLon - minLon) * cos(minLat / 180 * Pi))
+        CalculateSize = round(CalculateSize, 3)
+        return CalculateSize
 
     def CalculateClosedNodeChainSqure(self, NodeRefs, N):
         S = 0
@@ -207,21 +220,19 @@ class clsOsmGeometry():
         fn_return_value = S
         return fn_return_value
 
-    def CalculateWaySize(self, intWayNo):
+    def CalculateWaySize(self, way):
 
-        bbox = self.GetWayBBox(intWayNo)
-        N = len(self.ways[intWayNo].NodeRefs)-1
+        bbox = way.getBbox() #self.GetWayBBox(intWayNo)
+        N = len(way.NodeRefs)-1
         #print(N)
         if N<0:
-            print("Way without nodes: " + self.ways[intWayNo].id)
+            print("Way without nodes: " + way.id)
             return 0.0
     
-        if self.ways[intWayNo].NodeRefs[0] != self.ways[intWayNo].NodeRefs[N]:
-            # Debug.Print "way not closed " & ways(intWayNo).ID
+        if way.NodeRefs[0] != way.NodeRefs[N]:
             fn_return_value = DEGREE_LENGTH_M * Sqr(abs(bbox.maxLat - bbox.minLat) * abs(bbox.maxLon - bbox.minLon) * cos(( bbox.minLat + bbox.maxLat )  / 2.0 / 180 * Pi))
         else:
-            # Debug.Print "way  closed"
-            fn_return_value = Sqr(self.CalculateClosedNodeChainSqure(self.ways[intWayNo].NodeRefs, N))
+            fn_return_value = Sqr(self.CalculateClosedNodeChainSqure(way.NodeRefs, N))
         return fn_return_value
 
 
@@ -345,23 +356,30 @@ class clsOsmGeometry():
 
         return Outlines
 
-    def CalculateRelationSize(self, WayRefs, way_count):
-        size = 0.0
+    def CalculateRelationSize(self, id, type, WayRefs):
+        
+        if type not in ["boundary", "multipolygon"]:
+            # other known types of relations are site, collection and waterway. 
+            # we do not know how to calculate size for them, and do not really care. 
+            return None
         Outlines=self.ExtractCloseNodeChainFromRelation(WayRefs)
 
         if len(Outlines) > 0:
+            size = 0.0
             for OutlineNodeRefs in Outlines:
                 outline_nodeCount = len(OutlineNodeRefs)
                 if OutlineNodeRefs[0] == OutlineNodeRefs[outline_nodeCount - 1]:
                     size =size + Sqr(self.CalculateClosedNodeChainSqure(OutlineNodeRefs, outline_nodeCount - 1))
                 else:
-                    print('Relation is not closed')
+                    print('Relation r' + id + ' ('+type+') is broken. One of the rings is not closed')
         else:
-            print('Empty relation. Probably members with outer role is missing or no closed rings ')
+            size = None 
+            print('Relation r' + id + ' ('+type+') is empty. Probably members with outer role is missing or no closed rings ')
+            
         return size
         
         
-    def AddRelation(self, id, version, timestamp, osmtags, WayRefs):
+    def AddRelation(self, id, version, timestamp, osmtags, WayRefs, object_incomplete):
 
         way_count = len(WayRefs)
         aRelation = TRelation()
@@ -371,6 +389,9 @@ class clsOsmGeometry():
         aRelation.osmtags = osmtags
         aRelation.WayRefs =  WayRefs
         aRelation.way_count = way_count
+        aRelation.object_incomplete = object_incomplete
+        aRelation.type = osmtags.get("type","")
+        aRelation.size = self.CalculateRelationSize(id, aRelation.type, WayRefs)
 
         #calculate bbox
         minLat = 0

@@ -1,4 +1,4 @@
-rem @echo off
+@echo off
 
 SET WORK_FOLDER=%1
 SET SOURCE_FILE=%2\russia-latest.o5m

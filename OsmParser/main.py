@@ -246,7 +246,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
                     touched_date = obj_date
                     
    
-   # write ways inside BBOX                
+    # write ways inside BBOX                
     for way in objOsmGeomParts.ways:
         
         blnCompleteObject = False

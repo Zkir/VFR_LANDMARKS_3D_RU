@@ -172,20 +172,16 @@ def readOsmXml(strSrcOsmFile):
 
 
         if strTag == '/way':
-            intWayNo = objOsmGeom.AddWay(osmObject.id, osmObject.version, osmObject.timestamp, osmObject.osmtags, osmObject.NodeRefs)
-            osmObject.bbox = objOsmGeom.GetWayBBox(intWayNo)
-            osmObject.size = objOsmGeom.CalculateWaySize(intWayNo)
+            if not blnObjectIncomplete:
+                intWayNo = objOsmGeom.AddWay(osmObject.id, osmObject.version, osmObject.timestamp, osmObject.osmtags, osmObject.NodeRefs, blnObjectIncomplete)
+                osmObject.bbox = objOsmGeom.GetWayBBox(intWayNo)
+                osmObject.size = objOsmGeom.ways[intWayNo].size
 
         if strTag == '/relation':
-
-            try:
-                osmObject.size = objOsmGeom.CalculateRelationSize(osmObject.WayRefs, osmObject.way_count)
-            except:
-                print('Relation ' +  osmObject.id + ' : unable to determine size')
-                osmObject.size = 0
-            
-            intRelationNo = objOsmGeom.AddRelation(osmObject.id,osmObject.version, osmObject.timestamp, osmObject.osmtags, osmObject.WayRefs)
-            osmObject.bbox = objOsmGeom.GetRelationBBox(intRelationNo)
+            if not blnObjectIncomplete:
+                intRelationNo = objOsmGeom.AddRelation(osmObject.id,osmObject.version, osmObject.timestamp, osmObject.osmtags, osmObject.WayRefs, blnObjectIncomplete)
+                osmObject.bbox = objOsmGeom.GetRelationBBox(intRelationNo)
+                osmObject.size = objOsmGeom.relations[intRelationNo].size
             
 
         # Closing node

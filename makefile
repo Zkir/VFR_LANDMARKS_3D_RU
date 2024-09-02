@@ -55,7 +55,7 @@ work_folder\05_geocoder\geocoder.osm: work_folder\00_planet.osm\russia-latest.o5
 	scripts\geocoder_extract.bat work_folder\05_geocoder work_folder\00_planet.osm
 
 work_folder\05_geocoder\geocoder.txt: work_folder\05_geocoder\geocoder.osm  ##create geocoder mp file. Actually geocoder txt should be created from geocode.osm, but the script was lost. 	
-	copy geocoder.txt work_folder\05_geocoder
+	python OsmParser\geocoder_update.py
 	touch $@
 
 #****************************************************************************************************************************

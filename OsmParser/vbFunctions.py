@@ -2,7 +2,7 @@
 # VB6 runtime library
 #just not to invent the wheel
 #=======================================================================================================================
-from math import cos
+from math import cos, sin
 from os import remove
 from re import match
 
