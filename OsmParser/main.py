@@ -34,7 +34,8 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
             #print( "not a building: " + osmObject.type + " " + osmObject.id)
             pass
 
-    fo = open(strOutputFile, 'w', encoding="utf-8")
+    
+    building_dat = []
     for osmObject in SelectedObjects:
         heightbyparts = 0
         numberofparts = 0
@@ -71,21 +72,21 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
 
         ref_temples_ru = osmObject.getTag('ref:temples.ru')
         j = j + 1
-        fo.write(str(j) + '|' + osmObject.type + '|' + osmObject.id + '|' + str(osmObject.bbox.minLat) + '|'
-                 + str(osmObject.bbox.minLon) + '|'
-                 + str(osmObject.bbox.maxLat) + '|'
-                 + str(osmObject.bbox.maxLon) + '|' + osmObject.name + '|' + osmObject.descr + '|' + ref_temples_ru + '|'
-                 + strBuildingType + '|' + str(Round(osmObject.size)) + '|'
-                 + str(Round(osmObject.dblHeight)) + '|' + osmObject.colour + '|' + osmObject.material + '|'
-                 + guessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate) + '|'
-                 + parseStartDateValue( osmObject.tagStartDate) + '|' + osmObject.tagWikipedia + '|'
-                 + osmObject.tagAddrStreet + '|' + osmObject.tagAddrHouseNumber + '|' + osmObject.tagAddrCity + '|'
-                 + osmObject.tagAddrDistrict + '|' + osmObject.tagAddrRegion + '|'
-                 + str(osmObject.blnHasBuildingParts and (osmObject.dblHeight > 0)) + '|' + str(numberofparts) + '|'
-                 + touched_date + '|' 
-                 + str(numberofvalidationerrors)
-                 + '\n')
-    fo.close()
+        building_dat.append([str(j),  osmObject.type,  osmObject.id,  str(osmObject.bbox.minLat),
+                 str(osmObject.bbox.minLon) ,
+                 str(osmObject.bbox.maxLat) ,
+                 str(osmObject.bbox.maxLon),   osmObject.name,   osmObject.descr,   ref_temples_ru ,
+                 strBuildingType,   str(Round(osmObject.size)) ,
+                 str(Round(osmObject.dblHeight)),   osmObject.colour,   osmObject.material ,
+                 guessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate),
+                 parseStartDateValue( osmObject.tagStartDate),   osmObject.tagWikipedia,
+                 osmObject.tagAddrStreet,   osmObject.tagAddrHouseNumber,   osmObject.tagAddrCity,
+                 osmObject.tagAddrDistrict,   osmObject.tagAddrRegion,
+                 str(osmObject.blnHasBuildingParts and (osmObject.dblHeight > 0)),   str(numberofparts),
+                 touched_date,  
+                 str(numberofvalidationerrors)])
+    
+    saveDatFile(building_dat, strOutputFile)
 
     # miracle: update totals file
     totals = loadDatFile(BUILD_PATH + '\\work_folder\\Quadrants.dat')
