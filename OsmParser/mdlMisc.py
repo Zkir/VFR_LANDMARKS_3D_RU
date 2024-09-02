@@ -231,8 +231,17 @@ def safeString(s):
 
 #====================================================================================
 # home-brew relational DB interface
-# plain files pipe (|) separated
+# plain text files pipe (|) separated
 #====================================================================================
+def endcodeDatString(s):
+    # we only need to encode pipe simbol
+    s=s.replace(r'|', r'&#124;') 
+    return s
+
+def decodeDatString(s):
+    s=s.replace(r"&#124;", r"|") 
+    return s
+
 def loadDatFile(strInputFile, encoding="utf-8"):
     cells = []
     filehandle = open(strInputFile, 'r', encoding=encoding)
@@ -241,7 +250,7 @@ def loadDatFile(strInputFile, encoding="utf-8"):
         if Left(txt,1) != "#":
             row = txt.strip().split("|")
             for i in range(len(row)):
-                row[i] = row[i].strip()
+                row[i] = decodeDatString(row[i].strip())
             if len(row)>1:
                 cells.append(row)
         txt = filehandle.readline()
@@ -257,6 +266,6 @@ def saveDatFile(cells,strOutputFile):
         for field in row: 
             if txt!="":
                 txt = txt + "|"   
-            txt = txt + field
+            txt = txt + endcodeDatString(field)
         filehandle.write(txt+'\n') 
     filehandle.close()   
