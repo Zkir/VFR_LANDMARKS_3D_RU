@@ -11,7 +11,7 @@ import json
 #========================================================================
 #  Web Page for individual object, with 3d model
 #========================================================================
-def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors):
+def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors, urlPrevious, urlNext):
     strHTMLPage = ""
     strOSMurl = ""
     strF4url = ""
@@ -139,7 +139,10 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors)
     print( '  <div class=\'page-footer\'>'+ '\n')
     print( '  <div class=\'navigation\'>'+ '\n')
     print( '<hr />'+ '\n')
+    urlPrevious, urlNext
+    print( '  <a href="'+urlPrevious+'"> << Предыдущее </a> -- \n')
     print( '  <a href=\'/\'>Главная страница</a> --> <a href=\'/' + strQuadrantName + '.html\'>' + strQuadrantName + '</a>'+ '\n')
+    print( '  -- <a href="'+urlNext+'"> Следущее >> </a> \n')
     print( '  </div>'+ '\n')
     #zero frame for josm links
     print( '<div style="display: none;"><iframe name="josm"></iframe></div>'+ '\n')
@@ -201,19 +204,24 @@ if len(s)>=2:
     intObjectIndex=s[2][0:-5]
     #print(intObjectIndex) 
 else:
-    strQuadrantName="RU-MOW"
-    intObjectIndex="R3030568"
+    strQuadrantName= "RUS_TOP" # "RU-MOW"
+    intObjectIndex= "R1645496" # "R3030568"
 
 strInputFile = "data\\quadrants\\"+strQuadrantName+".dat"
 cells = loadDatFile(strInputFile)
 page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(strInputFile)))
 page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)
+
+
+# sort by number of building parts - we need it for proper navigation 
+cells.sort(key=lambda row: int(row[24]), reverse=True)
     
+idx=0    
 for rec in cells:
     if UCase(Left(rec[1],1)) + rec[2] == intObjectIndex:
        obj_rec = rec
        break  
-       
+    idx += 1   
         
 #validation errors
 validation_errors_file_name = "data\\errors\\" + UCase(Left(obj_rec[1],1)) + obj_rec[2] +'.errors.dat'
@@ -226,6 +234,18 @@ if os.path.exists(validation_errors_file_name):
         validation_errors = json.load(f)
 else:
     validation_errors = []
-      
     
-CreateObjectPage(strQuadrantName, obj_rec, page_time_stamp, validation_errors)
+#print(idx,len(cells))
+
+if idx>0:      
+    urlPrevious =  UCase(Left(cells[idx-1][1],1)) + cells[idx-1][2] + '.html'  
+else:
+    urlPrevious =  '/' + strQuadrantName + '.html' 
+
+
+if idx+1<len(cells):
+    urlNext =   UCase(Left(cells[idx+1][1],1)) + cells[idx+1][2] + '.html' #cells[idx+1]
+else:     
+    urlNext =  '/' + strQuadrantName + '.html'
+    
+CreateObjectPage(strQuadrantName, obj_rec, page_time_stamp, validation_errors, urlPrevious, urlNext)
