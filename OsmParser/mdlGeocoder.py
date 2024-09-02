@@ -6,6 +6,9 @@ import rtree
 import geohash2
 import os
 
+GEOCODER_SOURCE_OSM = "work_folder\\05_geocoder\\geocoder.osm"
+GEOCODER_SOURCE_TXT  = "work_folder\\05_geocoder\\geocoder.txt"
+
 #===================================================================
 # Проверка принадлежности точки полигону методом испускания луча
 # Элементарная функция
@@ -466,3 +469,49 @@ class Geocoder:
         return geocodes
     
 
+# ===================================================================================================================
+# Геокодирование объектов из dat-файла
+# ===================================================================================================================
+
+def get_geocode_by_priority(geocodes, priority_geocodes):
+    x = ""
+    for geocode in priority_geocodes:
+        if geocode in  geocodes:
+            x = geocodes[geocode]
+            break   
+    return x        
+
+def DoGeocodingForDatFile(strInputFile):
+    
+    
+    cells = loadDatFile(strInputFile)
+    
+    city_geocodes = ["place", "adminlevel_8", "adminlevel_9", "adminlevel_10" ] # город
+    district_geocodes = ["adminlevel_6"] # район
+    region_geocodes = ["adminlevel_4"] # область
+    
+    if True:
+        if  (len(cells) > 0):
+            print("Loading geocoder...")
+            t1 = time.time()
+            geocoder = Geocoder()
+            #geocoder.loadDataFromOsmFile(GEOCODER_SOURCE_OSM)
+            geocoder.loadDataFromTextFile(GEOCODER_SOURCE_TXT)
+
+            t2 = time.time()
+            print("Geocoder loaded in " + str(t2 - t1) + " seconds")
+
+            for i in range(len(cells)):
+                lat = (float(cells[i][3]) + float(cells[i][5])) / 2
+                lon = (float(cells[i][4]) + float(cells[i][6])) / 2
+                geocodes = geocoder.getGeoCodes(lat, lon)
+                cells[i][20] = get_geocode_by_priority(geocodes, city_geocodes)  # город
+                cells[i][21] = get_geocode_by_priority(geocodes, district_geocodes)  # район
+                cells[i][22] = get_geocode_by_priority(geocodes, region_geocodes)  # область
+                
+            t3 = time.time()
+            # we still need to save results, we will need them in future.
+            saveDatFile(cells, strInputFile)
+            print("objects geocoded in " + str(t3 - t2) + " seconds")
+        else:
+            print("No objects, geocoding skipped")

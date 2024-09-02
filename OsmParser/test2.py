@@ -1,6 +1,5 @@
 # This is our playground
 # here we will check our ideas.
-from mdlSite import *
 from mdlGeocoder import *
 from mdlDBMetadata import *
 import pickle
@@ -55,6 +54,18 @@ geocoder = geocoder_new
 
 
 t0 = time.time()
+
+#крейсер Аврора (R3272566) 
+print()                
+lat , lon = (59.955415, 30.337808250000002)
+geocodes = getGeoCodes2(geocoder, lat, lon)
+print(geocodes)
+
+#Павловский дворец (R1759666) 
+print()                
+lat , lon = (59.71606405, 30.39528915)
+geocodes = getGeoCodes2(geocoder, lat, lon)
+print(geocodes)
 
 print()                
 lat , lon =  (55.6613160, 37.3340129)

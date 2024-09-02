@@ -6,7 +6,7 @@ from mdlMisc import *
 from mdlOsmParser import readOsmXml, encodeXmlString
 from osmGeometry import clsOsmGeometry
 from mdlXmlParser import clsXMLparser
-from mdlSite import DoGeocodingForDatFile
+from mdlGeocoder import DoGeocodingForDatFile
 from mdlStartDate import parseStartDateValue
 
 from  tag_validator import validate_tags, dump_errors

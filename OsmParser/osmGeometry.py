@@ -373,7 +373,7 @@ class clsOsmGeometry():
                 else:
                     print('Relation r' + id + ' ('+type+') is broken. One of the rings is not closed')
         else:
-            size = None 
+            size = 0  
             print('Relation r' + id + ' ('+type+') is empty. Probably members with outer role is missing or no closed rings ')
             
         return size
