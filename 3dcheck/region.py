@@ -214,7 +214,10 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
                 print('<td>' + "" + '</td>' )
                 
             if len(cells[i])>26:
-                print('<td><a href="'+strErrorsUrl+'">' + cells[i][26] + '</a></td>' )
+                if cells[i][26] != "0":
+                    print('<td><a href="'+strErrorsUrl+'">' + cells[i][26] + '</a></td>' )
+                else:
+                    print('<td>' + cells[i][26] + '</td>' )
             else:
                 print('<td>' + "??" + '</td>' )
                 

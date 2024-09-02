@@ -112,7 +112,12 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
     print( '  <tr><td>Osm Buildings</td><td><a target=\'_blank\' href=\'' + strOsmBurl + '\'>' + 'osmbuildings.org' + '</a></td></tr>'+ '\n')
     print( '  <tr><td>Число частей:</td><td>'+obj_rec[24]+strStars+'</td></tr>'+ '\n')
     print( '  <tr><td>Дата редактирования:</td><td>'+obj_rec[25][0:10]+'</td></tr>'+ '\n')
-    print( '  <tr><td>Ошибки валидации:</td><td><a href="'+strOsmID+'.errors.html"> '+str(len(validation_errors))+'</a></td></tr>'+ '\n')
+    
+    n_errors=int(obj_rec[26])
+    if n_errors > 0:
+        print( '  <tr><td>Ошибки валидации:</td><td><a href="'+strOsmID+'.errors.html"> '+str(n_errors)+'</a></td></tr>'+ '\n')
+    else:
+        print( '  <tr><td>Ошибки валидации:</td><td> 0 </td></tr>'+ '\n')
     print( '  <tr><td colspan="2"><br/><b><center>*<a target="josm" href="' + strJOSMurl + '">Редактировать в JOSM</a>*</center></b></td></tr>'+ '\n')
     print( '  </table>'+ '\n')
     print( '   '+ '\n')
