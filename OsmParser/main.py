@@ -1,6 +1,8 @@
 ﻿import time
 import subprocess
 import sys
+import os
+import hashlib
 
 from mdlMisc import *
 from mdlOsmParser import readOsmXml, encodeXmlString
@@ -8,8 +10,7 @@ from osmGeometry import clsOsmGeometry
 from mdlXmlParser import clsXMLparser
 from mdlGeocoder import DoGeocodingForDatFile
 from mdlStartDate import parseStartDateValue
-
-from  tag_validator import validate_tags, dump_errors
+from tag_validator import validate_tags, dump_errors
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 
@@ -196,10 +197,15 @@ def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
             strResult = 'RUINED ' + strResult
         else:
             print('unexpected value for ruins key ' + tagRuins)
-    fn_return_value = Trim(strResult)
-    return fn_return_value
+            
+    if strResult == '' and tagBuilding not in ['yes','no']: 
+        strResult = tagBuilding.upper()
+    
+  
+    return Trim(strResult)
 
-
+def gethash(s):
+    return hashlib.md5(s.encode("utf-8")).hexdigest() 
 
 def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     
@@ -207,6 +213,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     numberofparts = 0
     touched_date = "1900-01-01"
     numberofvalidationerrors = 0
+    strhash = ""
     
     # we need exclude broken objects without nodes
     # bboxes for them are wrong
@@ -236,6 +243,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
         obj_ver = node.version 
         obj_date = node.timestamp
         
+        
         node_lat = float(node.lat)
         node_lon = float(node.lon)
         
@@ -243,6 +251,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
             #or node id belongs to set of known nodes!
             #objOsmGeom.AddNode(obj_id, node_lat, node_lon, obj_ver, obj_date)
             fo.write( '<node id="' + obj_id + '" version="' + obj_ver + '"  lat="' + str(node_lat) + '" lon="' + str(node_lon) + '"/>'+ '\n')
+            strhash += 'n'+ obj_id + "v" + obj_ver
             if obj_date > touched_date:
                     touched_date = obj_date
                     
@@ -275,6 +284,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
         
         #print way with node refs and tags
         fo.write( '<way id="' + obj_id + '" version="' + obj_ver + '" >' + '\n')
+        strhash += 'w'+ obj_id + "v" + obj_ver
         for node_ref in way.NodeRefs:
             fo.write( '  <nd ref="' + objOsmGeomParts.GetNodeID(node_ref) + '" />' + '\n')
             
@@ -321,6 +331,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
         obj_levels = osmtags.get('building:levels', '0')
         
         fo.write( '<relation id="' + obj_id + '" version="' + obj_ver + '" >' + '\n')
+        strhash += 'r'+ obj_id + "v" + obj_ver
         
         for way in relation.WayRefs:
             fo.write( '    <member type="way" ref="' + objOsmGeomParts.GetWayID( way[0]) + '" role="' + way[1] + '"  />' + '\n')
@@ -361,13 +372,24 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     
 
     if not ( blnHasBuildingParts and  ( height > 0 ) ) :
-        Kill(strOutputOsmFileName)
-        #numberofvalidationerrors = 0
+        os.remove(strOutputOsmFileName)
+        if os.path.exists(strOutputOsmFileName+'.md5'):
+            os.remove(strOutputOsmFileName+'.md5')
+    else:
+        with open(strOutputOsmFileName+'.md5', 'w',encoding="utf-8") as f:
+            f.write(gethash(strhash))
+       
     
     numberofvalidationerrors = len(Errors)
     if numberofvalidationerrors > 0:
-        dump_errors(strValidationErrorsFileName, Errors)    
-       
+        dump_errors(strValidationErrorsFileName, Errors) 
+    else:
+        # we need to clean up an error file, if it was created on a previous run
+        if os.path.exists(strValidationErrorsFileName):
+            os.remove(strValidationErrorsFileName)
+        
+
+
         
     return [height, numberofparts,touched_date,numberofvalidationerrors]
 

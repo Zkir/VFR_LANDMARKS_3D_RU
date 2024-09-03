@@ -3,7 +3,6 @@
 #just not to invent the wheel
 #=======================================================================================================================
 from math import cos, sin
-from os import remove
 from re import match
 
 def Left(s, pos):
@@ -52,9 +51,6 @@ def IsNumeric(s):
         return True
     except ValueError:
         return False
-
-def Kill(s):
-    remove(s)
 
 def IIf(a,b,c):
     if a:

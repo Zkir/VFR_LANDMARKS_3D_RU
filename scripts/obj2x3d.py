@@ -29,9 +29,9 @@ else:
     else:
         strOutputFile=strInputFile + '.x3d'
 
-print("Converter X-plane OBJ to X3D")
-print("(c) Zkir 2019")
-print("Input file: "+ strInputFile )
+#print("Converter X-plane OBJ to X3D")
+#print("(c) Zkir 2019")
+#print("Input file: "+ strInputFile )
 filehandle = open(strInputFile, 'r')
 vertices = []
 indices =[]
@@ -90,11 +90,11 @@ while len(txt) != 0:
     txt = filehandle.readline()
     # end of while
 
-print ("Vertices read: "+ str(len(vertices)))
-print ("Indices read: "+ str(len(indices)))
+#print ("Vertices read: "+ str(len(vertices)))
+#print ("Indices read: "+ str(len(indices)))
 filehandle.close()
 
-print("Output file: "+ strOutputFile )
+#print("Output file: "+ strOutputFile )
 
 filehandle = open(strOutputFile, 'w')
 filehandle.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
@@ -179,5 +179,5 @@ filehandle.write("	</Scene>\n")
 filehandle.write("</X3D>")
 
 filehandle.close()
-print ("done")
+#print ("done")
 

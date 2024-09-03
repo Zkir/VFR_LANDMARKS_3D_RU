@@ -106,11 +106,11 @@ work_folder\30_3dmodels: | work_folder ## Prepare folder for 3d models (obj/x3d)
 	mkdir work_folder\30_3dmodels 
 	
 work_folder\30_3dmodels\convert_osm_to_obj: work_folder\20_osm_3dmodels\extract_building_models_osm | work_folder\30_3dmodels 	##Convert 3d objects from osm files to blender and x-plane obj 
-	for %%v in (work_folder\20_osm_3dmodels\*.osm) do osm2blend.bat "%%v" work_folder\30_3dmodels
+	for %%v in (work_folder\20_osm_3dmodels\*.osm) do scripts\osm2blend.bat "%%v" work_folder\30_3dmodels
 	touch $@		
 	
 work_folder\30_3dmodels\convert_obj_to_x3d: work_folder\30_3dmodels\convert_osm_to_obj              ##Convert x-plane obj files to x3d, to be used on website.  		
-	for %%v in (work_folder\30_3dmodels\*.obj) do obj2x3d.py "%%v"
+	for %%v in (work_folder\30_3dmodels\*.obj) do scripts\obj2x3d.py "%%v"
 	touch $@		
 
 #****************************************************************************************************************************
