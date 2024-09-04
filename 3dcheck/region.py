@@ -75,8 +75,11 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     # ==========================================================================
     # sort by number of building parts
     # ==========================================================================
-    cells.sort(key=lambda row: int(row[24]), reverse=True)
-
+    if strQuadrantName != "RUS_LATEST":
+        cells.sort(key=lambda row: int(row[24]), reverse=True)
+    else:
+        # Latest should be sorted by date (already?)
+        pass  
 
 
     #==========================================================================

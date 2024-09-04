@@ -91,7 +91,8 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
     print( '  <div class=\'descr\'  >'+ '\n')
     print( '  <table style=\'padding:15px;\'>'+ '\n')
     print( '  <tr><td>Тип здания:  </td><td>' + obj_rec[10] + '</td></tr>'+ '\n')
-    print( '  <tr><td>Описание:  </td><td>' + obj_rec[8] + '</td></tr>'+ '\n')
+    if obj_rec[8] != "":
+        print( '  <tr><td>Описание:  </td><td>' + obj_rec[8] + '</td></tr>'+ '\n')
     print( '  <tr><td>Год постройки: </td><td>' + obj_rec[16] + '</td></tr>'+ '\n')
     print( '  <tr><td>Стиль: </td><td>' + obj_rec[15] + '</td></tr>'+ '\n')
     print( '  <tr><td>Размер, м : </td><td>' + obj_rec[11] + '</td></tr>'+ '\n')
@@ -100,14 +101,16 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
     print( '  <tr><td>Материал: </td><td>' + obj_rec[14] + '</td></tr>'+ '\n')
     print( '  <tr><td>Адрес:</td><td>' + obj_rec[18] + ' ' + obj_rec[19] + '</td></tr>'+ '\n')
     print( '  <tr><td>Город:</td><td>' + obj_rec[20] + '</td></tr>'+ '\n')
-    print( '  <tr><td>Район:</td><td>' + obj_rec[21] + '</td></tr>'+ '\n')
+    if obj_rec[21] != "":    
+        print( '  <tr><td>Район:</td><td>' + obj_rec[21] + '</td></tr>'+ '\n')
     print( '  <tr><td>Область:</td><td>' + obj_rec[22] + '</td></tr>'+ '\n')
     print( '  <tr><td>Lat: </td><td>' + str(lat) + '</td></tr>'+ '\n')
     print( '  <tr><td>Lon: </td><td>' + str(lon) + '</td></tr>'+ '\n')
     print( '  <tr><td>Osm Id: </td><td><a href=\'' + strOSMurl + '\'> ' + strOsmID + '</a></td></tr>'+ '\n')
     if strWikipediaLink != '':
         print( '  <tr><td>Википедия:</td><td><a target=\'_blank\' href=\'' + strWikipediaLink + '\'>' + Mid(obj_rec[17], 4) + '</a></td></tr>'+ '\n')
-    print( '  <tr><td>temples.ru:</td><td><a target=\'_blank\' href=\'' + strTemplesUrl + '\'>' + strTemplesID + '</a></td></tr>'+ '\n')
+    if strTemplesID != "":    
+        print( '  <tr><td>temples.ru:</td><td><a target=\'_blank\' href=\'' + strTemplesUrl + '\'>' + strTemplesID + '</a></td></tr>'+ '\n')
     print( '  <tr><td>F4 Map</td><td><a target=\'_blank\' href=\'' + strF4url + '\'>' + 'demo.f4map.com' + '</a></td></tr>'+ '\n')
     print( '  <tr><td>Osm Buildings</td><td><a target=\'_blank\' href=\'' + strOsmBurl + '\'>' + 'osmbuildings.org' + '</a></td></tr>'+ '\n')
     print( '  <tr><td>Число частей:</td><td>'+obj_rec[24]+strStars+'</td></tr>'+ '\n')
@@ -219,7 +222,11 @@ page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)
 
 
 # sort by number of building parts - we need it for proper navigation 
-cells.sort(key=lambda row: int(row[24]), reverse=True)
+if strQuadrantName != "RUS_LATEST":
+    cells.sort(key=lambda row: int(row[24]), reverse=True)
+else:
+    pass
+    #for the latest changes list is already sorted by date    
     
 idx=0    
 for rec in cells:

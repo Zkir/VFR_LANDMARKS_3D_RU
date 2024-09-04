@@ -35,6 +35,9 @@ def CreateIndexPage(strInputFile):
     print( '  <p>1. <a href="/">Россия, по регионам</a>. </p>' + '\n')
     print( '  <p>2. Россия, по квадратам</a> </p>' + '\n')
     print( '  <p>3. <a href="/rus-top.html">Топ зданий, Россия</a> </p>' + '\n')
+    print( '  <p>3. <a href="/rus-latest.html">Последние изменения, Россия</a> </p>' + '\n')
+    
+   
 
     print( '  <h2>Список областей</h2>' + '\n')
     print( '  <table class="sortable">' + '\n')
@@ -51,9 +54,11 @@ def CreateIndexPage(strInputFile):
     print( '  </table>' + '\n')
     print( '  <h2>Полезные ссылки</h2>' + '\n')
     print( '  <ul>' + '\n')
-    print( '    <li><a href="https://www.openstreetmap.org/user/Zkir/diary/390256" >Задать вопросы по этому валидатору можно тут</a></li> ' + '\n')
+    print( '    <li><a href="https://community.openstreetmap.org/t/3dcheck-zkir-ru/117934/19" >Задать вопросы по этому валидатору можно тут</a></li> ' + '\n')
     print( '    <li><a href="https://wiki.openstreetmap.org/wiki/Simple_3D_buildings" >Спецификация Simple Buildings, т.е. то, как рисовать 3D-здания в OSM</a></li>' + '\n')
     print( '    <li><a href="https://wiki.openstreetmap.org/wiki/User:Zkir">Дополнительные теги для церквей</a></li>' + '\n')
+    print( '    <li><a href="https://wiki.openstreetmap.org/wiki/RU:Key:building#%D0%97%D0%B4%D0%B0%D0%BD%D0%B8%D1%8F">Классификация зданий</a></li>' + '\n')
+    print( '    <li><a href="https://wiki.openstreetmap.org/wiki/RU:Key:building:architecture">Архитектурные стили</a></li>' + '\n')
     print( '    <li><a href="https://demo.f4map.com/#lat=56.3099201&amp;lon=38.1301151&amp;zoom=18&amp;camera.theta=58.228&amp;camera.phi=-41.93">3D карта, ака F4map</a></li>' + '\n')
     print( '  </ul>' + '\n')
     print( '  <hr />' + '\n')
