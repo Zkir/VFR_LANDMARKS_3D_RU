@@ -7,6 +7,7 @@ import time
 from mdlMisc import *
 import os.path
 import json
+from mdlClassify import buildingTypeRus
 
 #========================================================================
 #  Web Page for individual object, with 3d model
@@ -90,7 +91,7 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
 
     print( '  <div class=\'descr\'  >'+ '\n')
     print( '  <table style=\'padding:15px;\'>'+ '\n')
-    print( '  <tr><td>Тип здания:  </td><td>' + obj_rec[10] + '</td></tr>'+ '\n')
+    print( '  <tr><td>Тип здания:  </td><td>' + buildingTypeRus(obj_rec[10]) + '</td></tr>'+ '\n')
     if obj_rec[8] != "":
         print( '  <tr><td>Описание:  </td><td>' + obj_rec[8] + '</td></tr>'+ '\n')
     print( '  <tr><td>Год постройки: </td><td>' + obj_rec[16] + '</td></tr>'+ '\n')

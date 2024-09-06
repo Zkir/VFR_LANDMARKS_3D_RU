@@ -6,6 +6,7 @@ import codecs
 from mdlMisc import *
 import cgi
 import time
+from mdlClassify import buildingTypeRus
 
 class TSummaryRec:
 
@@ -128,11 +129,16 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     print( '<td><b>' + str(arrSummary[0].TotalObjects) + '</b></td><td><b>' + str(arrSummary[0].ObjectsWith3D) + '<b></td>'+ '\n')
     print( '<td><b>' + str(Round(dblPercentage)) + '</b></td></tr>'+ '\n')
     print( '</table>'+ '\n')
+    
     print( '<h2>Объекты</h2>'+ '\n')
     print( '<p><small>Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</small><p>'+ '\n')
     print( '<table class="sortable">'+ '\n')
-    print( '<tr><th>OSM ID</th><th>Название</th><th>Год постройки</th><th>Temples.ru</th><th>Размер, м</th><th>Высота, м</th><th>Цвет</th><th>Материал</th>'
-           + '<th>Стиль</th><th>Город</th> <th>Район</th> <th>Область</th><th>OSM 3D </th><th>Число частей</th><th>Послед. редактир.</th><th>Ошибки</th><th>J</th></tr>'+ '\n')
+    print( '<tr><th>OSM ID</th><th>Название</th><th>Год постройки</th><th>Размер, м</th><th>Высота, м</th>'
+           + '<th>Тип здания</th><th>Стиль</th><th>Город</th> <th>Район</th> <th>Область</th><th>OSM 3D </th><th>Число частей</th><th>Послед. редактир.</th><th>Ошибки</th><th>J</th></tr>'+ '\n')
+    
+    # Hidden columns
+    #<th>Temples.ru</th>       
+    #<th>Цвет</th><th>Материал</th>
    
     for i in range(len(cells)):
 
@@ -174,7 +180,7 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
                 strDescription = Mid(cells[i][17], 4) #wikipedia article name, if any
             #last resort -- building type
             if strDescription == '':
-                strDescription = '&lt;&lt;' + cells[i][10] + '&gt;&gt;'
+                strDescription = '&lt;&lt;' + buildingTypeRus(cells[i][10]).upper() + '&gt;&gt;'
             #ID and link to osm site
             strOsmID = Left(UCase(cells[i][1] ), 1) + ':' + cells[i][2]
             strModelUrl = strQuadrantName + '/' + Left(UCase(cells[i][1] ), 1) + cells[i][2]  + '.html'
@@ -191,17 +197,25 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
 
             #year of construction
             print( '<td>' + cells[i][16] + '</td>'+ '\n')
-            #temples.ru ref
-            if strTemplesUrl != '':
-                print( '<td><a href="' + strTemplesUrl + '" target="_blank">' + strTemplesID + '</a></td>'+ '\n')
-            else:
-                print( '<td></td>'+ '\n')
+            
+            ###Z#temples.ru ref
+            ###Zif strTemplesUrl != '':
+            ###Z    print( '<td><a href="' + strTemplesUrl + '" target="_blank">' + strTemplesID + '</a></td>'+ '\n')
+            ###Zelse:
+            ###Z    print( '<td></td>'+ '\n')
+            
             #Size
             print( '<td>' + IIf(cells[i][11] != 0, cells[i][11], '???') + '</td>'+ '\n')
             #height
             print( '<td>' + IIf(cells[i][12] != "0", cells[i][12], '?') + '</td>'+ '\n')
-            #Materials
-            print( '<td>' + cells[i][13] + '</td><td>' + cells[i][14] + '</td><td>' + cells[i][15] + '</td>'+ '\n')
+            
+            #Color and Materials
+            ###print( '<td>' + cells[i][13] + '</td><td>' + cells[i][14] + '</td>\n')
+            #тип здания
+            print('<td>' + buildingTypeRus(cells[i][10].upper()) + '</td>' + '\n') 
+            
+            #Style 
+            print('<td>' + cells[i][15] + '</td>' + '\n') 
             #Address: city-district-region
             print( '<td>' + cells[i][20] + '</td>'+ '\n')
             strDistrict = cells[i][21]
@@ -209,7 +223,8 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
             strDistrict = strDistrict.replace('городской округ', 'го')
             print('<td>' + strDistrict + '</td>'+ '\n')
             print('<td>' + cells[i][22].replace('область', 'обл') + '</td>'+ '\n')
-            print('<td><a href="' + strF4url + '">' + cells[i][23] + '</a></td>'+ '\n')
+            osm3d='Да' if cells[i][23]  == 'True' else 'Нет'
+            print('<td><a href="' + strF4url + '">' + osm3d + '</a></td>'+ '\n')
             print('<td>' + cells[i][24] + '</td>' )
             if len(cells[i])>25:
                 print('<td>' + cells[i][25][0:10] + '</td>' )

@@ -151,6 +151,7 @@ def guessBuildingStyle(strArchitecture, strDate):
     fn_return_value = LCase(strResult)
     return fn_return_value
 
+
 def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tagReligion, tagDenomination, tagBarrier, dblSize, tagRuins):
     CHURCH_MIN_SIZE = 10
 
@@ -179,7 +180,7 @@ def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
         if tagBarrier == 'city_wall':
             strResult = 'DEFENSIVE WALL'
     else:
-        if tagBuilding == 'church' or tagBuilding == 'cathedral':
+        if tagBuilding in ['church', 'cathedral', 'temple' ]:
             if dblSize != 0 and dblSize < CHURCH_MIN_SIZE:
                 strResult = tagDenomination + ' CHAPEL'
             else:
@@ -199,10 +200,10 @@ def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
             print('unexpected value for ruins key ' + tagRuins)
             
     if strResult == '' and tagBuilding not in ['yes','no']: 
-        strResult = tagBuilding.upper()
+        strResult = tagBuilding
     
   
-    return Trim(strResult)
+    return Trim(strResult.upper())
 
 def gethash(s):
     return hashlib.md5(s.encode("utf-8")).hexdigest() 
