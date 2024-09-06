@@ -2,7 +2,7 @@ import mdlMisc
 
 import sys
 sys.path.append('../3dcheck/')
-from mdlClassify import buildingTypeRus
+from mdlClassify import buildingTypeRus, achitectureStylesRus
 
 
 
@@ -19,8 +19,6 @@ for rec in cells:
     
     style=rec[15].strip()
     if style!="":
-        if style[0]=="~":
-            style=style[1:]
         if style not in arch_styles:
             arch_styles[style]=0
         arch_styles[style] += 1    
@@ -44,5 +42,5 @@ arch_styles=list(arch_styles.items())
 arch_styles.sort(key=lambda rec: rec[0], reverse=False)
 
 for rec in arch_styles:
-    if rec[1]>=2: # rec[0].upper() not in building_types_rus_names and 
-        print("'"+rec[0]+"': '"+ str(rec[1])+"'")        
+    if rec[1]>=2 and  achitectureStylesRus(rec[0]) == rec[0]:
+        print("'"+rec[0]+"': '"+ str(rec[1])+"',")        

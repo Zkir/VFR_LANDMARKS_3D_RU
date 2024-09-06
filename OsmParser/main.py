@@ -144,6 +144,12 @@ def guessBuildingStyle(strArchitecture, strDate):
                 strResult = '~neoclassicism'
             elif strDate <= '1917':
                 strResult = '~pseudo-Russian'
+            elif strDate <= '1932':    
+                '~constructivism'
+            elif strDate <= '1936':        
+                '~postconstructivism'
+            elif strDate <= '1955':            
+                '~stalinist_neoclassicism'
             elif strDate <= '1991':
                 strResult = '~soviet'
             else:

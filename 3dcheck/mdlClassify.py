@@ -84,3 +84,52 @@ def buildingTypeRus(s):
     if s.startswith('RUINED '):
         s=s[6:].strip()
     return building_types_rus_names.get(s,s)
+
+    
+#https://wiki.openstreetmap.org/wiki/RU:Key:building:architecture    
+achitecture_styles_rus_names={
+
+    'art_deco': 'Ар-деко',
+    'art_nouveau': 'Модерн (ар-нуво)',
+    'baroque': 'Барокко',
+    'brutalist': 'Брутализм',
+
+    'constructivism': 'Конструктивизм',
+    'contemporary': 'Современный',
+    'eclectic': 'Эклектика',
+    'empire': 'Ампир',
+    'functionalism': 'Функционализм',
+    'gothic': 'Готика',
+    'international': 'Интернациональный стиль',
+    'international_style': 'Интернациональный стиль',
+    'modern': 'Архитектурный модернизм',
+    'neo-gothic': 'Неоготика',
+    'neoclassicism': 'Классицизм',
+    'classicism': 'Классицизм', # mistype for russia, should be neoclassicism
+    'postconstructivism': 'Постконструктивизм',
+    'postmodern': 'Постмодерн',
+    'pseudo-russian': 'Псевдорусский стиль',
+    'russian_gothic': 'Псевдоготика',
+    'rococo': 'Рококо',
+    'chinoiserie': 'Шинуазри',
+    'stalinist_neoclassicism': 'Сталинский ампир',
+    
+    'oldrussian': 'Древнерусский',
+    'old_russian': 'Древнерусский',
+    
+    'pre-mongolian': 'Русская романика', #Определяется автоматически, но ни одного такого здания еще нет в осм
+    'uzorochye': 'Узорочье', #Определяется автоматически, но ни одного такого здания еще нет в осм
+    'soviet': 'Позднесоветский функционализм', # Определяется автоматически, но ни одного такого здания еще нет в осм (и слава богу)
+    
+    
+    #   'modernism': '2', -- не документирован
+    #   'russian_revival': '4', russian_revival -- это русский стиль в широком смысле.
+}    
+
+def achitectureStylesRus(style):
+    if style!="" and style[0]=="~":
+        style=style[1:]
+        prefix="~"
+    else:    
+        prefix=""
+    return prefix+achitecture_styles_rus_names.get(style,style)

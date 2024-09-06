@@ -7,7 +7,7 @@ import time
 from mdlMisc import *
 import os.path
 import json
-from mdlClassify import buildingTypeRus
+from mdlClassify import buildingTypeRus, achitectureStylesRus
 
 #========================================================================
 #  Web Page for individual object, with 3d model
@@ -46,6 +46,9 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
     strObjectName=obj_rec[7]
     if strObjectName=="" and strWikipediaName!="":
         strObjectName=strWikipediaName
+        
+    #if strObjectName == '':
+    #    strObjectName = '&lt;&lt;' + buildingTypeRus(cells[i][10]).upper() + '&gt;&gt;'    
     
     strStars=''
     intNumberOfParts=int(obj_rec[24])
@@ -95,7 +98,7 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
     if obj_rec[8] != "":
         print( '  <tr><td>Описание:  </td><td>' + obj_rec[8] + '</td></tr>'+ '\n')
     print( '  <tr><td>Год постройки: </td><td>' + obj_rec[16] + '</td></tr>'+ '\n')
-    print( '  <tr><td>Стиль: </td><td>' + obj_rec[15] + '</td></tr>'+ '\n')
+    print( '  <tr><td>Стиль: </td><td>' + achitectureStylesRus(obj_rec[15]) + '</td></tr>'+ '\n')
     print( '  <tr><td>Размер, м : </td><td>' + obj_rec[11] + '</td></tr>'+ '\n')
     print( '  <tr><td>Высота, м : </td><td>' + obj_rec[12] + '</td></tr>'+ '\n')
     print( '  <tr><td>Цвет:  </td><td>' + obj_rec[13] + '</td></tr>'+ '\n')

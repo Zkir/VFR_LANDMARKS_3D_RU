@@ -6,7 +6,7 @@ import codecs
 from mdlMisc import *
 import cgi
 import time
-from mdlClassify import buildingTypeRus
+from mdlClassify import buildingTypeRus, achitectureStylesRus
 
 class TSummaryRec:
 
@@ -215,7 +215,7 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
             print('<td>' + buildingTypeRus(cells[i][10].upper()) + '</td>' + '\n') 
             
             #Style 
-            print('<td>' + cells[i][15] + '</td>' + '\n') 
+            print('<td>' + achitectureStylesRus(cells[i][15]) + '</td>' + '\n') 
             #Address: city-district-region
             print( '<td>' + cells[i][20] + '</td>'+ '\n')
             strDistrict = cells[i][21]
