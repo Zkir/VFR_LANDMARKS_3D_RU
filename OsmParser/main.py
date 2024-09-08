@@ -14,6 +14,8 @@ from tag_validator import *
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 
+DEFAULT_LEVEL_HEIGHT = 3
+
 def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     j = 0
     intModelsCreated = 0
@@ -43,10 +45,17 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
         touched_date = ""
         numberofvalidationerrors = 0
         
-        strHeight = osmObject.getTag('height')
-        osmObject.dblHeight = parseHeightValue(strHeight)
         blnFence = (osmObject.tagBarrier == 'fence') or (osmObject.tagBarrier == 'wall')
-
+        
+        # Let's determine building height
+        # height tag has priority. if it is not possible, let's try building:levels 
+        if 'height' in osmObject.osmtags:
+            strHeight = osmObject.getTag('height')
+            osmObject.dblHeight = parseHeightValue(strHeight)
+        else:
+            strLevels = osmObject.osmtags.get('building:levels', '0')
+            osmObject.dblHeight = float(strLevels) * DEFAULT_LEVEL_HEIGHT
+        
         # Rewrite osmObject as osm file!
         if not blnFence:
             heightbyparts, numberofparts, touched_date, numberofvalidationerrors = rewriteOsmFile(osmObject, OSM_3D_MODELS_PATH,objOsmGeomParts, ObjectsParts)
@@ -306,7 +315,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
             blnHasBuildingParts = True
             numberofparts = numberofparts + 1
             if obj_height == 0:
-                obj_height= float(obj_levels) * 3   
+                obj_height= float(obj_levels) * DEFAULT_LEVEL_HEIGHT   
             if obj_height > height:
                 height = obj_height
         if obj_date > touched_date:
@@ -355,7 +364,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
             blnHasBuildingParts = True
             numberofparts = numberofparts + 1 
             if obj_height == 0:
-                obj_height= float(obj_levels) * 3   
+                obj_height= float(obj_levels) * DEFAULT_LEVEL_HEIGHT   
             if obj_height > height:
                 height = obj_height
         if obj_date > touched_date:
@@ -368,9 +377,10 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     
     if numberofparts == 1:
         Errors += [log_error(UCase(Left(object1.type, 1)) + ':'+object1.id, SINGLE_BUILDING_PART)]
-        
-    if object1.dblHeight != 0 and abs(height - object1.dblHeight)/abs(object1.dblHeight)>0.05:          
-        Errors += [log_error(UCase(Left(object1.type, 1)) + ':'+object1.id, HEIGHT_DISCREPANCY,object1.dblHeight, height)]
+    
+    if numberofparts >= 1:    
+        if object1.dblHeight != 0 and abs(height - object1.dblHeight)/abs(object1.dblHeight)>0.05:          
+            Errors += [log_error(UCase(Left(object1.type, 1)) + ':'+object1.id, HEIGHT_DISCREPANCY,object1.dblHeight, height)]
     
 
     fo.write( '</osm>'+ '\n')
@@ -383,7 +393,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
         if os.path.exists(strOutputOsmFileName+'.md5'):
             os.remove(strOutputOsmFileName+'.md5')
     else:
-        with open(strOutputOsmFileName+'.md5', 'w',encoding="utf-8") as f:
+        with open(strOutputOsmFileName+'.md5', 'w', encoding="utf-8") as f:
             f.write(gethash(strhash))
        
     

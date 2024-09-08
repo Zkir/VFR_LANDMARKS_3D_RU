@@ -9,10 +9,12 @@ rem if errorlevel 1 goto error
 call scripts\buildings_extract-per-region %QUADRANT% %QUADRANT%.poly
 if errorlevel 1 goto error
 
+IF NOT EXIST work_folder\20_osm_3dmodels mkdir work_folder\20_osm_3dmodels
+
 OsmParser\main.py %QUADRANT%
 if errorlevel 1 goto error
 
-call upload.bat
+call scripts\upload.bat
 
 echo all done
 
