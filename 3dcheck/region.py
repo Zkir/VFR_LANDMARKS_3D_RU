@@ -242,6 +242,33 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
             print('<td><a href="' + strJOSMurl + '" target = "josm" >' + 'J' + '</a></td>'+ '\n')
             print('</tr>'+ '\n')
     print( '</table>'+ '\n')
+    print("""
+        <h3>Примечания</h3>
+        <ul>
+        <li>
+        <b>Год постройки</b> определяется по тегу <b><a href="https://wiki.openstreetmap.org/wiki/RU:Key:start_date">start_date</a></b>.
+        В OSM start_date допускает сложный синтаксис, позволяющий задавать приблизительные интервалы, если точная дата неизвестна, 
+        но мы всегда берем один конкретный год, даже если в <b>start_date</b> задан <i>интервал</i>. 
+        Так делается, потому что по одному году легче определять архитектурный стиль чем по интервалу. 
+        </li>
+
+        <li>
+        <b>Тип здания</b> определяеся на основе значений тега <b><a href="https://wiki.openstreetmap.org/wiki/RU:Key:building#%D0%97%D0%B4%D0%B0%D0%BD%D0%B8%D1%8F">building</a></b> 
+        - с некоторыми упрощениями, необходимыми для перевода на русский язык. Предполагается, что <b>building=*</b> указывает на первоначальное предназначение здания, 
+        отражающееся в архитектуре. Это предназначение не может быть просто так изменено, без серьезной перестройки. Например, планетарий невозможен без купола, театр без вешалки,
+        школа без учебных классов. Для культовых зданий указывается конфессия, из тегов <b><a href="https://wiki.openstreetmap.org/wiki/RU:Key:religion">religion</a></b> и <b><a href="https://wiki.openstreetmap.org/wiki/RU:Key:denomination">denominaiton</a></b>,
+        потому что конфессия влияет на стиль здания. 
+
+        Теги <b>building=public</b>, <b>building=civic</b>, <b>building=commercial</b>, <b>building=government</b>, <b>building=historic</b>  
+         кажутся совершенно бесполезными, поскольку они не имеют отношения к архитектуре, и, кроме того, они не используются последовательно.
+        </li>
+
+        <li>
+        <b>Стиль</b> определяется из тега <b><a href="https://wiki.openstreetmap.org/wiki/RU:Key:building:architecture">building:architecture</b></a>, практически без всякой черной магии. Знак тильды ~ перед стилем означает, что он определен автоматически на основании года постройки. Кажется, что простейший алгоритм на основе линейной периодизации дает неплохие результаты. Тем не менее,  <b>building:architecture</b> всегда можно добавить вручную.
+        </li>
+
+        </ul>
+    """)
     print( '<hr />'+ '\n')
     print( '<p>Дата формирования страницы: ' + page_time_stamp + '</p>' + '\n')
     #zero frame for josm links
