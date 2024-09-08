@@ -4,9 +4,12 @@ building_types_rus_names = {
     'CAMPANILE': 'Колокольня',
     'RUSSIAN ORTHODOX CHURCH': "Православная церковь",
     'RUSSIAN ORTHODOX CHAPEL': "Православная часовня",	
+    'RUSSIAN ORTHODOX CAMPANILE': "Православная колокольня",	
     'OLD_BELIEVERS CHURCH': 'Православная церковь', #Она всё равно православная, даже если старообрядческая
     'OLD_BELIEVERS CHAPEL': "Православная часовня",	 
+    
     'ARMENIAN_APOSTOLIC CHURCH': 'Армянская церковь',
+    'ARMENIAN_APOSTOLIC CHAPEL': 'Армянская часовня',
     'CATHOLIC CHURCH': 'Католический храм',
     'ROMAN_CATHOLIC CHURCH': 'Католический храм',
     'CATHOLIC CHAPEL': 'Католическая часовня',
@@ -15,21 +18,29 @@ building_types_rus_names = {
     'LUTHERAN CHURCH': 'Лютеранская кирха',
     'LUTHERAN CHAPEL': 'Лютеранская часовня',
     'PROTESTANT CHURCH': 'Протестантская церковь',
-    
     'BAPTIST CHURCH': 'Протестантская церковь',
     'BAPTIST CHAPEL': 'Протестантская часовня',
     'EVANGELICAL CHURCH': 'Протестантская церковь',
     'PENTECOSTAL CHURCH':'Протестантская церковь',
     'SEVENTH_DAY_ADVENTIST CHURCH': 'Протестантская церковь',
     'PRESBYTERIAN CHURCH': 'Протестантская церковь',
+    'NEW_APOSTOLIC CHURCH': 'Протестантская церковь',
+    'ADVENTIST CHURCH': 'Протестантская церковь',
+    
+    'METHODIST CHURCH': 'Протестантская церковь',
+    'EVANGELICAL CHAPEL': 'Протестантская часовня',
+    
+    'MORMON CHURCH': 'Храм мормонов',
     
     'MOSQUE': 'Мечеть',
-    'SUNNI MOSQUE': 'Мечеть',
+    'SUNNI MOSQUE': 'Мечеть', # Пока сунниты и шииты для нас в плане архитектуры не отличаются.
+    'SHIA MOSQUE': 'Мечеть',  # Кто знает, пусть подскажет.
+    
     'SYNAGOGUE': 'Синагога',
     'CHURCH FENCE': 'Церковная ограда', 
     'FONT': 'Купель, источник',
     
-    
+    'RESIDENTIAL':'Жилой дом', #плохой тег!
     'HOUSE': 'Частный жилой дом',
     'DETACHED': 'Частный жилой дом',
     'APARTMENTS': 'Многоквартирный дом',
@@ -59,9 +70,11 @@ building_types_rus_names = {
     'PARKING': 'Гараж',
     'GARAGE': 'Гараж',
     'INDUSTRIAL': 'Промышленное здание',
-    'GREENHOUSE': ' Оранжерея',
+    'GREENHOUSE': 'Оранжерея',
     'PALACE': 'Дворец',
     'GAZEBO': 'Беседка',
+    'FIRE_LOOKOUT': 'Пожарная каланча',
+    'OFFICE': 'Офисное здание',
     
     'WATER TOWER': 'Водонапорная башня',
     
@@ -73,9 +86,29 @@ building_types_rus_names = {
     'BUNKER': 'Бункер, ДОТ',
     'HANGAR': 'Ангар',
     'SHIP': 'Корабль на приколе',
-    'CELLAR': 'Погреб'
-  
+    'CELLAR': 'Погреб',
+    'ROOF': 'Навес',
+    'SHED': 'Сарай',
+    'HUT': 'Изба',
+    'STABLE': 'Конюшня',
+    'WINDMILL': 'Мельница',
+    'SERVICE': 'Техническая будка',
+    
+    'GATEHOUSE': 'Надвратная башня', #Торхауз
 
+    'BRIDGE': 'Мост',
+    'FIRE_STATION': 'Пожарная станция',
+
+}
+# Useless building types 
+useless_building_types={ 
+    'COMMERCIAL',
+    'PUBLIC',
+    'CIVIC',
+    'GOVERNMENT',
+    'RESIDENTIAL',
+    'RELIGIOUS',
+    'HISTORIC',
 }
 
 def buildingTypeRus(s):
@@ -102,7 +135,7 @@ achitecture_styles_rus_names={
     'gothic': 'Готика',
     'international': 'Интернациональный стиль',
     'international_style': 'Интернациональный стиль',
-    'modern': 'Архитектурный модернизм',
+    'modern': 'Модернизм',
     'neo-gothic': 'Неоготика',
     'neoclassicism': 'Классицизм',
     'classicism': 'Классицизм', # mistype for russia, should be neoclassicism
@@ -114,13 +147,14 @@ achitecture_styles_rus_names={
     'chinoiserie': 'Шинуазри',
     'stalinist_neoclassicism': 'Сталинский ампир',
     
-    'oldrussian': 'Древнерусский',
-    'old_russian': 'Древнерусский',
-    
-    'pre-mongolian': 'Русская романика', #Определяется автоматически, но ни одного такого здания еще нет в осм
+    'pre-mongolian': 'Домонгольская романика', #Определяется автоматически, но ни одного такого здания еще нет в осм
+    'oldrussian': 'Русская романика',
+    'old_russian': 'Русская романика',
     'uzorochye': 'Узорочье', #Определяется автоматически, но ни одного такого здания еще нет в осм
-    'soviet': 'Позднесоветский функционализм', # Определяется автоматически, но ни одного такого здания еще нет в осм (и слава богу)
+    'soviet': 'Советский модернизм', # Определяется автоматически, но ни одного такого здания еще нет в осм (и слава богу)
     
+    'islamic': 'Исламская архитектура',
+    'ottoman': 'Османский стиль', 
     
     #   'modernism': '2', -- не документирован
     #   'russian_revival': '4', russian_revival -- это русский стиль в широком смысле.
