@@ -10,7 +10,7 @@ from osmGeometry import clsOsmGeometry
 from mdlXmlParser import clsXMLparser
 from mdlGeocoder import DoGeocodingForDatFile
 from mdlStartDate import parseStartDateValue
-from tag_validator import validate_tags, dump_errors
+from tag_validator import *
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 
@@ -165,6 +165,9 @@ def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
     if tagDenomination == 'orthodox' or tagDenomination == 'russian_orthodox' or tagDenomination == 'dissenters':
         tagDenomination = 'RUSSIAN ORTHODOX'
     if tagBuilding == 'bell_tower' or tagManMade == 'campanile' or tagTowerType == 'campanile':
+        tagBuilding = 'campanile'
+    
+    if tagBuilding == 'tower' and tagTowerType == 'bell_tower':
         tagBuilding = 'campanile'
     if tagBuilding == 'mosque':
         strResult = 'MOSQUE'
@@ -357,25 +360,22 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
                 height = obj_height
         if obj_date > touched_date:
             touched_date=obj_date
-            
+        
         Errors += validate_tags("R:" + str(obj_id), osmtags, obj_is_building_part)    
+        # end of relation loop
+        
+    # checks of building in general 
+    
+    if numberofparts == 1:
+        Errors += [log_error(UCase(Left(object1.type, 1)) + ':'+object1.id, SINGLE_BUILDING_PART)]
+        
+    if object1.dblHeight != 0 and abs(height - object1.dblHeight)/abs(object1.dblHeight)>0.05:          
+        Errors += [log_error(UCase(Left(object1.type, 1)) + ':'+object1.id, HEIGHT_DISCREPANCY,object1.dblHeight, height)]
     
 
     fo.write( '</osm>'+ '\n')
     fo.close()
-                    
-
-    ### #the same with relations. if members were not filtered out on the previous step, it should be considered as whole.
-    ###if strTag == 'member':
-    ###    if objXML.GetAttribute('type') == 'way':
-    ###        way_id = objXML.GetAttribute('ref')
-    ###        intWayNo = objOsmGeom.FindWay(way_id)
-    ###        if intWayNo != - 1:
-    ###            WayRefs.append ([intWayNo,objXML.GetAttribute('role')])
-    ###            way_count = way_count + 1
-    ###        else:
-    ###            #' relation incomplete
-    ###            blnCompleteObject = False
+    
     
 
     if not ( blnHasBuildingParts and  ( height > 0 ) ) :
@@ -420,7 +420,7 @@ def processQuadrant(strQuadrantName):
                      objOsmGeomParts, ObjectsParts
                      )
     t2 = time.time()
-    print("Quadrant " + strQuadrantName + " processed in "+str(t2-t1)+" seconds")
+    print("Quadrant " + strQuadrantName + " processed in "+str(round(t2-t1,3))+" seconds")
 
         
     t3=time.time()

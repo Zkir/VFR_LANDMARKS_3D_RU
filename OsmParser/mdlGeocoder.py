@@ -499,7 +499,7 @@ def DoGeocodingForDatFile(strInputFile):
             geocoder.loadDataFromTextFile(GEOCODER_SOURCE_TXT)
 
             t2 = time.time()
-            print("Geocoder loaded in " + str(t2 - t1) + " seconds")
+            print("Geocoder loaded in " + str(round(t2 - t1,3)) + " seconds")
 
             for i in range(len(cells)):
                 lat = (float(cells[i][3]) + float(cells[i][5])) / 2
@@ -512,6 +512,6 @@ def DoGeocodingForDatFile(strInputFile):
             t3 = time.time()
             # we still need to save results, we will need them in future.
             saveDatFile(cells, strInputFile)
-            print("objects geocoded in " + str(t3 - t2) + " seconds")
+            print("objects geocoded in " + str(round(t3 - t2,3)) + " seconds")
         else:
             print("No objects, geocoding skipped")

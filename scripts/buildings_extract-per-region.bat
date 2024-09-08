@@ -7,7 +7,7 @@ set PLANET=work_folder\07_building_data
 
 echo Updating %QUADRANT% quadrant data from osm
 
-mkdir %WORK_FOLDER%
+IF NOT EXIST %WORK_FOLDER% mkdir %WORK_FOLDER%
 
 osmconvert %PLANET%\objects-all.osm  -B=%BBOX% -o="%WORK_FOLDER%\objects-all.osm"
 osmconvert %PLANET%\objects-with-parts.osm  -B=%BBOX% -o="%WORK_FOLDER%\objects-with-parts.osm" 
