@@ -149,4 +149,4 @@ def dump_errors(strOutputFileName, errors):
     #   print(errors) 
        
     with open(strOutputFileName, 'w',encoding="utf-8") as f:
-        json.dump(errors, f, indent=4) # , ensure_ascii=False
+        json.dump(errors, f, indent=4, ensure_ascii=False)  

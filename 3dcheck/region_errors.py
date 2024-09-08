@@ -89,8 +89,8 @@ def CreateRegionPage(strQuadrantName, cells, page_time_stamp):
         validation_errors_file_name = "data\\errors\\" + UCase(Left(obj_rec[1],1)) + obj_rec[2] +'.errors.dat'
 
         if os.path.exists(validation_errors_file_name) and int(obj_rec[26])>0:
-            with open(validation_errors_file_name) as f:
-                validation_errors = json.load(f)
+            with open(validation_errors_file_name, encoding="utf-8") as f:
+                validation_errors = json.load(f) 
         else:
             validation_errors = []
 

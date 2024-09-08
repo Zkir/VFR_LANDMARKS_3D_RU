@@ -203,7 +203,7 @@ validation_errors_file_name = "data\\errors\\" + UCase(Left(obj_rec[1],1)) + obj
 
 
 if os.path.exists(validation_errors_file_name):
-    with open(validation_errors_file_name) as f:
+    with open(validation_errors_file_name, encoding="utf-8") as f:
         validation_errors = json.load(f)
 else:
     validation_errors = []
