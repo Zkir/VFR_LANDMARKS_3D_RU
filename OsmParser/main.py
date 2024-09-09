@@ -54,6 +54,8 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
             osmObject.dblHeight = parseHeightValue(strHeight)
         else:
             strLevels = osmObject.osmtags.get('building:levels', '0')
+            if not checkFloat(strLevels):
+                strLevels='0'
             osmObject.dblHeight = float(strLevels) * DEFAULT_LEVEL_HEIGHT
         
         # Rewrite osmObject as osm file!
