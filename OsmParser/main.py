@@ -154,7 +154,7 @@ def guessBuildingStyle(strArchitecture, strDate):
             elif strDate < '1875':
                 strResult = '~neoclassicism'
             elif strDate <= '1917':
-                strResult = '~pseudo-Russian'
+                strResult = '~pseudo-russian'
             elif strDate <= '1932':    
                 '~constructivism'
             elif strDate <= '1936':        
@@ -165,8 +165,8 @@ def guessBuildingStyle(strArchitecture, strDate):
                 strResult = '~soviet'
             else:
                 strResult = '~contemporary'
-    fn_return_value = LCase(strResult)
-    return fn_return_value
+    
+    return strResult.lower()
 
 
 def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tagReligion, tagDenomination, tagBarrier, dblSize, tagRuins):
@@ -175,44 +175,70 @@ def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
     strResult = ''
     if tagDenomination == 'orthodox' or tagDenomination == 'russian_orthodox' or tagDenomination == 'dissenters':
         tagDenomination = 'RUSSIAN ORTHODOX'
-    if tagBuilding == 'bell_tower' or tagManMade == 'campanile' or tagTowerType == 'campanile':
-        tagBuilding = 'campanile'
     
-    if tagBuilding == 'tower' and tagTowerType == 'bell_tower':
+    if tagBuilding == 'tower' or tagManMade == 'tower':
+        if tagTowerType == 'bell_tower':
+            tagBuilding = 'campanile'
+        if tagTowerType == 'communication':
+            tagBuilding = 'communication tower'
+        if tagTowerType == 'defensive':
+            strResult = 'defensive tower'
+            
+    if tagBuilding == 'bell_tower' or tagManMade == 'campanile':
         tagBuilding = 'campanile'
-    if tagBuilding == 'mosque':
-        strResult = 'MOSQUE'
-    if tagBarrier == 'fence':
+        
+    if  tagBuilding == 'water_tower' or  tagManMade == 'water_tower' :
+        strResult = 'water tower'        
+    
+    #some strage translations for barriers    
+    #  we pray the Lord that only _church_ fences has been extracted before, 
+    # and we need not to check and tagAmenity == 'place_of_worship' or landuse == religious
+    if tagBarrier == 'fence' and tagBuilding =='': 
         strResult = 'CHURCH FENCE'
+        
     if tagBarrier == 'wall':
         strResult = 'HISTORIC WALL'
         #strResult = "CHURCH FENCE"
+        
+    if tagBarrier == 'city_wall':
+            strResult = 'DEFENSIVE WALL'    
+            
+    # useless building types
+    # let's consider them as synonyms for building=yes
+    if tagBuilding in ['public', 'civic', 'commercial', 'government', 'historic','abandoned', 'disused']:
+        tagBuilding = 'yes'
+            
+    # for building=yes we are free to guess building type from other tags     
     if tagBuilding == 'yes':
+        # religion          
         if tagAmenity == 'place_of_worship':
             if tagReligion == 'christian':
-                if dblSize != 0 and dblSize < CHURCH_MIN_SIZE:
-                    strResult = tagDenomination + ' CHAPEL'
-                else:
-                    strResult = tagDenomination + ' CHURCH'
+                tagBuilding = 'church'
             if tagReligion == 'muslim':
-                strResult = tagDenomination + ' MOSQUE'
-
-        if tagBarrier == 'city_wall':
-            strResult = 'DEFENSIVE WALL'
-    else:
-        if tagBuilding in ['church', 'cathedral', 'temple' ]:
-            if dblSize != 0 and dblSize < CHURCH_MIN_SIZE:
-                strResult = tagDenomination + ' CHAPEL'
-            else:
-                strResult = tagDenomination + ' CHURCH'
-        if tagBuilding == 'chapel':
-            strResult = tagDenomination + ' CHAPEL'
-        if tagBuilding == 'campanile':
-            strResult = tagDenomination + ' CAMPANILE'
-    if tagTowerType == 'defensive':
-        strResult = 'DEFENSIVE TOWER'
-    if  ( tagManMade == 'water_tower' )  or  ( tagBuilding == 'water_tower' ) :
-        strResult = 'WATER TOWER'
+                tagBuilding = 'mosque'
+                
+        # maybe some other tags?? 
+        pass
+        
+    #temple is the same thing as church in christianity 
+    if tagBuilding == 'temple':
+        if tagReligion == 'christian':
+            tagBuilding = 'church'
+        else: 
+            tagBuilding = tagReligion + ' ' + 'temple'        
+        
+    # for christian buildings we need to analyse size, to distinguish between churches and chapels
+    # small churches are chapels :)
+    if tagBuilding in ['church', 'cathedral']:
+        if dblSize != 0 and dblSize < CHURCH_MIN_SIZE:
+            tagBuilding = 'chapel'
+        else:
+            tagBuilding = 'church'
+            
+    # add denomination to religious buildings
+    if tagBuilding in  ['chapel', 'church', 'campanile', 'mosque']:
+        strResult = tagDenomination + ' ' + tagBuilding
+        
     if tagRuins != '':
         if tagRuins == 'yes':
             strResult = 'RUINED ' + strResult

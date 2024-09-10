@@ -29,6 +29,7 @@ building_types_rus_names = {
     
     'METHODIST CHURCH': 'Протестантская церковь',
     'EVANGELICAL CHAPEL': 'Протестантская часовня',
+    'GREEK_ORTHODOX CHAPEL': 'Православная часовня',
     
     'MORMON CHURCH': 'Храм мормонов',
     
@@ -37,6 +38,7 @@ building_types_rus_names = {
     'SHIA MOSQUE': 'Мечеть',  # Кто знает, пусть подскажет.
     
     'SYNAGOGUE': 'Синагога',
+    'BUDDHIST TEMPLE': 'Буддийский храм',
     'CHURCH FENCE': 'Церковная ограда', 
     'FONT': 'Купель, источник',
     
@@ -70,6 +72,7 @@ building_types_rus_names = {
     'PARKING': 'Гараж',
     'GARAGE': 'Гараж',
     'INDUSTRIAL': 'Промышленное здание',
+    'WAREHOUSE': 'Склад',
     'GREENHOUSE': 'Оранжерея',
     'PALACE': 'Дворец',
     'GAZEBO': 'Беседка',
@@ -98,6 +101,7 @@ building_types_rus_names = {
 
     'BRIDGE': 'Мост',
     'FIRE_STATION': 'Пожарная станция',
+    'COMMUNICATION TOWER': 'Телебашня',
 
 }
 # Useless building types 

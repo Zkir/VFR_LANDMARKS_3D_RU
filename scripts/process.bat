@@ -10,6 +10,8 @@ call scripts\buildings_extract-per-region %QUADRANT% %QUADRANT%.poly
 if errorlevel 1 goto error
 
 IF NOT EXIST work_folder\20_osm_3dmodels mkdir work_folder\20_osm_3dmodels
+IF NOT EXIST work_folder\21_osm_objects_list mkdir work_folder\21_osm_objects_list
+
 
 OsmParser\main.py %QUADRANT%
 if errorlevel 1 goto error
