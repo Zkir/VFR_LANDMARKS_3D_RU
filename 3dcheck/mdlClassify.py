@@ -7,6 +7,7 @@ building_types_rus_names = {
     'RUSSIAN ORTHODOX CAMPANILE': "Православная колокольня",	
     'OLD_BELIEVERS CHURCH': 'Православная церковь', #Она всё равно православная, даже если старообрядческая
     'OLD_BELIEVERS CHAPEL': "Православная часовня",	 
+    'OLD_BELIEVERS CAMPANILE': "Православная колокольня",
     
     'ARMENIAN_APOSTOLIC CHURCH': 'Армянская церковь',
     'ARMENIAN_APOSTOLIC CHAPEL': 'Армянская часовня',
@@ -36,6 +37,7 @@ building_types_rus_names = {
     'MOSQUE': 'Мечеть',
     'SUNNI MOSQUE': 'Мечеть', # Пока сунниты и шииты для нас в плане архитектуры не отличаются.
     'SHIA MOSQUE': 'Мечеть',  # Кто знает, пусть подскажет.
+    'NONDENOMINATIONAL MOSQUE': 'Мечеть',
     
     'SYNAGOGUE': 'Синагога',
     'BUDDHIST TEMPLE': 'Буддийский храм',
@@ -45,7 +47,12 @@ building_types_rus_names = {
     'RESIDENTIAL':'Жилой дом', #плохой тег!
     'HOUSE': 'Частный жилой дом',
     'DETACHED': 'Частный жилой дом',
+    'MANOR': 'Особняк',
+    'STATELY': 'Особняк',
+    'PALACE': 'Дворец',
     'APARTMENTS': 'Многоквартирный дом',
+    
+    
     'BARRACKS': 'Казарма',
     
     'HOTEL': 'Гостиница',
@@ -54,12 +61,17 @@ building_types_rus_names = {
     'CINEMA': 'Кинотеатр',
     'CIRCUS': 'Цирк',
     'HOSPITAL': 'Больница',
+    'CLINIC': 'Больница',
     'RETAIL': 'Магазин',
     'TRIUMPHAL_ARCH': 'Триумфальная арка',
     'DEFENSIVE TOWER': 'Крепостная башня',
     'DEFENSIVE WALL': 'Крепостные стены',
     'HISTORIC WALL': 'Крепостные стены',
+    'CITYWALLS': 'Крепостные стены',
     'CASTLE': 'Крепость',
+    'FORT': 'Крепость',
+    'FORTIFICATION': 'Крепость',
+    
     'MUSEUM': 'Музей',
     'STADIUM': 'Стадион',
     'SPORTS_CENTRE':'Спортивный центр',
@@ -74,7 +86,6 @@ building_types_rus_names = {
     'INDUSTRIAL': 'Промышленное здание',
     'WAREHOUSE': 'Склад',
     'GREENHOUSE': 'Оранжерея',
-    'PALACE': 'Дворец',
     'GAZEBO': 'Беседка',
     'FIRE_LOOKOUT': 'Пожарная каланча',
     'OFFICE': 'Офисное здание',
@@ -89,20 +100,29 @@ building_types_rus_names = {
     'BUNKER': 'Бункер, ДОТ',
     'HANGAR': 'Ангар',
     'SHIP': 'Корабль на приколе',
+    'AIRCRAFT': 'Корабль на приколе',
+    'WRECK': 'Корабль на приколе',
+    
     'CELLAR': 'Погреб',
     'ROOF': 'Навес',
     'SHED': 'Сарай',
     'HUT': 'Изба',
     'STABLE': 'Конюшня',
     'WINDMILL': 'Мельница',
+    'WATERMILL': 'Мельница',
     'SERVICE': 'Техническая будка',
     
     'GATEHOUSE': 'Надвратная башня', #Торхауз
     'CITY_GATE': 'Надвратная башня', #Торхауз
 
     'BRIDGE': 'Мост',
+    'AQUEDUCT': 'Акведук',
     'FIRE_STATION': 'Пожарная станция',
     'COMMUNICATION TOWER': 'Телебашня',
+    
+    'MAUSOLEUM': 'Мавзолей',
+    'COLUMBARIUM': 'Колумбарий',
+    'VAULT': 'Склеп',
 
 }
 # Useless building types 

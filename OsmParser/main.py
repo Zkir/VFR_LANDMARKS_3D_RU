@@ -77,7 +77,8 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
         strBuildingType = calculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType,
                                                 osmObject.tagAmenity, osmObject.getTag('religion'),
                                                 osmObject.tagDenomination, osmObject.tagBarrier, osmObject.size,
-                                                osmObject.tagRuins, osmObject.getTag('historic'),osmObject.getTag('landuse'))
+                                                osmObject.tagRuins, osmObject.getTag('historic'),osmObject.getTag('landuse'),
+                                                osmObject.getTag('castle_type'), osmObject.getTag('tomb')  )
 
 
 
@@ -169,7 +170,7 @@ def guessBuildingStyle(strArchitecture, strDate):
     return strResult.lower()
 
 
-def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tagReligion, tagDenomination, tagBarrier, dblSize, tagRuins, tagHistoric, tagLanduse):
+def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tagReligion, tagDenomination, tagBarrier, dblSize, tagRuins, tagHistoric, tagLanduse, tagCastleType, tagTomb):
     CHURCH_MIN_SIZE = 10
 
     strResult = ''
@@ -203,7 +204,7 @@ def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
             
     # useless building types
     # let's consider them as synonyms for building=yes
-    if tagBuilding in ['public', 'civic', 'commercial', 'government', 'historic','abandoned', 'disused']:
+    if tagBuilding in ['public', 'civic', 'commercial', 'government', 'historic','abandoned', 'disused', 'outbuilding']:
         tagBuilding = 'yes'
             
     # for building=yes we are free to guess building type from other tags     
@@ -215,11 +216,16 @@ def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
             if tagReligion == 'muslim':
                 tagBuilding = 'mosque'
                 
-        # maybe some other tags?? 
+        # historic
         elif tagHistoric != '':
-            if tagHistoric not in ['building']:
+            if tagHistoric not in ['building', 'heritage', 'heritage_building', 'place_of_worship']:
                 tagBuilding=tagHistoric
-        pass
+                if tagHistoric == 'tomb' and  tagTomb !='':
+                    tagBuilding = tagTomb
+                
+                if tagHistoric == 'castle' and  tagCastleType != '':
+                    tagBuilding = tagCastleType 
+        
         
     #temple is the same thing as church in christianity 
     if tagBuilding == 'temple':
