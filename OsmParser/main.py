@@ -77,7 +77,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
         strBuildingType = calculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType,
                                                 osmObject.tagAmenity, osmObject.getTag('religion'),
                                                 osmObject.tagDenomination, osmObject.tagBarrier, osmObject.size,
-                                                osmObject.tagRuins)
+                                                osmObject.tagRuins, osmObject.getTag('historic'),osmObject.getTag('landuse'))
 
 
 
@@ -169,7 +169,7 @@ def guessBuildingStyle(strArchitecture, strDate):
     return strResult.lower()
 
 
-def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tagReligion, tagDenomination, tagBarrier, dblSize, tagRuins):
+def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tagReligion, tagDenomination, tagBarrier, dblSize, tagRuins, tagHistoric, tagLanduse):
     CHURCH_MIN_SIZE = 10
 
     strResult = ''
@@ -191,9 +191,7 @@ def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
         strResult = 'water tower'        
     
     #some strage translations for barriers    
-    #  we pray the Lord that only _church_ fences has been extracted before, 
-    # and we need not to check and tagAmenity == 'place_of_worship' or landuse == religious
-    if tagBarrier == 'fence' and tagBuilding =='': 
+    if tagBarrier == 'fence' and tagBuilding =='' and (tagLanduse == 'religious' or tagAmenity == 'place_of_worship' ): 
         strResult = 'CHURCH FENCE'
         
     if tagBarrier == 'wall':
@@ -218,6 +216,9 @@ def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
                 tagBuilding = 'mosque'
                 
         # maybe some other tags?? 
+        elif tagHistoric != '':
+            if tagHistoric not in ['building']:
+                tagBuilding=tagHistoric
         pass
         
     #temple is the same thing as church in christianity 

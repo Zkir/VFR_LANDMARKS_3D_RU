@@ -98,6 +98,7 @@ building_types_rus_names = {
     'SERVICE': 'Техническая будка',
     
     'GATEHOUSE': 'Надвратная башня', #Торхауз
+    'CITY_GATE': 'Надвратная башня', #Торхауз
 
     'BRIDGE': 'Мост',
     'FIRE_STATION': 'Пожарная станция',
