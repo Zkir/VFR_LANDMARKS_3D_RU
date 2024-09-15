@@ -243,7 +243,7 @@ def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
             tagBuilding = 'church'
             
     # add denomination to religious buildings
-    if tagBuilding in  ['chapel', 'church', 'campanile', 'mosque']:
+    if tagBuilding in  ['chapel', 'church', 'campanile', 'mosque', 'shrine', 'wayside_shrine']:
         strResult = tagDenomination + ' ' + tagBuilding
         
     if tagRuins != '':

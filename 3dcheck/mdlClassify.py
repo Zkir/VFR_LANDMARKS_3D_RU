@@ -1,16 +1,24 @@
 building_types_rus_names = {
+    
+    # religious
     'CHURCH': 'Церковь',
     'CHAPEL': 'Часовня',
     'CAMPANILE': 'Колокольня',
+    
+    'SHRINE': 'Часовня', # strange tags, but let's include for now
+    'WAYSIDE_SHRINE': 'Часовня',
+    
     'RUSSIAN ORTHODOX CHURCH': "Православная церковь",
     'RUSSIAN ORTHODOX CHAPEL': "Православная часовня",	
     'RUSSIAN ORTHODOX CAMPANILE': "Православная колокольня",	
     'OLD_BELIEVERS CHURCH': 'Православная церковь', #Она всё равно православная, даже если старообрядческая
     'OLD_BELIEVERS CHAPEL': "Православная часовня",	 
     'OLD_BELIEVERS CAMPANILE': "Православная колокольня",
+    'GEORGIAN_ORTHODOX CHAPEL': "Православная часовня",	 
     
     'ARMENIAN_APOSTOLIC CHURCH': 'Армянская церковь',
     'ARMENIAN_APOSTOLIC CHAPEL': 'Армянская часовня',
+    
     'CATHOLIC CHURCH': 'Католический храм',
     'ROMAN_CATHOLIC CHURCH': 'Католический храм',
     'CATHOLIC CHAPEL': 'Католическая часовня',
@@ -38,12 +46,14 @@ building_types_rus_names = {
     'SUNNI MOSQUE': 'Мечеть', # Пока сунниты и шииты для нас в плане архитектуры не отличаются.
     'SHIA MOSQUE': 'Мечеть',  # Кто знает, пусть подскажет.
     'NONDENOMINATIONAL MOSQUE': 'Мечеть',
+    'UNITED MOSQUE': 'Мечеть',
     
     'SYNAGOGUE': 'Синагога',
     'BUDDHIST TEMPLE': 'Буддийский храм',
     'CHURCH FENCE': 'Церковная ограда', 
     'FONT': 'Купель, источник',
     
+    # residential buildings 
     'RESIDENTIAL':'Жилой дом', #плохой тег!
     'HOUSE': 'Частный жилой дом',
     'DETACHED': 'Частный жилой дом',
@@ -51,10 +61,10 @@ building_types_rus_names = {
     'STATELY': 'Особняк',
     'PALACE': 'Дворец',
     'APARTMENTS': 'Многоквартирный дом',
-    
-    
+        
     'BARRACKS': 'Казарма',
     
+    # common urban buildings 
     'HOTEL': 'Гостиница',
     'TRAIN_STATION': 'Вокзал',
     'THEATRE': 'Театр',
@@ -63,7 +73,37 @@ building_types_rus_names = {
     'HOSPITAL': 'Больница',
     'CLINIC': 'Больница',
     'RETAIL': 'Магазин',
+    'MUSEUM': 'Музей',
+    'STADIUM': 'Стадион',
+    'SPORTS_CENTRE':'Спортивный центр',
+    'DORMITORY': 'Общежитие',
+    'PARKING': 'Гараж',
+    'GARAGE': 'Гараж',
+    'OFFICE': 'Офисное здание',
+    'SERVICE': 'Техническая будка',
+    
+    #educational 
+    'KINDERGARTEN': 'Детский сад',
+    'SCHOOL':'Школа',
+    'COLLEGE':'Школа',
+    'UNIVERSITY':'Университет',
+    
+    # industrial
+    'INDUSTRIAL': 'Промышленное здание',
+    'WAREHOUSE': 'Склад',
+    
+    # not so common urban buildings    
+    'AQUEDUCT': 'Акведук',
+    'BRIDGE': 'Мост',
+    'COMMUNICATION TOWER': 'Телебашня',
+    'FIRE_STATION': 'Пожарная станция',
+    'FIRE_LOOKOUT': 'Пожарная каланча',
+    'GAZEBO': 'Беседка',
+    'WATER TOWER': 'Водонапорная башня',
+    
     'TRIUMPHAL_ARCH': 'Триумфальная арка',
+    
+    # walls castles and defencive
     'DEFENSIVE TOWER': 'Крепостная башня',
     'DEFENSIVE WALL': 'Крепостные стены',
     'HISTORIC WALL': 'Крепостные стены',
@@ -71,33 +111,18 @@ building_types_rus_names = {
     'CASTLE': 'Крепость',
     'FORT': 'Крепость',
     'FORTIFICATION': 'Крепость',
-    
-    'MUSEUM': 'Музей',
-    'STADIUM': 'Стадион',
-    'SPORTS_CENTRE':'Спортивный центр',
-    'DORMITORY': 'Общежитие',
-    
-    'KINDERGARTEN': 'Детский сад',
-    'SCHOOL':'Школа',
-    'COLLEGE':'Школа',
-    'UNIVERSITY':'Университет',
-    'PARKING': 'Гараж',
-    'GARAGE': 'Гараж',
-    'INDUSTRIAL': 'Промышленное здание',
-    'WAREHOUSE': 'Склад',
+    'FORTRESS': 'Крепость',
+    'BUNKER': 'Бункер, ДОТ',
+    'GATEHOUSE': 'Надвратная башня', #Торхауз
+    'CITY_GATE': 'Надвратная башня', #Торхауз
+
     'GREENHOUSE': 'Оранжерея',
-    'GAZEBO': 'Беседка',
-    'FIRE_LOOKOUT': 'Пожарная каланча',
-    'OFFICE': 'Офисное здание',
-    
-    'WATER TOWER': 'Водонапорная башня',
     
     'CONSTRUCTION':'*СТРОЙКА*',
     'RUINS': 'Руины',
     'RUINED': 'Руины',
     'COLLAPSED': 'Руины',
 
-    'BUNKER': 'Бункер, ДОТ',
     'HANGAR': 'Ангар',
     'SHIP': 'Корабль на приколе',
     'AIRCRAFT': 'Корабль на приколе',
@@ -110,19 +135,14 @@ building_types_rus_names = {
     'STABLE': 'Конюшня',
     'WINDMILL': 'Мельница',
     'WATERMILL': 'Мельница',
-    'SERVICE': 'Техническая будка',
     
-    'GATEHOUSE': 'Надвратная башня', #Торхауз
-    'CITY_GATE': 'Надвратная башня', #Торхауз
-
-    'BRIDGE': 'Мост',
-    'AQUEDUCT': 'Акведук',
-    'FIRE_STATION': 'Пожарная станция',
-    'COMMUNICATION TOWER': 'Телебашня',
-    
+    # tombs
     'MAUSOLEUM': 'Мавзолей',
     'COLUMBARIUM': 'Колумбарий',
     'VAULT': 'Склеп',
+    'TOMB': 'Гробница',
+    'MEMORIAL': 'Памятник',
+    'MONUMENT': 'Памятник',
 
 }
 # Useless building types 
