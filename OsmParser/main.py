@@ -263,8 +263,10 @@ def gethash(s):
 
 def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     
-    height = 0
+    height = 0 # by parts
+    min_height = None # by parts
     numberofparts = 0
+    area_by_parts = 0
     touched_date = "1900-01-01"
     numberofvalidationerrors = 0
     strhash = ""
@@ -330,11 +332,15 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
         osmtags =  way.osmtags
         
         obj_is_building_part = (osmtags.get('building:part', 'no') != 'no')
-        obj_height = parseHeightValue(osmtags.get('height', '0'))
-        obj_levels = osmtags.get('building:levels', '0')
-       
-
-        ####intWayNo = objOsmGeom.AddWay(obj_id, NodeRefs, obj_ver, obj_date)
+        if "height" in osmtags:
+            obj_height = parseHeightValue(osmtags['height'])
+        else: 
+            obj_height =  float(osmtags.get('building:levels', '0')) * DEFAULT_LEVEL_HEIGHT 
+        
+        if "min_height" in osmtags:
+            obj_min_height = parseHeightValue(osmtags['min_height'])
+        else: 
+            obj_min_height =  float(osmtags.get('building:min_levels', '0')) * DEFAULT_LEVEL_HEIGHT         
         
         #print way with node refs and tags
         fo.write( '<way id="' + obj_id + '" version="' + obj_ver + '" >' + '\n')
@@ -349,10 +355,17 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
         if obj_is_building_part:
             blnHasBuildingParts = True
             numberofparts = numberofparts + 1
-            if obj_height == 0:
-                obj_height= float(obj_levels) * DEFAULT_LEVEL_HEIGHT   
+            area_by_parts += way.size**2
+        
             if obj_height > height:
                 height = obj_height
+            
+            if min_height is None:
+                min_height = obj_min_height            
+                
+            elif obj_min_height < min_height:
+                min_height = obj_min_height    
+                
         if obj_date > touched_date:
             touched_date = obj_date
             
@@ -381,8 +394,15 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
         osmtags =  relation.osmtags
         
         obj_is_building_part = (osmtags.get('building:part', 'no') != 'no')
-        obj_height = parseHeightValue(osmtags.get('height', '0'))
-        obj_levels = osmtags.get('building:levels', '0')
+        if "height" in osmtags:
+            obj_height = parseHeightValue(osmtags['height'])
+        else: 
+            obj_height =  float(osmtags.get('building:levels', '0')) * DEFAULT_LEVEL_HEIGHT 
+        
+        if "min_height" in osmtags:
+            obj_min_height = parseHeightValue(osmtags['min_height'])
+        else: 
+            obj_min_height =  float(osmtags.get('building:min_levels', '0')) * DEFAULT_LEVEL_HEIGHT     
         
         fo.write( '<relation id="' + obj_id + '" version="' + obj_ver + '" >' + '\n')
         strhash += 'r'+ obj_id + "v" + obj_ver
@@ -398,10 +418,16 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
         if obj_is_building_part:
             blnHasBuildingParts = True
             numberofparts = numberofparts + 1 
-            if obj_height == 0:
-                obj_height= float(obj_levels) * DEFAULT_LEVEL_HEIGHT   
+            area_by_parts += relation.size**2
+            
             if obj_height > height:
                 height = obj_height
+            
+            if min_height is None:
+                min_height = obj_min_height            
+            elif obj_min_height < min_height:
+                min_height = obj_min_height
+                
         if obj_date > touched_date:
             touched_date=obj_date
         
@@ -410,12 +436,31 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
         
     # checks of building in general 
     
-    if numberofparts == 1:
-        Errors += [log_error(UCase(Left(object1.type, 1)) + ':'+object1.id, SINGLE_BUILDING_PART)]
+    #if numberofparts == 1:
+    #    Errors += [log_error(UCase(Left(object1.type, 1)) + ':'+object1.id, SINGLE_BUILDING_PART)]
+    
+    # actually, we should check that total area of building parts is equal to area of the building outline 
+    # (it's requirement of Simple 3D building specification)
+    # to do this precisely, we need to intersect polygons (and this we are not capable of currently)
+    # we use just arithmetic sum. But even in this case, if sum by parts is less then outline square, it's an ERROR.
+    # if there is just one part, it exactly precise!
+    
+    if numberofparts >= 1:
+        
+        if round(area_by_parts) < round(object1.size**2) :
+            print(round(area_by_parts), "    ",  round(object1.size**2))
+            Errors += [log_error(UCase(Left(object1.type, 1)) + ':'+object1.id, PARTS_DO_NOT_COVER_OUTLINE, round(area_by_parts), round(object1.size**2))]
     
     if numberofparts >= 1:    
-        if object1.dblHeight != 0 and abs(height - object1.dblHeight)/abs(object1.dblHeight)>0.05:          
-            Errors += [log_error(UCase(Left(object1.type, 1)) + ':'+object1.id, HEIGHT_DISCREPANCY,object1.dblHeight, height)]
+        if object1.dblHeight != 0 and abs(height - object1.dblHeight)/abs(object1.dblHeight)>0.05:
+            if height!=0:             
+                Errors += [log_error(UCase(Left(object1.type, 1)) + ':'+object1.id, HEIGHT_DISCREPANCY, object1.dblHeight, height)]
+            else:
+                Errors += [log_error(UCase(Left(object1.type, 1)) + ':'+object1.id, ZERO_HEIGHT_ALL_PARTS)]
+            
+        if min_height > 0:    
+            Errors += [log_error(UCase(Left(object1.type, 1)) + ':'+object1.id, FLYING_BUILDING, min_height)]
+            
     
 
     fo.write( '</osm>'+ '\n')

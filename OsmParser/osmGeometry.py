@@ -365,18 +365,18 @@ class clsOsmGeometry():
         Outlines=self.ExtractCloseNodeChainFromRelation(WayRefs)
 
         if len(Outlines) > 0:
-            size = 0.0
+            area = 0.0
             for OutlineNodeRefs in Outlines:
                 outline_nodeCount = len(OutlineNodeRefs)
                 if OutlineNodeRefs[0] == OutlineNodeRefs[outline_nodeCount - 1]:
-                    size =size + Sqr(self.CalculateClosedNodeChainSqure(OutlineNodeRefs, outline_nodeCount - 1))
+                    area = area + self.CalculateClosedNodeChainSqure(OutlineNodeRefs, outline_nodeCount - 1)
                 else:
                     print('Relation r' + id + ' ('+type+') is broken. One of the rings is not closed')
         else:
-            size = 0  
+            area = 0  
             print('Relation r' + id + ' ('+type+') is empty. Probably members with outer role is missing or no closed rings ')
             
-        return size
+        return Sqr(area)
         
         
     def AddRelation(self, id, version, timestamp, osmtags, WayRefs, object_incomplete):

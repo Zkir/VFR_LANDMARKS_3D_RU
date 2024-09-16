@@ -57,18 +57,21 @@ def checkMeter(s):
     
     
 # Erorrs
-UNPARSED_START_DATE =        "Неразбочивое значение даты постройки: {}" #"Unparsed start_date value: {}"
-HEIGHT_TAG_MISSING =         "Ни высота, ни этажность не заданы" #"Height tag is missing"
-ZERO_HEIGHT_BUILDING_PART =  "Нулевая высота не разрешается для частей здания" #"Zero height is not allowed for building parts" 
-ZERO_HEIGHT_BUILDING =       "Зданий с нулевой высотой не бывает" #"Zero height is not recommended for buildings"
-UNKNOWN_ROOF_ORIENTATION =   "Неизвестная ориентация крыши: {}" #"Unknown roof orientation {} "
-UNKNOWN_ROOF_DIRECTION =     "Неизвестное направление крыши: {}" #"Invalid value for roof direction: {}"
-UNKNOWN_ROOF_SHAPE =         "Неизвестная форма крыши: {}" #"Unknown roof shape {} "
-ROOF_SHAPE_MANY =            "Тег roof:shape=many не допустим для частей здания" #"Roof shape 'many' is not allowed for building parts"
-INVALID_VALUE_FOR_KEY =      "Недопустимое значение для тега {}: {}" #"Invalid value for {} tag: {}"
+UNPARSED_START_DATE        = "Неразбочивое значение даты постройки: {}" #"Unparsed start_date value: {}"
+HEIGHT_TAG_MISSING         = "Ни высота, ни этажность не заданы" #"Height tag is missing"
+ZERO_HEIGHT_BUILDING_PART  = "Нулевая высота не разрешается для частей здания" #"Zero height is not allowed for building parts" 
+ZERO_HEIGHT_BUILDING       = "Зданий с нулевой высотой не бывает" #"Zero height is not recommended for buildings"
+UNKNOWN_ROOF_ORIENTATION   = "Неизвестная ориентация крыши: {}" #"Unknown roof orientation {} "
+UNKNOWN_ROOF_DIRECTION     = "Неизвестное направление крыши: {}" #"Invalid value for roof direction: {}"
+UNKNOWN_ROOF_SHAPE         = "Неизвестная форма крыши: {}" #"Unknown roof shape {} "
+ROOF_SHAPE_MANY            = "Тег roof:shape=many не допустим для частей здания" #"Roof shape 'many' is not allowed for building parts"
+INVALID_VALUE_FOR_KEY      = "Недопустимое значение для тега {}: {}" #"Invalid value for {} tag: {}"
 DEPRECATED_BUILDING_HEIGHT = "Тег building:height устарел, используйте просто height" #"building:height is deprecated, use height instead"
-SINGLE_BUILDING_PART =       "Здание из одной-единственной части не имеет большого смысла и это практически всегда ошибка"         
-HEIGHT_DISCREPANCY   =       "Высота указанная на здании ({} м) и вычисленная по частям ({} м) сильно различаются"      
+#SINGLE_BUILDING_PART       = "Здание из одной-единственной части не имеет большого смысла и это практически всегда ошибка"         
+HEIGHT_DISCREPANCY         = "Высота указанная на здании ({} м) и вычисленная по частям ({} м) сильно различаются"  
+ZERO_HEIGHT_ALL_PARTS      = "Ни одна часть здания не имеет высоты. "
+FLYING_BUILDING            = "Здание летает. Cамая нижня часть висит в {} м над землей"
+PARTS_DO_NOT_COVER_OUTLINE = "Частей здания не хватает. Части здания ({} кв.м) не покрывают контур ({} кв.м)."
     
 def log_error(part_id, s, *data ):
     s=s.format(*data)
