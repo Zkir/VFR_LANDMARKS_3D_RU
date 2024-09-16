@@ -44,6 +44,12 @@ def parseStartDate(strDate:str) -> int:
     # empty
     if strDate == '':
         return None 
+        
+    # list : A;B;C
+    # list may occur, if a building has been rebuilt several times or destroyed and then restored.
+    if ";" in strDate:
+        # we will take the last date, although it is not always the best choice. 
+        strDate = strDate.split(";")[-1]
     
           
     #interval XX..YY 
@@ -281,6 +287,8 @@ def tests():
     assert psd("2-я четв. C16") ==  1538 
     assert psd("3-я четв. C16") ==  1562
     assert psd("4-я четв. C16") ==  1588 
+    
+    assert psd("1713..1736;1796;1828") == 1828
 
    
     print("Tests OK")
