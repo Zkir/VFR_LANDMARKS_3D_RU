@@ -184,6 +184,7 @@ achitecture_styles_rus_names={
     'neo-gothic': 'Неоготика',
     'neoclassicism': 'Классицизм',
     'classicism': 'Классицизм', # mistype for russia, should be neoclassicism
+    'nothern_modern': "Северный модерн",
     'postconstructivism': 'Постконструктивизм',
     'postmodern': 'Постмодерн',
     'pseudo-russian': 'Псевдорусский стиль',
