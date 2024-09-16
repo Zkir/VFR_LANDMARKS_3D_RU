@@ -359,7 +359,7 @@ class clsOsmGeometry():
     def CalculateRelationSize(self, id, type, WayRefs):
         
         if type not in ["boundary", "multipolygon"]:
-            # other known types of relations are site, collection and waterway. 
+            # other known types of relations are 'site', 'collection', 'waterway' and 'building'! 
             # we do not know how to calculate size for them, and do not really care. 
             return None
         Outlines=self.ExtractCloseNodeChainFromRelation(WayRefs)

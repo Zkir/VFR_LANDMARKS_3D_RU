@@ -53,10 +53,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
             strHeight = osmObject.getTag('height')
             osmObject.dblHeight = parseHeightValue(strHeight)
         else:
-            strLevels = osmObject.osmtags.get('building:levels', '0')
-            if not checkFloat(strLevels):
-                strLevels='0'
-            osmObject.dblHeight = float(strLevels) * DEFAULT_LEVEL_HEIGHT
+            osmObject.dblHeight = parseLevelsValue(osmObject.osmtags.get('building:levels', '0')) * DEFAULT_LEVEL_HEIGHT
         
         # Rewrite osmObject as osm file!
         if not blnFence:
@@ -131,10 +128,14 @@ def parseHeightValue(str):
     if str == "":
         str = '0'
     if not IsNumeric(str):
-        #print ("Unparsed height value: " + str)
         str = '0'
-    fn_return_value = float(str)
-    return fn_return_value
+    return float(str)
+    
+    
+def parseLevelsValue(value):
+    if not IsNumeric(value):
+        value = '0'
+    return float(value)
 
 
 def guessBuildingStyle(strArchitecture, strDate):
@@ -330,17 +331,22 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
         obj_date =    way.timestamp
         
         osmtags =  way.osmtags
+        # slightly change height related tags.
+        # blender-osm does not understand units, so we will just convert everything to meeters and remove units
+        for tag in osmtags:
+            if tag in ['height','min_height','roof:height']:
+                osmtags[tag] = str(parseHeightValue(osmtags[tag])) 
         
         obj_is_building_part = (osmtags.get('building:part', 'no') != 'no')
         if "height" in osmtags:
             obj_height = parseHeightValue(osmtags['height'])
         else: 
-            obj_height =  float(osmtags.get('building:levels', '0')) * DEFAULT_LEVEL_HEIGHT 
+            obj_height =  parseLevelsValue(osmtags.get('building:levels', '0')) * DEFAULT_LEVEL_HEIGHT 
         
         if "min_height" in osmtags:
             obj_min_height = parseHeightValue(osmtags['min_height'])
         else: 
-            obj_min_height =  float(osmtags.get('building:min_levels', '0')) * DEFAULT_LEVEL_HEIGHT         
+            obj_min_height =  parseLevelsValue(osmtags.get('building:min_levels', '0')) * DEFAULT_LEVEL_HEIGHT         
         
         #print way with node refs and tags
         fo.write( '<way id="' + obj_id + '" version="' + obj_ver + '" >' + '\n')
@@ -376,6 +382,12 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     
     for relation in objOsmGeomParts.relations:
         
+        if relation.type == 'building':
+            # Relations of type 'building' is a very strange thing.
+            # It is neither building outline nor building part.
+            # We cannot to much with them, only skip
+            continue
+        
         way_count =   len(relation.WayRefs)
         
         blnCompleteObject = False 
@@ -392,17 +404,22 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
         obj_date =    relation.timestamp
         
         osmtags =  relation.osmtags
+        # slightly change height related tags.
+        # blender-osm does not understand units, so we will just convert everything to meeters and remove units
+        for tag in osmtags:
+            if tag in ['height','min_height','roof:height']:
+                osmtags[tag] = str(parseHeightValue(osmtags[tag])) 
         
         obj_is_building_part = (osmtags.get('building:part', 'no') != 'no')
         if "height" in osmtags:
             obj_height = parseHeightValue(osmtags['height'])
         else: 
-            obj_height =  float(osmtags.get('building:levels', '0')) * DEFAULT_LEVEL_HEIGHT 
+            obj_height =  parseLevelsValue (osmtags.get('building:levels', '0')) * DEFAULT_LEVEL_HEIGHT 
         
         if "min_height" in osmtags:
             obj_min_height = parseHeightValue(osmtags['min_height'])
         else: 
-            obj_min_height =  float(osmtags.get('building:min_levels', '0')) * DEFAULT_LEVEL_HEIGHT     
+            obj_min_height =  parseLevelsValue(osmtags.get('building:min_levels', '0')) * DEFAULT_LEVEL_HEIGHT     
         
         fo.write( '<relation id="' + obj_id + '" version="' + obj_ver + '" >' + '\n')
         strhash += 'r'+ obj_id + "v" + obj_ver
