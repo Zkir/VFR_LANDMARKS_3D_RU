@@ -448,7 +448,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     if numberofparts >= 1:
         
         if round(area_by_parts) < round(object1.size**2) :
-            print(round(area_by_parts), "    ",  round(object1.size**2))
+            #print(round(area_by_parts), "    ",  round(object1.size**2))
             Errors += [log_error(UCase(Left(object1.type, 1)) + ':'+object1.id, PARTS_DO_NOT_COVER_OUTLINE, round(area_by_parts), round(object1.size**2))]
     
     if numberofparts >= 1:    
