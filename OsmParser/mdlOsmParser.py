@@ -188,8 +188,12 @@ def readOsmXml(strSrcOsmFile):
         if strTag == '/node' or strTag == '/way' or strTag == '/relation':
             if (blnObjectIncomplete != True) and (osmObject.type != 'node'):
                 # we will return only completed objects, and we will skip nodes (to save CPU time)
-                   
-                if (osmObject.type=='relation' and osmObject.osmtags['type'] == 'building'):
+                
+                if osmObject.type=='relation' and 'type' not in osmObject.osmtags:
+                    print('stange relation without type ' + osmObject.id  )
+                    print('   ', osmObject.osmtags)                
+                    
+                if (osmObject.type=='relation' and 'type'  in osmObject.osmtags and osmObject.osmtags['type'] == 'building'):
                     # also filter 
                     # relations of type building are strange objects! \
                     pass
