@@ -78,16 +78,11 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     # ==========================================================================
     if strQuadrantName != "RUS_LATEST":
         cells.sort(key=lambda row: int(row[24]), reverse=True)
+        arrSummary = GetSummary(cells)
     else:
         # Latest should be sorted by date (already?)
         pass  
 
-
-    #==========================================================================
-    # create quadrant summary page
-    #==========================================================================
-
-    arrSummary = GetSummary(cells)
 
     print( '<html>'+ '\n')
     print( '<head>'+ '\n')
@@ -104,31 +99,36 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     print( '</head>'+ '\n')
     print( '<body>'+ '\n')
     print( '<h1>Валидатор 3D: квадрат ' + strQuadrantName + '</h1>'+ '\n')
-    print( '<p>Данный валидатор проверяет <b>наличие</b> 3d-моделей для церквей и некоторых других исторических зданий.'+ '\n')
-    print( 'Почему церкви? Потому что это наиболее заметные объекты и для их моделирования есть фотографии на temples.ru.</p>'+ '\n')
-    # Print #3, "<p>На данный момент в валидацию включены отдельные районы Московской, Владимирской и Ярославской областей, т.е. то, что попадает в квадратный градус [56&deg;, 38&deg;]</p>"
-    print( '<h2>Cтатистика по квадрату</h2>'+ '\n')
-    print( '<table class="sortable">'+ '\n')
-    print( '<tr><th>Область</th><th>Район</th><th>Всего объектов</th> <th>С 3D моделью</th> <th>% </th></tr>'+ '\n')
+    print( '<p>На этой странице представлены здания, отредактированные в последнее время.'+ '\n')
+    print( 'Включены только здания, имеющие 3D модели.</p>'+ '\n')
     
-    N=len(arrSummary)
-    for i in range(1, N):
-        if arrSummary[i].TotalObjects > 0:
-            dblPercentage = arrSummary[i].ObjectsWith3D / arrSummary[i].TotalObjects * 100
+    if strQuadrantName == "RUS_LATEST":
+        print( '<h2>Пульс проекта</h2>'+ '\n')
+        print('<p><img src="data/images/recent_activity.png"></img><br />')
+        print('Количество отредактированных зданий по дням</p>')
+    else: 
+        print( '<h2>Cтатистика по квадрату</h2>'+ '\n')
+        print( '<table class="sortable">'+ '\n')
+        print( '<tr><th>Область</th><th>Район</th><th>Всего объектов</th> <th>С 3D моделью</th> <th>% </th></tr>'+ '\n')
+        
+        N=len(arrSummary)
+        for i in range(1, N):
+            if arrSummary[i].TotalObjects > 0:
+                dblPercentage = arrSummary[i].ObjectsWith3D / arrSummary[i].TotalObjects * 100
+            else:
+                dblPercentage = 0
+            print( '<tr><td>' + IIf(arrSummary[i].RegionName != '', arrSummary[i].RegionName, '???') + '</td>'+ '\n')
+            print( '<td>' + arrSummary[i].DistrictName + '</td>'+ '\n')
+            print( '<td>' + str(arrSummary[i].TotalObjects) + '</td><td>' + str(arrSummary[i].ObjectsWith3D) + '</td><td> ' + str(Round(dblPercentage)) + ' </td></tr>'+ '\n')
+        if arrSummary[0].TotalObjects > 0:
+            dblPercentage = arrSummary[0].ObjectsWith3D / arrSummary[0].TotalObjects * 100
         else:
             dblPercentage = 0
-        print( '<tr><td>' + IIf(arrSummary[i].RegionName != '', arrSummary[i].RegionName, '???') + '</td>'+ '\n')
-        print( '<td>' + arrSummary[i].DistrictName + '</td>'+ '\n')
-        print( '<td>' + str(arrSummary[i].TotalObjects) + '</td><td>' + str(arrSummary[i].ObjectsWith3D) + '</td><td> ' + str(Round(dblPercentage)) + ' </td></tr>'+ '\n')
-    if arrSummary[0].TotalObjects > 0:
-        dblPercentage = arrSummary[0].ObjectsWith3D / arrSummary[0].TotalObjects * 100
-    else:
-        dblPercentage = 0
-    print( '<tr><td><b>Всего в квадрате<b></td>'+ '\n')
-    print( '<td></td>'+ '\n')
-    print( '<td><b>' + str(arrSummary[0].TotalObjects) + '</b></td><td><b>' + str(arrSummary[0].ObjectsWith3D) + '<b></td>'+ '\n')
-    print( '<td><b>' + str(Round(dblPercentage)) + '</b></td></tr>'+ '\n')
-    print( '</table>'+ '\n')
+        print( '<tr><td><b>Всего в квадрате<b></td>'+ '\n')
+        print( '<td></td>'+ '\n')
+        print( '<td><b>' + str(arrSummary[0].TotalObjects) + '</b></td><td><b>' + str(arrSummary[0].ObjectsWith3D) + '<b></td>'+ '\n')
+        print( '<td><b>' + str(Round(dblPercentage)) + '</b></td></tr>'+ '\n')
+        print( '</table>'+ '\n')
     
     print( '<h2>Объекты</h2>'+ '\n')
     print( '<p><small>Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</small><p>'+ '\n')
@@ -150,15 +150,15 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
                 number_of_errors = 0
               
             if cells[i][23]=="True":
-                if (int(cells[i][24])>1) and (number_of_errors==0): 
-                    #there is model, and there are more than one building part   
+                if (number_of_errors==0): 
+                    #there is model, and no validation errors.  Green:OK 
                     print( '<tr style="background: #DDFFCC" > '+ '\n')
                 else:
-                    #there is just one building part, which is very suspisious.   
+                    #there are some validation errors, but model was created. Yellow: warning  
                     print( '<tr style="background: #FFFFAA" > '+ '\n')
             else:
                 if (cells[i][23] == "False") and (int(cells[i][24])>0) :
-                    #there are some building parts but they do not have height. Model cannot be created.
+                    #there are some building parts, but model was not created. It's Red:Error. Probably there are some validation messages.
                     print( '<tr style="background: #FFBBBB" > '+ '\n')
                 else:
                     #there are no building parts and a model is not created. Sad, but it's not an error
