@@ -268,7 +268,7 @@ class Geocoder:
                     if admin_level in accepted_admin_levels or place in accepted_places:
                                 
 
-                        Outlines=objOsmGeom.ExtractCloseNodeChainFromRelation(relation.WayRefs)
+                        outlines = objOsmGeom.ExtractCloseNodeChainsFromRelation(relation.WayRefs)
                         if len(Outlines)>0:
                             boundaries = []
                             bbox = Bbox()
@@ -277,7 +277,8 @@ class Geocoder:
                             bbox.minLon = relation.minLon # objOsmGeom.nodes[Outlines[0][0]].lon
                             bbox.maxLon = relation.maxLon # objOsmGeom.nodes[Outlines[0][0]].lon
 
-                            for OutlineNodeRefs in Outlines:
+                            for outline in outlines:
+                                OutlineNodeRefs = outline[0]
                                 boundary=[]
                                 for node in OutlineNodeRefs:
                                     boundary.append([objOsmGeom.nodes[node].lat, objOsmGeom.nodes[node].lon])

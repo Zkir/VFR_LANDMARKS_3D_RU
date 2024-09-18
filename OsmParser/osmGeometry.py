@@ -194,7 +194,7 @@ class clsOsmGeometry():
         CalculateSize = round(CalculateSize, 3)
         return CalculateSize
 
-    def CalculateClosedNodeChainSqure(self, NodeRefs, N):
+    def CalculateClosedNodeChainArea(self, NodeRefs, N):
         S = 0
         x0 = 0
         y0 = 0
@@ -232,11 +232,11 @@ class clsOsmGeometry():
         if way.NodeRefs[0] != way.NodeRefs[N]:
             fn_return_value = DEGREE_LENGTH_M * Sqr(abs(bbox.maxLat - bbox.minLat) * abs(bbox.maxLon - bbox.minLon) * cos(( bbox.minLat + bbox.maxLat )  / 2.0 / 180 * Pi))
         else:
-            fn_return_value = Sqr(self.CalculateClosedNodeChainSqure(way.NodeRefs, N))
+            fn_return_value = Sqr(self.CalculateClosedNodeChainArea(way.NodeRefs, N))
         return fn_return_value
 
 
-    def ExtractCloseNodeChainFromRelation(self, WayRefs):
+    def ExtractCloseNodeChainsFromRelation(self, WayRefs):
 
         i = 0
         j = 0
@@ -346,7 +346,7 @@ class clsOsmGeometry():
 
             if (k>0) and (OutlineNodeRefs[0] == OutlineNodeRefs[outline_nodeCount - 1]):
                 #print("ring closed")
-                Outlines.append(OutlineNodeRefs)
+                Outlines.append((OutlineNodeRefs, role))
                 #re-initialize
                 k=0
                 OutlineNodeRefs=[]
@@ -362,21 +362,34 @@ class clsOsmGeometry():
             # other known types of relations are 'site', 'collection', 'waterway' and 'building'! 
             # we do not know how to calculate size for them, and do not really care. 
             return None
-        Outlines=self.ExtractCloseNodeChainFromRelation(WayRefs)
+        Outlines=self.ExtractCloseNodeChainsFromRelation(WayRefs)
 
         if len(Outlines) > 0:
             area = 0.0
-            for OutlineNodeRefs in Outlines:
+            for OutlineNodeRefs_with_roles in Outlines:
+                OutlineNodeRefs= OutlineNodeRefs_with_roles[0]
+                role = OutlineNodeRefs_with_roles[1]
                 outline_nodeCount = len(OutlineNodeRefs)
                 if OutlineNodeRefs[0] == OutlineNodeRefs[outline_nodeCount - 1]:
-                    area = area + self.CalculateClosedNodeChainSqure(OutlineNodeRefs, outline_nodeCount - 1)
+                    outline_area = self.CalculateClosedNodeChainArea(OutlineNodeRefs, outline_nodeCount - 1)
+                    if role == 'outer':
+                        area = area + outline_area
+                    elif role =='inner':    
+                        area = area - outline_area
+                    else: 
+                        print('Relation r' + id + ' ('+type+') has unknown role '+role)
                 else:
                     print('Relation r' + id + ' ('+type+') is broken. One of the rings is not closed')
         else:
             area = 0  
             print('Relation r' + id + ' ('+type+') is empty. Probably members with outer role is missing or no closed rings ')
+        
+        if area<0:
+            area = 0
+            print('Relation r' + id + ' ('+type+') has negative area. Probably outer members are missing.')
             
-        return Sqr(area)
+        
+        return Sqr(area) 
         
         
     def AddRelation(self, id, version, timestamp, osmtags, WayRefs, object_incomplete):
