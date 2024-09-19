@@ -7,6 +7,7 @@ import time
 from mdlMisc import *
 import os.path
 import json
+from mdlClassify import buildingTypeRus
 
 #========================================================================
 #  Web Page for individual object, with validation errors
@@ -30,6 +31,8 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors)
     if strObjectName=="" and strWikipediaName!="":
         strObjectName=strWikipediaName
 
+    if strObjectName == '':
+        strObjectName = '&lt;&lt;' + buildingTypeRus(obj_rec[10]).upper() + '&gt;&gt;' 
     
     strStars=''
     intNumberOfParts=int(obj_rec[24])
@@ -97,47 +100,14 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors)
         print('</tr>')
     print( '  </table>'+ '\n')
     
-
-
-    """
-        print( '  <div class=\'descr\'  >'+ '\n')
-        print( '  <table style=\'padding:15px;\'>'+ '\n')
-        print( '  <tr><td>Тип здания:  </td><td>' + obj_rec[10] + '</td></tr>'+ '\n')
-        print( '  <tr><td>Описание:  </td><td>' + obj_rec[8] + '</td></tr>'+ '\n')
-        print( '  <tr><td>Год постройки: </td><td>' + obj_rec[16] + '</td></tr>'+ '\n')
-        print( '  <tr><td>Стиль: </td><td>' + obj_rec[15] + '</td></tr>'+ '\n')
-        print( '  <tr><td>Размер, м : </td><td>' + obj_rec[11] + '</td></tr>'+ '\n')
-        print( '  <tr><td>Высота, м : </td><td>' + obj_rec[12] + '</td></tr>'+ '\n')
-        print( '  <tr><td>Цвет:  </td><td>' + obj_rec[13] + '</td></tr>'+ '\n')
-        print( '  <tr><td>Материал: </td><td>' + obj_rec[14] + '</td></tr>'+ '\n')
-        print( '  <tr><td>Адрес:</td><td>' + obj_rec[18] + ' ' + obj_rec[19] + '</td></tr>'+ '\n')
-        print( '  <tr><td>Город:</td><td>' + obj_rec[20] + '</td></tr>'+ '\n')
-        print( '  <tr><td>Район:</td><td>' + obj_rec[21] + '</td></tr>'+ '\n')
-        print( '  <tr><td>Область:</td><td>' + obj_rec[22] + '</td></tr>'+ '\n')
-        print( '  <tr><td>Lat: </td><td>' + str(lat) + '</td></tr>'+ '\n')
-        print( '  <tr><td>Lon: </td><td>' + str(lon) + '</td></tr>'+ '\n')
-        print( '  <tr><td>Osm Id: </td><td><a href=\'' + strOSMurl + '\'> ' + strOsmID + '</a></td></tr>'+ '\n')
-        if strWikipediaLink != '':
-            print( '  <tr><td>Википедия:</td><td><a target=\'_blank\' href=\'' + strWikipediaLink + '\'>' + Mid(obj_rec[17], 4) + '</a></td></tr>'+ '\n')
-        print( '  <tr><td>temples.ru:</td><td><a target=\'_blank\' href=\'' + strTemplesUrl + '\'>' + strTemplesID + '</a></td></tr>'+ '\n')
-        print( '  <tr><td>F4 Map</td><td><a target=\'_blank\' href=\'' + strF4url + '\'>' + 'demo.f4map.com' + '</a></td></tr>'+ '\n')
-        print( '  <tr><td>Osm Buildings</td><td><a target=\'_blank\' href=\'' + strOsmBurl + '\'>' + 'osmbuildings.org' + '</a></td></tr>'+ '\n')
-        print( '  <tr><td>Число частей:</td><td>'+obj_rec[24]+strStars+'</td></tr>'+ '\n')
-        print( '  <tr><td>Дата редактирования:</td><td>'+obj_rec[25][0:10]+'</td></tr>'+ '\n')
-        print( '  <tr><td>Ошибки валидации:</td><td><a href="'+strOsmID+'.errors.html"> '+str(len(validation_errors))+'</a></td></tr>'+ '\n')
-        print( '  <tr><td colspan="2"><br/><b><center>*<a target="josm" href="' + strJOSMurl + '">Редактировать в JOSM</a>*</center></b></td></tr>'+ '\n')
-        print( '  </table>'+ '\n')
-        print( '   '+ '\n')
-        print( '  </div>'+ '\n')
-    """
-    
+   
 
     print( '  <div style=\'clear:both;\'></div>'+ '\n')
     print( '  </div>'+ '\n')
     print( '  <div class=\'page-footer\'>'+ '\n')
     print( '  <div class=\'navigation\'>'+ '\n')
     print( '<hr />'+ '\n')
-    print( '  <a href=\'/\'>Главная страница</a> --> <a href=\'/' + strQuadrantName + '.html\'>' + strQuadrantName + '</a> --> <a href="'+strOsmID+'.html">'+ strOsmID + '</a>\n')
+    print( '  <a href=\'/\'>Главная страница</a> --> <a href=\'/' + strQuadrantName + '.html\'>' + strQuadrantName + '</a> --> <a href="'+strOsmID+'.html">'+ strObjectName + '</a>\n')
     print( '  </div>'+ '\n')
     #zero frame for josm links
     print( '<div style="display: none;"><iframe name="josm"></iframe></div>'+ '\n')

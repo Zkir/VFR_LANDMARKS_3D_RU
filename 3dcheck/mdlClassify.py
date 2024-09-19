@@ -14,7 +14,9 @@ building_types_rus_names = {
     'OLD_BELIEVERS CHURCH': 'Православная церковь', #Она всё равно православная, даже если старообрядческая
     'OLD_BELIEVERS CHAPEL': "Православная часовня",	 
     'OLD_BELIEVERS CAMPANILE': "Православная колокольня",
-    'GEORGIAN_ORTHODOX CHAPEL': "Православная часовня",	 
+    'GEORGIAN_ORTHODOX CHAPEL': "Православная часовня",	
+
+    'RUSSIAN ORTHODOX WAYSIDE_SHRINE': 'Православная часовня',
     
     'ARMENIAN_APOSTOLIC CHURCH': 'Армянская церковь',
     'ARMENIAN_APOSTOLIC CHAPEL': 'Армянская часовня',
@@ -131,7 +133,8 @@ building_types_rus_names = {
     'CELLAR': 'Погреб',
     'ROOF': 'Навес',
     'SHED': 'Сарай',
-    'HUT': 'Изба',
+    'HUT': 'Хижина',
+    'CABIN': 'Хижина',
     'STABLE': 'Конюшня',
     'WINDMILL': 'Мельница',
     'WATERMILL': 'Мельница',
@@ -143,6 +146,7 @@ building_types_rus_names = {
     'TOMB': 'Гробница',
     'MEMORIAL': 'Памятник',
     'MONUMENT': 'Памятник',
+    'WAR_GRAVE' : 'Памятник',
 
 }
 # Useless building types 
@@ -192,17 +196,19 @@ achitecture_styles_rus_names={
     'rococo': 'Рококо',
     'chinoiserie': 'Шинуазри',
     'stalinist_neoclassicism': 'Сталинский ампир',
+    'neo-renaissance': 'Неоренессанс',
     
     'pre-mongolian': 'Домонгольская романика', #Определяется автоматически, но ни одного такого здания еще нет в осм
     'oldrussian': 'Русская романика',
     'old_russian': 'Русская романика',
     'uzorochye': 'Узорочье', #Определяется автоматически, но ни одного такого здания еще нет в осм
     'soviet': 'Советский модернизм', # Определяется автоматически, но ни одного такого здания еще нет в осм (и слава богу)
+    'modernism': 'Советский модернизм', # таких тегов всего 2 (на 2024-09-18), потому что в английском языке даже слова такого нет.  -- не документирован
     
     'islamic': 'Исламская архитектура',
     'ottoman': 'Османский стиль', 
     
-    #   'modernism': '2', -- не документирован
+    
     #   'russian_revival': '4', russian_revival -- это русский стиль в широком смысле.
 }    
 
@@ -212,4 +218,9 @@ def achitectureStylesRus(style):
         prefix="~"
     else:    
         prefix=""
+    
+    if ";" in style:
+        #"Эклектика" -- это когда стилей больше одного. Учитесь, сынки!
+        style = 'eclectic'  
+        
     return prefix+achitecture_styles_rus_names.get(style,style)

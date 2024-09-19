@@ -47,8 +47,8 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
     if strObjectName=="" and strWikipediaName!="":
         strObjectName=strWikipediaName
         
-    #if strObjectName == '':
-    #    strObjectName = '&lt;&lt;' + buildingTypeRus(cells[i][10]).upper() + '&gt;&gt;'    
+    if strObjectName == '':
+        strObjectName = '&lt;&lt;' + buildingTypeRus(obj_rec[10]).upper() + '&gt;&gt;'    
     
     strStars=''
     intNumberOfParts=int(obj_rec[24])
@@ -87,7 +87,7 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
     print( '</head>'+ '\n')
     print( '<body class=\'page\'>'+ '\n')
     print( '  <div class=\'page-header\'>'+ '\n')
-    strPageTitle=strObjectName + ' (' + strOsmID + ') ' +strStars
+    strPageTitle=strObjectName + ' '  +strStars # ' (' + strOsmID + ') '
     print( '    <h1 title="'+strPageTitle+'">' + strPageTitle + '</h1>'+ '\n')
     print( '  </div>'+ '\n')
     print( '  <div class=\'page-content\'>'+ '\n')

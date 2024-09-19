@@ -63,11 +63,16 @@ arch_styles.sort(key=lambda rec: rec[0], reverse=False)
 for rec in arch_styles:
     if rec[1]>=2 and  achitectureStylesRus(rec[0]) == rec[0]:
         print("'"+rec[0]+"': '"+ str(rec[1])+"',")        
+
+
+
         
-        
-print("=======================")        
-print("Styles inverse")        
-print("=======================")        
+print("="*70)        
+print("Статистика по стилям")        
+print("="*70)        
+print("Название стиля".ljust(25), "в тегах".rjust(4)+'  ', "по дате".rjust(4)+'  ', "оригинальные теги")        
+print("-"*70)        
+arch_styles_dict=dict(arch_styles)        
 
 inv_styles = {}
 for k, v in achitecture_styles_rus_names.items():
@@ -77,4 +82,9 @@ inv_styles=list(inv_styles.items())
 inv_styles.sort(key=lambda rec: rec[0], reverse=False)
 
 for rec in inv_styles:
-    print(rec[0].ljust(30),rec[1])        
+    n=0
+    n_auto=0
+    for style in rec[1]:
+        n=n+arch_styles_dict.get(style,0)
+        n_auto=n_auto+arch_styles_dict.get('~'+style,0)
+    print(rec[0].ljust(25), str(n).rjust(6)+'    ', str(n_auto).rjust(6)+'  ', rec[1])        
