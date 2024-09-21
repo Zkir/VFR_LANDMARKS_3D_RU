@@ -50,6 +50,8 @@ def change_statistics(cells):
     
     
 def create_diagram(player_uuid, activity):
+    bottom_h = 16
+    bottom_font_size = 12 
     MAX_PER_DAY = 1
     for day in activity:
         day_total=activity[day]["total"]
@@ -60,7 +62,7 @@ def create_diagram(player_uuid, activity):
     draw = ImageDraw.Draw(im)
 
     bar_width = im.size[0]//len(activity)
-    bar_height_per_unit= int(im.size[1]//MAX_PER_DAY)
+    bar_height_per_unit= int((im.size[1]-bottom_h)//MAX_PER_DAY)
 
     outline_color = (0, 0, 0, 255) 
     #outline_color = (0, 0, 0, 0) 
@@ -79,21 +81,29 @@ def create_diagram(player_uuid, activity):
         for slot in ['red','yellow','green']:  
             day_total=activity[day][slot]
             
-            xy = [(i*bar_width,    im.size[1]-(h+bar_height_per_unit*day_total)),
-                 ((i+1)*bar_width, im.size[1]-h )]
+            xy = [(i*bar_width,    (im.size[1]-bottom_h)-(h+bar_height_per_unit*day_total)),
+                 ((i+1)*bar_width, (im.size[1]-bottom_h)-h )]
             draw.rectangle(xy, fill_color[slot], outline=None)
             h=h+(bar_height_per_unit*day_total)
         
         #we need to draw outline for total
         day_total=activity[day]["total"]        
-        xy = [(i*bar_width,    im.size[1]-(bar_height_per_unit*day_total)),
-             ((i+1)*bar_width, im.size[1])]
+        xy = [(i*bar_width,    (im.size[1]-bottom_h)-(bar_height_per_unit*day_total)),
+             ((i+1)*bar_width, (im.size[1]-bottom_h))]
         draw.rectangle(xy, fill=None, outline=outline_color)    
                 
         i += 1
+    
+    items=list(activity.items())
+    first_day = str(items[0][0])
+    last_day  = str(items[-1][0])
+    
+    draw.text((0,im.size[1]-3),           first_day, fill=outline_color, anchor = "lb", font_size=12)    
+    draw.text(((i+0)*bar_width, im.size[1]-3),  last_day,  fill=outline_color, anchor = "rb", font_size=12) 
+    #print(im.size[0],(i)*bar_width,(i+1)*bar_width)    
 
     im.save("" + player_uuid +".png", "PNG")
-    #im.show()     
+    
 
 MIN_DATE='1900.01.01 00:00:00'
 
