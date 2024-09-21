@@ -104,8 +104,8 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     
     if strQuadrantName == "RUS_LATEST":
         print( '<h2>Пульс проекта</h2>'+ '\n')
-        print('<p><img src="data/images/recent_activity.png"></img><br />')
-        print('Количество отредактированных зданий по дням</p>')
+        print('<p>Количество отредактированных зданий по дням</p>')
+        print('<p><img src="data/images/recent_activity.png"></img></p>')
     else: 
         print( '<h2>Cтатистика по квадрату</h2>'+ '\n')
         print( '<table class="sortable">'+ '\n')
