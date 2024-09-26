@@ -74,18 +74,9 @@ class TRelation:
 class clsOsmGeometry():
     """coordinates of nodes"""
     def __init__(self):
-        self.nodes = []
-        self.nodehash = {}
-        self.ways = []
-        self.wayhash = {}
-        
-        self.relations = []
-        self.relationhash = {}
-        
-        self.max_node = -1
-        self.max_way = -1
-        self.max_relation = -1
-        
+        self.nodes = {}
+        self.ways = {}
+        self.relations = {}
 
     def AddNode(self, id, lat, lon, version, timestamp):
         #print("debug",id, lat, lon)
@@ -97,18 +88,17 @@ class clsOsmGeometry():
         aNode.version = version 
         aNode.timestamp = timestamp
         
+        self.nodes[id] = aNode
         
-        self.nodes.append(aNode)
-
-        self.max_node = self.max_node + 1
-        self.nodehash[id]=self.max_node
 
     def FindNode(self, id):
-        return self.nodehash.get(id,-1)
+        if id in self.nodes:
+            return id
+        else:
+            return None    
 
     def GetNodeID(self, intNodeNo):
-        fn_return_value = self.nodes[intNodeNo].id
-        return fn_return_value
+        return self.nodes[intNodeNo].id
 
     def GetNodeLat(self, intNodeNo):
         fn_return_value = self.nodes[intNodeNo].lat
@@ -142,6 +132,7 @@ class clsOsmGeometry():
         
         #calculate bbox
         for i in range(node_count):
+            
             lat = self.nodes[aWay.NodeRefs[i]].lat
             lon = self.nodes[aWay.NodeRefs[i]].lon
             if i == 0:
@@ -166,23 +157,23 @@ class clsOsmGeometry():
         aWay.maxLon = maxLon
         
         aWay.size = self.CalculateWaySize(aWay)
+
+        self.ways[id] = aWay
         
-        self.ways.append(aWay)
-        self.max_way = self.max_way + 1
-        self.wayhash[id] = self.max_way
-        
-        return self.max_way
+        return id
 
     def GetWayBBox(self, intWayNo):
         bbox = self.ways[intWayNo].getBbox()
         return bbox
 
-    def FindWay(self, id):
-        return self.wayhash.get(id,-1)
+    def FindWay(self, way_id):
+        if way_id in self.ways:
+            return way_id
+        else:
+            return None
 
     def GetWayID(self, intWayNo):
-        fn_return_value = self.ways[intWayNo].id
-        return fn_return_value
+        return self.ways[intWayNo].id
 
     def GetWayNodeRefsAndCount(self, intWayNo):
         #anode_count = self.ways(intWayNo).node_count
@@ -436,11 +427,9 @@ class clsOsmGeometry():
         aRelation.maxLat = maxLat
         aRelation.maxLon = maxLon        
         
-        self.relations.append(aRelation)
-        self.max_relation = self.max_relation + 1
-        self.relationhash[id] = self.max_relation
+        self.relations[id] = aRelation
         
-        return self.max_relation
+        return id
         
     def GetRelationBBox(self, intRelationNo):
         bbox = TBbox()

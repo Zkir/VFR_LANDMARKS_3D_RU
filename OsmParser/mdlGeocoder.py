@@ -226,7 +226,7 @@ class Geocoder:
         
         objOsmGeom, _ = readOsmXml(strSrcOsmFile)
   
-        for way in objOsmGeom.ways:
+        for _, way in objOsmGeom.ways.items():
             Tags = way.osmtags
             if way.NodeRefs[0] == way.NodeRefs[-1]: #closed way
                 if Tags.get("place","") in accepted_places:
@@ -256,7 +256,7 @@ class Geocoder:
                     region.size = way.size
                     self.regions.append(region)
         
-        for relation in objOsmGeom.relations:        
+        for _, relation in objOsmGeom.relations.items():        
             Tags = relation.osmtags
             blnObjectIncomplete = relation.object_incomplete
             

@@ -90,7 +90,7 @@ def readOsmXml(strSrcOsmFile):
         if strTag == 'nd':
             node_id = objXML.GetAttribute('ref')
             intNodeNo = objOsmGeom.FindNode(node_id)
-            if intNodeNo == - 1:
+            if intNodeNo is None:
                 #raise Exception('FindNode', 'node not found! ' + node_id)
                 blnObjectIncomplete=True
             else:
@@ -101,7 +101,7 @@ def readOsmXml(strSrcOsmFile):
             if objXML.GetAttribute('type') == 'way':
                 way_id = objXML.GetAttribute('ref')
                 intWayNo = objOsmGeom.FindWay(way_id)
-                if intWayNo == - 1:
+                if intWayNo is None:
                     #raise Exception('FindWay', 'way not found! ' + way_id)
                     blnObjectIncomplete=True
                 else:

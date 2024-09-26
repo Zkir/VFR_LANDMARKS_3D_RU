@@ -295,7 +295,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     fo.write( '  <bounds minlat="' + str(object1.bbox.minLat) + '" minlon="' + str(object1.bbox.minLon) + '" maxlat="' + str(object1.bbox.maxLat) + '" maxlon="' + str(object1.bbox.maxLon) + '"/> ' + '\n')
     
     # write nodes inside BBOX  
-    for node in objOsmGeomParts.nodes: 
+    for _, node in objOsmGeomParts.nodes.items(): 
         obj_id = node.id 
         obj_ver = node.version 
         obj_date = node.timestamp
@@ -314,7 +314,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
                     
    
     # write ways inside BBOX                
-    for way in objOsmGeomParts.ways:
+    for _, way in objOsmGeomParts.ways.items():
         
         blnCompleteObject = False
         if way.minLat >= object1.bbox.minLat and way.maxLat <= object1.bbox.maxLat and way.minLon >= object1.bbox.minLon and way.maxLon <= object1.bbox.maxLon:
@@ -380,7 +380,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
 
     # write relations inside BBOX                              
     
-    for relation in objOsmGeomParts.relations:
+    for _, relation in objOsmGeomParts.relations.items():
         
         if relation.type == 'building':
             # Relations of type 'building' is a very strange thing.
