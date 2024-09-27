@@ -2,7 +2,6 @@
 # some arrays to store osm-geometry
 # we need this geometry to determine bboxes of objects and find building parts
 #***********************************************************************************************************************
-#from vbFunctions import *
 DEGREE_LENGTH_M = 111.13 * 1000
 from math import cos
 Pi = 3.14159265358979
@@ -91,22 +90,21 @@ class clsOsmGeometry():
         self.nodes[id] = aNode
         
 
-    def FindNode(self, id):
-        if id in self.nodes:
-            return id
+    #To be deleted
+    def FindNode(self, node_id):
+        if node_id in self.nodes:
+            return node_id
         else:
-            return None    
+            return None            
 
     def GetNodeID(self, intNodeNo):
         return self.nodes[intNodeNo].id
 
     def GetNodeLat(self, intNodeNo):
-        fn_return_value = self.nodes[intNodeNo].lat
-        return fn_return_value
+        return self.nodes[intNodeNo].lat
 
     def GetNodeLon(self, intNodeNo):
-        fn_return_value = self.nodes[intNodeNo].lon
-        return fn_return_value
+        return self.nodes[intNodeNo].lon
 
     def AddWay(self, id, version, timestamp, osmtags, NodeRefs, object_incomplete):
         i = 0
