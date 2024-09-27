@@ -1,6 +1,8 @@
-from mdlXmlParser import *
-from osmGeometry import *
-from vbFunctions import *
+#from mdlXmlParser import *
+#from osmGeometry import *
+#from vbFunctions import *
+
+
 from mdlDBMetadata import *
 from mdlMisc import *
 import time

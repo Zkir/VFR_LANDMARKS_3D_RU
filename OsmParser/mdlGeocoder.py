@@ -1,6 +1,6 @@
 ﻿import time
 from mdlMisc import *
-from osmGeometry import *
+#from osmGeometry import *
 from mdlOsmParser import readOsmXml
 import rtree
 import geohash2

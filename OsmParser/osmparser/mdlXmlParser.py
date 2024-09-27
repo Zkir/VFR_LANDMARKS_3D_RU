@@ -1,5 +1,5 @@
 #***********************************************************************************************************************
-# Very simple osm-xml parcer. Minimal funtionality, compartible with output of osmconvert tool.
+# Very simple osm-xml parser. Minimal funtionality, compartible with output of osmconvert tool.
 #***********************************************************************************************************************
 class clsXMLparser:
     filehandle=""

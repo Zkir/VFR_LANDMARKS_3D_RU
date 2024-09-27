@@ -5,9 +5,10 @@ import os
 import hashlib
 
 from mdlMisc import *
-from mdlOsmParser import readOsmXml, encodeXmlString
-from osmGeometry import clsOsmGeometry
-from mdlXmlParser import clsXMLparser
+from mdlOsmParser import readOsmXml
+from osmparser import encodeXmlString
+#from osmGeometry import clsOsmGeometry
+#from mdlXmlParser import clsXMLparser
 from mdlGeocoder import DoGeocodingForDatFile
 from mdlStartDate import parseStartDateValue
 from tag_validator import *
