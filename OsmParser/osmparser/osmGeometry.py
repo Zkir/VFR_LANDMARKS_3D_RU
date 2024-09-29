@@ -77,7 +77,7 @@ class clsOsmGeometry():
         self.ways = {}
         self.relations = {}
 
-    def AddNode(self, id, lat, lon, version, timestamp):
+    def AddNode(self, id, lat, lon, version="1", timestamp="1900-01-01"):
         #print("debug",id, lat, lon)
         aNode=TNode()
         aNode.id = id
@@ -88,6 +88,7 @@ class clsOsmGeometry():
         aNode.timestamp = timestamp
         
         self.nodes[id] = aNode
+        return id
         
 
     #To be deleted
