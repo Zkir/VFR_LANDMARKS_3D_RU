@@ -81,12 +81,16 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
 
 
 
-        ref_temples_ru = osmObject.getTag('ref:temples.ru')
+        tagRefTemplesRu = osmObject.getTag('ref:temples.ru')
+        tagRefSoboryRu = osmObject.getTag('ref:sobory.ru')
+        tagWikidata = osmObject.getTag('wikidata')
+        tagArchitect = osmObject.getTag('architect')
+        
         j = j + 1
         building_dat.append([str(j),  osmObject.type,  osmObject.id,  str(osmObject.bbox.minLat),
                  str(osmObject.bbox.minLon) ,
                  str(osmObject.bbox.maxLat) ,
-                 str(osmObject.bbox.maxLon),   osmObject.name,   osmObject.descr,   ref_temples_ru ,
+                 str(osmObject.bbox.maxLon),   osmObject.name,   osmObject.descr,  tagRefTemplesRu ,
                  strBuildingType,   str(Round(osmObject.size)) ,
                  str(Round(osmObject.dblHeight)),   osmObject.colour,   osmObject.material ,
                  guessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate),
@@ -95,7 +99,11 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
                  osmObject.tagAddrDistrict,   osmObject.tagAddrRegion,
                  str(osmObject.blnHasBuildingParts and (osmObject.dblHeight > 0)),   str(numberofparts),
                  touched_date,  
-                 str(numberofvalidationerrors)])
+                 str(numberofvalidationerrors),
+                 tagRefSoboryRu,
+                 tagWikidata,
+                 tagArchitect
+                 ])
     
     saveDatFile(building_dat, strOutputFile)
 
