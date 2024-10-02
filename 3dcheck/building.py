@@ -58,6 +58,19 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
        strStars='★★'
     if intNumberOfParts>1000:
        strStars='★★★'
+       
+    strSoboryID   = obj_rec[27]
+    if strSoboryID !="":
+        strSoboryUrl="https://sobory.ru/article/?object=" +strSoboryID 
+    else: 
+        strSoboryUrl = ""
+    
+    strWikidata   = obj_rec[28]
+    if strWikidata !="":
+        strWikidataLink = "https://www.wikidata.org/wiki/"+strWikidata
+    else:
+        strWikidataLink = ""
+    strArchitect   = obj_rec[29]
   
     print( '<!doctype html>'+ '\n')
     print( '<html>'+ '\n')
@@ -99,6 +112,8 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
         print( '  <tr><td>Описание:  </td><td>' + obj_rec[8] + '</td></tr>'+ '\n')
     print( '  <tr><td>Год постройки: </td><td>' + obj_rec[16] + '</td></tr>'+ '\n')
     print( '  <tr><td>Стиль: </td><td>' + achitectureStylesRus(obj_rec[15]) + '</td></tr>'+ '\n')
+    if strArchitect != "":    
+        print( '  <tr><td>Архитектор: </td><td>' + strArchitect + '</td></tr>'+ '\n')
     print( '  <tr><td>Размер, м : </td><td>' + obj_rec[11] + '</td></tr>'+ '\n')
     print( '  <tr><td>Высота, м : </td><td>' + obj_rec[12] + '</td></tr>'+ '\n')
     print( '  <tr><td>Цвет:  </td><td>' + obj_rec[13] + '</td></tr>'+ '\n')
@@ -113,10 +128,23 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
     print( '  <tr><td>Osm Id: </td><td><a href=\'' + strOSMurl + '\'> ' + strOsmID + '</a></td></tr>'+ '\n')
     if strWikipediaLink != '':
         print( '  <tr><td>Википедия:</td><td><a target=\'_blank\' href=\'' + strWikipediaLink + '\'>' + Mid(obj_rec[17], 4) + '</a></td></tr>'+ '\n')
+        
+    if strWikidata != "":    
+        print( '  <tr><td>Викидата:</td><td><a target=\'_blank\' href=\'' + strWikidataLink + '\'>' + strWikidata + '</a></td></tr>'+ '\n')    
+        
     if strTemplesID != "":    
         print( '  <tr><td>temples.ru:</td><td><a target=\'_blank\' href=\'' + strTemplesUrl + '\'>' + strTemplesID + '</a></td></tr>'+ '\n')
+        
+    if strSoboryID != "":    
+        print( '  <tr><td>sobory.ru:</td><td><a target=\'_blank\' href=\'' + strSoboryUrl + '\'>' + strSoboryID + '</a></td></tr>'+ '\n')    
+        
+    
+        
+        
+        
     print( '  <tr><td>F4 Map</td><td><a target=\'_blank\' href=\'' + strF4url + '\'>' + 'demo.f4map.com' + '</a></td></tr>'+ '\n')
-    print( '  <tr><td>Osm Buildings</td><td><a target=\'_blank\' href=\'' + strOsmBurl + '\'>' + 'osmbuildings.org' + '</a></td></tr>'+ '\n')
+    #osmbuildings are blocked in RF
+    #print( '  <tr><td>Osm Buildings</td><td><a target=\'_blank\' href=\'' + strOsmBurl + '\'>' + 'osmbuildings.org' + '</a></td></tr>'+ '\n')
     print( '  <tr><td>Число частей:</td><td>'+obj_rec[24]+strStars+'</td></tr>'+ '\n')
     print( '  <tr><td>Дата редактирования:</td><td>'+obj_rec[25][0:10]+'</td></tr>'+ '\n')
     
