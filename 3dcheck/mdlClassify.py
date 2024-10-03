@@ -8,6 +8,8 @@ building_types_rus_names = {
     'SHRINE': 'Часовня', # strange tags, but let's include for now
     'WAYSIDE_SHRINE': 'Часовня',
     
+    'ORTHODOX CHURCH': "Православная церковь",
+    'ORTHODOX CHAPEL': "Православная часовня",	
     'RUSSIAN ORTHODOX CHURCH': "Православная церковь",
     'RUSSIAN ORTHODOX CHAPEL': "Православная часовня",	
     'RUSSIAN ORTHODOX CAMPANILE': "Православная колокольня",	
@@ -147,6 +149,10 @@ building_types_rus_names = {
     'MEMORIAL': 'Памятник',
     'MONUMENT': 'Памятник',
     'WAR_GRAVE' : 'Памятник',
+    
+    #originated from wikidata, should be added to processing.
+    'ICE_RINK': 'Каток', # !!! to be created from leisure=ice_rink + building=yes . Note, wikidata classifies ice sport palaces as rinks!
+    'PLANETARIUM': "Планетарий", # from amenity=planetarium
 
 }
 # Useless building types 

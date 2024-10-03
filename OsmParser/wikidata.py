@@ -3,13 +3,17 @@ import requests
 import mdlMisc
 from  mdlDBMetadata import * 
 import os
+import sys
+sys.path.append('../3dcheck/')
+from mdlClassify import * 
 
 
 wikidata_buildings={
-                    'Q19860854': 'ruin', # building or structure that has been demolished or destroyed
+                    'Q19860854': 'ruins', # building or structure that has been demolished or destroyed
                     'Q811979':   'building', 
                     'Q41176':    'building',
                     'Q35112127': 'building', #historic building
+                    'Q180174':   'building', #folly does not say anything about the building unfortunatelly
                     'Q3947':     'residential', #house=building usually intended for living in
                     'Q279118':   'wooden house',
                     'Q12104567': 'apartments',
@@ -46,7 +50,7 @@ wikidata_buildings={
                     'Q4315006':  'university',  #national research university
                     'Q3914':     'school',
                     'Q1935049':  'school', # military school
-                    'Q2385804':  'educational institution', 
+                    'Q2385804':  'school',  # educational institution
                     'Q7692354':  'school', # техникум
                     'Q55043':    'school',  #gymnasium
                     'Q55008603': 'school',  #children's music school
@@ -61,7 +65,7 @@ wikidata_buildings={
                     'Q56242225': 'orthodox church',
                     'Q25416095': 'orthodox church', # sobor 
                     'Q27055621': 'russian wooden church', #!
-                    'Q27055636': 'Old Believers church', 
+                    'Q27055636': 'old_believers church', 
                     'Q1975485':  'orthodox chapel' ,
                     'Q56242235': 'lutheran church', 
                     'Q56242275': 'lutheran church',  
@@ -78,25 +82,24 @@ wikidata_buildings={
                     'Q30565277': 'geothermal power station',
                     'Q57821':    'fortification',
                     'Q57831':    'fortress',
-                    'Q81917':    'fortified tower', 
+                    'Q81917':    'DEFENSIVE TOWER', 
                     'Q1785071':  'fort',  
                     'Q83405':    'industrial', #factory
                     'Q483110':   'stadium',
-                    'Q641226':   'arena', #!
+                    'Q641226':   'stadium',  # arena !!!!! there is no proper tag for arenas in OSM.  stadium and sports_centre are used despite definitions !!!!
                     'Q1154710':  'stadium',  #association football venue
-                    'Q1282870':  'ice rink',
-                    'Q2617766':  'ice rink', # speed skating rink
+                    'Q1282870':  'ice_rink',
+                    'Q2617766':  'ice_rink', # speed skating rink
                     'Q11166728': 'communication tower',#television tower 
                     'Q11303':    'skyscraper',
                     'Q1435490':  'people\'s house',
                     'Q494829':   'bus station',
-                    'Q55488':    'railway station',
-                    'Q1339195':  'station building',  
+                    'Q55488':    'TRAIN_STATION',  #railway station
+                    'Q1339195':  'TRAIN_STATION',  #station building 
                     'Q2281788':  'public aquarium',
                     'Q4989906':  'monument', 
                     'Q860861':   'sculpture',
                     'Q162875':   'mausoleum',
-                    'Q180174':   'folly',
                     'Q12518':    'tower',
                     'Q18142':    'tower',  #tower block
                     'Q39715':    'lighthouse',
@@ -107,7 +110,7 @@ wikidata_buildings={
                     'Q233324':   'seminary',
                     'Q375336':   'film studio',
                     'Q11446':    'ship',
-                    'Q751876':   'château', #!
+                    'Q751876':   'palace', #château
                     'Q16560':    'palace', 
                     'Q3950':     'villa',
                     'Q17715832': 'castle ruin',
@@ -122,7 +125,7 @@ wikidata_buildings={
                     'Q23413':    'castle',  
                     'Q928830':   'metro station',  
                     'Q274153':   'water tower',  
-                    'Q160169':   'dacha',
+                    'Q160169':   'house', #dacha 
                     'Q148319':   'planetarium',  
                     'Q143912':   'triumphal_arch',  
                     'Q16917':    'hospital', 
@@ -135,7 +138,7 @@ wikidata_buildings={
 
                     'Q15548045': 'almshouse',  #Богадельня
                     'Q2386997':  'Gostiny Dvor',  #Historical Russian indoor market or shopping centre
-                    'Q2811':     'submarine',  #3
+                    'Q2811':     'ship',  #submarine
                     'Q1254933':  'astronomical observatory',  #3
                     'Q7075':     'library',
                     'Q22806':    'library',  #national library   
@@ -144,8 +147,10 @@ wikidata_buildings={
                     'Q53060':    'gate', 
                     'Q11707':    'restaurant',  
                     
-                    'Q125626250':'takya', #! Islamic term
-                    
+                    'Q125626250':'takya', #! Sufi lodge -- islamic monastery. 
+                    }
+
+wikidata_non_buildings={
                     #strange non-building types
                     'Q532':      'village',
                     'Q2319498':  'village',
@@ -211,13 +216,6 @@ wikidata_buildings={
                     'Q43501':    'zoo', 
 
 }
-
-"""
-'Q184356':'radio telescope',
-'Q12019965':'indoor ice rink', #! possibly sport_centre?
-
-"""
-                    
    
 
 
@@ -284,55 +282,68 @@ def get_wikidata_organized(qid):
     return wd
 
 
+# ============
+# main block 
+# ============
+unmatched_building_types_with_osm = []
+for key, value in wikidata_buildings.items():
+    if value =='building':
+        continue
+    if value.upper() not in building_types_rus_names:
+        print(value)
+        unmatched_building_types_with_osm += [key]
+        
+
+
+
+
 cells=mdlMisc.loadDatFile("../work_folder/22_all_osm_objects_list/all-objects.dat") 
 
 n=0
 for rec in cells:
     if rec[QUADDATA_WIKIDATA_ID] !="":
         n += 1
-print("total wikidata: ", n)
+print("total objects with wikidata tag: ", n)
         
 wikidata_buildings_unknown = {}
 
 for rec in cells:
-    if rec[QUADDATA_WIKIDATA_ID]!="":
+    if rec[QUADDATA_WIKIDATA_ID]!="" :
+        wikidata = get_wikidata_organized(rec[QUADDATA_WIKIDATA_ID]) 
+        if wikidata["instance_of"] in unmatched_building_types_with_osm and rec[QUADDATA_BUILDING_TYPE]!="":
     
-        #print(rec[QUADDATA_OBJ_TYPE][0]+rec[QUADDATA_OBJ_ID], rec[QUADDATA_WIKIDATA_ID] )
-        
-        #print( 
-        #    rec[QUADDATA_COLOUR] + " " +
-        #    rec[QUADDATA_MATERIAL] + " " +
-        #    rec[QUADDATA_BUILDING_TYPE] + " " +
-        #    rec[QUADDATA_STYLE] + " " +
-        #    rec[QUADDATA_BUILD_DATE]
-        #    )
-
-        
-        #if rec[QUADDATA_ARCHITECT]!="":
-        #    print(rec[QUADDATA_ARCHITECT])
-
-        for key, value in get_wikidata_organized(rec[QUADDATA_WIKIDATA_ID]).items():
-            #print (key+': "'+ str(value)+'"')
+            print(rec[QUADDATA_OBJ_TYPE][0]+rec[QUADDATA_OBJ_ID], rec[QUADDATA_WIKIDATA_ID] )
             
-            if key== "instance_of":
-                if value not in wikidata_buildings:
-                    if value not in wikidata_buildings_unknown:
-                        wikidata_buildings_unknown[value] = 0
-                        #print("'"+value+"':'',")
-                        
-                    wikidata_buildings_unknown[value] += 1 
-            
-        #print()    
-        #print()
-    
+            print( 
+                rec[QUADDATA_COLOUR] + " " +
+                rec[QUADDATA_MATERIAL] + " " +
+                rec[QUADDATA_BUILDING_TYPE] + " " +
+                rec[QUADDATA_STYLE] + " " +
+                rec[QUADDATA_BUILD_DATE]
+                )
+
+            for key, value in wikidata.items():
+                
+                
+                if key== "instance_of":
+                    if value not in wikidata_buildings:
+                        if value not in wikidata_buildings_unknown:
+                            wikidata_buildings_unknown[value] = 0
+                        wikidata_buildings_unknown[value] += 1 
+                    else:
+                        print(key+': ' + wikidata_buildings[str(value)])
+                else:
+                    print (key+': "'+ str(value)+'"')            
+                
+            print()    
+            print()
+
+print('unrecognized wikidata building types:')    
 bubu = list( wikidata_buildings_unknown.items())
-
 bubu.sort(reverse=True, key=lambda x: int(x[1]) )
-
 for (key, value) in bubu:
     if int(value)>1:
         print("'"+key+"':'',  #"+ str(value)) 
-        
-print( len(bubu))        
+print('unrecognized wikidata building types total: ', len(bubu))        
 
 #SF3D_USE_CPU=1
