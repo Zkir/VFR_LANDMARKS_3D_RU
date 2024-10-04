@@ -7,6 +7,9 @@ import sys
 sys.path.append('../3dcheck/')
 from mdlClassify import * 
 
+WIKIDATA_DIRECTORY = "d:/_VFR_LANDMARKS_3D_RU/work_folder/23_wikidata"
+IMAGE_DIRECTORY =    "d:/_VFR_LANDMARKS_3D_RU/work_folder/25_images"
+
 
 wikidata_buildings={
                     'Q19860854': 'ruins', # building or structure that has been demolished or destroyed
@@ -316,7 +319,7 @@ def print_sorted_dict(a_dict, limit=0):
 
 def get_wikidata(qid):
     wikidata =None
-    wdfilename="d:/_VFR_LANDMARKS_3D_RU/work_folder/23_wikidata/" + qid + '.json'
+    wdfilename=WIKIDATA_DIRECTORY + "/" + qid + '.json'
     
     if os.path.exists(wdfilename):
         with open(wdfilename,'r', encoding='utf-8') as f:
@@ -337,7 +340,7 @@ def get_from_wikimedia_api(url):
     return(response)
 
 def download_file(url, filename):
-    full_save_path = "d:/_VFR_LANDMARKS_3D_RU/work_folder/23_wikidata/" +  filename
+    full_save_path = IMAGE_DIRECTORY + "/" +  filename
     if os.path.exists(full_save_path):
         return
     
@@ -349,6 +352,11 @@ def download_file(url, filename):
     
     with open(full_save_path, mode="wb") as file:
        file.write(r.content)
+       
+def save_description(txt, filename):
+    full_save_path = IMAGE_DIRECTORY + "/" +  filename
+    with open(full_save_path, mode="w",encoding="utf-8") as file:
+       file.write(txt)
 
 def get_wikidata_organized(qid):    
     wd={}
@@ -357,6 +365,8 @@ def get_wikidata_organized(qid):
 
     if 'en' in wikidata['labels']:
         wd["label"] = wikidata['labels']['en']['value']
+    else:
+        wd["label"] = ''
         
     if 'ru' in wikidata['labels']:
         wd["label_ru"] = wikidata['labels']['ru']['value']    
@@ -510,6 +520,10 @@ def main():
                     ).strip()
                     
             if building_text_description != '' and 'image' in wikidata:
+                #building_text_description += " " + wikidata["label"] + " " +wikidata["description"]
+                #building_text_description += " " +wikidata["label"]
+                building_text_description = building_text_description.strip()
+                
                 api_url ="https://commons.wikimedia.org/w/api.php?action=query&format=json" +"&prop=imageinfo&iiprop=url&titles=File:" + wikidata['image']
                 print(rec[QUADDATA_OBJ_TYPE][0]+rec[QUADDATA_OBJ_ID], rec[QUADDATA_WIKIDATA_ID] )
                 print('  ' + building_text_description)
@@ -521,9 +535,16 @@ def main():
                 image_metadata = get_from_wikimedia_api(api_url)
                 for _, yyy in image_metadata["query"]["pages"].items():
                     break # we just need one image, and expect only one
-                image_download_url = yyy["imageinfo"][0]["url"] 
+                if "imageinfo" in yyy:
+                    image_download_url = yyy["imageinfo"][0]["url"] 
+                else:
+                    print('ERROR: wikimedia site did not provided url for the image '+ api_url)
+                    continue
                 print('  '+str(image_download_url))
-                #download_file(image_download_url, wikidata['image'])
+                _, extension = os.path.splitext(wikidata['image'])
+                download_file(image_download_url, rec[QUADDATA_WIKIDATA_ID] + extension)
+                save_description(building_text_description, rec[QUADDATA_WIKIDATA_ID]+'.txt')
+                #exit()
                            
                 print()
                
