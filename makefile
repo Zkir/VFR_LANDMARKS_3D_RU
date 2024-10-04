@@ -91,13 +91,22 @@ work_folder\22_all_osm_objects_list : | work_folder
 
 work_folder\20_osm_3dmodels\extract_building_models_osm: work_folder\10_osm_extracts\extract_osm_data work_folder\05_geocoder\geocoder.txt | work_folder\21_osm_objects_list work_folder\20_osm_3dmodels ## extract osm buildings  into separate osm files
 	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do python OsmParser\main.py %%i
+	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do python OsmParser\wikidata.py update-region -i work_folder\21_osm_objects_list\%%i.dat -r
 	touch $@
 	
 work_folder\22_all_osm_objects_list\all-objects.dat: work_folder\20_osm_3dmodels\extract_building_models_osm | work_folder\22_all_osm_objects_list ##join object lists from different quadrants
 	python scripts\joindats.py $@ work_folder\21_osm_objects_list
+	osmparser\wikidata.py print-stats -i $@ >work_folder\22_all_osm_objects_list\wikidata-stats.txt
 
 work_folder\22_all_osm_objects_list\RUS_TOP.dat: work_folder\22_all_osm_objects_list\all-objects.dat
 	python OsmParser\make_tops.py $@ $<
+	
+#****************************************************************************************************************************
+#* 25 Extract images 
+#****************************************************************************************************************************		
+work_folder\extract_images: work_folder\22_all_osm_objects_list\all-objects.dat
+	python OsmParser\wikidata.py get-images -i work_folder\22_all_osm_objects_list\all-objects.dat
+	touch $@
 
 #****************************************************************************************************************************
 #* 30 Convert models to x-plane obj and x3d 

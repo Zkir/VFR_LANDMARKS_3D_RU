@@ -4,8 +4,8 @@ import mdlMisc
 from  mdlDBMetadata import * 
 import os
 import sys
-sys.path.append('../3dcheck/')
 from mdlClassify import * 
+import argparse
 
 WIKIDATA_DIRECTORY = "d:/_VFR_LANDMARKS_3D_RU/work_folder/23_wikidata"
 IMAGE_DIRECTORY =    "d:/_VFR_LANDMARKS_3D_RU/work_folder/25_images"
@@ -386,7 +386,7 @@ def get_wikidata_organized(qid):
     if 'P31' in wikidata['claims']:
         wd["instance_of"] = wikidata['claims']['P31'][0]['mainsnak']['datavalue']['value']['id']
     else:
-        wd["instance_of"] = '???'
+        wd["instance_of"] = ''
         
     
     if 'P18' in wikidata['claims']:     
@@ -439,20 +439,10 @@ def get_wikidata_organized(qid):
 # ============
 # main block 
 # ============
-def main():
-    unmatched_building_types_with_osm = {}
-
-            
-    cells=mdlMisc.loadDatFile("../work_folder/22_all_osm_objects_list/all-objects.dat") 
-
-    n=0
-    for rec in cells:
-        if rec[QUADDATA_WIKIDATA_ID] !="":
-            n += 1
-    print("total objects with wikidata tag: ", n)
-            
-    wikidata_buildings_unknown = {}
-    wikidata_architectures = {}
+def update_region(input_file_name, output_file_name):
+    
+    
+    cells=mdlMisc.loadDatFile(input_file_name) 
 
     for rec in cells:
         if rec[QUADDATA_WIKIDATA_ID]!="" :
@@ -487,14 +477,30 @@ def main():
             if not rec[QUADDATA_ARCHITECT]:
                 rec[QUADDATA_ARCHITECT] = wikidata["architect_ru"]
              
+           
+
+    mdlMisc.saveDatFile(cells, output_file_name)
+ 
+def print_stats(input_file_name):
+    cells=mdlMisc.loadDatFile(input_file_name) 
+    
+    n=0
+    wikidata_buildings_unknown = {}
+    wikidata_architectures = {}
+    unmatched_building_types_with_osm = {}
+    for rec in cells:
+        if rec[QUADDATA_WIKIDATA_ID] !="":
+            n += 1
             # calculate some usage statistics             
-            if wd_building_type != 'building' and wd_building_type.upper() not in building_types_rus_names:
+            wikidata = get_wikidata_organized(rec[QUADDATA_WIKIDATA_ID]) 
+            wd_building_type =  wikidata_buildings.get(wikidata["instance_of"], '')
+            if wd_building_type and wd_building_type != 'building' and wd_building_type.upper() not in building_types_rus_names:
                 if wd_building_type not in unmatched_building_types_with_osm:
                     unmatched_building_types_with_osm[wd_building_type] = 0
                 unmatched_building_types_with_osm[wd_building_type] += 1
                 
             value = wikidata["instance_of"]
-            if value not in wikidata_buildings and value not in wikidata_non_buildings:
+            if value and value not in wikidata_buildings and value not in wikidata_non_buildings:
                 if value not in wikidata_buildings_unknown:
                     wikidata_buildings_unknown[value] = 0
                 wikidata_buildings_unknown[value] += 1 
@@ -504,11 +510,31 @@ def main():
             if building_architecture:
                 if building_architecture not in wikidata_architectures:
                     wikidata_architectures[building_architecture] = 0 
-                wikidata_architectures[building_architecture] += 1
-
-                
-                
+                wikidata_architectures[building_architecture] += 1 
             
+            
+    print("total objects with wikidata tag: ", n)
+            
+    
+    print()
+    print('unrecognized wikidata building types:')    
+    print_sorted_dict(wikidata_buildings_unknown,limit=2)
+    print('unrecognized wikidata building types total: ', len(wikidata_buildings_unknown))        
+
+    print()
+    print("unmatched building types with osm")
+    print_sorted_dict(unmatched_building_types_with_osm, limit=4)
+
+    print()
+    print("wikidata_architectures:")
+    print_sorted_dict(wikidata_architectures,limit=3)
+    
+    
+    
+def get_images(input_file_name):
+    cells=mdlMisc.loadDatFile(input_file_name) 
+    for rec in cells:
+        if rec[QUADDATA_WIKIDATA_ID]!="" :
             
             building_text_description =  ( 
                     rec[QUADDATA_COLOUR] + " " +
@@ -518,11 +544,12 @@ def main():
                     rec[QUADDATA_BUILD_DATE] + " " + 
                     rec[QUADDATA_ARCHITECT]
                     ).strip()
-                    
+            
+            wikidata = get_wikidata_organized(rec[QUADDATA_WIKIDATA_ID])             
             if building_text_description != '' and 'image' in wikidata:
                 #building_text_description += " " + wikidata["label"] + " " +wikidata["description"]
                 #building_text_description += " " +wikidata["label"]
-                building_text_description = building_text_description.strip()
+                #building_text_description = building_text_description.strip()
                 
                 api_url ="https://commons.wikimedia.org/w/api.php?action=query&format=json" +"&prop=imageinfo&iiprop=url&titles=File:" + wikidata['image']
                 print(rec[QUADDATA_OBJ_TYPE][0]+rec[QUADDATA_OBJ_ID], rec[QUADDATA_WIKIDATA_ID] )
@@ -544,26 +571,46 @@ def main():
                 _, extension = os.path.splitext(wikidata['image'])
                 download_file(image_download_url, rec[QUADDATA_WIKIDATA_ID] + extension)
                 save_description(building_text_description, rec[QUADDATA_WIKIDATA_ID]+'.txt')
-                #exit()
-                           
                 print()
-               
-
-    print()
-    print('unrecognized wikidata building types:')    
-    print_sorted_dict(wikidata_buildings_unknown,limit=2)
-    print('unrecognized wikidata building types total: ', len(wikidata_buildings_unknown))        
-
-    print()
-    print("unmatched building types with osm")
-    print_sorted_dict(unmatched_building_types_with_osm, limit=4)
-
-    print()
-    print("wikidata_architectures:")
-    print_sorted_dict(wikidata_architectures,limit=3)
-
-    mdlMisc.saveDatFile(cells, "../work_folder/22_all_osm_objects_list/all-objects-wd.dat")
+    
 
 #SF3D_USE_CPU=1
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(
+        prog='wikidata',
+        description='this script is a part of 3DCHECK/VFR_LANDMARKS_3D_RU pipeline',
+        epilog='Created by zkir (c) 2024')
+        
+    parser.add_argument('command', choices=['update-region', 'get-images', 'print-stats'],  help='update-region updates region from wikidata, \n get-images gets images from wikimedia commons' )
+    parser.add_argument('-i', '--input', required=True, type=str, help='input file, should be dat-csv file' )
+    parser.add_argument('-r', '--rewrite', required=False, action='store_true', help='rewrite the input file with updated data' )
+    parser.add_argument('-o', '--output', required=False, type=str, help='output osm-xml with created parts' )
+    
+    args = parser.parse_args()
+
+    command=args.command
+    input_file_name = args.input
+    output_file_name = args.output
+    
+    if not output_file_name:
+        if args.rewrite:
+            output_file_name = input_file_name
+        else:
+            output_file_name = input_file_name + '-rewrite.dat'
+    
+    if not os.path.exists(input_file_name):
+        print("ERROR: specified input file does not exist: " + input_file_name )
+        exit(1)
+        
+    if command == 'update-region':
+        update_region(input_file_name, output_file_name)
+    elif command == 'get-images':
+        get_images(input_file_name)
+    elif command == 'print-stats':
+        print_stats(input_file_name)    
+    else:
+        print("unknown command " + command )
+    
+
+
+
