@@ -12,65 +12,78 @@ IMAGE_DIRECTORY =    "d:/_VFR_LANDMARKS_3D_RU/work_folder/25_images"
 
 
 wikidata_buildings={
-                    'Q19860854': 'ruins', # building or structure that has been demolished or destroyed
+                    'Q19860854': 'ruins',       # building or structure that has been demolished or destroyed
                     'Q811979':   'building', 
                     'Q41176':    'building',
-                    'Q35112127': 'building', # historic building
-                    'Q180174':   'building', # folly does not say anything about the building unfortunatelly
-                    'Q811430':   'building', # fixed construction
-                    'Q3947':     'residential', #house=building usually intended for living in
-                    'Q279118':   'house', # wooden house
+                    'Q35112127': 'building',    # historic building
+                    'Q180174':   'building',    # folly does not say anything about the building unfortunatelly
+                    'Q811430':   'building',    # fixed construction
+                    'Q655686':   'building',    # commercial building
+                    'Q11755880': 'residential', 
+                    'Q3947':     'residential', # house=building usually intended for living in
+                    'Q1498804':  'residential', # multifamily residential 
+                    'Q279118':   'house',       # !!! wooden house  !!!
+                    'Q41955438': 'building',    # !!! brick building  = building made out of bricks !!!
                     'Q12104567': 'apartments',
                     'Q13402009': 'apartments',
-                    'Q1577547':  'apartments',  #revenue house
-                    'Q989946':   'roof',    # shelter=basic architectural structure or building providing protection from the local environment
-                    'Q1802963':  'manor',   # mansion 
+                    'Q1577547':  'apartments',  # revenue house
+                    'Q847950':   'dormitory',  
+                    'Q131263':   'barracks', 
+                    'Q989946':   'roof',        # shelter=basic architectural structure or building providing protection from the local environment
+                    'Q1802963':  'manor',       # mansion 
                     'Q879050':   'manor', 
-                    'Q1365179':  'manor',   # private mansion 
-                    'Q12292478': 'MANOR',   # estate
-                    'Q1021645':  'office',  # office building
-                    'Q2519340':  'office',  # administrative building
-                    'Q16831714': 'office',  # government building 
-                    'Q25550691': 'office',  # town hall= chief administrative seat of a municipality
-                    'Q18761864': 'OFFICE',  # bank
+                    'Q1365179':  'manor',       # private mansion 
+                    'Q12292478': 'MANOR',       # estate
+                    'Q1021645':  'office',      # office building
+                    'Q203180':   'office',      # serviced office (Бизнес-центр)
+                    'Q2519340':  'office',      # administrative building
+                    'Q16831714': 'office',      # government building 
+                    'Q25550691': 'office',      # town hall= chief administrative seat of a municipality
+                    'Q294422':   'office',      # public building = owned and operated by a governing body, carrying out official duties, and often occupied by a governmental agency
+                    'Q18761864': 'OFFICE',      # bank
                     'Q33506':    'museum',
-                    'Q2087181':  'museum',  # historic house museum
-                    'Q207694':   'museum',  # art museum
-                    'Q2772772':  'museum',  # military museum
-                    'Q588140':   'museum',  # science museum 
-                    'Q10624527': 'museum',  # biographical museum
-                    'Q2398990':  'museum',  # technology museum
-                    'Q1595639':  'museum',  # local museum
-                    'Q17431399': 'museum',  # national museum
+                    'Q2087181':  'museum',      # historic house museum
+                    'Q207694':   'museum',      # art museum
+                    'Q2772772':  'museum',      # military museum
+                    'Q588140':   'museum',      # science museum 
+                    'Q10624527': 'museum',      # biographical museum
+                    'Q2398990':  'museum',      # technology museum
+                    'Q1595639':  'museum',      # local museum
+                    'Q17431399': 'museum',      # national museum
                     'Q4453481':  'theatre',
                     'Q24354':    'theatre',
-                    'Q153562':   'theatre', # opera house 
-                    'Q84860894': 'theatre', # puppet theatre 
-                    'Q1698619':  'theatre', # theatre intended primarily to show plays
-                    'Q41253':    'cinema',  # movie theater 
+                    'Q153562':   'theatre',     # opera house 
+                    'Q84860894': 'theatre',     # puppet theatre 
+                    'Q1698619':  'theatre',     # theatre intended primarily to show plays
+                    'Q41253':    'cinema',      # movie theater 
                     'Q56195017': 'circus',
                     'Q38723':    'university',
                     'Q3918':     'university',
-                    'Q180958':   'university',  #faculty 
-                    'Q125569386':'university', # university branch
-                    'Q4315006':  'university',  #national research university
-                    'Q3914':     'school',
-                    'Q1935049':  'school', # military school
-                    'Q2385804':  'school',  # educational institution
-                    'Q7692354':  'school', # техникум
-                    'Q55043':    'school',  #gymnasium
-                    'Q55008603': 'school',  #children's music school
-                    'Q189004':   'school',  #college 
-                    'Q1244442':  'school', 
-                    'Q4438531':  'school',  #specialized secondary school
+                    'Q180958':   'university',  # faculty 
+                    'Q125569386':'university',  # university branch
+                    'Q4315006':  'university',  # national research university
+                    'Q875538':   'university',  # public university
+                    'Q917182':   'university',  # military academy
+                    'Q3914':     'school',      # school as institution
+                    'Q1244442':  'school',      # school as building
+                    'Q1935049':  'school',      # military school
+                    'Q2385804':  'school',      # educational institution
+                    'Q7692354':  'school',      # техникум
+                    'Q55043':    'school',      # gymnasium
+                    'Q55008603': 'school',      # children's music school
+                    'Q189004':   'school',      # college 
+                    'Q4438531':  'school',      # specialized secondary school
+                    'Q233324':   'school',      # seminary
+                    'Q132834':   'school',      # madrasa  
+                    
                     'Q108325':   'chapel',
                     'Q16970':    'church',
-                    'Q200334':   'CAMPANILE',  #bell tower
-                    'Q2977':     'church', #cathedral
+                    'Q200334':   'CAMPANILE',   # bell tower
+                    'Q2977':     'church',      # cathedral
                     'Q2031836':  'orthodox church',
                     'Q56242225': 'orthodox church',
                     'Q25416095': 'orthodox church', # sobor 
-                    'Q27055621': 'orthodox church', #russian wooden church !!!!!
+                    'Q27055621': 'orthodox church', # russian wooden church !!!!!
                     'Q27055636': 'old_believers church', 
                     'Q1975485':  'orthodox chapel' ,
                     'Q56242235': 'lutheran church', 
@@ -81,12 +94,15 @@ wikidata_buildings={
                     'Q5393308':  'Buddhist temple', 
                     'Q65156015': 'Buddhist temple',  # khurul= буддийский храм (монастырь, обитель) в калмыцком ламаизме
                     'Q34627':    'synagogue',
-                    'Q83405':    'industrial', #factory
-                    # we do not have any better right now, smth like POWER_PLANT could be interesting                     
+                    'Q83405':    'industrial', # factory
+                    'Q1662011':  'industrial', # industrial building
+                    # we do not have any better right now, smth like POWER_PLANT could be interesting    
+                    'Q159719':   'INDUSTRIAL',  # power station = facility generating electric power               
                     'Q1601458':  'INDUSTRIAL',  # combined heat and power station
                     'Q1781180':  'INDUSTRIAL',  # condensation power station
                     'Q15911738': 'INDUSTRIAL',  # hydroelectric power station
                     'Q30565277': 'INDUSTRIAL',  # geothermal power station
+                    'Q200297':   'INDUSTRIAL',  # thermal power station  
                     
                     'Q57821':    'fortification',
                     'Q57831':    'fortress',
@@ -95,24 +111,35 @@ wikidata_buildings={
 
                     'Q483110':   'stadium',
                     'Q641226':   'stadium',  # arena !!!!! there is no proper tag for arenas in OSM.  stadium and sports_centre are used despite definitions !!!!
-                    'Q1154710':  'stadium',  #association football venue
+                    'Q1154710':  'stadium',  # association football venue
                     'Q1282870':  'ice_rink',
                     'Q2617766':  'ice_rink', # speed skating rink
+                    'Q12019965': 'ice_rink',  #indoor ice rink
+                    'Q7579839':  'SPORTS_CENTRE', #sports complex !!! we do not really know what it (or osm 'sports_centre') is. 
                     'Q11166728': 'communication tower',#television tower 
                     'Q1435490':  'people\'s house',
                     'Q494829':   'bus station',
-                    'Q55488':    'TRAIN_STATION',  # railway station
-                    'Q1339195':  'TRAIN_STATION',  # station building 
-                    'Q928830':   'TRAIN_STATION',  # metro station 
+                    'Q55488':    'TRAIN_STATION',    # railway station
+                    'Q1339195':  'TRAIN_STATION',    # station building 
+                    'Q928830':   'SUBWAY_ENTRANCE',  # metro station 
+                    'Q2921357':  'SUBWAY_ENTRANCE',  # we do not have this in OSM currently. 
+                    'Q67183571': 'TRANSPORTATION',   # terminal 
                     'Q2281788':  'public aquarium',
                     'Q4989906':  'monument', 
                     'Q860861':   'sculpture',
                     'Q162875':   'mausoleum',
+                    'Q1578744':  'tomb',             # burial vault
                     'Q39715':    'lighthouse',
                     'Q46124':    'sanatorium',
-                    'Q11315':    'retail', #shopping center
-                    'Q27686':    'hotel',
-                    'Q233324':   'seminary',
+                    'Q18760388': 'retail',
+                    'Q213441':   'RETAIL',  # shop = place where items or services are sold
+                    'Q11315':    'RETAIL',  # shopping center
+                    'Q132510':   'RETAIL',  # market 
+                    'Q216107':   'RETAIL',  # department store
+                    'Q2386997':  'RETAIL',  # Gostiny Dvor = Historical Russian indoor market or shopping centre
+                    'Q27686':    'hotel',   # hotel as business enterprise 
+                    'Q63099748': 'hotel',  # hotel as building
+
                     'Q375336':   'film studio',
                     'Q11446':    'ship',
                     'Q97377955': 'SHIP', #floating nuclear power plant
@@ -124,7 +151,6 @@ wikidata_buildings={
                     'Q1686006' : 'summer residence',
                     'Q1195942':  'fire_station', 
                     
-                    
                     'Q685204':   'GATEHOUSE',  #gate tower
                     'Q82117':    'CITY_GATE', 
                     'Q276173':   'GAZEBO',  #pavilion, but in osm pavilion means british sports pavilion
@@ -134,26 +160,37 @@ wikidata_buildings={
                     'Q148319':   'planetarium',  
                     'Q143912':   'triumphal_arch',  
                     'Q16917':    'hospital', 
+                    'Q39364723': 'hospital', 
                     'Q952885':   'greenhouse',  #orangery 
                     
                     'Q785952':   'public bath',  #! do we have something like this in osm?  
                     
                     # we do not have any better currently
-                    'Q1181413':  'THEATRE',  #palace of culture= large house of culture, major club-house
-                    'Q1329623':  'THEATRE',  #cultural center=facility where culture and arts are promoted 
-                    'Q1060829':  'THEATRE',  #concert hall
+                    'Q1181413':  'THEATRE',  # palace of culture = large house of culture, major club-house
+                    'Q5061188':  'THEATRE',  # house of culture = cultural building; cultural institution
+                    'Q1329623':  'THEATRE',  # cultural center = facility where culture and arts are promoted 
+                    'Q1060829':  'THEATRE',  # concert hall
 
                     'Q15548045': 'almshouse',  #Богадельня
-                    'Q2386997':  'RETAIL',  # Gostiny Dvor = Historical Russian indoor market or shopping centre
+
                     
-                    'Q1254933':  'astronomical observatory',  #3
+                    'Q1254933':  'astronomical observatory', 
                     'Q7075':     'library',
                     'Q22806':    'library',  #national library   
-                    'Q1112897':  'rostral column',  #2
+                    'Q856584':   'library',  #library building
+                    'Q1112897':  'rostral column',  
                     'Q623525':   'rotunda',  #???
                     'Q53060':    'gate', 
                     'Q11707':    'restaurant',  
-                    
+                    'Q30022':    'coffeehouse',  #establishment that serves coffee and tea
+                    'Q184644':   'conservatory', 
+                    'Q57659484': 'exhibition hall', 
+                    'Q199451':   'pagoda',  
+                    'Q383092':   'art academy',  
+                    'Q13107184': 'pharmacy',  # ???? retail ????
+                    'Q861951':   'police_station ',  #!!!!!
+                    'Q55485':    'dead-end railway station',  #dead-end railway station
+                    'Q184356':   'radio telescope',  
 
                     }
 
@@ -227,8 +264,12 @@ wikidata_non_buildings={
                     'Q163740':   'nonprofit organization',  
                     'Q4671277':  'academic institution', 
                     'Q1497375':  'architectural ensemble',
-                    'Q863915':   'inland port',                      
+                    'Q863915':   'inland port',  
+                    'Q44782':    'port',                      
                     'Q43501':    'zoo', 
+                    'Q1348006':  'city block',   #= central element of urban planning and urban design; smallest area that is surrounded by streets
+                    'Q126916836':'Solnceva street',  #s treet in Ramenskoye
+                    'Q327333':   'government agency', 
 
 }
 
@@ -480,37 +521,45 @@ def update_region(input_file_name, output_file_name):
            
 
     mdlMisc.saveDatFile(cells, output_file_name)
+    
+def count(a_dict, value):  
+    if value not in a_dict:
+        a_dict[value] = 0
+    a_dict[value] += 1     
  
 def print_stats(input_file_name):
     cells=mdlMisc.loadDatFile(input_file_name) 
     
     n=0
+    wikidata_buildings_known =  {}
     wikidata_buildings_unknown = {}
     wikidata_architectures = {}
     unmatched_building_types_with_osm = {}
+    
     for rec in cells:
         if rec[QUADDATA_WIKIDATA_ID] !="":
             n += 1
             # calculate some usage statistics             
             wikidata = get_wikidata_organized(rec[QUADDATA_WIKIDATA_ID]) 
             wd_building_type =  wikidata_buildings.get(wikidata["instance_of"], '')
-            if wd_building_type and wd_building_type != 'building' and wd_building_type.upper() not in building_types_rus_names:
-                if wd_building_type not in unmatched_building_types_with_osm:
-                    unmatched_building_types_with_osm[wd_building_type] = 0
-                unmatched_building_types_with_osm[wd_building_type] += 1
+            if wd_building_type and wd_building_type != 'building':
+                if wd_building_type.upper() not in building_types_rus_names:
+                    count(unmatched_building_types_with_osm, wd_building_type)
+                else:
+                    count(wikidata_buildings_known, wd_building_type)
+                    
+                    
                 
             value = wikidata["instance_of"]
             if value and value not in wikidata_buildings and value not in wikidata_non_buildings:
-                if value not in wikidata_buildings_unknown:
-                    wikidata_buildings_unknown[value] = 0
-                wikidata_buildings_unknown[value] += 1 
+                count(wikidata_buildings_unknown, value)
+                
            
             value = wikidata["architecture"]
             building_architecture =  wikidata_achitecture_styles.get(value,value)
             if building_architecture:
-                if building_architecture not in wikidata_architectures:
-                    wikidata_architectures[building_architecture] = 0 
-                wikidata_architectures[building_architecture] += 1 
+                count(wikidata_architectures, building_architecture)
+                
             
             
     print("total objects with wikidata tag: ", n)
@@ -524,6 +573,10 @@ def print_stats(input_file_name):
     print()
     print("unmatched building types with osm")
     print_sorted_dict(unmatched_building_types_with_osm, limit=4)
+    
+    print()
+    print("wikidata building types")
+    print_sorted_dict(wikidata_buildings_known)
 
     print()
     print("wikidata_architectures:")
