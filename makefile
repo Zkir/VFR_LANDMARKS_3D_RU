@@ -88,8 +88,11 @@ work_folder\21_osm_objects_list: | work_folder ## make folder for osm object lis
 	
 work_folder\22_all_osm_objects_list : | work_folder
 	mkdir work_folder\22_all_osm_objects_list
+	
+work_folder\23_wikidata: | work_folder
+	mkdir work_folder\23_wikidata
 
-work_folder\20_osm_3dmodels\extract_building_models_osm: work_folder\10_osm_extracts\extract_osm_data work_folder\05_geocoder\geocoder.txt | work_folder\21_osm_objects_list work_folder\20_osm_3dmodels ## extract osm buildings  into separate osm files
+work_folder\20_osm_3dmodels\extract_building_models_osm: work_folder\10_osm_extracts\extract_osm_data work_folder\05_geocoder\geocoder.txt | work_folder\21_osm_objects_list work_folder\20_osm_3dmodels work_folder\23_wikidata ## extract osm buildings  into separate osm files
 	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do python OsmParser\main.py %%i
 	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do python OsmParser\wikidata.py update-region -i work_folder\21_osm_objects_list\%%i.dat -r
 	touch $@
