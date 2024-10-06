@@ -118,7 +118,7 @@ wikidata_buildings={
                     'Q7579839':  'SPORTS_CENTRE', #sports complex !!! we do not really know what it (or osm 'sports_centre') is. 
                     'Q11166728': 'communication tower',#television tower 
                     'Q1435490':  'people\'s house',
-                    'Q494829':   'bus station',
+                    'Q494829':   'bus_station',
                     'Q55488':    'TRAIN_STATION',    # railway station
                     'Q1339195':  'TRAIN_STATION',    # station building 
                     'Q928830':   'SUBWAY_ENTRANCE',  # metro station 
@@ -544,11 +544,9 @@ def print_stats(input_file_name):
             wd_building_type =  wikidata_buildings.get(wikidata["instance_of"], '')
             if wd_building_type and wd_building_type != 'building':
                 if wd_building_type.upper() not in building_types_rus_names:
-                    count(unmatched_building_types_with_osm, wd_building_type)
+                    count(unmatched_building_types_with_osm, wd_building_type.lower())
                 else:
-                    count(wikidata_buildings_known, wd_building_type)
-                    
-                    
+                    count(wikidata_buildings_known, wd_building_type.lower())
                 
             value = wikidata["instance_of"]
             if value and value not in wikidata_buildings and value not in wikidata_non_buildings:

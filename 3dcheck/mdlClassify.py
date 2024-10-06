@@ -150,8 +150,8 @@ building_types_rus_names = {
     'MONUMENT': 'Памятник',
     'WAR_GRAVE' : 'Памятник',
     
-    #originated from wikidata, should be added to processing.
-    'ICE_RINK': 'Каток', # !!! to be created from leisure=ice_rink + building=yes . Note, wikidata classifies ice sport palaces as rinks!
+    
+    'ICE_RINK': 'Каток', # from leisure=ice_rink + building=yes . Note, wikidata classifies ice sport palaces as rinks!
     'PLANETARIUM': "Планетарий", # from amenity=planetarium
     'LIGHTHOUSE': 'Маяк', # from man_made=lighthouse
     'LIBRARY': 'Библиотека', #from amenity=library

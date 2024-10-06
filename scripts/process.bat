@@ -16,6 +16,9 @@ IF NOT EXIST work_folder\21_osm_objects_list mkdir work_folder\21_osm_objects_li
 OsmParser\main.py %QUADRANT%
 if errorlevel 1 goto error
 
+OsmParser\wikidata.py update-region -i work_folder\21_osm_objects_list\%QUADRANT%.dat -r
+if errorlevel 1 goto error
+
 call scripts\upload.bat
 
 echo all done

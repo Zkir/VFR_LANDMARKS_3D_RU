@@ -72,11 +72,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
                     print("    " + str(numberofvalidationerrors) + " errors detected")
 
         # fill report
-        strBuildingType = calculateBuildingType(osmObject.tagBuilding, osmObject.tagManMade, osmObject.tagTowerType,
-                                                osmObject.tagAmenity, osmObject.getTag('religion'),
-                                                osmObject.tagDenomination, osmObject.tagBarrier, osmObject.size,
-                                                osmObject.tagRuins, osmObject.getTag('historic'),osmObject.getTag('landuse'),
-                                                osmObject.getTag('castle_type'), osmObject.getTag('tomb')  )
+        strBuildingType = calculateBuildingType(osmObject.osmtags, osmObject.size )
 
 
 
@@ -180,10 +176,23 @@ def guessBuildingStyle(strArchitecture, strDate):
     return strResult.lower()
 
 
-def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tagReligion, tagDenomination, tagBarrier, dblSize, tagRuins, tagHistoric, tagLanduse, tagCastleType, tagTomb):
+def calculateBuildingType( osmtags, dblSize):
     CHURCH_MIN_SIZE = 10
-
-    strResult = ''
+    tagBuilding =     osmtags.get('building','')
+    tagManMade =      osmtags.get('man_made','')
+    tagTowerType =    osmtags.get('tower:type','')
+    tagAmenity =      osmtags.get('amenity','')
+    tagReligion =     osmtags.get('religion','')
+    tagDenomination = osmtags.get('denomination','')
+    tagBarrier =      osmtags.get('barrier','')
+    tagRuins =        osmtags.get('ruins','')
+    tagHistoric =     osmtags.get('historic','')
+    tagLanduse =      osmtags.get('landuse','')
+    tagCastleType =   osmtags.get('castle_type','')
+    tagTomb =         osmtags.get('tomb','')
+    tagLeisure =      osmtags.get('leisure','')
+    tagTheatreGenre = osmtags.get('theatre:genre','')
+   
     if tagDenomination == 'orthodox' or tagDenomination == 'russian_orthodox' or tagDenomination == 'dissenters':
         tagDenomination = 'RUSSIAN ORTHODOX'
     
@@ -193,24 +202,23 @@ def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
         if tagTowerType == 'communication':
             tagBuilding = 'communication tower'
         if tagTowerType == 'defensive':
-            strResult = 'defensive tower'
+            tagBuilding = 'defensive tower'
             
     if tagBuilding == 'bell_tower' or tagManMade == 'campanile':
         tagBuilding = 'campanile'
         
     if  tagBuilding == 'water_tower' or  tagManMade == 'water_tower' :
-        strResult = 'water tower'        
+        tagBuilding = 'water tower'        
     
     #some strage translations for barriers    
     if tagBarrier == 'fence' and tagBuilding =='' and (tagLanduse == 'religious' or tagAmenity == 'place_of_worship' ): 
-        strResult = 'CHURCH FENCE'
+        tagBuilding = 'CHURCH FENCE'
         
     if tagBarrier == 'wall':
-        strResult = 'HISTORIC WALL'
-        #strResult = "CHURCH FENCE"
+        tagBuilding = 'HISTORIC WALL'
         
     if tagBarrier == 'city_wall':
-            strResult = 'DEFENSIVE WALL'    
+        tagBuilding = 'DEFENSIVE WALL'    
             
     # useless building types
     # let's consider them as synonyms for building=yes
@@ -226,6 +234,26 @@ def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
             if tagReligion == 'muslim':
                 tagBuilding = 'mosque'
                 
+        elif tagAmenity in ['library', 'cinema', 'planetarium', 'restaurant', 'clinic', 'hospital', 'bus_station','university', 'school']:        
+            tagBuilding = tagAmenity
+        
+        #??amenity=community_centre??
+            
+        elif tagAmenity == 'theatre':        
+            if tagTheatreGenre != 'circus':
+                tagBuilding = 'theatre'           
+            else:
+                # wiki says that circus is theatre:genre=circus
+                tagBuilding = 'circus'     
+            
+        elif tagManMade == 'lighthouse':
+            tagBuilding = 'lighthouse' 
+            
+        elif tagLeisure in ['stadium','sports_centre' 'ice_rink']:
+            tagBuilding = tagLeisure 
+        
+        # tourism=museum,  tourism=hotel        
+        
         # historic
         elif tagHistoric != '':
             if tagHistoric not in ['building', 'heritage', 'heritage_building', 'place_of_worship']:
@@ -252,18 +280,20 @@ def calculateBuildingType(tagBuilding, tagManMade, tagTowerType, tagAmenity, tag
         else:
             tagBuilding = 'church'
             
+    if tagBuilding not in ['yes','no']: 
+        strResult = tagBuilding
+    else:
+        strResult = ''
+            
     # add denomination to religious buildings
     if tagBuilding in  ['chapel', 'church', 'campanile', 'mosque', 'shrine', 'wayside_shrine']:
-        strResult = tagDenomination + ' ' + tagBuilding
+        strResult = tagDenomination + ' ' + strResult
         
     if tagRuins != '':
-        if tagRuins == 'yes':
+        if tagRuins == 'yes' and strResult != "ruins": # preventing RUINED RUINS
             strResult = 'RUINED ' + strResult
         else:
             print('unexpected value for ruins key ' + tagRuins)
-            
-    if strResult == '' and tagBuilding not in ['yes','no']: 
-        strResult = tagBuilding
     
   
     return Trim(strResult.upper())
