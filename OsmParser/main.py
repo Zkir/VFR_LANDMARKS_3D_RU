@@ -81,12 +81,17 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
         tagRefSoboryRu = osmObject.getTag('ref:sobory.ru')
         tagWikidata = osmObject.getTag('wikidata')
         tagArchitect = osmObject.getTag('architect')
-        
+        tagAddrHousename = osmObject.getTag("addr:housename")
+        if osmObject.name:
+            object_name = osmObject.name
+        else:     
+            object_name = tagAddrHousename
+            
         j = j + 1
         building_dat.append([str(j),  osmObject.type,  osmObject.id,  str(osmObject.bbox.minLat),
                  str(osmObject.bbox.minLon) ,
                  str(osmObject.bbox.maxLat) ,
-                 str(osmObject.bbox.maxLon),   osmObject.name,   osmObject.descr,  tagRefTemplesRu ,
+                 str(osmObject.bbox.maxLon),   object_name,   osmObject.descr,  tagRefTemplesRu ,
                  strBuildingType,   str(Round(osmObject.size)) ,
                  str(Round(osmObject.dblHeight)),   osmObject.colour,   osmObject.material ,
                  guessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate),
@@ -192,6 +197,7 @@ def calculateBuildingType( osmtags, dblSize):
     tagTomb =         osmtags.get('tomb','')
     tagLeisure =      osmtags.get('leisure','')
     tagTheatreGenre = osmtags.get('theatre:genre','')
+    tagBuildingFlats= osmtags.get("building:flats",'')
    
     if tagDenomination == 'orthodox' or tagDenomination == 'russian_orthodox' or tagDenomination == 'dissenters':
         tagDenomination = 'RUSSIAN ORTHODOX'
@@ -203,6 +209,8 @@ def calculateBuildingType( osmtags, dblSize):
             tagBuilding = 'communication tower'
         if tagTowerType == 'defensive':
             tagBuilding = 'defensive tower'
+        if tagTowerType == 'watchtower':
+            tagBuilding = 'defensive tower' #watchtower  is a type of fortification
             
     if tagBuilding == 'bell_tower' or tagManMade == 'campanile':
         tagBuilding = 'campanile'
@@ -244,7 +252,10 @@ def calculateBuildingType( osmtags, dblSize):
                 tagBuilding = 'theatre'           
             else:
                 # wiki says that circus is theatre:genre=circus
-                tagBuilding = 'circus'     
+                tagBuilding = 'circus' 
+
+        elif tagAmenity == 'research_institute':
+            tagBuilding = 'office'                
             
         elif tagManMade == 'lighthouse':
             tagBuilding = 'lighthouse' 
@@ -264,6 +275,8 @@ def calculateBuildingType( osmtags, dblSize):
                 if tagHistoric == 'castle' and  tagCastleType != '':
                     tagBuilding = tagCastleType 
         
+        elif tagBuildingFlats.isnumeric() and float(tagBuildingFlats)>20:
+            tagBuilding = 'apartments'
         
     #temple is the same thing as church in christianity 
     if tagBuilding == 'temple':
