@@ -37,32 +37,32 @@ CUSTOM_FACADE_BLD_TYPE = 4
 CUSTOM_FACADE_STYLE = 5
 
 
-
-def checkCustomModelList(Sheet1):
-    i = 0
-
-    j = 0
-
-    strOsmID = ""
-    for i in vbForRange(2, 30000):
-        if Sheet1.Cells(i, 1) == '':
-            break
-        strOsmID = UCase(Left(Sheet1.Cells(i, 1).Value, 1)) + ':' + Trim(Sheet1.Cells(i, 2).Value)
-        for j in vbForRange(0, custom_model_count - 1):
-            #exact predefined model for this object, match by osm id
-            if custom_models(j, CUSTOM_MODEL_OSM_ID) == strOsmID:
-                # we should check height| Material |Building_type |
-                if custom_models(j, CUSTOM_MODEL_HEIGHT) != '':
-                    if custom_models(j, CUSTOM_MODEL_HEIGHT) != Sheet1.Cells(i, 9).Value:
-                        Debug.Print(custom_models(j, CUSTOM_MODEL_FILE_NAME) + ' height is different. found ' + custom_models(j, CUSTOM_MODEL_HEIGHT) + ' expected ' + Sheet1.Cells(i, 9).Value)
-                else:
-                    Debug.Print(custom_models(j, CUSTOM_MODEL_FILE_NAME) + ' height is not specified. expected ' + Sheet1.Cells(i, 9).Value)
-                    custom_models[j, CUSTOM_MODEL_HEIGHT] = Sheet1.Cells(i, 9).Value
-                #Style  and Size should be assigned
-                custom_models[j, CUSTOM_MODEL_STYLE] = Sheet1.Cells(i, 12).Value
-                if Left(custom_models(j, CUSTOM_MODEL_STYLE), 1) == '~':
-                    custom_models[j, CUSTOM_MODEL_STYLE] = Mid(custom_models(j, CUSTOM_MODEL_STYLE), 2)
-                custom_models[j, CUSTOM_MODEL_SIZE] = Sheet1.Cells(i, 8).Value
+## Not really ported from vb6, commented out
+##def checkCustomModelList(Sheet1):
+##    i = 0
+##
+##    j = 0
+##
+##    strOsmID = ""
+##    for i in vbForRange(2, 30000):
+##        if Sheet1.Cells(i, 1) == '':
+##            break
+##        strOsmID = UCase(Left(Sheet1.Cells(i, 1).Value, 1)) + ':' + Trim(Sheet1.Cells(i, 2).Value)
+##        for j in vbForRange(0, custom_model_count - 1):
+##            #exact predefined model for this object, match by osm id
+##            if custom_models(j, CUSTOM_MODEL_OSM_ID) == strOsmID:
+##                # we should check height| Material |Building_type |
+##                if custom_models(j, CUSTOM_MODEL_HEIGHT) != '':
+##                    if custom_models(j, CUSTOM_MODEL_HEIGHT) != Sheet1.Cells(i, 9).Value:
+##                        Debug.Print(custom_models(j, CUSTOM_MODEL_FILE_NAME) + ' height is different. found ' + custom_models(j, CUSTOM_MODEL_HEIGHT) + ' expected ' + Sheet1.Cells(i, 9).Value)
+##                else:
+##                    Debug.Print(custom_models(j, CUSTOM_MODEL_FILE_NAME) + ' height is not specified. expected ' + Sheet1.Cells(i, 9).Value)
+##                    custom_models[j, CUSTOM_MODEL_HEIGHT] = Sheet1.Cells(i, 9).Value
+##                #Style  and Size should be assigned
+##                custom_models[j, CUSTOM_MODEL_STYLE] = Sheet1.Cells(i, 12).Value
+##                if Left(custom_models(j, CUSTOM_MODEL_STYLE), 1) == '~':
+##                    custom_models[j, CUSTOM_MODEL_STYLE] = Mid(custom_models(j, CUSTOM_MODEL_STYLE), 2)
+##                custom_models[j, CUSTOM_MODEL_SIZE] = Sheet1.Cells(i, 8).Value
 
 
 def readOsmModelList(Sheet1, OSM_3D_MODELS_PATH):
@@ -310,39 +310,35 @@ def WriteExlusionZone(fh1,strZone):
     fh1.write('PROPERTY sim/exclude_str ' + strZone + '\n')
 
 def WritePolygon(fh1, objOsmGeom, obj_type, obj_osmid, intHeight, Facade_id):
-    k = 0
-    node_count = 0
-    NodeRefs = vbObjectInitialize(objtype=Long)
+    NodeRefs = None
     intWayNo = 0
     N = 0
     if obj_type == 'way':
         intWayNo = objOsmGeom.FindWay(obj_osmid)
-        objOsmGeom.GetWayNodeRefsAndCount(intWayNo, NodeRefs, node_count)
-        N = node_count - 1
+        NodeRefs = objOsmGeom.GetWayNodeRefsAndCount(intWayNo)
+        N = len(NodeRefs) - 1
         # for x-plane polygons should NOT be closed, x-plane will close them automatically
         # if specified so in facade definition
-        if NodeRefs(0) == NodeRefs(N):
+        if NodeRefs[0] == NodeRefs[N]:
             N = N - 1
         fh1.write( 'BEGIN_POLYGON ' + Facade_id + ' ' + intHeight + ' 2' + '\n')
         fh1.write( 'BEGIN_WINDING' + '\n')
         for k in vbForRange(0, N):
-            fh1.write( 'POLYGON_POINT ' + objOsmGeom.GetNodeLon(NodeRefs(k)) + ' ' + objOsmGeom.GetNodeLat(NodeRefs(k)), '\n')
+            fh1.write( 'POLYGON_POINT ' + objOsmGeom.GetNodeLon(NodeRefs[k]) + ' ' + objOsmGeom.GetNodeLat(NodeRefs[k]), '\n')
         fh1.write('END_WINDING' + '\n')
         fh1.write('END_POLYGON' + '\n')
     else:
-        Debug.Print('only ways are supported for dsf polygons')
+        print('only ways are supported for dsf polygons')
         # Err.Raise vbObjectError, "WritePolygon", "only ways are supported for dsf polygons"
 
 def WritePolygonMP(fh2, objOsmGeom, obj_type, obj_osmid, intHeight, blnClosed):
-    k = 0
-    node_count = 0
-    NodeRefs = vbObjectInitialize(objtype=Long)
     intWayNo = 0
     S = ""
     N = ""
     if obj_type == 'way':
         intWayNo = objOsmGeom.FindWay(obj_osmid)
-        objOsmGeom.GetWayNodeRefsAndCount(intWayNo, NodeRefs, node_count)
+        NodeRefs = objOsmGeom.GetWayNodeRefsAndCount(intWayNo)
+        node_count = len(NodeRefs)
         S = ''
         if blnClosed:
             N = node_count - 2
@@ -351,7 +347,7 @@ def WritePolygonMP(fh2, objOsmGeom, obj_type, obj_osmid, intHeight, blnClosed):
         for k in vbForRange(0, N):
             if k != 0:
                 S = S + ', '
-            S = S + '(' + objOsmGeom.GetNodeLat(NodeRefs(k)) + ',' + objOsmGeom.GetNodeLon(NodeRefs(k)) + ')'
+            S = S + '(' + objOsmGeom.GetNodeLat(NodeRefs[k]) + ',' + objOsmGeom.GetNodeLon(NodeRefs[k]) + ')'
         fh2.write( 'Data0=' + S, '\n')
     else:
         #Err.Raise vbObjectError, "WritePolygon", "only ways are supported for dsf polygons"

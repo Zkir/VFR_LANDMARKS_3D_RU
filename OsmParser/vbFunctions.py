@@ -5,6 +5,11 @@
 from math import cos, sin
 from re import match
 
+def vbForRange(a, b):
+    #just a stub  
+    #it is not known for sure how a and b should be translated from vb6 to python 
+    return range(a,b) 
+
 def Left(s, pos):
     return s[0:pos]
 
