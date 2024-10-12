@@ -2,6 +2,7 @@ from vbFunctions import *
 from mdlMisc import *
 from mdlDBMetadata import *
 import os.path
+from mdlOsmParser import readOsmXml
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 
@@ -199,7 +200,7 @@ def WriteDSF(Sheet1, strFolderName, dsfLat, dsfLon, objOsmGeom):
         obj_building_style = Sheet1[i][QUADDATA_STYLE]
         if Left(obj_building_style, 1) == '~':
             obj_building_style = Mid(obj_building_style, 2)
-        obj_height = Sheet1[i][QUADDATA_HEIGHT]
+        obj_height = float(Sheet1[i][QUADDATA_HEIGHT])
         # object should belong to tile
         if  ( obj_lat >= dsfLat )  and  ( obj_lat < dsfLat + 1 )  and  ( obj_lon >= dsfLon )  and  ( obj_lon < dsfLon + 1 ) :
             if  ( obj_building_type != 'DEFENSIVE WALL' )  and  ( obj_building_type != 'CHURCH FENCE' )  and  ( obj_building_type != 'HISTORIC WALL' ) :
@@ -267,9 +268,13 @@ def WriteDSF(Sheet1, strFolderName, dsfLat, dsfLon, objOsmGeom):
                     print('appropriate facade cannot be found:'+ obj_osmid )
                     fh1.write('# ' + '  appropriate facade cannot be found:'+ obj_osmid + '\n')
                     #Err.Raise(vbObjectError, 'WriteDsf', 'Appropriate facade cannot be found')
-
-                # TODO: uncomment!
-                # WritePolygon(objOsmGeom, Trim(Sheet1.Cells(i, 1).Value), Trim(Sheet1.Cells(i, 2).Value), obj_height, Trim(str(intModelIndex)))
+                
+                #if obj_height == 0:
+                #    print("zero height polygon: "+select_variable_0) 
+                #    print("  "+Sheet1[i][QUADDATA_OBJ_TYPE],  Trim(Sheet1[i][QUADDATA_OBJ_ID]), obj_height, Trim(str(intModelIndex)))      
+               
+                    
+                WritePolygon(fh1, objOsmGeom, Sheet1[i][QUADDATA_OBJ_TYPE],  Trim(Sheet1[i][QUADDATA_OBJ_ID]), obj_height, Trim(str(intModelIndex)))
 
                 #Sheet1.Cells[i, 14].Value = 'FAC'
                 #Sheet1.Cells[i, 15].Value = intMatchLevel
@@ -285,13 +290,16 @@ def WriteDSF(Sheet1, strFolderName, dsfLat, dsfLon, objOsmGeom):
                     fh2.write( 'Type=0x13' + '\n')
                 fh2.write( 'Text=' + Sheet1[i][QUADDATA_NAME] + '-- ' + str(intMatchLevel) + '\n')
 
-                #WritePolygonMP(objOsmGeom, Trim(Sheet1.Cells(i, 1).Value), Trim(Sheet1.Cells(i, 2).Value), 7, blnClosed)
+
+                WritePolygonMP(fh2, objOsmGeom, Sheet1[i][QUADDATA_OBJ_TYPE],  Trim(Sheet1[i][QUADDATA_OBJ_ID]), obj_height, blnClosed)
 
                 fh2.write( 'BuildingType=' + obj_building_type + '\n')
                 fh2.write( 'BuildingColor=' + obj_colour + '\n')
                 fh2.write( 'BuildingMaterial=' + obj_material + '\n')
                 fh2.write( 'BuildingStyle=' + obj_building_style + '\n')
                 fh2.write( 'BuildingSize=' + obj_building_size + '\n')
+                fh2.write( 'BuildingHeight=' + str(obj_height) + '\n')
+                
                 #Print #2, "CustomModel=" & Sheet1.Cells(i, 17).Value
                 fh2.write( '[END]' + '\n')
     fh1.write( '' + '\n')
@@ -309,7 +317,7 @@ def WriteExlusionZone(fh1,strZone):
     fh1.write('PROPERTY sim/exclude_bch ' + strZone + '\n')
     fh1.write('PROPERTY sim/exclude_str ' + strZone + '\n')
 
-def WritePolygon(fh1, objOsmGeom, obj_type, obj_osmid, intHeight, Facade_id):
+def WritePolygon(fh1, objOsmGeom, obj_type, obj_osmid, height, Facade_id):
     NodeRefs = None
     intWayNo = 0
     N = 0
@@ -321,17 +329,17 @@ def WritePolygon(fh1, objOsmGeom, obj_type, obj_osmid, intHeight, Facade_id):
         # if specified so in facade definition
         if NodeRefs[0] == NodeRefs[N]:
             N = N - 1
-        fh1.write( 'BEGIN_POLYGON ' + Facade_id + ' ' + intHeight + ' 2' + '\n')
+        fh1.write( 'BEGIN_POLYGON ' + Facade_id + ' ' + str(height) + ' 2' + '\n')
         fh1.write( 'BEGIN_WINDING' + '\n')
         for k in vbForRange(0, N):
-            fh1.write( 'POLYGON_POINT ' + objOsmGeom.GetNodeLon(NodeRefs[k]) + ' ' + objOsmGeom.GetNodeLat(NodeRefs[k]), '\n')
+            fh1.write( 'POLYGON_POINT ' + str(objOsmGeom.GetNodeLon(NodeRefs[k])) + ' ' + str(objOsmGeom.GetNodeLat(NodeRefs[k])) + '\n')
         fh1.write('END_WINDING' + '\n')
         fh1.write('END_POLYGON' + '\n')
     else:
         print('only ways are supported for dsf polygons')
         # Err.Raise vbObjectError, "WritePolygon", "only ways are supported for dsf polygons"
 
-def WritePolygonMP(fh2, objOsmGeom, obj_type, obj_osmid, intHeight, blnClosed):
+def WritePolygonMP(fh2, objOsmGeom, obj_type, obj_osmid, height, blnClosed):
     intWayNo = 0
     S = ""
     N = ""
@@ -347,8 +355,8 @@ def WritePolygonMP(fh2, objOsmGeom, obj_type, obj_osmid, intHeight, blnClosed):
         for k in vbForRange(0, N):
             if k != 0:
                 S = S + ', '
-            S = S + '(' + objOsmGeom.GetNodeLat(NodeRefs[k]) + ',' + objOsmGeom.GetNodeLon(NodeRefs[k]) + ')'
-        fh2.write( 'Data0=' + S, '\n')
+            S = S + '(' + str(objOsmGeom.GetNodeLat(NodeRefs[k])) + ',' + str(objOsmGeom.GetNodeLon(NodeRefs[k])) + ')'
+        fh2.write( 'Data0=' + S + '\n')
     else:
         #Err.Raise vbObjectError, "WritePolygon", "only ways are supported for dsf polygons"
         print('only ways are supported for dsf polygons')
@@ -467,9 +475,8 @@ def main(dsfLat, dsfLon):
     dsf_folder_name = BUILD_PATH + '\\work_folder\\50_DSF\\' 
     quadrant_dat_file_name = dsf_folder_name + '\\'+strQuadrantName+'.dat'
     osm_models_folder = BUILD_PATH + '\\work_folder\\30_3dmodels'
-
-
-    objOsmGeom = None
+    
+    objOsmGeom, _ = readOsmXml("work_folder\\07_building_data\\objects-all.osm")
 
     custom_models = loadDatFile(BUILD_PATH + "\\custom_models_list.txt", encoding="cp1251")
     custom_facades = loadDatFile(BUILD_PATH + "\\custom_facade_list.txt", encoding="cp1251")
