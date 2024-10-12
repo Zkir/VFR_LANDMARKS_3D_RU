@@ -5,11 +5,12 @@ IF EXIST %lockfile% goto error
 touch %lockfile%
 rem ========== main part ===================================
 
-make planet-update
-make 
+make planet-update > work_folder\log.txt 2>&1
+make   >> work_folder\log.txt 2>&1
 
 rem ========== tail ========================================
 del %lockfile%
+echo process complete >> work_folder\log.txt 2>&1
 echo process complete 
 goto end
 :error 
