@@ -1,6 +1,4 @@
-from vbFunctions import *
 from datetime import datetime
-
 
 lstColorCodes=[
 ['aliceblue', '#F0F8FF'],
@@ -156,7 +154,7 @@ lstColorCodes=[
 def getColourName(strRgbCode):
     strColorName = "black"
 
-    if Left(strRgbCode, 1) != "#":
+    if not strRgbCode.startswith("#"):
         raise Exception ("wrong color format")
     if len(strRgbCode) == 4:
         r1 = int(strRgbCode[1: 2],16) * 16
@@ -169,7 +167,7 @@ def getColourName(strRgbCode):
     minDistance = (r1 * r1) + g1 * g1 + b1 * b1
 
     for color in lstColorCodes:
-        if Left(color[1], 1) != "#":
+        if not color[1].startswith("#"):
             raise Exception("wrong color format")
 
         r2 = int(color[1][1: 3],16)
@@ -178,7 +176,7 @@ def getColourName(strRgbCode):
         Distance = (r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2
 
         if Distance < minDistance:
-            strColorName = LCase(color[0])
+            strColorName = color[0].lower()
             minDistance = Distance
 
     return strColorName
@@ -193,11 +191,11 @@ def getColorDistance(strColorName1, strColorName2):
     b1 = 0
     b2 = 0
     for color in lstColorCodes:
-        if LCase(strColorName1) == LCase(color[0]):
+        if strColorName1.upper() == color[0].upper():
             r1 = int(color[1][1: 3], 16)
             g1 = int(color[1][3: 5], 16)
             b1 = int(color[1][5: 7], 16)
-        if LCase(strColorName2) == LCase(color[0]):
+        if strColorName2.upper() == color[0].upper():
             r2 = int(color[1][1: 3], 16)
             g2 = int(color[1][3: 5], 16)
             b2 = int(color[1][5: 7], 16)
@@ -210,12 +208,12 @@ def composeQuadrantName(dsfLat, dsfLon):
         fn_return_value = '+'
     else:
         fn_return_value = '-'
-    fn_return_value = fn_return_value + Right('00' + str(dsfLat), 2)
+    fn_return_value = fn_return_value + ('00' + str(dsfLat))[-2:]
     if dsfLon >= 0:
         fn_return_value = fn_return_value + '+'
     else:
         fn_return_value = fn_return_value + '-'
-    fn_return_value = fn_return_value + Right('000' + str(dsfLon), 3)
+    fn_return_value = fn_return_value + ('000' + str(dsfLon))[-3:]
 
     return fn_return_value
 
@@ -247,7 +245,7 @@ def loadDatFile(strInputFile, encoding="utf-8"):
     filehandle = open(strInputFile, 'r', encoding=encoding)
     txt = filehandle.readline().strip()
     while len(txt) != 0:
-        if Left(txt,1) != "#":
+        if not txt.startswith("#"):
             row = txt.strip().split("|")
             for i in range(len(row)):
                 row[i] = decodeDatString(row[i].strip())

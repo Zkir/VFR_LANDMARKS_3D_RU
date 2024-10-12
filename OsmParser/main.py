@@ -7,11 +7,10 @@ import hashlib
 from mdlMisc import *
 from mdlOsmParser import readOsmXml
 from osmparser import encodeXmlString
-#from osmGeometry import clsOsmGeometry
-#from mdlXmlParser import clsXMLparser
 from mdlGeocoder import DoGeocodingForDatFile
 from mdlStartDate import parseStartDateValue
 from tag_validator import *
+from vbFunctions import Left, Right, Round, Len, Trim, UCase, IsNumeric
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 
