@@ -11,6 +11,7 @@ del "russia-latest.osm.pbf"
 ren "russia-latest-latest.osm.pbf" "russia-latest.osm.pbf
 
 osmconvert "russia-latest.osm.pbf" -o="russia-latest.o5m"
+if errorlevel 1 goto error
 
 goto end
 :error
