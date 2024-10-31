@@ -78,10 +78,11 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
     print( '  <title>' + strObjectName  +'</title>'+ '\n')
     #print( '  <meta encoding=\'utf-8\' />'+ '\n')
     print( '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'+ '\n')
-    #Print #4, "  <script src='http://x3dom.org/release/x3dom.js'></script>"
-    #Print #4, "  <link rel='stylesheet' href='http://x3dom.org/release/x3dom.css' />"
+    ##print ( "  <script src='https://x3dom.org/release/x3dom.js'></script>")
+    ##print ( "  <link rel='stylesheet' href='https://x3dom.org/release/x3dom.css' />")
     print( '  <script src=\'/x3dom/x3dom.js\'></script>'+ '\n')
     print( '  <link rel=\'stylesheet\' href=\'/x3dom/x3dom.css\' />'+ '\n')
+    
     print( '  <script>'+ '\n')
     print( '    function fitCamera()'+ '\n')
     print( '    {'+ '\n')
@@ -164,6 +165,8 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
         print( '        <x3d id=\'x3dElem\' x=\'0px\' y=\'0px\' width=\'100%\' height=\'100%\'>'+ '\n')
         print( '          <scene>'+ '\n')
         print( "            <inline onload='fitCamera()' url='/models/" + strOsmID + ".x3d'></inline>" + "\n")
+        #print( "            <inline onload='fitCamera()' url='/models2/R225033.gltf'></inline>" + "\n")
+        
         print( '          </scene>'+ '\n')
         print( '        </x3d>'+ '\n')
         print( '      </div>'+ '\n')
@@ -199,8 +202,9 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
     print( '      </div>'+ '\n')
     print( '      <x3d id=\'x3dElem2\' x=\'0px\' y=\'0px\' width=\'100%\' height=\'100%\'>'+ '\n')
     print( '               <scene>'+ '\n')
-    #print( '                  <inline onload=\'fitCamera2()\' url=\'R3881262.x3d\'></inline>'+ '\n')
-    print( "                   <inline onload='fitCamera2()' url='/models/" + strOsmID + ".x3d'></inline>" + "\n")
+    #print( "                   <inline onload='fitCamera2()' url='/models/" + strOsmID + ".x3d'></inline>" + "\n")
+    #print( "                   <inline onload='fitCamera2()' url='/data/models_gltf/" + strOsmID + ".gltf'></inline>" + "\n")
+    print( "                   <inline onload='fitCamera2()' url='/data/models2/" + strOsmID + ".x3d'></inline>" + "\n")
     print( '               </scene>'+ '\n')
     print( '      </x3d>'+ '\n')
     print( '    </div>'+ '\n')
