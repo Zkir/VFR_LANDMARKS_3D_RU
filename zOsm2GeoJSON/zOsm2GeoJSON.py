@@ -35,6 +35,13 @@ def writeGeoJson(Objects, objOsmGeom, strOutputFile, strAction, allowed_tags, st
 
     j = 0
     for osmObject in Objects:
+        if osmObject.type == 'relation':
+            outlines = objOsmGeom.ExtractCloseNodeChainFromRelation(osmObject.WayRefs)
+            if len(outlines) == 0:
+                    print ("ERROR: Relation "+osmObject.id+" is empty!")
+                    continue 
+        
+        
         if j != 0:
             fo.write(',\n')
         j = j + 1
@@ -107,19 +114,19 @@ def writeGeoJson(Objects, objOsmGeom, strOutputFile, strAction, allowed_tags, st
                 fo.write('            }\n')
 
             else:
-                Outlines=objOsmGeom.ExtractCloseNodeChainFromRelation(osmObject.WayRefs)
+            
                 fo.write('            "geometry": {\n')
                 fo.write('                "type": "Polygon",\n')
                 fo.write('                "coordinates": [\n') 
                    
-                for i in range(len(Outlines)):
+                for i in range(len(outlines)):
                     if i!=0:
                             fo.write(',\n')
                     fo.write('                    [\n') 
-                    for k in range(len(Outlines[i])):
+                    for k in range(len(outlines[i])):
                         if k!=0:
                             fo.write(',\n')
-                        fo.write('                        [' + str(objOsmGeom.nodes[Outlines[i][k]].lon) + ', ' + str(objOsmGeom.nodes[Outlines[i][k]].lat) + ']')                    
+                        fo.write('                        [' + str(objOsmGeom.nodes[outlines[i][k]].lon) + ', ' + str(objOsmGeom.nodes[outlines[i][k]].lat) + ']')                    
                     fo.write('\n')
                     fo.write('                    ]')
                 fo.write('\n')

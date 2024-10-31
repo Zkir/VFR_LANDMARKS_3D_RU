@@ -222,9 +222,17 @@ class clsOsmGeometry():
             for i in way_numbers:
                 wayno=WayRefs[i][0]
                 role=WayRefs[i][1]
+                
+                
                 if role == 'outer' or role == 'inner':
                     w_NodeRefs=self.GetWayNodeRefsAndCount(wayno)
                     w_node_count=len(w_NodeRefs)
+                    if  w_node_count==0:
+                        print('way '+self.ways[wayno].id+ ' does not contain nodes')
+                        return []
+                        #exit(1234)
+                        
+                        
                     if firstNodeId != - 1:
                         PrevFirstNodeId = OutlineNodeRefs[0]
                         PrevLastNodeId = OutlineNodeRefs[outline_nodeCount - 1]

@@ -15,7 +15,25 @@ df_landuses = gpd.read_file(workfolder+"landuses-clipped-all.geojson")
 df_buildings = gpd.read_file(workfolder+"buildings.geojson")
 ds_building_areas = df_buildings.geometry.area
 
+print()
+print("invalid objects", "buildings.geojson")
+df= df_buildings
+invalid = df.loc[~df.geometry.is_valid]
+print(invalid)
+
+print()
+print("invalid objects", "landuses-clipped-all.geojson")
+df= df_landuses
+invalid = df.loc[~df.geometry.is_valid]
+print(invalid)
+
+
+df_buildings.geometry = df_buildings.geometry.make_valid()
+print(df_buildings)
+
 for index, row in df_landuses.iterrows():
+
+    
 
     m = df_buildings.geometry.intersects(row.geometry).loc[lambda x: x == True]
     n = m.size
