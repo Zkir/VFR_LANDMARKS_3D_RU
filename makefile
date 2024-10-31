@@ -117,6 +117,9 @@ work_folder\extract_images: work_folder\22_all_osm_objects_list\all-objects.dat
 work_folder\30_3dmodels: | work_folder ## Prepare folder for 3d models (obj/x3d)
 	mkdir work_folder\30_3dmodels 
 	
+work_folder\31_3dmodels2: | work_folder ## Prepare folder for 3d models (gltf)
+	mkdir work_folder\31_3dmodels2
+	
 work_folder\30_3dmodels\convert_osm_to_obj: work_folder\20_osm_3dmodels\extract_building_models_osm | work_folder\30_3dmodels 	##Convert 3d objects from osm files to blender and x-plane obj 
 	for %%v in (work_folder\20_osm_3dmodels\*.osm) do scripts\osm2blend.bat "%%v" work_folder\30_3dmodels
 	touch $@		
@@ -125,6 +128,9 @@ work_folder\30_3dmodels\convert_obj_to_x3d: work_folder\30_3dmodels\convert_osm_
 	for %%v in (work_folder\30_3dmodels\*.obj) do scripts\obj2x3d.py "%%v"
 	touch $@		
 
+work_folder\31_3dmodels2\convert_osm_to_gltf: work_folder\20_osm_3dmodels\extract_building_models_osm | work_folder\31_3dmodels2 	##Experimental via osm2world 
+	for %%v in (work_folder\20_osm_3dmodels\*.osm) do scripts\osm2gltf.bat "%%v" work_folder\31_3dmodels2
+	touch $@		
 #****************************************************************************************************************************
 #* 50 create x-plane specific files, e.g dsf per quadrant. 
 #****************************************************************************************************************************	
@@ -194,7 +200,7 @@ work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip: work_folder\copy_xpla
 work_folder\90_uploads: | work_folder ## prepare uploads folder 
 	mkdir work_folder\90_uploads
 	
-work_folder\90_uploads\upload_models_to_web: work_folder\30_3dmodels\convert_obj_to_x3d work_folder\22_all_osm_objects_list\RUS_TOP.dat | work_folder\90_uploads 	##Upload 3d models and dat files to web (validator)  
+work_folder\90_uploads\upload_models_to_web: work_folder\30_3dmodels\convert_obj_to_x3d work_folder\22_all_osm_objects_list\RUS_TOP.dat  work_folder\31_3dmodels2\convert_osm_to_gltf | work_folder\90_uploads 	##Upload 3d models and dat files to web (validator)  
 	scripts\upload.bat
 	touch $@		
 
