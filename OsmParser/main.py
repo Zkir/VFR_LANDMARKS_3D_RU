@@ -196,7 +196,8 @@ def calculateBuildingType( osmtags, dblSize):
     tagTomb =         osmtags.get('tomb','')
     tagLeisure =      osmtags.get('leisure','')
     tagTheatreGenre = osmtags.get('theatre:genre','')
-    tagBuildingFlats= osmtags.get("building:flats",'')
+    tagBuildingFlats= osmtags.get('building:flats','')
+    tagTourism      = osmtags.get('tourism', '')
    
     if tagDenomination == 'orthodox' or tagDenomination == 'russian_orthodox' or tagDenomination == 'dissenters':
         tagDenomination = 'RUSSIAN ORTHODOX'
@@ -262,8 +263,6 @@ def calculateBuildingType( osmtags, dblSize):
         elif tagLeisure in ['stadium','sports_centre' 'ice_rink']:
             tagBuilding = tagLeisure 
         
-        # tourism=museum,  tourism=hotel        
-        
         # historic
         elif tagHistoric != '':
             if tagHistoric not in ['building', 'heritage', 'heritage_building', 'place_of_worship']:
@@ -273,6 +272,11 @@ def calculateBuildingType( osmtags, dblSize):
                 
                 if tagHistoric == 'castle' and  tagCastleType != '':
                     tagBuilding = tagCastleType 
+                    
+        # tourism=museum,  tourism=hotel        
+        # unfortunately, we can induce hotel only. museums can be orgainzed in any kind of building
+        elif tagTourism in ['hotel']: 
+            tagBuilding = tagTourism                    
         
         elif tagBuildingFlats.isnumeric() and float(tagBuildingFlats)>20:
             tagBuilding = 'apartments'
