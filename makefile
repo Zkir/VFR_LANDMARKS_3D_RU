@@ -106,8 +106,11 @@ work_folder\22_all_osm_objects_list\RUS_TOP.dat: work_folder\22_all_osm_objects_
 	
 #****************************************************************************************************************************
 #* 25 Extract images 
-#****************************************************************************************************************************		
-work_folder\extract_images: work_folder\22_all_osm_objects_list\all-objects.dat
+#****************************************************************************************************************************
+work_folder\25_images: | work_folder
+	mkdir $@
+		
+work_folder\25_images\extract_images: work_folder\22_all_osm_objects_list\all-objects.dat | work_folder\25_images
 	python OsmParser\wikidata.py get-images -i work_folder\22_all_osm_objects_list\all-objects.dat
 	touch $@
 
