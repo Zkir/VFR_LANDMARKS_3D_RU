@@ -46,6 +46,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
         numberofvalidationerrors = 0
         
         blnFence = (osmObject.tagBarrier == 'fence') or (osmObject.tagBarrier == 'wall')
+        hasWindows = False 
         
         # Let's determine building height
         # height tag has priority. if it is not possible, let's try building:levels 
@@ -57,7 +58,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
         
         # Rewrite osmObject as osm file!
         if not blnFence:
-            heightbyparts, numberofparts, touched_date, numberofvalidationerrors = rewriteOsmFile(osmObject, OSM_3D_MODELS_PATH,objOsmGeomParts, ObjectsParts)
+            heightbyparts, numberofparts, touched_date, numberofvalidationerrors, hasWindows = rewriteOsmFile(osmObject, OSM_3D_MODELS_PATH,objOsmGeomParts, ObjectsParts)
             osmObject.blnHasBuildingParts = (heightbyparts > 0)
             intValidationErrorsTotal += numberofvalidationerrors
 
@@ -102,7 +103,8 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
                  str(numberofvalidationerrors),
                  tagRefSoboryRu,
                  tagWikidata,
-                 tagArchitect
+                 tagArchitect,
+                 str(hasWindows)
                  ])
     
     saveDatFile(building_dat, strOutputFile)
@@ -316,6 +318,12 @@ def calculateBuildingType( osmtags, dblSize):
 
 def gethash(s):
     return hashlib.md5(s.encode("utf-8")).hexdigest() 
+    
+def checkWindows(osmtags):
+    for tag in osmtags:
+        if tag.startswith("window:"):
+            return True
+    return False     
 
 def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     
@@ -326,6 +334,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     touched_date = "1900-01-01"
     numberofvalidationerrors = 0
     strhash = ""
+    hasWindows = False
     
     # we need exclude broken objects without nodes
     # bboxes for them are wrong
@@ -431,6 +440,8 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
             touched_date = obj_date
             
         Errors += validate_tags("W:" + str(obj_id), osmtags, obj_is_building_part)  
+        
+        hasWindows = hasWindows or checkWindows(osmtags)
 
 
     # write relations inside BBOX                              
@@ -503,7 +514,9 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
         if obj_date > touched_date:
             touched_date=obj_date
         
-        Errors += validate_tags("R:" + str(obj_id), osmtags, obj_is_building_part)    
+        Errors += validate_tags("R:" + str(obj_id), osmtags, obj_is_building_part)   
+
+        hasWindows = hasWindows or checkWindows(osmtags)        
         # end of relation loop
         
     # checks of building in general 
@@ -560,7 +573,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
 
 
         
-    return [height, numberofparts,touched_date,numberofvalidationerrors]
+    return [height, numberofparts, touched_date, numberofvalidationerrors, hasWindows]
 
 
 def processQuadrant(strQuadrantName):
