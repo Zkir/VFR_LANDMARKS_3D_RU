@@ -174,7 +174,7 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
         print( '      <div class=\'no_model\'>'+ '\n')
         print( '           <img src=\'/nomodel.gif\' width=\'450px\' height=\'450px\' alt=\'3d Модель отсутствует\' ><img> '+ '\n')
         print( '      </div>'+ '\n')
-    print( '       <button id="trigger-overlay" type="button">На весь экран</button>'+ '\n')
+    print( '       <button id="trigger-overlay" type="button">Osm2World</button>'+ '\n')
     print( '    </div>'+ '\n')
 
     print( '  <div style=\'clear:both;\'></div>'+ '\n')
