@@ -340,7 +340,7 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     # bboxes for them are wrong
     
     if object1.bbox.minLat == 0 and object1.bbox.maxLat == 0 and object1.bbox.minLon == 0 and object1.bbox.maxLon == 0:
-        return [height, numberofparts, touched_date, numberofvalidationerrors]
+        return [height, numberofparts, touched_date, numberofvalidationerrors, hasWindows]
     
     #objOsmGeom = clsOsmGeometry()
     
