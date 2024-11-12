@@ -55,8 +55,12 @@ def GetSummary(cells):
     return summary
 
 #========================================================================
-#  Web Page for Area(quadrant) summary
+#  Web Page for Area (quadrant) summary
 #========================================================================
+region_names = {'RUS_TOP':'Топ зданий, Россия',
+                'RUS_TOP_WINDOWS':'Топ зданий с ОКНАМИ, Россия',
+                'RUS_LATEST': 'Последние изменения, Россия',
+               }
 
 def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages, blnGeocode):
     strHTMLPage = ""
@@ -98,9 +102,14 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     print( '</style>'+ '\n')
     print( '</head>'+ '\n')
     print( '<body>'+ '\n')
-    print( '<h1>Валидатор 3D: квадрат ' + strQuadrantName + '</h1>'+ '\n')
-    print( '<p>На этой странице представлены здания, отредактированные в последнее время.'+ '\n')
-    print( 'Включены только здания, имеющие 3D модели.</p>'+ '\n')
+    print( '<h1>Валидатор 3D: ' + region_names.get(strQuadrantName, strQuadrantName) + '</h1>'+ '\n')
+    if strQuadrantName == "RUS_LATEST":
+        print( '<p>На этой странице представлены здания, отредактированные в последнее время.'+ '\n')
+        print( 'Включены только здания, имеющие 3D модели.</p>'+ '\n')
+        
+    elif strQuadrantName == "RUS_TOP_WINDOWS":    
+        print( '<p>На этой странице представлены здания, имеющие окна, заданные тегами <b><a href="https://wiki.openstreetmap.org/wiki/Key:window">window:*</a></b> .'+ '\n')
+        
     
     if strQuadrantName == "RUS_LATEST":
         print( '<h2>Пульс проекта</h2>'+ '\n')

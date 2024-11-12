@@ -12,7 +12,7 @@ from mdlClassify import buildingTypeRus, achitectureStylesRus
 #========================================================================
 #  Web Page for individual object, with 3d model
 #========================================================================
-def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors, urlPrevious, urlNext):
+def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp, validation_errors, urlPrevious, urlNext):
     strHTMLPage = ""
     strOSMurl = ""
     strF4url = ""
@@ -164,8 +164,10 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
         print( '      <div class=\'x3d-content\'>'+ '\n')
         print( '        <x3d id=\'x3dElem\' x=\'0px\' y=\'0px\' width=\'100%\' height=\'100%\'>'+ '\n')
         print( '          <scene>'+ '\n')
-        print( "            <inline onload='fitCamera()' url='/models/" + strOsmID + ".x3d'></inline>" + "\n")
-        #print( "            <inline onload='fitCamera()' url='/models2/R225033.gltf'></inline>" + "\n")
+        if strQuadrantName == "RUS_TOP_WINDOWS":
+            print( "            <inline onload='fitCamera()' url='/data/models2/" + strOsmID + ".x3d'></inline>" + "\n")
+        else:
+            print( "            <inline onload='fitCamera()' url='/models/" + strOsmID + ".x3d'></inline>" + "\n")
         
         print( '          </scene>'+ '\n')
         print( '        </x3d>'+ '\n')
@@ -174,7 +176,10 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
         print( '      <div class=\'no_model\'>'+ '\n')
         print( '           <img src=\'/nomodel.gif\' width=\'450px\' height=\'450px\' alt=\'3d Модель отсутствует\' ><img> '+ '\n')
         print( '      </div>'+ '\n')
-    print( '       <button id="trigger-overlay" type="button">Osm2World</button>'+ '\n')
+    if strQuadrantName == "RUS_TOP_WINDOWS":        
+        print( '       <button id="trigger-overlay" type="button">blosm</button>'+ '\n')
+    else: 
+        print( '       <button id="trigger-overlay" type="button">Osm2World</button>'+ '\n')
     print( '    </div>'+ '\n')
 
     print( '  <div style=\'clear:both;\'></div>'+ '\n')
@@ -202,9 +207,12 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors,
     print( '      </div>'+ '\n')
     print( '      <x3d id=\'x3dElem2\' x=\'0px\' y=\'0px\' width=\'100%\' height=\'100%\'>'+ '\n')
     print( '               <scene>'+ '\n')
-    #print( "                   <inline onload='fitCamera2()' url='/models/" + strOsmID + ".x3d'></inline>" + "\n")
+    
     #print( "                   <inline onload='fitCamera2()' url='/data/models_gltf/" + strOsmID + ".gltf'></inline>" + "\n")
-    print( "                   <inline onload='fitCamera2()' url='/data/models2/" + strOsmID + ".x3d'></inline>" + "\n")
+    if strQuadrantName == "RUS_TOP_WINDOWS":
+        print( "                   <inline onload='fitCamera2()' url='/models/" + strOsmID + ".x3d'></inline>" + "\n")
+    else: 
+        print( "                   <inline onload='fitCamera2()' url='/data/models2/" + strOsmID + ".x3d'></inline>" + "\n")
     print( '               </scene>'+ '\n')
     print( '      </x3d>'+ '\n')
     print( '    </div>'+ '\n')

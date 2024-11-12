@@ -33,8 +33,9 @@ def CreateIndexPage(strInputFile):
     print( '  <!-- <p>Данные нарезаются по квадратным градусам (этот валидатор таким родился)</p> -->' + '\n')
     print( '  <h2>Разделы</h2>' + '\n')
     print( '  <p>1. <a href="/">Россия, по регионам</a>. </p>' + '\n')
-    print( '  <p>2. Россия, по квадратам</a> </p>' + '\n')
-    print( '  <p>3. <a href="/rus-top.html">Топ зданий, Россия</a> </p>' + '\n')
+    #print( '  <p>2. Россия, по квадратам</a> </p>' + '\n')
+    print( '  <p>2. <a href="/rus-top.html">Топ зданий, Россия</a> </p>' + '\n')
+    print( '  <p>3. <a href="/rus-top-windows.html">Топ зданий c ОКНАМИ, Россия</a> </p>' + '\n')
     print( '  <p>4. <a href="/rus-latest.html">Последние изменения, Россия</a> </p>' + '\n')
     
    
