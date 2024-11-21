@@ -232,7 +232,7 @@ def calculateBuildingType( osmtags, dblSize):
             
     # useless building types
     # let's consider them as synonyms for building=yes
-    if tagBuilding in ['public', 'civic', 'commercial', 'government', 'historic','abandoned', 'disused', 'outbuilding']:
+    if tagBuilding in ['public', 'civic',  'government', 'historic','abandoned', 'disused', 'outbuilding']:
         tagBuilding = 'yes'
             
     # for building=yes we are free to guess building type from other tags     
