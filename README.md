@@ -17,7 +17,7 @@ The process works in the good old way:
 
 ## How to install? ##
 ###  Windows ###
-1. Clone the git repostitory. Directory should be d:\\_VFR_LANDMARKS_3D_RU 
+1. Clone the git repostitory. Directory should be **d:\\_VFR_LANDMARKS_3D_RU**
 2. Install dependencies (see below).
 3. Run run_validator.bat
 4. Enjoy.
@@ -35,15 +35,16 @@ Known dependencies include:
 4. wget
 5. OsmTools (osmupdate, osmconvert, osmfilter)
 6. osmosis
-7. Blender 2.79a
-8. Blender-osm plugin
-9. Patch for the Blender-osm plugin, to support additional roof shapes
-10. Blender Startup file (not sure where it is)
-11. xplane2blender plugin (3.5.0 is used, compartible with blender 2.79a)
-12. Osm2world
-13. Python (currenty 3.12.7 is used)
-14. Some Python libraries are needed to be installed. [requirements.txt] could help
-15. Apache web server, for frontend. 
+7. Python (currenty 3.12.7 is used)
+8. Some Python libraries are needed to be installed. [requirements.txt](requirements.txt) could help.
+9. Blender 2.79a
+10. Blender-osm plugin
+11. Patch for the Blender-osm plugin, to support additional roof shapes. Included into this [repository](blender-osm-patch).
+12. Blender Startup file (not sure where it is now)
+13. xplane2blender plugin (version 3.5.0 is used, compartible with blender 2.79a)
+14. x-plane tools
+15. Osm2world
+16. Apache web server, for frontend. 
 
 ## References ##
 1) X-plane tools: https://developer.x-plane.com/tools/xptools/
