@@ -37,11 +37,11 @@ Known dependencies include:
 6. osmosis
 7. Python (currenty 3.12.7 is used)
 8. Some Python libraries are needed to be installed. [requirements.txt](requirements.txt) could help.
-9. Blender 2.79a
-10. Blender-osm plugin
+9. Blender 2.79b
+10. Blender-osm plugin (version 2.3.6 is used, compartible with Blender 2.79b )
 11. Patch for the Blender-osm plugin, to support additional roof shapes. Included into this [repository](blender-osm-patch).
 12. Blender Startup file (not sure where it is now)
-13. xplane2blender plugin (version 3.5.0 is used, compartible with blender 2.79a)
+13. xplane2blender plugin (version 3.5.0 is used, compartible with Blender 2.79b)
 14. x-plane tools
 15. Osm2world
 16. Apache web server, for frontend. 
