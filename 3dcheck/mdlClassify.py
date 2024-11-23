@@ -63,6 +63,7 @@ building_types_rus_names = {
     'DETACHED':              'Частный жилой дом',
     'MANOR':                 'Особняк',
     'STATELY':               'Особняк',
+    'MANSION':               'Особняк',
     'PALACE':                'Дворец',
     'APARTMENTS':            'Многоквартирный дом',
         
@@ -104,6 +105,7 @@ building_types_rus_names = {
     'FIRE_STATION':          'Пожарная станция',
     'FIRE_LOOKOUT':          'Пожарная каланча',
     'GAZEBO':                'Беседка',
+    'WATER_TOWER':           'Водонапорная башня',
     'WATER TOWER':           'Водонапорная башня',
     
     'TRIUMPHAL_ARCH':        'Триумфальная арка',
