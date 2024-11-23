@@ -47,8 +47,8 @@ class T3DObject:
         return self.osmtags.get(tag_key,'')
 
     def isBuilding(self):
-        # if an object has building tag, it's probably a building (forget about building=no)
-        blnBuilding=(self.getTag("building") != "")
+        # if an object has building tag, it's probably a building 
+        blnBuilding= self.getTag("building") not in ['', 'no']
         # Relation building is not really a building, it's just a group of building parts.
         if (self.getTag("type") == "building"):
             blnBuilding = False
