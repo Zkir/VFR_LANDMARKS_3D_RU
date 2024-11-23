@@ -3,7 +3,7 @@ Project to create visual landmarks for x-plane, based on osm-data and custom mod
 
 ## How does it work? ##
 The process works in the good old way:
-1. The planet.osm.pbf (or rather the country extract) is downloaded then updated. 
+1. The planet.osm.pbf (or rather the country extract) is downloaded then updated (osmconvert, osmupdate, osmfilter and osmosis are used for this purpose). 
 2. Osm-xmls with buildings and parts are extracted, lists of the extracted osm-xml are created.
 3. Additionally, those buildings are checked for errors, error messages are saved into corresponding dat file.
 4. 3D models are created via Blender with Blender-OSM plugin, textures are baked.
@@ -13,7 +13,7 @@ The process works in the good old way:
 8. x-plane scenery package is compliled. 
 9. All that is copied to 3dcheck folder, where it can be displayed on web by Apache.
 
- Tools like osmconvert, osmupdate, osmfilter and osmosis are used for this purpose.
+ 
 
 ## How to install? ##
 ###  Windows ###
