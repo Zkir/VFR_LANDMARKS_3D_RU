@@ -135,6 +135,11 @@ for rec1 in rsObjectList:
 
 saveDatFile(rsOutput,DB_FOLDER+'RUS_LATEST.dat')
 
+
+#diagram for recent changes
+recent_changes_stat = change_statistics(rsOutput)
+create_diagram(DB_FOLDER+'recent_activity', recent_changes_stat )
+
 # objects with windows
 rsObjectList.sort(key=lambda row: safe_int(row[QUADDATA_NUMBER_OF_PARTS]), reverse=True)
 rsOutput=[]
@@ -145,10 +150,6 @@ for rec1 in rsObjectList:
         n += 1      
 
 saveDatFile(rsOutput, DB_FOLDER+'RUS_TOP_WINDOWS.dat')
-
-#diagram for recent changes
-recent_changes_stat = change_statistics(rsOutput)
-create_diagram(DB_FOLDER+'recent_activity', recent_changes_stat )
 
 
 

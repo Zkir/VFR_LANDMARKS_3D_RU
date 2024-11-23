@@ -7,6 +7,7 @@ from mdlMisc import *
 import cgi
 import time
 from mdlClassify import buildingTypeRus, achitectureStylesRus
+from misc2 import region_names
 
 class TSummaryRec:
 
@@ -57,10 +58,7 @@ def GetSummary(cells):
 #========================================================================
 #  Web Page for Area (quadrant) summary
 #========================================================================
-region_names = {'RUS_TOP':'Топ зданий, Россия',
-                'RUS_TOP_WINDOWS':'Топ зданий с ОКНАМИ, Россия',
-                'RUS_LATEST': 'Последние изменения, Россия',
-               }
+
 
 def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages, blnGeocode):
     strHTMLPage = ""

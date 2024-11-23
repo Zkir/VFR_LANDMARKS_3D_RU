@@ -8,6 +8,7 @@ from mdlMisc import *
 import os.path
 import json
 from mdlClassify import buildingTypeRus, achitectureStylesRus
+from misc2 import region_names
 
 #========================================================================
 #  Web Page for individual object, with 3d model
@@ -189,7 +190,7 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp, validation_errors
     print( '<hr />'+ '\n')
     urlPrevious, urlNext
     print( '  <a href="'+urlPrevious+'"> << Предыдущее </a> -- \n')
-    print( '  <a href=\'/\'>Главная страница</a> --> <a href=\'/' + strQuadrantName + '.html\'>' + strQuadrantName + '</a>'+ '\n')
+    print( '  <a href=\'/\'>Главная страница</a> --> <a href=\'/' + strQuadrantName + '.html\'>' + region_names.get(strQuadrantName, strQuadrantName) + '</a>'+ '\n')
     print( '  -- <a href="'+urlNext+'"> Следущее >> </a> \n')
     print( '  </div>'+ '\n')
     #zero frame for josm links
