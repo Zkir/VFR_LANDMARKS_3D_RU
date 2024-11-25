@@ -66,10 +66,8 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
                 osmObject.dblHeight = heightbyparts
             if osmObject.blnHasBuildingParts and (osmObject.dblHeight > 0):
                 intModelsCreated = intModelsCreated + 1
-                print('3d model created ' + Left(osmObject.type, 1) + ':' + osmObject.id + ' ' + safeString(
-                    osmObject.name) + ' ' + safeString(osmObject.descr))
-                if numberofvalidationerrors > 0:    
-                    print("    " + str(numberofvalidationerrors) + " errors detected")
+                print('3d model created ' + Left(osmObject.type, 1) + ':' + osmObject.id + ' ' +
+                    safeString(osmObject.name) + ', ' + safeString(str(numberofparts))+ ' parts, '+safeString(str(numberofvalidationerrors))+' errors')
 
         # fill report
         strBuildingType = calculateBuildingType(osmObject.osmtags, osmObject.size )
@@ -365,8 +363,65 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     fo.write( '<osm version="0.6" generator="zkir manually">' + '\n')
     fo.write( '  <bounds minlat="' + str(object1.bbox.minLat) + '" minlon="' + str(object1.bbox.minLon) + '" maxlat="' + str(object1.bbox.maxLat) + '" maxlon="' + str(object1.bbox.maxLon) + '"/> ' + '\n')
     
+    # find objects matching the bounding box. We are interested in relations and ways. 
+    # only nodes belonging to ways are needed.
+
+    bbox_nodes = []
+    bbox_ways = []
+    bbox_relations = []
+    
+    #check relations
+    for _, relation in objOsmGeomParts.relations.items():
+        if relation.type == 'building':
+            # Relations of type 'building' is a very strange thing.
+            # It is neither building outline nor building part.
+            # We cannot to much with them, only skip
+            continue
+        
+        if relation.minLat >= object1.bbox.minLat and relation.maxLat <= object1.bbox.maxLat and relation.minLon >= object1.bbox.minLon and relation.maxLon <= object1.bbox.maxLon:
+            blnCompleteObject = True
+        else:    
+            blnCompleteObject = False              
+        
+        if not blnCompleteObject or  len(relation.WayRefs) == 0:
+            continue 
+            
+        bbox_relations += [relation.id]
+        for way_ref in relation.WayRefs:
+            if way_ref[0] not in bbox_ways:  
+                bbox_ways += [way_ref[0]]
+            
+    #check ways
+    for _, way in objOsmGeomParts.ways.items():
+         
+        if way.minLat >= object1.bbox.minLat and way.maxLat <= object1.bbox.maxLat and way.minLon >= object1.bbox.minLon and way.maxLon <= object1.bbox.maxLon:
+            blnCompleteObject = True
+            #TODO: we NEED to check that way is complete, and all it's nodes inside BBOX (or objOsmGeom Nodes)             
+        else:    
+            blnCompleteObject = False
+            
+        if not blnCompleteObject or  len(way.NodeRefs) == 0:
+            continue 
+        if way.id not in bbox_ways:  
+            bbox_ways += [way.id] 
+
+        
+    #We do not need to check nodes directly, but rather include nodes which are members of ways 
+    for way_id in bbox_ways:
+        way = objOsmGeomParts.ways[way_id]        
+        for node_ref in way.NodeRefs:
+            if node_ref not in bbox_nodes:
+                bbox_nodes  += [node_ref]
+            
+    #sort
+    bbox_nodes.sort(key=lambda x: int(x))
+    bbox_ways.sort(key=lambda x: int(x)) 
+    bbox_relations.sort(key=lambda x: int(x)) 
+    
+    
     # write nodes inside BBOX  
-    for _, node in objOsmGeomParts.nodes.items(): 
+    for node_id in bbox_nodes:
+        node = objOsmGeomParts.nodes[node_id]
         obj_id = node.id 
         obj_ver = node.version 
         obj_date = node.timestamp
@@ -375,27 +430,16 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
         node_lat = float(node.lat)
         node_lon = float(node.lon)
         
-        if node_lat >= object1.bbox.minLat and node_lat <= object1.bbox.maxLat and node_lon >= object1.bbox.minLon and node_lon <= object1.bbox.maxLon:
-            #or node id belongs to set of known nodes!
-            #objOsmGeom.AddNode(obj_id, node_lat, node_lon, obj_ver, obj_date)
-            fo.write( '<node id="' + obj_id + '" version="' + obj_ver + '"  lat="' + str(node_lat) + '" lon="' + str(node_lon) + '"/>'+ '\n')
-            strhash += 'n'+ obj_id + "v" + obj_ver
-            if obj_date > touched_date:
-                    touched_date = obj_date
+        
+        fo.write( '<node id="' + obj_id + '" version="' + obj_ver + '"  lat="' + str(node_lat) + '" lon="' + str(node_lon) + '"/>'+ '\n')
+        strhash += 'n'+ obj_id + "v" + obj_ver
+        if obj_date > touched_date:
+                touched_date = obj_date
                     
    
     # write ways inside BBOX                
-    for _, way in objOsmGeomParts.ways.items():
-        
-        blnCompleteObject = False
-        if way.minLat >= object1.bbox.minLat and way.maxLat <= object1.bbox.maxLat and way.minLon >= object1.bbox.minLon and way.maxLon <= object1.bbox.maxLon:
-            blnCompleteObject = True
-        
-            #TODO: we NEED to check that way is complete, and all it's nodes inside BBOX (or objOsmGeom Nodes)             
-            
-        if not blnCompleteObject or  len(way.NodeRefs) == 0:
-            continue 
-        
+    for way_id in bbox_ways:
+        way = objOsmGeomParts.ways[way_id]
         
         obj_id =      way.id
         obj_ver =     way.version 
@@ -453,25 +497,9 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
 
     # write relations inside BBOX                              
     
-    for _, relation in objOsmGeomParts.relations.items():
-        
-        if relation.type == 'building':
-            # Relations of type 'building' is a very strange thing.
-            # It is neither building outline nor building part.
-            # We cannot to much with them, only skip
-            continue
-        
-        way_count =   len(relation.WayRefs)
-        
-        blnCompleteObject = False 
-        if relation.minLat >= object1.bbox.minLat and relation.maxLat <= object1.bbox.maxLat and relation.minLon >= object1.bbox.minLon and relation.maxLon <= object1.bbox.maxLon:
-            blnCompleteObject = True
-        
-            #TODO: we NEED to check that way is complete, and all it's nodes inside BBOX (or objOsmGeom Nodes)             
-        
-        if not blnCompleteObject or  way_count == 0:
-            continue 
-        
+    for relation_id in bbox_relations:
+        relation = objOsmGeomParts.relations[relation_id]
+
         obj_id =      relation.id
         obj_ver =     relation.version 
         obj_date =    relation.timestamp
