@@ -3,6 +3,7 @@ import subprocess
 import sys
 import os
 import hashlib
+import rtree
 
 from mdlMisc import *
 from mdlOsmParser import readOsmXml
@@ -15,6 +16,47 @@ from vbFunctions import Left, Right, Round, Len, Trim, UCase, IsNumeric
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 
 DEFAULT_LEVEL_HEIGHT = 3
+
+# Rtree
+class SpatialIndexRtree: 
+    def __init__(self):
+        self.sp_ix = rtree.index.Index()
+        self.aux_index={}
+        self.i=0
+        
+    def insert(self, ix, bbox):
+        self.aux_index[self.i]=ix
+        self.sp_ix.insert(self.i, (bbox.minLat, bbox.minLon, bbox.maxLat, bbox.maxLon)) 
+        self.i += 1
+        
+    
+    # should return objects which bboxes intersects with the given point(bbox)         
+    def intersection(self, bbox):
+        ways = []
+        relations = []
+        ids = list(self.sp_ix.intersection((bbox.minLat, bbox.minLon, bbox.maxLat, bbox.maxLon)))    
+        for i in ids:
+            id=self.aux_index[i]
+            if id.startswith("W"):
+                ways += [id[1:]]
+            if id.startswith("R"):
+                relations += [id[1:]]
+        return ways, relations
+        
+# Create Spatial index
+def createSpatialIndex(objOsmGeom):
+    spatial_index = SpatialIndexRtree()
+    
+     #check relations
+    for relation_id, relation in objOsmGeom.relations.items():
+        spatial_index.insert('R'+relation_id, relation.getBbox()) 
+            
+    #check ways
+    for way_id, way in objOsmGeom.ways.items():
+        spatial_index.insert('W'+way_id, way.getBbox())  
+        
+        
+    return spatial_index    
 
 def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     j = 0
@@ -37,6 +79,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
             #print( "not a building: " + osmObject.type + " " + osmObject.id)
             pass
 
+    spatial_index = createSpatialIndex(objOsmGeomParts)
     
     building_dat = []
     for osmObject in SelectedObjects:
@@ -58,7 +101,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
         
         # Rewrite osmObject as osm file!
         if not blnFence:
-            heightbyparts, numberofparts, touched_date, numberofvalidationerrors, hasWindows = rewriteOsmFile(osmObject, OSM_3D_MODELS_PATH,objOsmGeomParts, ObjectsParts)
+            heightbyparts, numberofparts, touched_date, numberofvalidationerrors, hasWindows = rewriteOsmFile(osmObject, OSM_3D_MODELS_PATH,objOsmGeomParts, ObjectsParts, spatial_index)
             osmObject.blnHasBuildingParts = (heightbyparts > 0)
             intValidationErrorsTotal += numberofvalidationerrors
 
@@ -330,7 +373,7 @@ def checkWindows(osmtags):
             return True
     return False     
 
-def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
+def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts, spatial_index):
     
     height = 0 # by parts
     min_height = None # by parts
@@ -370,8 +413,11 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
     bbox_ways = []
     bbox_relations = []
     
+    way_ids, relation_ids = spatial_index.intersection(object1.bbox)
+    
     #check relations
-    for _, relation in objOsmGeomParts.relations.items():
+    for relation_id in relation_ids:
+        relation=objOsmGeomParts.relations[relation_id]
         if relation.type == 'building':
             # Relations of type 'building' is a very strange thing.
             # It is neither building outline nor building part.
@@ -392,8 +438,8 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts):
                 bbox_ways += [way_ref[0]]
             
     #check ways
-    for _, way in objOsmGeomParts.ways.items():
-         
+    for way_id in way_ids:
+        way = objOsmGeomParts.ways[way_id]
         if way.minLat >= object1.bbox.minLat and way.maxLat <= object1.bbox.maxLat and way.minLon >= object1.bbox.minLon and way.maxLon <= object1.bbox.maxLon:
             blnCompleteObject = True
             #TODO: we NEED to check that way is complete, and all it's nodes inside BBOX (or objOsmGeom Nodes)             
