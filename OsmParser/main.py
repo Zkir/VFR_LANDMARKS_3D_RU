@@ -244,8 +244,11 @@ def calculateBuildingType( osmtags, dblSize):
             if tagReligion == 'muslim':
                 tagBuilding = 'mosque'
                 
-        elif tagAmenity in ['library', 'cinema', 'planetarium', 'restaurant', 'clinic', 'hospital', 'bus_station','university', 'school']:        
+        elif tagAmenity in ['library', 'cinema', 'planetarium', 'restaurant', 'clinic', 'hospital', 'bus_station', 'university', 'school']:        
             tagBuilding = tagAmenity
+            
+        elif tagAmenity == 'pharmacy':   
+            tagBuilding = 'retail'
         
         #??amenity=community_centre??
             
@@ -261,6 +264,10 @@ def calculateBuildingType( osmtags, dblSize):
             
         elif tagManMade == 'lighthouse':
             tagBuilding = 'lighthouse' 
+        
+        elif tagManMade == 'beacon': #there is some difference between beacon and lighthouse, but for object with building=* we will ignore it. 
+            tagBuilding = 'lighthouse'         
+        
             
         elif tagLeisure in ['stadium','sports_centre' 'ice_rink']:
             tagBuilding = tagLeisure 
