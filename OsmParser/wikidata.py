@@ -376,8 +376,10 @@ def get_wikidata(qid):
         
         with open(wdfilename, 'w', encoding='utf-8') as f:
             json.dump(wikidata, f, ensure_ascii=False, indent=4)
-
-    return wikidata['entities'][qid]
+    if 'entities' in wikidata:
+        return wikidata['entities'][qid]
+    else:
+        return None         
 
 def get_from_wikimedia_api(url):
     r = requests.get(url)
@@ -429,79 +431,69 @@ def save_description(txt, filename):
 
 def get_wikidata_organized(qid):    
     wd={}
+    wd["label"] = ''
+    wd["label_ru"] = ''
+    wd["description"]=""
+    wd["description_ru"]=""
+    wd["instance_of"] = ''
+    wd["coordinates"] = None # coordinates may be missing in case object in wikidata is not a building, but 'Q2088357': 'musical ensemble'  for example
+    wd["architect"] = ''
+    wd["architect_ru"] = ''
+    wd["architecture"] = ''
+    wd["wikipedia"] = "" 
 
     wikidata = get_wikidata(qid)
-
-    if 'en' in wikidata['labels']:
-        wd["label"] = wikidata['labels']['en']['value']
-    else:
-        wd["label"] = ''
+    if not wikidata:
+        #this means that error was returned by wikidata API
+        return wd
         
-    if 'ru' in wikidata['labels']:
-        wd["label_ru"] = wikidata['labels']['ru']['value']    
-    else:    
-        wd["label_ru"] = ''
+    if 'labels' in wikidata: 
+        if  'en' in wikidata['labels']:
+            wd["label"] = wikidata['labels']['en']['value']
+            
+        if 'labels' in wikidata and 'ru' in wikidata['labels']:
+            wd["label_ru"] = wikidata['labels']['ru']['value']    
         
-    if 'en' in wikidata['descriptions']:
-        wd["description"]=wikidata['descriptions']['en']['value']
-    else:  
-        wd["description"]=""
+    if 'descriptions' in wikidata:
+        if 'en' in wikidata['descriptions']:
+            wd["description"]=wikidata['descriptions']['en']['value']
         
-    if 'ru' in wikidata['descriptions']:
-        wd["description_ru"]=wikidata['descriptions']['ru']['value']
-    else:  
-        wd["description_ru"]=""
-        
-    if 'P31' in wikidata['claims']:
-        wd["instance_of"] = wikidata['claims']['P31'][0]['mainsnak']['datavalue']['value']['id']
-    else:
-        wd["instance_of"] = ''
-        
+        if 'ru' in wikidata['descriptions']:
+            wd["description_ru"]=wikidata['descriptions']['ru']['value']
+            
+    if 'claims' in wikidata:
+        if 'P31' in wikidata['claims']:
+            wd["instance_of"] = wikidata['claims']['P31'][0]['mainsnak']['datavalue']['value']['id']
     
-    if 'P18' in wikidata['claims']:     
-        wd["image"] = wikidata['claims']['P18'][0]['mainsnak']['datavalue']['value']
-    if 'P856' in wikidata['claims']:
-        wd["website"] = wikidata['claims']['P856'][0]['mainsnak']['datavalue']['value']
+        if 'P18' in wikidata['claims']:     
+            wd["image"] = wikidata['claims']['P18'][0]['mainsnak']['datavalue']['value']
+        if 'P856' in wikidata['claims']:
+            wd["website"] = wikidata['claims']['P856'][0]['mainsnak']['datavalue']['value']
         
-    if 'P625' in wikidata['claims']:
-        wd["coordinates"] = wikidata['claims']['P625'][0]['mainsnak']['datavalue']['value']
-    else:
-        # coordinates may be missing in case object in wikidata is not a building, but 'Q2088357': 'musical ensemble'  for example
-        wd["coordinates"] = None
+        if 'P625' in wikidata['claims']:
+            wd["coordinates"] = wikidata['claims']['P625'][0]['mainsnak']['datavalue']['value']
 
-    if 'P571' in wikidata['claims'] and 'datavalue' in wikidata['claims']['P571'][0]['mainsnak']:
-        wd["start_date"] = wikidata['claims']['P571'][0]['mainsnak']['datavalue']['value']['time'][1:5]
+        if 'P571' in wikidata['claims'] and 'datavalue' in wikidata['claims']['P571'][0]['mainsnak']:
+            wd["start_date"] = wikidata['claims']['P571'][0]['mainsnak']['datavalue']['value']['time'][1:5]
+
         
-    if 'ruwiki' in wikidata['sitelinks']:    
+        if 'P84' in wikidata['claims'] and 'datavalue' in wikidata['claims']['P84'][0]['mainsnak']:
+            architect_id = wikidata['claims']['P84'][0]['mainsnak']['datavalue']['value']["id"]    
+            architect_data = get_wikidata(architect_id)
+            
+            if 'en' in architect_data['labels']:
+                wd["architect"] = architect_data['labels']['en']['value']
+            
+            if 'ru' in architect_data['labels']:
+                wd["architect_ru"] = architect_data['labels']['ru']['value']    
+        
+        if 'P149' in wikidata['claims'] and 'datavalue' in wikidata['claims']['P149'][0]['mainsnak']:
+            wd["architecture"] = wikidata['claims']['P149'][0]['mainsnak']['datavalue']['value']["id"]            
+            
+        
+    if 'sitelinks' in wikidata and 'ruwiki' in wikidata['sitelinks']:    
         wd["wikipedia"] = 'ru:'+wikidata['sitelinks']['ruwiki']['title']
-    else:    
-        wd["wikipedia"] = ""
-        
-    if 'P84' in wikidata['claims']:
-        architect_id = wikidata['claims']['P84'][0]['mainsnak']['datavalue']['value']["id"]    
-        architect_data = get_wikidata(architect_id)
-        
-        if 'en' in architect_data['labels']:
-            wd["architect"] = architect_data['labels']['en']['value']
-        else:
-            wd["architect"] = ''
-        
-        if 'ru' in architect_data['labels']:
-            wd["architect_ru"] = architect_data['labels']['ru']['value']    
-        else:    
-            wd["architect_ru"] = ''
-
-    else:
-        wd["architect"] = ''
-        wd["architect_ru"] = ''
-        
-    if 'P149' in wikidata['claims']:
-        wd["architecture"] = wikidata['claims']['P149'][0]['mainsnak']['datavalue']['value']["id"]            
-    else:
-        wd["architecture"] = ''
-        
-        
-        
+    
     return wd
 
 
@@ -509,13 +501,17 @@ def get_wikidata_organized(qid):
 # main block 
 # ============
 def update_region(input_file_name, output_file_name):
+    LIMIT=50000
     
+    all_objects=mdlMisc.loadDatFile(input_file_name) 
+    objects_with_wikidata = []
     
-    cells=mdlMisc.loadDatFile(input_file_name) 
-
-    for rec in cells:
-        if rec[QUADDATA_WIKIDATA_ID]!="" :
-            
+    for rec in all_objects:
+        if rec[QUADDATA_WIKIDATA_ID] != "" :
+            objects_with_wikidata.append(rec)
+    n = 0
+    for rec in tqdm(objects_with_wikidata):
+                 
             # Get info from wikidata DB
             wikidata = get_wikidata_organized(rec[QUADDATA_WIKIDATA_ID]) 
             
@@ -545,10 +541,15 @@ def update_region(input_file_name, output_file_name):
                 
             if not rec[QUADDATA_ARCHITECT]:
                 rec[QUADDATA_ARCHITECT] = wikidata["architect_ru"]
-             
+            
+            n += 1
+            if n>= LIMIT:
+                print(f"Limit of {LIMIT} objects has been exceeded")
+                break
            
 
-    mdlMisc.saveDatFile(cells, output_file_name)
+    mdlMisc.saveDatFile(all_objects, output_file_name)
+    print (f'{n} objects processed out of {len(objects_with_wikidata)}')
     
 def count(a_dict, value):  
     if value not in a_dict:
@@ -658,7 +659,6 @@ def get_images(input_file_name):
                 #print()
     
 
-#SF3D_USE_CPU=1
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         prog='wikidata',
