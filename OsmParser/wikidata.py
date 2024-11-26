@@ -6,6 +6,10 @@ import os
 import sys
 from mdlClassify import * 
 import argparse
+from PIL import Image
+from pathlib import Path
+from io import BytesIO
+from tqdm import tqdm
 
 WIKIDATA_DIRECTORY = "d:/_VFR_LANDMARKS_3D_RU/work_folder/23_wikidata"
 IMAGE_DIRECTORY =    "d:/_VFR_LANDMARKS_3D_RU/work_folder/25_images"
@@ -380,19 +384,43 @@ def get_from_wikimedia_api(url):
     response=json.loads(r.content.decode('utf-8'))
     return(response)
 
-def download_file(url, filename):
-    full_save_path = IMAGE_DIRECTORY + "/" +  filename
-    if os.path.exists(full_save_path):
+def download_image(url, filename):
+    NEW_SIZE = 512
+    # setup
+    short_filename = Path(filename).stem
+    extension      = Path(filename).suffix
+    if extension in ['.svg']:
+        # vector images are not supported either by PIL nor by pytorch
+        # so we cannot do much with them
         return
     
+    #full_save_path = os.path.join(IMAGE_DIRECTORY, filename) #filepath with original extension
+    full_save_path = os.path.join(IMAGE_DIRECTORY , short_filename+".png")
+    
+    if os.path.exists(full_save_path):
+        #if file exists already, no need to redownload it. 
+        return
+    
+    # download    
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
-
     r = requests.get(url, headers=headers )
     if not r.ok:
         raise Exception("Unable to download file. Status "+str(r.status_code))
+        
+    # open from memory    
+    img = Image.open(BytesIO(r.content))    
     
-    with open(full_save_path, mode="wb") as file:
-       file.write(r.content)
+    #resize
+    ratio = NEW_SIZE / min(img.size[0], img.size[1])
+    new_width = int(ratio*img.size[0]) 
+    new_height= int(ratio*img.size[1])
+    img = img.resize((new_width, new_height), Image.LANCZOS)
+
+    #save to file
+    
+    img.save(full_save_path, "PNG")       
+    
+    
        
 def save_description(txt, filename):
     full_save_path = IMAGE_DIRECTORY + "/" +  filename
@@ -584,8 +612,12 @@ def print_stats(input_file_name):
     
 def get_images(input_file_name):
     cells=mdlMisc.loadDatFile(input_file_name) 
-    for rec in cells:
+    for rec in tqdm(cells):
         if rec[QUADDATA_WIKIDATA_ID]!="" :
+    
+            if os.path.exists(os.path.join(IMAGE_DIRECTORY , rec[QUADDATA_WIKIDATA_ID]+".png")):
+                #if file exists already, no need to redownload it. 
+                continue
             
             building_text_description =  ( 
                     rec[QUADDATA_COLOUR] + " " +
@@ -603,11 +635,11 @@ def get_images(input_file_name):
                 #building_text_description = building_text_description.strip()
                 
                 api_url ="https://commons.wikimedia.org/w/api.php?action=query&format=json" +"&prop=imageinfo&iiprop=url&titles=File:" + wikidata['image']
-                print(rec[QUADDATA_OBJ_TYPE][0]+rec[QUADDATA_OBJ_ID], rec[QUADDATA_WIKIDATA_ID] )
-                print('  ' + building_text_description)
-                print('  ' + wikidata['image'])
-                #print('  ' +'https://commons.wikimedia.org/wiki/File:'+wikidata['image'])
-                #print('  ' + api_url)
+                #print(rec[QUADDATA_OBJ_TYPE][0]+rec[QUADDATA_OBJ_ID], rec[QUADDATA_WIKIDATA_ID] )
+                #print('  ' + building_text_description)
+                #print('  ' + wikidata['image'])
+                ##print('  ' +'https://commons.wikimedia.org/wiki/File:'+wikidata['image'])
+                ##print('  ' + api_url)
                 
                 # we need to obtain actual download url via api, because it is hidden.           
                 image_metadata = get_from_wikimedia_api(api_url)
@@ -618,11 +650,12 @@ def get_images(input_file_name):
                 else:
                     print('ERROR: wikimedia site did not provided url for the image '+ api_url)
                     continue
-                print('  '+str(image_download_url))
+                #print('  '+str(image_download_url))
                 _, extension = os.path.splitext(wikidata['image'])
-                download_file(image_download_url, rec[QUADDATA_WIKIDATA_ID] + extension)
-                save_description(building_text_description, rec[QUADDATA_WIKIDATA_ID]+'.txt')
-                print()
+                download_image(image_download_url, rec[QUADDATA_WIKIDATA_ID] + extension)
+                
+                #save_description(building_text_description, rec[QUADDATA_WIKIDATA_ID]+'.txt')
+                #print()
     
 
 #SF3D_USE_CPU=1
