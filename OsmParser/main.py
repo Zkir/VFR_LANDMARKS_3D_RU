@@ -115,9 +115,6 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
         # fill report
         strBuildingType = calculateBuildingType(osmObject.osmtags, osmObject.size )
 
-
-
-
         tagRefTemplesRu = osmObject.getTag('ref:temples.ru')
         tagRefSoboryRu = osmObject.getTag('ref:sobory.ru')
         tagWikidata = osmObject.getTag('wikidata')
@@ -355,9 +352,10 @@ def calculateBuildingType( osmtags, dblSize):
     if tagBuilding in  ['chapel', 'church', 'campanile', 'mosque', 'shrine', 'wayside_shrine']:
         strResult = tagDenomination + ' ' + strResult
         
-    if tagRuins != '':
-        if tagRuins == 'yes' and strResult != "ruins": # preventing RUINED RUINS
-            strResult = 'RUINED ' + strResult
+    if tagRuins not in ['', 'no']:
+        if tagRuins == 'yes':
+            if strResult != "ruins": # preventing RUINED RUINS
+                strResult = 'RUINED ' + strResult
         else:
             print('unexpected value for ruins key ' + tagRuins)
     
@@ -612,7 +610,6 @@ def rewriteOsmFile(object1, OSM_3D_MODELS_PATH, objOsmGeomParts, ObjectsParts, s
     # if there is just one part, it exactly precise!
     
     if numberofparts >= 1:
-        
         if round(area_by_parts) < round(object1.size**2) :
             #print(round(area_by_parts), "    ",  round(object1.size**2))
             Errors += [log_error(UCase(Left(object1.type, 1)) + ':'+object1.id, PARTS_DO_NOT_COVER_OUTLINE, round(area_by_parts), round(object1.size**2))]
