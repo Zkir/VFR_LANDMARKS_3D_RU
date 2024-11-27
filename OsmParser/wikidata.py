@@ -11,6 +11,8 @@ from pathlib import Path
 from io import BytesIO
 from tqdm import tqdm
 
+Image.MAX_IMAGE_PIXELS = None
+
 WIKIDATA_DIRECTORY = "d:/_VFR_LANDMARKS_3D_RU/work_folder/23_wikidata"
 IMAGE_DIRECTORY =    "d:/_VFR_LANDMARKS_3D_RU/work_folder/25_images"
 
@@ -27,6 +29,8 @@ wikidata_buildings={
                     'Q3947':     'residential', # house=building usually intended for living in
                     'Q1498804':  'residential', # multifamily residential 
                     'Q279118':   'house',       # !!! wooden house  !!!
+                    'Q160169':   'house',       # dacha 
+                    'Q1307276':  'house',  #single-family detached home 
                     'Q41955438': 'building',    # !!! brick building  = building made out of bricks !!!
                     'Q12104567': 'apartments',
                     'Q13402009': 'apartments',
@@ -38,6 +42,12 @@ wikidata_buildings={
                     'Q879050':   'manor', 
                     'Q1365179':  'manor',       # private mansion 
                     'Q12292478': 'MANOR',       # estate
+                    'Q15848826': 'palace',      # city palace
+                    'Q751876':   'palace', #château
+                    'Q16560':    'palace', 
+                    'Q3950':     'villa',
+                    'Q1686006' : 'summer residence',
+                    
                     'Q1021645':  'office',      # office building
                     'Q203180':   'office',      # serviced office (Бизнес-центр)
                     'Q2519340':  'office',      # administrative building
@@ -79,15 +89,21 @@ wikidata_buildings={
                     'Q4438531':  'school',      # specialized secondary school
                     'Q233324':   'school',      # seminary
                     'Q132834':   'school',      # madrasa  
+                    'Q1542966':  'school',      # secondary school in Germany
                     
                     'Q108325':   'chapel',
+                    'Q1457501':  'chapel',                #cemetery chapel
                     'Q16970':    'church',
-                    'Q200334':   'CAMPANILE',   # bell tower
-                    'Q2977':     'church',      # cathedral
+                    'Q200334':   'CAMPANILE',             # bell tower
+                    'Q2977':     'church',                # cathedral
+                    'Q317557':   'church',                # parish church - church which acts as the religious centre of a parish
+                    'Q1129743':  'roman_catholic church', # filial church - in the Roman Catholic Church, a church building that is not the main church of a parish
+                    'Q10631691': 'catholic church',       # catholic pilgrimage church
+                    'Q1088552':  'catholic church',       # catholic church building
                     'Q2031836':  'orthodox church',
                     'Q56242225': 'orthodox church',
-                    'Q25416095': 'orthodox church', # sobor 
-                    'Q27055621': 'orthodox church', # russian wooden church !!!!!
+                    'Q25416095': 'orthodox church',       # sobor 
+                    'Q27055621': 'orthodox church',       # russian wooden church !!!!!
                     'Q27055636': 'old_believers church', 
                     'Q1975485':  'orthodox chapel' ,
                     'Q56242235': 'lutheran church', 
@@ -110,7 +126,8 @@ wikidata_buildings={
                     
                     'Q57821':    'fortification',
                     'Q57831':    'fortress',
-                    'Q81917':    'DEFENSIVE TOWER', 
+                    'Q81917':    'defensive tower',
+                    'Q20034791': 'defensive tower',                     
                     'Q1785071':  'fort',  
 
                     'Q483110':   'stadium',
@@ -142,25 +159,22 @@ wikidata_buildings={
                     'Q216107':   'RETAIL',  # department store
                     'Q2386997':  'RETAIL',  # Gostiny Dvor = Historical Russian indoor market or shopping centre
                     'Q27686':    'hotel',   # hotel as business enterprise 
-                    'Q63099748': 'hotel',  # hotel as building
+                    'Q63099748': 'hotel',   # hotel as building
+                    'Q256020':   'hotel',   # inn
 
                     'Q375336':   'film studio',
                     'Q11446':    'ship',
                     'Q97377955': 'SHIP', #floating nuclear power plant
                     'Q2811':     'SHIP',  #submarine
-                    'Q751876':   'palace', #château
-                    'Q16560':    'palace', 
-                    'Q3950':     'villa',
                     'Q17715832': 'castle ruin',
-                    'Q1686006' : 'summer residence',
                     'Q1195942':  'fire_station', 
                     
                     'Q685204':   'GATEHOUSE',  #gate tower
                     'Q82117':    'CITY_GATE', 
                     'Q276173':   'GAZEBO',  #pavilion, but in osm pavilion means british sports pavilion
                     'Q23413':    'castle',  
+                    'Q615810':   'castle',  #water castle
                     'Q274153':   'water tower',  
-                    'Q160169':   'house', #dacha 
                     'Q148319':   'planetarium',  
                     'Q143912':   'triumphal_arch',  
                     'Q16917':    'hospital', 
@@ -195,6 +209,14 @@ wikidata_buildings={
                     'Q861951':   'police_station ',  #!!!!!
                     'Q55485':    'dead-end railway station',  #dead-end railway station
                     'Q184356':   'radio telescope',  
+                    
+                    'Q543654':   'townhall',     # rathaus
+                    'Q1303167':  'barn',         # barn
+                    'Q185187':   'watermill',    # watermill 
+                    'Q38720':    'windmill',     # windmill
+                    'Q3044808':  'outbuilding',  # outbuilding
+                    'Q182676':   'hut',          #mountain hut
+                    ##'Q1440300':  '',           #observation tower 
 
                     }
 
@@ -274,6 +296,13 @@ wikidata_non_buildings={
                     'Q1348006':  'city block',   #= central element of urban planning and urban design; smallest area that is surrounded by streets
                     'Q126916836':'Solnceva street',  #s treet in Ramenskoye
                     'Q327333':   'government agency', 
+                    
+                    'Q1516079':  'cultural heritage ensemble',
+                    'Q13406463': 'Wikimedia list article', 
+                    'Q253019':   'Ortsteil',      #named subdivision or section of a human settlement in Germany, Austria or Switzerland
+                    'Q123705':   'neighborhood',  #neighborhood
+                    'Q839954':   'archaeological site', 
+                    'Q521458':   'railway infrastructure manager',  #railway infrastructure manager
 
 }
 
@@ -393,7 +422,7 @@ def download_image(url, filename):
     extension      = Path(filename).suffix
     if extension in ['.svg']:
         # vector images are not supported either by PIL nor by pytorch
-        # so we cannot do much with them
+        # so we cannot do much with them, just skip
         return
     
     #full_save_path = os.path.join(IMAGE_DIRECTORY, filename) #filepath with original extension
@@ -408,15 +437,23 @@ def download_image(url, filename):
     r = requests.get(url, headers=headers )
     if not r.ok:
         raise Exception("Unable to download file. Status "+str(r.status_code))
-        
+    
     # open from memory    
     img = Image.open(BytesIO(r.content))    
     
     #resize
-    ratio = NEW_SIZE / min(img.size[0], img.size[1])
-    new_width = int(ratio*img.size[0]) 
-    new_height= int(ratio*img.size[1])
-    img = img.resize((new_width, new_height), Image.LANCZOS)
+    try:
+        ratio = NEW_SIZE / min(img.size[0], img.size[1])
+        new_width = int(ratio*img.size[0]) 
+        new_height= int(ratio*img.size[1])
+        img = img.resize((new_width, new_height), Image.LANCZOS)
+    except OSError as e:
+        print(e)
+        print(url, filename)
+        return
+    
+    if img.mode == 'CMYK':
+        img = img.convert('RGB')
 
     #save to file
     
@@ -612,51 +649,54 @@ def print_stats(input_file_name):
     
     
 def get_images(input_file_name):
-    cells=mdlMisc.loadDatFile(input_file_name) 
-    for rec in tqdm(cells):
+    all_objects = mdlMisc.loadDatFile(input_file_name) 
+    objects_with_wikidata = []
+    for rec in all_objects:
         if rec[QUADDATA_WIKIDATA_ID]!="" :
-    
-            if os.path.exists(os.path.join(IMAGE_DIRECTORY , rec[QUADDATA_WIKIDATA_ID]+".png")):
-                #if file exists already, no need to redownload it. 
+            objects_with_wikidata.append (rec)
+            
+    for rec in tqdm(objects_with_wikidata):
+        if os.path.exists(os.path.join(IMAGE_DIRECTORY , rec[QUADDATA_WIKIDATA_ID]+".png")):
+            #if file exists already, no need to redownload it. 
+            continue
+        
+        building_text_description =  ( 
+                rec[QUADDATA_COLOUR] + " " +
+                rec[QUADDATA_MATERIAL] + " " +
+                rec[QUADDATA_BUILDING_TYPE] + " " +
+                rec[QUADDATA_STYLE] + " " +
+                rec[QUADDATA_BUILD_DATE] + " " + 
+                rec[QUADDATA_ARCHITECT]
+                ).strip()
+        
+        wikidata = get_wikidata_organized(rec[QUADDATA_WIKIDATA_ID])             
+        if building_text_description != '' and 'image' in wikidata:
+            #building_text_description += " " + wikidata["label"] + " " +wikidata["description"]
+            #building_text_description += " " +wikidata["label"]
+            #building_text_description = building_text_description.strip()
+            
+            api_url ="https://commons.wikimedia.org/w/api.php?action=query&format=json" +"&prop=imageinfo&iiprop=url&titles=File:" + wikidata['image']
+            #print(rec[QUADDATA_OBJ_TYPE][0]+rec[QUADDATA_OBJ_ID], rec[QUADDATA_WIKIDATA_ID] )
+            #print('  ' + building_text_description)
+            #print('  ' + wikidata['image'])
+            ##print('  ' +'https://commons.wikimedia.org/wiki/File:'+wikidata['image'])
+            ##print('  ' + api_url)
+            
+            # we need to obtain actual download url via api, because it is hidden.           
+            image_metadata = get_from_wikimedia_api(api_url)
+            for _, yyy in image_metadata["query"]["pages"].items():
+                break # we just need one image, and expect only one
+            if "imageinfo" in yyy:
+                image_download_url = yyy["imageinfo"][0]["url"] 
+            else:
+                #print('ERROR: wikimedia site did not provided url for the image '+ api_url)
                 continue
+            #print('  '+str(image_download_url))
+            _, extension = os.path.splitext(wikidata['image'])
+            download_image(image_download_url, rec[QUADDATA_WIKIDATA_ID] + extension)
             
-            building_text_description =  ( 
-                    rec[QUADDATA_COLOUR] + " " +
-                    rec[QUADDATA_MATERIAL] + " " +
-                    rec[QUADDATA_BUILDING_TYPE] + " " +
-                    rec[QUADDATA_STYLE] + " " +
-                    rec[QUADDATA_BUILD_DATE] + " " + 
-                    rec[QUADDATA_ARCHITECT]
-                    ).strip()
-            
-            wikidata = get_wikidata_organized(rec[QUADDATA_WIKIDATA_ID])             
-            if building_text_description != '' and 'image' in wikidata:
-                #building_text_description += " " + wikidata["label"] + " " +wikidata["description"]
-                #building_text_description += " " +wikidata["label"]
-                #building_text_description = building_text_description.strip()
-                
-                api_url ="https://commons.wikimedia.org/w/api.php?action=query&format=json" +"&prop=imageinfo&iiprop=url&titles=File:" + wikidata['image']
-                #print(rec[QUADDATA_OBJ_TYPE][0]+rec[QUADDATA_OBJ_ID], rec[QUADDATA_WIKIDATA_ID] )
-                #print('  ' + building_text_description)
-                #print('  ' + wikidata['image'])
-                ##print('  ' +'https://commons.wikimedia.org/wiki/File:'+wikidata['image'])
-                ##print('  ' + api_url)
-                
-                # we need to obtain actual download url via api, because it is hidden.           
-                image_metadata = get_from_wikimedia_api(api_url)
-                for _, yyy in image_metadata["query"]["pages"].items():
-                    break # we just need one image, and expect only one
-                if "imageinfo" in yyy:
-                    image_download_url = yyy["imageinfo"][0]["url"] 
-                else:
-                    print('ERROR: wikimedia site did not provided url for the image '+ api_url)
-                    continue
-                #print('  '+str(image_download_url))
-                _, extension = os.path.splitext(wikidata['image'])
-                download_image(image_download_url, rec[QUADDATA_WIKIDATA_ID] + extension)
-                
-                #save_description(building_text_description, rec[QUADDATA_WIKIDATA_ID]+'.txt')
-                #print()
+            #save_description(building_text_description, rec[QUADDATA_WIKIDATA_ID]+'.txt')
+            #print()
     
 
 if __name__ == '__main__':

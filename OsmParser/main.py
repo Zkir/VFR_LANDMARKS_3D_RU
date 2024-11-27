@@ -317,7 +317,7 @@ def calculateBuildingType( osmtags, dblSize):
                 if tagHistoric == 'tomb' and  tagTomb !='':
                     tagBuilding = tagTomb
                 
-                if tagHistoric == 'castle' and  tagCastleType != '':
+                if tagHistoric == 'castle' and  tagCastleType not in  ['', 'defensive']:
                     tagBuilding = tagCastleType 
                     
         # tourism=museum,  tourism=hotel        
