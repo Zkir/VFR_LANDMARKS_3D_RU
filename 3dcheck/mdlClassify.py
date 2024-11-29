@@ -1,5 +1,5 @@
 building_types_rus_names = {
-    
+    'CONSTRUCTION':               '_СТРОЙКА_',    
     # religious
     'CHURCH':                     'Церковь',
     'CHAPEL':                     'Часовня',
@@ -124,8 +124,7 @@ building_types_rus_names = {
     'CITY_GATE':       'Надвратная башня', #Торхауз
 
     'GREENHOUSE':      'Оранжерея',
-    
-    'CONSTRUCTION':    '*СТРОЙКА*',
+   
     'RUINS':           'Руины',
     'RUINED':          'Руины',
     'COLLAPSED':       'Руины',

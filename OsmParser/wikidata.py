@@ -55,15 +55,6 @@ wikidata_buildings={
                     'Q25550691': 'office',      # town hall= chief administrative seat of a municipality
                     'Q294422':   'office',      # public building = owned and operated by a governing body, carrying out official duties, and often occupied by a governmental agency
                     'Q18761864': 'OFFICE',      # bank
-                    'Q33506':    'museum',
-                    'Q2087181':  'museum',      # historic house museum
-                    'Q207694':   'museum',      # art museum
-                    'Q2772772':  'museum',      # military museum
-                    'Q588140':   'museum',      # science museum 
-                    'Q10624527': 'museum',      # biographical museum
-                    'Q2398990':  'museum',      # technology museum
-                    'Q1595639':  'museum',      # local museum
-                    'Q17431399': 'museum',      # national museum
                     'Q4453481':  'theatre',
                     'Q24354':    'theatre',
                     'Q153562':   'theatre',     # opera house 
@@ -226,6 +217,17 @@ wikidata_non_buildings={
                     'Q12518':    'tower',
                     'Q18142':    'tower',  #tower block
                     'Q11303':    'skyscraper', # may be can help us in case height is missing?
+                    
+                    # museum can be created from any type of building
+                    'Q33506':    'museum',
+                    'Q2087181':  'museum',      # historic house museum
+                    'Q207694':   'museum',      # art museum
+                    'Q2772772':  'museum',      # military museum
+                    'Q588140':   'museum',      # science museum 
+                    'Q10624527': 'museum',      # biographical museum
+                    'Q2398990':  'museum',      # technology museum
+                    'Q1595639':  'museum',      # local museum
+                    'Q17431399': 'museum',      # national museum
                     
                     #strange non-building types
                     'Q634099':   'rural settlement in Russia',
