@@ -103,7 +103,7 @@ work_folder\22_all_osm_objects_list\all-objects.dat: work_folder\20_osm_3dmodels
 
 work_folder\22_all_osm_objects_list\RUS_TOP.dat: work_folder\22_all_osm_objects_list\all-objects.dat
 	python OsmParser\make_tops.py $@ $<
-	
+
 #****************************************************************************************************************************
 #* 25 Extract images 
 #****************************************************************************************************************************
@@ -113,6 +113,9 @@ work_folder\25_images: | work_folder
 work_folder\25_images\extract_images: work_folder\22_all_osm_objects_list\all-objects.dat | work_folder\25_images
 	python OsmParser\wikidata.py get-images -i work_folder\22_all_osm_objects_list\all-objects.dat
 	touch $@
+	
+work_folder\22_all_osm_objects_list\photo_wo_type.dat:  work_folder\25_images\extract_images
+	python osmparser\find_missing.py
 
 #****************************************************************************************************************************
 #* 30 Convert models to x-plane obj and x3d 

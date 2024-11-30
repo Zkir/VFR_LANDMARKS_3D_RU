@@ -109,10 +109,16 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
         print( '<p>На этой странице представлены здания, имеющие окна, заданные тегами <b><a href="https://wiki.openstreetmap.org/wiki/Key:window">window:*</a></b> .'+ '\n')
         
     
-    if strQuadrantName == "RUS_LATEST":
+    elif strQuadrantName == "RUS_LATEST":
         print( '<h2>Пульс проекта</h2>'+ '\n')
         print('<p>Количество отредактированных зданий по дням</p>')
         print('<p><img src="data/images/recent_activity.png"></img></p>')
+    elif strQuadrantName == "photo_wo_type":
+        print( '<h2>Здания без типа</h2>'+ '\n')
+        print('<p>На этой странице собраны здания, для которых не задан тип. Вы очень поможете проекту, если установите значение тега <b>building=*</b></p>')
+        print('<p>Существующие типы зданий, они же значения <b>building=*</b> можно посмотреть <a href="https://wiki.openstreetmap.org/wiki/RU:Key:building">тут</a>.</p>')
+        
+        
     else: 
         print( '<h2>Cтатистика по квадрату</h2>'+ '\n')
         print( '<table class="sortable">'+ '\n')
@@ -140,7 +146,8 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     print( '<h2>Объекты</h2>'+ '\n')
     print( '<p><small>Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</small><p>'+ '\n')
     print( '<table class="sortable">'+ '\n')
-    print( '<tr><th>OSM ID</th><th>Название</th><th>Год постройки</th><th>Размер, м</th><th>Высота, м</th>'
+    #<th>OSM ID</th>
+    print( '<tr><th>Название</th><th>Год постройки</th><th>Размер, м</th><th>Высота, м</th>'
            + '<th>Тип здания</th><th>Стиль</th><th>Город</th> <th>Район</th> <th>Область</th><th>OSM 3D </th><th>Число частей</th><th>Послед. редактир.</th><th>Ошибки</th><th>J</th></tr>'+ '\n')
     
     # Hidden columns
@@ -148,8 +155,8 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     #<th>Цвет</th><th>Материал</th>
    
     for i in range(len(cells)):
-
-        if ( cells[i][10] != 'DEFENSIVE WALL' )  and  ( cells[i][10] != 'CHURCH FENCE' )  and  ( cells[i][10] != 'WATER TOWER' )  and  ( cells[i][10] != 'HISTORIC WALL' ) :
+    
+        if ( cells[i][10] != 'DEFENSIVE WALL' )  and  ( cells[i][10] != 'CHURCH FENCE' )  and  ( cells[i][10] != 'HISTORIC WALL' ) : ## ??and  ( cells[i][10] != 'WATER TOWER' )??
         
             if len(cells[i])>26:
                 number_of_errors = int(cells[i][26])
@@ -193,10 +200,10 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
             strModelUrl = strQuadrantName + '/' + Left(UCase(cells[i][1] ), 1) + cells[i][2]  + '.html'
             strErrorsUrl = strQuadrantName + '/' + Left(UCase(cells[i][1] ), 1) + cells[i][2]  + '.errors.html'
             
-            print( '<td><a href="' + strOSMurl + '">' + strOsmID + '</a></td>'+ '\n')
-            #Print #3, "<td>" & strOsmID & "</td>"
+            #print( '<td><a href="' + strOSMurl + '">' + strOsmID + '</a></td>'+ '\n')
+            
             #Name/description
-            if (cells[i][23] == "True") or (int(cells[i][24])>0):
+            if (cells[i][23] == "True") or (int(cells[i][24])>0) or cells[28]:
                 #Better check here that the model exists!
                 print('<td width="350px"><a href="' + strModelUrl + '">' + strDescription + '</a></td>'+ '\n')
             else:
@@ -249,6 +256,7 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
             print('<td><a href="' + strJOSMurl + '" target = "josm" >' + 'J' + '</a></td>'+ '\n')
             print('</tr>'+ '\n')
     print( '</table>'+ '\n')
+    print(f'Всего {len(cells)} объектов в данном списке')
     print("""
         <h3>Примечания</h3>
         <ul>

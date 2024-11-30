@@ -174,9 +174,14 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp, validation_errors
         print( '        </x3d>'+ '\n')
         print( '      </div>'+ '\n')
     else:
-        print( '      <div class=\'no_model\'>'+ '\n')
-        print( '           <img src=\'/nomodel.gif\' width=\'450px\' height=\'450px\' alt=\'3d Модель отсутствует\' ><img> '+ '\n')
-        print( '      </div>'+ '\n')
+        if obj_rec[28]:
+            print( '      <div class=\'no_model\'>'+ '\n')
+            print( '           <img src=\'/data/building_images/'+obj_rec[28]+'.png\'  height=\'512px\' alt=\'3d Модель отсутствует\' ><img> '+ '\n')
+            print( '      </div>'+ '\n')
+        else:
+            print( '      <div class=\'no_model\'>'+ '\n')
+            print( '           <img src=\'/nomodel.gif\' width=\'450px\' height=\'450px\' alt=\'3d Модель отсутствует\' ><img> '+ '\n')
+            print( '      </div>'+ '\n')
     if strQuadrantName == "RUS_TOP_WINDOWS":        
         print( '       <button id="trigger-overlay" type="button">blosm</button>'+ '\n')
     else: 
