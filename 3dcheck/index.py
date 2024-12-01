@@ -38,6 +38,7 @@ def CreateIndexPage(strInputFile):
     print( '  <p>3. <a href="/rus-top-windows.html">Топ зданий c ОКНАМИ, Россия</a> </p>' + '\n')
     print( '  <p>4. <a href="/rus-latest.html">Последние изменения, Россия</a> </p>' + '\n')
     print( '  <p>5. <a href="/photo_wo_type.html">Здания без типа, Россия</a> </p>' + '\n')
+    print( '  <p>6. <a href="/stats.html">Статистика по типам зданий, Россия</a> </p>' + '\n')
     
     
    
