@@ -53,6 +53,7 @@ building_types_rus_names = {
     'CHRISTIAN_COMMUNITY CHURCH': 'Протестантская церковь',
     
     'MORMON CHURCH':              'Храм мормонов',
+    'JEHOVAHS_WITNESS CHURCH':    'Зал Царства',
     
     'MOSQUE':                     'Мечеть',
     'SUNNI MOSQUE':               'Мечеть', # Пока сунниты и шииты для нас в плане архитектуры не отличаются.
@@ -81,6 +82,7 @@ building_types_rus_names = {
     'PRESBYTERY':            'Частный жилой дом', # just a house where a priest lives, no special features/traits
         
     'BARRACKS':              'Казарма',
+    'GUARDHOUSE':            'Караульная будка',
     
     # common urban buildings 
     'RESTAURANT':            'Ресторан',
@@ -96,6 +98,7 @@ building_types_rus_names = {
     'RETAIL':                'Магазин',
     'MUSEUM':                'Музей',
     'STADIUM':               'Стадион',
+    'GRANDSTAND':            'Стадион',          # Трибуна
     'SPORTS_CENTRE':         'Спортивный центр',
     'SPORTS_HALL':           'Спортивный центр', # What is the difference between sports hall and sports center is not quite clear
     'DORMITORY':             'Общежитие',
