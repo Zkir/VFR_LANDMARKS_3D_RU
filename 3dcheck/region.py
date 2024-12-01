@@ -101,23 +101,21 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     print( '</head>'+ '\n')
     print( '<body>'+ '\n')
     print( '<h1>Валидатор 3D: ' + region_names.get(strQuadrantName, strQuadrantName) + '</h1>'+ '\n')
-    if strQuadrantName == "RUS_LATEST":
-        print( '<p>На этой странице представлены здания, отредактированные в последнее время.'+ '\n')
-        print( 'Включены только здания, имеющие 3D модели.</p>'+ '\n')
         
-    elif strQuadrantName == "RUS_TOP_WINDOWS":    
+    if strQuadrantName == "RUS_TOP_WINDOWS":    
         print( '<p>На этой странице представлены здания, имеющие окна, заданные тегами <b><a href="https://wiki.openstreetmap.org/wiki/Key:window">window:*</a></b> .'+ '\n')
         
-    
     elif strQuadrantName == "RUS_LATEST":
+        print( '<p>На этой странице представлены здания, отредактированные в последнее время.'+ '\n')
+        print( 'Включены только здания, имеющие 3D модели.</p>'+ '\n')
         print( '<h2>Пульс проекта</h2>'+ '\n')
         print('<p>Количество отредактированных зданий по дням</p>')
         print('<p><img src="data/images/recent_activity.png"></img></p>')
+        
     elif strQuadrantName == "photo_wo_type":
         print( '<h2>Здания без типа</h2>'+ '\n')
         print('<p>На этой странице собраны здания, для которых не задан тип. Вы очень поможете проекту, если установите значение тега <b>building=*</b></p>')
         print('<p>Существующие типы зданий, они же значения <b>building=*</b> можно посмотреть <a href="https://wiki.openstreetmap.org/wiki/RU:Key:building">тут</a>.</p>')
-        
         
     else: 
         print( '<h2>Cтатистика по квадрату</h2>'+ '\n')

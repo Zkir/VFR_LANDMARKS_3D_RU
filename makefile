@@ -206,7 +206,7 @@ work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip: work_folder\copy_xpla
 work_folder\90_uploads: | work_folder ## prepare uploads folder 
 	mkdir work_folder\90_uploads
 	
-work_folder\90_uploads\upload_models_to_web: work_folder\30_3dmodels\convert_obj_to_x3d work_folder\22_all_osm_objects_list\RUS_TOP.dat  work_folder\31_3dmodels2\convert_osm_to_gltf | work_folder\90_uploads 	##Upload 3d models and dat files to web (validator)  
+work_folder\90_uploads\upload_models_to_web: work_folder\30_3dmodels\convert_obj_to_x3d work_folder\22_all_osm_objects_list\RUS_TOP.dat  work_folder\31_3dmodels2\convert_osm_to_gltf work_folder\22_all_osm_objects_list\photo_wo_type.dat | work_folder\90_uploads 	##Upload 3d models and dat files to web (validator)  
 	scripts\upload.bat
 	touch $@		
 

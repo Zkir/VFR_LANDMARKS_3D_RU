@@ -128,6 +128,7 @@ building_types_rus_names = {
     'RUINS':           'Руины',
     'RUINED':          'Руины',
     'COLLAPSED':       'Руины',
+    'FAKE_RUINS':      'Руины',
 
     'HANGAR':          'Ангар',
     'SHIP':            'Корабль на приколе',
