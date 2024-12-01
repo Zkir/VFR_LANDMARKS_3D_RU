@@ -317,8 +317,11 @@ def calculateBuildingType( osmtags, dblSize):
                 if tagHistoric == 'tomb' and  tagTomb !='':
                     tagBuilding = tagTomb
                 
-                if tagHistoric == 'castle' and  tagCastleType not in  ['', 'defensive']:
-                    tagBuilding = tagCastleType 
+                if tagHistoric == 'castle' and  tagCastleType != '':
+                    if tagCastleType not in  [ 'defensive']:
+                        tagBuilding = tagCastleType 
+                    else:    
+                        tagBuilding = tagCastleType + ' ' + tagBuilding
                     
         # tourism=museum,  tourism=hotel        
         # unfortunately, we can induce hotel only. museums can be orgainzed in any kind of building

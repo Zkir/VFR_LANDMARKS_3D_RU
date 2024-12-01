@@ -16,6 +16,7 @@ Image.MAX_IMAGE_PIXELS = None
 WIKIDATA_DIRECTORY = "d:/_VFR_LANDMARKS_3D_RU/work_folder/23_wikidata"
 IMAGE_DIRECTORY =    "d:/_VFR_LANDMARKS_3D_RU/work_folder/25_images"
 
+LIMIT=150000
 
 wikidata_buildings={
                     'Q19860854': 'ruins',       # building or structure that has been demolished or destroyed
@@ -30,11 +31,12 @@ wikidata_buildings={
                     'Q1498804':  'residential', # multifamily residential 
                     'Q279118':   'house',       # !!! wooden house  !!!
                     'Q160169':   'house',       # dacha 
-                    'Q1307276':  'house',  #single-family detached home 
+                    'Q1307276':  'house',       # single-family detached home 
                     'Q41955438': 'building',    # !!! brick building  = building made out of bricks !!!
                     'Q12104567': 'apartments',
                     'Q13402009': 'apartments',
                     'Q1577547':  'apartments',  # revenue house
+                    'Q105681016':'apartments',  # condominium
                     'Q847950':   'dormitory',  
                     'Q131263':   'barracks', 
                     'Q989946':   'roof',        # shelter=basic architectural structure or building providing protection from the local environment
@@ -43,7 +45,7 @@ wikidata_buildings={
                     'Q1365179':  'manor',       # private mansion 
                     'Q12292478': 'MANOR',       # estate
                     'Q15848826': 'palace',      # city palace
-                    'Q751876':   'palace', #château
+                    'Q751876':   'palace',      # château
                     'Q16560':    'palace', 
                     'Q3950':     'villa',
                     'Q1686006' : 'summer residence',
@@ -85,7 +87,7 @@ wikidata_buildings={
                     'Q108325':   'chapel',
                     'Q1457501':  'chapel',                #cemetery chapel
                     'Q16970':    'church',
-                    'Q200334':   'CAMPANILE',             # bell tower
+                    'Q200334':   'campanile',             # free-standing bell tower
                     'Q2977':     'church',                # cathedral
                     'Q317557':   'church',                # parish church - church which acts as the religious centre of a parish
                     'Q1129743':  'roman_catholic church', # filial church - in the Roman Catholic Church, a church building that is not the main church of a parish
@@ -100,20 +102,20 @@ wikidata_buildings={
                     'Q56242235': 'lutheran church', 
                     'Q56242275': 'lutheran church',  
                     'Q32815':    'mosque', 
-                    'Q1454820':  'mosque', #congregational mosque 
-                    'Q125626250':'MOSQUE', #! takya or sufi lodge is an islamic monastery. 
-                    'Q5393308':  'Buddhist temple', 
-                    'Q65156015': 'Buddhist temple',  # khurul= буддийский храм (монастырь, обитель) в калмыцком ламаизме
+                    'Q1454820':  'mosque',                # congregational mosque 
+                    'Q125626250':'mosque',                #! takya or sufi lodge is an islamic monastery. 
+                    'Q5393308':  'buddhist temple', 
+                    'Q65156015': 'buddhist temple',       # khurul= буддийский храм (монастырь, обитель) в калмыцком ламаизме
                     'Q34627':    'synagogue',
-                    'Q83405':    'industrial', # factory
-                    'Q1662011':  'industrial', # industrial building
+                    'Q83405':    'industrial',            # factory
+                    'Q1662011':  'industrial',            # industrial building
                     # we do not have any better right now, smth like POWER_PLANT could be interesting    
-                    'Q159719':   'INDUSTRIAL',  # power station = facility generating electric power               
-                    'Q1601458':  'INDUSTRIAL',  # combined heat and power station
-                    'Q1781180':  'INDUSTRIAL',  # condensation power station
-                    'Q15911738': 'INDUSTRIAL',  # hydroelectric power station
-                    'Q30565277': 'INDUSTRIAL',  # geothermal power station
-                    'Q200297':   'INDUSTRIAL',  # thermal power station  
+                    'Q159719':   'industrial',            # power station = facility generating electric power               
+                    'Q1601458':  'industrial',            # combined heat and power station
+                    'Q1781180':  'industrial',            # condensation power station
+                    'Q15911738': 'industrial',            # hydroelectric power station
+                    'Q30565277': 'industrial',            # geothermal power station
+                    'Q200297':   'industrial',            # thermal power station  
                     
                     'Q57821':    'fortification',
                     'Q57831':    'fortress',
@@ -127,16 +129,16 @@ wikidata_buildings={
                     'Q1282870':  'ice_rink',
                     'Q2617766':  'ice_rink', # speed skating rink
                     'Q12019965': 'ice_rink',  #indoor ice rink
-                    'Q7579839':  'SPORTS_CENTRE', #sports complex !!! we do not really know what it (or osm 'sports_centre') is. 
+                    'Q7579839':  'sports_centre', #sports complex !!! we do not really know what it (or osm 'sports_centre') is. 
                     'Q11166728': 'communication tower',#television tower 
                     'Q1435490':  'people\'s house',
                     'Q494829':   'bus_station',
-                    'Q55488':    'TRAIN_STATION',    # railway station
-                    'Q1339195':  'TRAIN_STATION',    # station building 
-                    'Q928830':   'SUBWAY_ENTRANCE',  # metro station 
-                    'Q2921357':  'SUBWAY_ENTRANCE',  # we do not have this in OSM currently. 
-                    'Q67183571': 'TRANSPORTATION',   # terminal 
-                    'Q2281788':  'public aquarium',
+                    'Q55488':    'train_station',    # railway station
+                    'Q1339195':  'train_station',    # station building 
+                    'Q928830':   'subway_entrance',  # metro station 
+                    'Q2921357':  'subway_entrance',  # we do not have this in OSM currently. 
+                    'Q67183571': 'transportation',   # terminal 
+                    'Q2281788':  'public_aquarium',
                     'Q4989906':  'monument', 
                     'Q860861':   'sculpture',
                     'Q162875':   'mausoleum',
@@ -144,25 +146,26 @@ wikidata_buildings={
                     'Q39715':    'lighthouse',
                     'Q46124':    'sanatorium',
                     'Q18760388': 'retail',
-                    'Q213441':   'RETAIL',  # shop = place where items or services are sold
-                    'Q11315':    'RETAIL',  # shopping center
-                    'Q132510':   'RETAIL',  # market 
-                    'Q216107':   'RETAIL',  # department store
-                    'Q2386997':  'RETAIL',  # Gostiny Dvor = Historical Russian indoor market or shopping centre
+                    'Q213441':   'retail',  # shop = place where items or services are sold
+                    'Q11315':    'retail',  # shopping center
+                    'Q132510':   'retail',  # market 
+                    'Q216107':   'retail',  # department store
+                    'Q2386997':  'retail',  # Gostiny Dvor = Historical Russian indoor market or shopping centre
                     'Q27686':    'hotel',   # hotel as business enterprise 
                     'Q63099748': 'hotel',   # hotel as building
                     'Q256020':   'hotel',   # inn
+                    'Q5526694':  'hotel',   # gasthaus 
 
-                    'Q375336':   'film studio',
+                    'Q375336':   'film_studio',
                     'Q11446':    'ship',
-                    'Q97377955': 'SHIP', #floating nuclear power plant
-                    'Q2811':     'SHIP',  #submarine
-                    'Q17715832': 'castle ruin',
+                    'Q97377955': 'ship', #floating nuclear power plant
+                    'Q2811':     'ship',  #submarine
+                    'Q17715832': 'ruined castle', #castle ruin
                     'Q1195942':  'fire_station', 
                     
-                    'Q685204':   'GATEHOUSE',  #gate tower
-                    'Q82117':    'CITY_GATE', 
-                    'Q276173':   'GAZEBO',  #pavilion, but in osm pavilion means british sports pavilion
+                    'Q685204':   'gatehouse',  #gate tower
+                    'Q82117':    'city_gate', 
+                    'Q276173':   'gazebo',  #pavilion, but in osm pavilion means british sports pavilion
                     'Q23413':    'castle',  
                     'Q615810':   'castle',  #water castle
                     'Q274153':   'water tower',  
@@ -172,13 +175,13 @@ wikidata_buildings={
                     'Q39364723': 'hospital', 
                     'Q952885':   'greenhouse',  #orangery 
                     
-                    'Q785952':   'public bath',  #! do we have something like this in osm?  
+                    'Q785952':   'public_bath',  #! do we have something like this in osm?  
                     
                     # we do not have any better currently
-                    'Q1181413':  'THEATRE',  # palace of culture = large house of culture, major club-house
-                    'Q5061188':  'THEATRE',  # house of culture = cultural building; cultural institution
-                    'Q1329623':  'THEATRE',  # cultural center = facility where culture and arts are promoted 
-                    'Q1060829':  'THEATRE',  # concert hall
+                    'Q1181413':  'theatre',  # palace of culture = large house of culture, major club-house
+                    'Q5061188':  'theatre',  # house of culture = cultural building; cultural institution
+                    'Q1329623':  'theatre',  # cultural center = facility where culture and arts are promoted 
+                    'Q1060829':  'theatre',  # concert hall
 
                     'Q15548045': 'almshouse',  #Богадельня
 
@@ -187,19 +190,19 @@ wikidata_buildings={
                     'Q7075':     'library',
                     'Q22806':    'library',  #national library   
                     'Q856584':   'library',  #library building
-                    'Q1112897':  'rostral column',  
+                    'Q1112897':  'rostral_column',  
                     'Q623525':   'rotunda',  #???
                     'Q53060':    'gate', 
                     'Q11707':    'restaurant',  
                     'Q30022':    'coffeehouse',  #establishment that serves coffee and tea
                     'Q184644':   'conservatory', 
-                    'Q57659484': 'exhibition hall', 
+                    'Q57659484': 'exhibition_hall', 
                     'Q199451':   'pagoda',  
                     'Q383092':   'art academy',  
-                    'Q13107184': 'pharmacy',  # ???? retail ????
+                    'Q13107184': 'retail',           # pharmacy 
                     'Q861951':   'police_station ',  #!!!!!
                     'Q55485':    'dead-end railway station',  #dead-end railway station
-                    'Q184356':   'radio telescope',  
+                    'Q184356':   'radio_telescope',  
                     
                     'Q543654':   'townhall',     # rathaus
                     'Q1303167':  'barn',         # barn
@@ -208,6 +211,18 @@ wikidata_buildings={
                     'Q3044808':  'outbuilding',  # outbuilding
                     'Q182676':   'hut',          #mountain hut
                     ##'Q1440300':  '',           #observation tower 
+                    
+                    'Q489357':   'farm',                  # chief dwelling-house attached to a farm
+                    'Q2588110':  'farm',                  # type of a farmhouse combining living quarters and stables
+                    
+                    #German specific types
+                    'Q1362233':  'upper_lusatian house',  # Upper Lusatian house  --  combines log house, timber-framing and building stone methods of construction 
+                    'Q12020836': 'timber_frame house',    # residential building constructed using the timber framing method
+                    'Q607241':   'presbytery',            # where priests live and work
+                    'Q18760306': 'commercial',            # combined residential and commercial house or building
+                    'Q907632':   'house',                 # Bremer Haus 
+                    'Q16823155': 'castle',                # Schloss 
+                    'Q1440300':  'observation tower',     # civilian structure used to view the surrounding landscape
 
                     }
 
@@ -313,9 +328,14 @@ wikidata_achitecture_styles = {
                     'Q23752285': 'eclectic',          # Eclectic architecture in Russia 
                     'Q192068':   'eclectic',          # eclecticism 
                     'Q1268134':  'eclectic',          # beaux-arts
+                    'Q46261':    'romanesque',        # romanesque 
+                    'Q46805':    'romanesque',        # romanesque art 
+                    'Q4692':     'renaissance',       # renaissance in general 
+                    'Q236122':   'renaissance ',      # renaissance as architecture
                     'Q176483':   'gothic', 
-                    'Q695863':   'gothic',            # Brick Gothic
+                    'Q695863':   'gothic',            # Brick gothic
                     'Q46825':    'gothic',            # Gothic art
+                    'Q10924220': 'gothic',            # Late gothic
                     'Q38451143': 'oldrussian',        # Pskov architectural style
                     'Q112869097':'oldrussian',        # Yaroslavl school
                     'Q4070874':  'oldrussian',        # Архитектура домонгольского Смоленска
@@ -341,6 +361,7 @@ wikidata_achitecture_styles = {
                     'Q7382246':  'neoclassicism',     # Russian neoclassical revival 
                     'Q1513688':  'neoclassicism',     # Greek Revival architecture
                     'Q16191884': 'neoclassicism',     # Neo-Grec. seems to be the same thing in architecture as Greek Revival
+                    'Q20192147': 'neoclassicism',     # Neoclassicalism 
                     'Q191105':   'empire',            # Empire style
                     'Q112711827':'empire',            # Russian Empire style
                     'Q2860359':  'russian-byzantine',
@@ -365,15 +386,18 @@ wikidata_achitecture_styles = {
                     'Q4439247':  'stalinist_neoclassicism',  #Stalinist Empire style
                     'Q47942':    'functionalism',  
                     'Q245188':   'modern',  
-                    'Q24935410': 'modernism',                # Soviet Modernist architecture
+                    'Q24935410': 'modernist',                # Soviet Modernist architecture
+                    'Q162324':   'international',            # International style, type of modernist architecture
+                    'Q1962399':  'modern',                   # post WW2 modernism in Germany and Switzerland
                     'Q47783':    'postmodern',               # postmodernism
                     'Q238255':   'postmodern',               # deconstructivism
                     'Q595448':   'postmodern',               # postmodern architecture
                     'Q527449':   'ottoman',
                     'Q212940':   'islamic', 
                     'Q74156':    'moorish_revival',          # Moorish Revival architecture
-                    'Q911397':   'neo-baroque',              #The Baroque Revival, also known as Neo-Baroque (or Second Empire architecture in France and Wilhelminism in Germany), late 19th and early 20th centuries.
+                    'Q911397':   'neo-baroque',              # The Baroque Revival, also known as Neo-Baroque (or Second Empire architecture in France and Wilhelminism in Germany), late 19th and early 20th centuries.
                     'Q845318':   'high-tech',  
+                    'Q12020836': 'timber_frame',             #timber-framed house  
                     
                     'Q2600188':  '',  #Russian architecture = architectural styles within Russian sphere of influence ! Not a style! 
                     'Q37068':    '',  #Romanticism
@@ -540,8 +564,7 @@ def get_wikidata_organized(qid):
 # main block 
 # ============
 def update_region(input_file_name, output_file_name):
-    LIMIT=50000
-    
+   
     all_objects=mdlMisc.loadDatFile(input_file_name) 
     objects_with_wikidata = []
     
@@ -656,12 +679,15 @@ def get_images(input_file_name):
     for rec in all_objects:
         if rec[QUADDATA_WIKIDATA_ID]!="" :
             objects_with_wikidata.append (rec)
-            
-    for rec in tqdm(objects_with_wikidata):
+    
+    working_loop = tqdm(objects_with_wikidata)
+    n=0
+    k=0
+    for rec in working_loop:
         if os.path.exists(os.path.join(IMAGE_DIRECTORY , rec[QUADDATA_WIKIDATA_ID]+".png")):
             #if file exists already, no need to redownload it. 
             continue
-        
+        n+=1
         building_text_description =  ( 
                 rec[QUADDATA_COLOUR] + " " +
                 rec[QUADDATA_MATERIAL] + " " +
@@ -699,7 +725,9 @@ def get_images(input_file_name):
             
             #save_description(building_text_description, rec[QUADDATA_WIKIDATA_ID]+'.txt')
             #print()
-    
+            k+=1
+            
+        working_loop.set_description(f"{n} buildings processed, {k} images_downloaded")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(

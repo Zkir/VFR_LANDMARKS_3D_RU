@@ -7,6 +7,7 @@ building_types_rus_names = {
     
     'SHRINE':                     'Часовня', # strange tags, but let's include for now
     'WAYSIDE_SHRINE':             'Часовня',
+    'WAYSIDE_CHAPEL':             'Часовня',
     
     'ORTHODOX CHURCH':            'Православная церковь',
     'ORTHODOX CHAPEL':            'Православная часовня',	
@@ -17,61 +18,76 @@ building_types_rus_names = {
     'OLD_BELIEVERS CHAPEL':       'Православная часовня',	 
     'OLD_BELIEVERS CAMPANILE':    'Православная колокольня',
     'GEORGIAN_ORTHODOX CHAPEL':   'Православная часовня',	
+    'GREEK_ORTHODOX CHURCH':      'Православная церковь',
+    'GREEK_ORTHODOX CHAPEL':      'Православная часовня',
 
     'RUSSIAN ORTHODOX WAYSIDE_SHRINE': 'Православная часовня',
     
-    'ARMENIAN_APOSTOLIC CHURCH': 'Армянская церковь',
-    'ARMENIAN_APOSTOLIC CHAPEL': 'Армянская часовня',
+    'ARMENIAN_APOSTOLIC CHURCH':  'Армянская церковь',
+    'ARMENIAN_APOSTOLIC CHAPEL':  'Армянская часовня',
     
-    'CATHOLIC CHURCH':       'Католический храм',
-    'ROMAN_CATHOLIC CHURCH': 'Католический храм',
-    'CATHOLIC CHAPEL':       'Католическая часовня',
+    'CATHOLIC CHURCH':            'Католический храм',
+    'OLD_CATHOLIC CHURCH':        'Католический храм', #probably should rather be classified as 'protestant'.
+    'ROMAN_CATHOLIC CHURCH':      'Католический храм',
+    'CATHOLIC CHAPEL':            'Католическая часовня',
+    'ROMAN_CATHOLIC CHAPEL':      'Католическая часовня',
+    'CATHOLIC WAYSIDE_SHRINE':    'Католическая часовня',
 
-    'ANGLICAN CHURCH':       'Англиканская церковь',
-    'LUTHERAN CHURCH':       'Лютеранская кирха',
-    'LUTHERAN CHAPEL':       'Лютеранская часовня',
-    'PROTESTANT CHURCH':     'Протестантская церковь',
-    'BAPTIST CHURCH':        'Протестантская церковь',
-    'BAPTIST CHAPEL':        'Протестантская часовня',
-    'EVANGELICAL CHURCH':    'Протестантская церковь',
-    'PENTECOSTAL CHURCH':    'Протестантская церковь',
+    'ANGLICAN CHURCH':            'Англиканская церковь',
+    'LUTHERAN CHURCH':            'Протестантская церковь',
+    'LUTHERAN CHAPEL':            'Протестантская часовня',
+    'PROTESTANT CHURCH':          'Протестантская церковь',
+    'PROTESTANT CHAPEL':          'Протестантская часовня',
+    'BAPTIST CHURCH':             'Протестантская церковь',
+    'BAPTIST CHAPEL':             'Протестантская часовня',
+    'EVANGELICAL CHURCH':         'Протестантская церковь',
+    'PENTECOSTAL CHURCH':         'Протестантская церковь',
     'SEVENTH_DAY_ADVENTIST CHURCH': 'Протестантская церковь',
-    'PRESBYTERIAN CHURCH':   'Протестантская церковь',
-    'NEW_APOSTOLIC CHURCH':  'Протестантская церковь',
-    'ADVENTIST CHURCH':      'Протестантская церковь',
+    'PRESBYTERIAN CHURCH':        'Протестантская церковь',
+    'NEW_APOSTOLIC CHURCH':       'Протестантская церковь',
+    'ADVENTIST CHURCH':           'Протестантская церковь',
+    'METHODIST CHURCH':           'Протестантская церковь',
+    'EVANGELICAL CHAPEL':         'Протестантская часовня',
+    'REFORMED CHURCH':            'Протестантская церковь',
+    'CATHOLIC_APOSTOLIC CHURCH':  'Протестантская церковь', # despite it's name, it's a protestant denomination
+    'CHRISTIAN_COMMUNITY CHURCH': 'Протестантская церковь',
     
-    'METHODIST CHURCH':      'Протестантская церковь',
-    'EVANGELICAL CHAPEL':    'Протестантская часовня',
-    'GREEK_ORTHODOX CHAPEL': 'Православная часовня',
+    'MORMON CHURCH':              'Храм мормонов',
     
-    'MORMON CHURCH':         'Храм мормонов',
+    'MOSQUE':                     'Мечеть',
+    'SUNNI MOSQUE':               'Мечеть', # Пока сунниты и шииты для нас в плане архитектуры не отличаются.
+    'SHIA MOSQUE':                'Мечеть',  # Кто знает, пусть подскажет.
+    'AHMADIYYA MOSQUE':           'Мечеть',
+    'NONDENOMINATIONAL MOSQUE':   'Мечеть',
+    'UNITED MOSQUE':              'Мечеть',
     
-    'MOSQUE':                'Мечеть',
-    'SUNNI MOSQUE':          'Мечеть', # Пока сунниты и шииты для нас в плане архитектуры не отличаются.
-    'SHIA MOSQUE':           'Мечеть',  # Кто знает, пусть подскажет.
-    'NONDENOMINATIONAL MOSQUE': 'Мечеть',
-    'UNITED MOSQUE':         'Мечеть',
-    
-    'SYNAGOGUE':             'Синагога',
-    'BUDDHIST TEMPLE':       'Буддийский храм',
-    'CHURCH FENCE':          'Церковная ограда', 
-    'FONT':                  'Купель, источник',
+    'SYNAGOGUE':                  'Синагога',
+    'BUDDHIST TEMPLE':            'Буддийский храм',
+    'CHURCH FENCE':               'Церковная ограда', 
+    'FONT':                       'Купель, источник',
     
     # residential buildings 
     'RESIDENTIAL':           'Жилой дом', #плохой тег!
     'HOUSE':                 'Частный жилой дом',
     'DETACHED':              'Частный жилой дом',
+    'DWELLING_HOUSE':        'Частный жилой дом', # considered obsolete
+    'SEMIDETACHED_HOUSE':    'Частный жилой дом',
     'MANOR':                 'Особняк',
     'STATELY':               'Особняк',
     'MANSION':               'Особняк',
+    'VILLA':                 'Особняк',
     'PALACE':                'Дворец',
     'APARTMENTS':            'Многоквартирный дом',
+    'PRESBYTERY':            'Частный жилой дом', # just a house where a priest lives, no special features/traits
         
     'BARRACKS':              'Казарма',
     
     # common urban buildings 
+    'RESTAURANT':            'Ресторан',
     'HOTEL':                 'Гостиница',
+    'INN':                   'Гостиница',
     'TRAIN_STATION':         'Вокзал',
+    'RAILWAY_STATION':       'Вокзал',
     'THEATRE':               'Театр',
     'CINEMA':                'Кинотеатр',
     'CIRCUS':                'Цирк',
@@ -81,12 +97,15 @@ building_types_rus_names = {
     'MUSEUM':                'Музей',
     'STADIUM':               'Стадион',
     'SPORTS_CENTRE':         'Спортивный центр',
+    'SPORTS_HALL':           'Спортивный центр', # What is the difference between sports hall and sports center is not quite clear
     'DORMITORY':             'Общежитие',
     'PARKING':               'Гараж',
     'GARAGE':                'Гараж',
     'OFFICE':                'Офисное здание',
     'COMMERCIAL':            'Офисное здание',
     'SERVICE':               'Техническая будка',
+    
+    
     
     #educational 
     'KINDERGARTEN':          'Детский сад',
@@ -96,6 +115,8 @@ building_types_rus_names = {
     
     # industrial
     'INDUSTRIAL':            'Промышленное здание',
+    'MANUFACTURE':           'Промышленное здание',
+    'FACTORY':               'Промышленное здание',
     'WAREHOUSE':             'Склад',
     
     # not so common urban buildings    
@@ -115,7 +136,8 @@ building_types_rus_names = {
     'DEFENSIVE WALL':  'Крепостные стены',
     'HISTORIC WALL':   'Крепостные стены',
     'CITYWALLS':       'Крепостные стены',
-    'CASTLE':          'Крепость',
+    #'CASTLE':          'Замок', in OSM, it could be any big building, including defensive castle, palace, mansion, stately etc
+    'DEFENSIVE CASTLE':'Замок',
     'FORT':            'Крепость',
     'FORTIFICATION':   'Крепость',
     'FORTRESS':        'Крепость',
@@ -135,6 +157,13 @@ building_types_rus_names = {
     'AIRCRAFT':        'Корабль на приколе',
     'WRECK':           'Корабль на приколе',
     
+    #Rural Buildings
+    
+    'FARM':            'Частный жилой дом',
+    'FARMHOUSE':       'Частный жилой дом',
+    'FARM_AUXILIARY':  'Хозпостройка', 
+    'BARN':            'Амбар', 
+    'GRANARY':         'Амбар', 
     'CELLAR':          'Погреб',
     'ROOF':            'Навес',
     'SHED':            'Сарай',
