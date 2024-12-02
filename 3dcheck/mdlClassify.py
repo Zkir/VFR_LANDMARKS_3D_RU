@@ -21,7 +21,7 @@ building_types_rus_names = {
     'GREEK_ORTHODOX CHURCH':      'Православная церковь',
     'GREEK_ORTHODOX CHAPEL':      'Православная часовня',
 
-    'RUSSIAN ORTHODOX WAYSIDE_SHRINE': 'Православная часовня',
+    'RUSSIAN ORTHODOX WAYSIDE_SHRINE': 'Православная часовня', 	
     
     'ARMENIAN_APOSTOLIC CHURCH':  'Армянская церковь',
     'ARMENIAN_APOSTOLIC CHAPEL':  'Армянская часовня',
@@ -32,6 +32,7 @@ building_types_rus_names = {
     'CATHOLIC CHAPEL':            'Католическая часовня',
     'ROMAN_CATHOLIC CHAPEL':      'Католическая часовня',
     'CATHOLIC WAYSIDE_SHRINE':    'Католическая часовня',
+    'ROMAN_CATHOLIC WAYSIDE_SHRINE':'Католическая часовня',
 
     'ANGLICAN CHURCH':            'Англиканская церковь',
     'LUTHERAN CHURCH':            'Протестантская церковь',
@@ -51,9 +52,11 @@ building_types_rus_names = {
     'REFORMED CHURCH':            'Протестантская церковь',
     'CATHOLIC_APOSTOLIC CHURCH':  'Протестантская церковь', # despite it's name, it's a protestant denomination
     'CHRISTIAN_COMMUNITY CHURCH': 'Протестантская церковь',
+    'MENNONITE CHURCH':           'Протестантская церковь',
     
     'MORMON CHURCH':              'Храм мормонов',
     'JEHOVAHS_WITNESS CHURCH':    'Зал Царства',
+    'KINGDOM_HALL':               'Зал Царства',
     
     'MOSQUE':                     'Мечеть',
     'SUNNI MOSQUE':               'Мечеть', # Пока сунниты и шииты для нас в плане архитектуры не отличаются.
@@ -69,6 +72,7 @@ building_types_rus_names = {
     
     # residential buildings 
     'RESIDENTIAL':           'Жилой дом', #плохой тег!
+    'TERRACE':               'Жилой дом', #terrace -- это блок частных домов, стоящих вплотную вдоль улицы.
     'HOUSE':                 'Частный жилой дом',
     'DETACHED':              'Частный жилой дом',
     'DWELLING_HOUSE':        'Частный жилой дом', # considered obsolete
@@ -139,6 +143,7 @@ building_types_rus_names = {
     'DEFENSIVE WALL':  'Крепостные стены',
     'HISTORIC WALL':   'Крепостные стены',
     'CITYWALLS':       'Крепостные стены',
+    'CASTLE_WALL':     'Крепостные стены',
     #'CASTLE':          'Замок', in OSM, it could be any big building, including defensive castle, palace, mansion, stately etc
     'DEFENSIVE CASTLE':'Замок',
     'FORT':            'Крепость',

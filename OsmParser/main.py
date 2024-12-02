@@ -312,7 +312,7 @@ def calculateBuildingType( osmtags, dblSize):
         
         # historic
         elif tagHistoric != '':
-            if tagHistoric not in ['building', 'heritage', 'heritage_building', 'place_of_worship']:
+            if tagHistoric not in ['building', 'heritage', 'heritage_building', 'place_of_worship', 'technical_monument']:
                 tagBuilding=tagHistoric
                 if tagHistoric == 'tomb' and  tagTomb !='':
                     tagBuilding = tagTomb
