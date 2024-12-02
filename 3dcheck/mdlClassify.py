@@ -170,6 +170,7 @@ building_types_rus_names = {
     'FARM':            'Частный жилой дом',
     'FARMHOUSE':       'Частный жилой дом',
     'FARM_AUXILIARY':  'Хозпостройка', 
+    'OUTBUILDING':     'Хозпостройка', 
     'BARN':            'Амбар', 
     'GRANARY':         'Амбар', 
     'CELLAR':          'Погреб',

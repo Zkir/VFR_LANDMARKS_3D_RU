@@ -270,7 +270,7 @@ def calculateBuildingType( osmtags, dblSize):
             
     # useless building types
     # let's consider them as synonyms for building=yes
-    if tagBuilding in ['public', 'civic',  'government', 'historic','abandoned', 'disused', 'outbuilding']:
+    if tagBuilding in ['public', 'civic',  'government', 'historic', 'abandoned', 'disused']:
         tagBuilding = 'yes'
             
     # for building=yes we are free to guess building type from other tags     
@@ -312,7 +312,7 @@ def calculateBuildingType( osmtags, dblSize):
         
         # historic
         elif tagHistoric != '':
-            if tagHistoric not in ['building', 'heritage', 'heritage_building', 'place_of_worship', 'technical_monument']:
+            if tagHistoric not in ['building', 'heritage', 'heritage_building', 'place_of_worship', 'technical_monument', 'archaeological_site', 'battlefield'']:
                 tagBuilding=tagHistoric
                 if tagHistoric == 'tomb' and  tagTomb !='':
                     tagBuilding = tagTomb

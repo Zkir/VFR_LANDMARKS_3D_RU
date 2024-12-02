@@ -10,6 +10,7 @@ xcopy /Y /Q %WORK_FOLDER%\30_3dmodels\*.png  d:\_VFR_LANDMARKS_3D_RU\3dcheck\mod
 xcopy /Y /Q %WORK_FOLDER%\21_osm_objects_list\*.dat d:\_VFR_LANDMARKS_3D_RU\3dcheck\data\quadrants
 xcopy /Y /Q %WORK_FOLDER%\22_all_osm_objects_list\*.dat d:\_VFR_LANDMARKS_3D_RU\3dcheck\data\quadrants
 xcopy /Y /Q %WORK_FOLDER%\22_all_osm_objects_list\recent_activity.png d:\_VFR_LANDMARKS_3D_RU\3dcheck\data\images
+xcopy /Y /Q %WORK_FOLDER%\22_all_osm_objects_list\building_type_stats.json d:\_VFR_LANDMARKS_3D_RU\3dcheck\data\stats
 xcopy /Y /Q %WORK_FOLDER%\Quadrants.dat d:\_VFR_LANDMARKS_3D_RU\3dcheck\data\quadrants
 
 xcopy /Y /Q %WORK_FOLDER%\20_osm_3dmodels\*.errors.dat  d:\_VFR_LANDMARKS_3D_RU\3dcheck\data\errors
