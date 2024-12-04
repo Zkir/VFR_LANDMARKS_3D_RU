@@ -111,8 +111,7 @@ building_types_rus_names = {
     'OFFICE':                'Офисное здание',
     'COMMERCIAL':            'Офисное здание',
     'SERVICE':               'Техническая будка',
-    
-    
+    'BATH':                  'Баня/купальня', 
     
     #educational 
     'KINDERGARTEN':          'Детский сад',
@@ -125,6 +124,7 @@ building_types_rus_names = {
     'MANUFACTURE':           'Промышленное здание',
     'FACTORY':               'Промышленное здание',
     'WAREHOUSE':             'Склад',
+    'DEPOT':                 'Депо',
     
     # not so common urban buildings    
     'AQUEDUCT':              'Акведук',
@@ -220,47 +220,63 @@ def buildingTypeRus(s):
 #https://wiki.openstreetmap.org/wiki/RU:Key:building:architecture    
 achitecture_styles_rus_names={
 
-    'art_deco': 'Ар-деко',
-    'art_nouveau': 'Модерн (ар-нуво)',
-    'baroque': 'Барокко',
-    'brutalist': 'Брутализм',
+    'eclectic':                'Эклектика',
+    'pre-mongolian':           'Домонгольская романика', #Определяется автоматически, но ни одного такого здания еще нет в осм
+    'oldrussian':              'Русская романика',
+    'old_russian':             'Русская романика',
+    'uzorochye':               'Узорочье', #Определяется автоматически, но ни одного такого здания еще нет в осм
+    'gothic':                  'Готика',
 
-    'constructivism': 'Конструктивизм',
-    'contemporary': 'Современный',
-    'eclectic': 'Эклектика',
-    'empire': 'Ампир',
-    'functionalism': 'Функционализм',
-    'gothic': 'Готика',
-    'international': 'Интернациональный стиль',
-    'international_style': 'Интернациональный стиль',
-    'modern': 'Модернизм',
-    'neo-gothic': 'Неоготика',
-    'neoclassicism': 'Классицизм',
-    'classicism': 'Классицизм', # mistype for russia, should be neoclassicism
-    'nothern_modern': 'Северный модерн',
-    'postconstructivism': 'Постконструктивизм',
-    'postmodern': 'Постмодерн',
-    'pseudo-russian': 'Псевдорусский стиль',
-    'russian_gothic': 'Псевдоготика',
-    'rococo': 'Рококо',
-    'chinoiserie': 'Шинуазри',
-    'stalinist_neoclassicism': 'Сталинский ампир',
-    'neo-renaissance': 'Неоренессанс',
+    'baroque':                 'Барокко',
+    'rococo':                  'Рококо',
+    'chinoiserie':             'Шинуазри',
+    'neoclassicism':           'Классицизм',
+    'classicism':              'Классицизм', # mistype for russia, should be neoclassicism
+    'empire':                  'Классицизм', # Ампир
+    'neo-renaissance':         'Классицизм', # Неоренессанс
     
-    'pre-mongolian': 'Домонгольская романика', #Определяется автоматически, но ни одного такого здания еще нет в осм
-    'oldrussian': 'Русская романика',
-    'old_russian': 'Русская романика',
-    'uzorochye': 'Узорочье', #Определяется автоматически, но ни одного такого здания еще нет в осм
-    'soviet': 'Советский модернизм', # Определяется автоматически, но ни одного такого здания еще нет в осм (и слава богу)
-    'modernism': 'Советский модернизм', # таких тегов всего 2 (на 2024-09-18), потому что в английском языке даже слова такого нет.  -- не документирован
     
-    'islamic': 'Исламская архитектура',
-    'ottoman': 'Османский стиль', 
+    'neo-gothic':              'Неоготика',
+    'russian_gothic':          'Псевдоготика',
+    'pseudo-gothic':           'Псевдоготика',
+    'neo-romanesque':          'Неороманский стиль',  
+    'neo-baroque':             'Необарокко',
     
-    'brick style': 'Кирпичный стиль',
-    'brick_style': 'Кирпичный стиль',
+    'nothern_modern':          'Северный модерн',
+    
+    'russian-byzantine':       'Русско-византийский',
+    'pseudo-russian':          'Псевдорусский стиль',
+    'russian_revival':         'Псевдорусский стиль',
+    
+    'art_deco':                'Ар-деко',
+    'art_nouveau':             'Модерн (ар-нуво)',
+    
+    'constructivism':          'Конструктивизм',
+    'postconstructivism':      'Постконструктивизм',
+    
     'stalinist neoclassicism': 'Сталинский ампир',
-    'russian-byzantine': 'Русско-византийский',
+    'stalinist_neoclassicism': 'Сталинский ампир',    
+    
+    'brutalist':               'Брутализм',
+    'functionalism':           'Функционализм',
+    'international':           'Интернациональный стиль',
+    'international_style':     'Интернациональный стиль',
+    
+    'modern':                  'Модернизм',
+    'modernist':               'Модернизм',
+    'modernism':               'Модернизм', # таких тегов всего 2 (на 2024-09-18), потому что в английском языке даже слова такого нет.  -- не документирован
+    'soviet':                  'Советский модернизм', # Определяется автоматически, но ни одного такого здания еще нет в осм (и слава богу)
+    
+    'postmodern':              'Постмодерн',
+    'contemporary':            'Современный',
+    
+    'islamic':                 'Исламская архитектура',
+    'ottoman':                 'Османский стиль', 
+    
+    'brick style':             'Кирпичный стиль',
+    'brick_style':             'Кирпичный стиль',
+    
+
     
     #   'russian_revival': '4', russian_revival -- это русский стиль в широком смысле.
 }    

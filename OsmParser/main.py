@@ -73,11 +73,15 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
             # fences are not buildings
             blnFence = (osmObject.tagBarrier == 'fence') or (osmObject.tagBarrier == 'wall')
 
-        if blnBuilding or blnFence:
-            SelectedObjects.append(osmObject)
-        else:
-            #print( "not a building: " + osmObject.type + " " + osmObject.id)
-            pass
+        if not(blnBuilding or blnFence):
+            continue
+        
+        if osmObject.tagBuilding == 'military' or  'military' in osmObject.osmtags:
+            print('military object skipped: '+osmObject.type[0] +  osmObject.id)   
+            continue
+            
+        SelectedObjects.append(osmObject)
+        
 
     spatial_index = createSpatialIndex(objOsmGeomParts)
     
@@ -213,7 +217,7 @@ def guessBuildingStyle(strArchitecture, strDate):
             elif strDate <= '1955':            
                 strResult ='~stalinist_neoclassicism'
             elif strDate <= '1991':
-                strResult = '~soviet'
+                strResult = '~modern'
             else:
                 strResult = '~contemporary'
     
