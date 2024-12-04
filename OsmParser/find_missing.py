@@ -10,8 +10,7 @@ from pathlib import Path
 import json
 DB_FOLDER="d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\22_all_osm_objects_list\\"
 IMG_FOLDER="d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\25_images"
-
-
+CLASSIFIED_IMG_FOLDER = "d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\28_Classified_images"
 
 
 input_file_name = DB_FOLDER + "all-objects.dat"
@@ -51,6 +50,9 @@ for rec in object_list:
     style = rec[QUADDATA_STYLE]
     if style.startswith("~"):
         style = style[1:]
+        
+    if ';' in style or ',' in style:
+        style = 'eclectic'
     style = building_styles.get(style, style)    
         
     if rus_type not in building_types_stats:
@@ -102,7 +104,6 @@ for rec in object_list:
         if int(rec[QUADDATA_HEIGHT])==0: 
             n_photo_wo_height += 1
             photo_wo_height.append(rec)    
-        
             
             
 saveDatFile(wiki_wo_wikidata, join(DB_FOLDER, 'wiki_wo_wikidata.dat'))            
@@ -126,7 +127,7 @@ print('  without arch. style:', n_photo_wo_style)
 print('  without height:', n_photo_wo_height)
 print('wiki but no wikidata:', len(wiki_wo_wikidata))
 
-TYPE_SIZE_LIMIT=25
+TYPE_SIZE_LIMIT=5
 
 print()
 print("type unrecognized") 
@@ -145,11 +146,12 @@ if False:
 
         file_path = join(IMG_FOLDER, wikidata_id+'.png')
         if  exists(file_path):        
-            if rec[QUADDATA_BUILDING_TYPE]:    
-                building_class = buildingTypeRus(rec[QUADDATA_BUILDING_TYPE])
-                if building_class and building_types_stats[building_class]>=TYPE_SIZE_LIMIT :
-                    Path("work_folder\\28_Classified_images\\"+building_class).mkdir(parents=True, exist_ok=True)
-                    shutil.copyfile(file_path, "work_folder\\28_Classified_images\\"+building_class+"\\"+wikidata_id+'.png')        
+            if rec[QUADDATA_STYLE]:    
+                #building_class = buildingTypeRus(rec[QUADDATA_BUILDING_TYPE])
+                building_class =  building_styles.get(rec[QUADDATA_STYLE], rec[QUADDATA_STYLE])    
+                if building_class and building_styles_stats[building_class][TYPE_TOTAL]>=TYPE_SIZE_LIMIT :
+                    Path(CLASSIFIED_IMG_FOLDER+"\\"+building_class).mkdir(parents=True, exist_ok=True)
+                    shutil.copyfile(file_path, CLASSIFIED_IMG_FOLDER + "\\"+building_class+"\\"+wikidata_id+'.png')        
                     
             
             

@@ -221,11 +221,13 @@ def buildingTypeRus(s):
 achitecture_styles_rus_names={
 
     'eclectic':                'Эклектика',
+    'romanesque':              'Романский стиль',  
     'pre-mongolian':           'Домонгольская романика', #Определяется автоматически, но ни одного такого здания еще нет в осм
     'oldrussian':              'Русская романика',
     'old_russian':             'Русская романика',
     'uzorochye':               'Узорочье', #Определяется автоматически, но ни одного такого здания еще нет в осм
     'gothic':                  'Готика',
+    'renaissance':             'Ренессанс', # В архитектуре "ренессанс" -- это проторенесанс (кватроченто), римский классицизм, далее маньеризм и раннее барокко.
 
     'baroque':                 'Барокко',
     'rococo':                  'Рококо',
@@ -237,12 +239,15 @@ achitecture_styles_rus_names={
     
     
     'neo-gothic':              'Неоготика',
+    'gothic_revival':          'Неоготика',
+    'neogothic_revival':       'Неоготика',
     'russian_gothic':          'Псевдоготика',
     'pseudo-gothic':           'Псевдоготика',
     'neo-romanesque':          'Неороманский стиль',  
+    'romanesque_revival':      'Неороманский стиль',  
     'neo-baroque':             'Необарокко',
-    
-    'nothern_modern':          'Северный модерн',
+    'neobarocco':              'Необарокко', # popular mistype
+    'baroque_revival':         'Необарокко',
     
     'russian-byzantine':       'Русско-византийский',
     'pseudo-russian':          'Псевдорусский стиль',
@@ -250,19 +255,21 @@ achitecture_styles_rus_names={
     
     'art_deco':                'Ар-деко',
     'art_nouveau':             'Модерн (ар-нуво)',
+    'nothern_modern':          'Северный модерн',
     
     'constructivism':          'Конструктивизм',
     'postconstructivism':      'Постконструктивизм',
     
     'stalinist neoclassicism': 'Сталинский ампир',
     'stalinist_neoclassicism': 'Сталинский ампир',    
+    # Модернизм и его разновидности
+    'brutalist':               'Модернизм', #'Брутализм',
+    'brutalism':               'Модернизм', #'Брутализм',
+    'functionalism':           'Модернизм', #'Функционализм',
+    'international':           'Модернизм', #'Интернациональный стиль',
+    'international_style':     'Модернизм', #'Интернациональный стиль',
     
-    'brutalist':               'Брутализм',
-    'functionalism':           'Функционализм',
-    'international':           'Интернациональный стиль',
-    'international_style':     'Интернациональный стиль',
-    
-    'modern':                  'Модернизм',
+    'modern':                  'Модернизм', #
     'modernist':               'Модернизм',
     'modernism':               'Модернизм', # таких тегов всего 2 (на 2024-09-18), потому что в английском языке даже слова такого нет.  -- не документирован
     'soviet':                  'Советский модернизм', # Определяется автоматически, но ни одного такого здания еще нет в осм (и слава богу)
@@ -275,6 +282,9 @@ achitecture_styles_rus_names={
     
     'brick style':             'Кирпичный стиль',
     'brick_style':             'Кирпичный стиль',
+    
+    'timber_frame':            'Фахверк',
+    'umgebinde':               'Верхнелужицкий дом', #сочетание сруба и фахтверка на каркасе
     
 
     
