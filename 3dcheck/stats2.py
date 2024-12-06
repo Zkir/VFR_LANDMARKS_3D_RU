@@ -66,7 +66,7 @@ def createStatisticsPage(strInputFile):
     print( '<p><small>Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</small><p>'+ '\n')
     print( '<table class="sortable">'+ '\n')
     #<th>OSM ID</th>
-    print( '<tr><th>Тип здания</th><th>Всего зданий</th><th>Зданий с 3D моделью</th><th>Зданий с фотографией</th>'
+    print( '<tr><th>Стиль</th><th>Периодизация</th><th>Всего зданий</th><th>Зданий с 3D моделью</th><th>Зданий с фотографией</th>'
            + '<th>ОСМ-теги</th></tr>'+ '\n')
     
     # Hidden columns
@@ -77,12 +77,14 @@ def createStatisticsPage(strInputFile):
         if key and value["total"]>2:
             print('<tr>'+ '\n')
             print('<td>'+key+'</td>'+ '\n')
+            print('<td>' + str(value["dates"][4]) +'-' +str(value["dates"][5]) + '</td>'+ '\n')
             #print(f'<td><a href="/stats/{key}.html" >{key}</a></td>'+ '\n')
             
             print('<td>' + str(value["total"]) + '</td>'+ '\n')
             print('<td>' + str(value["with_model"]) + '</td>'+ '\n')
             print('<td>' + str(value["with_picture"]) + '</td>'+ '\n')
             print('<td>' + ", ".join(value["osm_tags"]) + '</td>'+ '\n')
+            
             print('</tr>'+ '\n')        
             n += 1
               

@@ -3,8 +3,8 @@ from mdlMisc import loadDatFile, saveDatFile
 from mdlDBMetadata import *
 from  mdlClassify import building_types_rus_names as building_classes
 from  mdlClassify import achitecture_styles_rus_names as building_styles
-
 from  mdlClassify import buildingTypeRus
+from  mdlStartDate import parseStartDate
 import shutil
 from pathlib import Path
 import json
@@ -12,6 +12,30 @@ DB_FOLDER="d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\22_all_osm_objects_list\\"
 IMG_FOLDER="d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\25_images"
 CLASSIFIED_IMG_FOLDER = "d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\28_Classified_images"
 
+def calculate_periods(building_types_stats):
+    for key, type_stat in building_types_stats.items():
+        avg=0
+        std=0
+        min_year=0
+        max_year=0
+        if len(type_stat[TYPE_DATES])>0:
+            min_year = type_stat[TYPE_DATES][0]
+            max_year = type_stat[TYPE_DATES][0]
+            for year in type_stat[TYPE_DATES]:
+                avg+=year
+                if year>max_year:
+                    max_year=year
+                if year<min_year:
+                    min_year=year
+                    
+            avg=avg/len(type_stat[TYPE_DATES])   
+            
+            for year in type_stat[TYPE_DATES]:
+                std+=(avg-year)**2
+                
+            std = (std / len(type_stat[TYPE_DATES])   ) ** 0.5
+        
+        type_stat[TYPE_DATES]= (round(avg,1), round(std,1), min_year, max_year, max(min_year, round(avg-2*std)), min(max_year, round(avg+2*std)))
 
 input_file_name = DB_FOLDER + "all-objects.dat"
 object_list = loadDatFile(input_file_name)
@@ -34,6 +58,7 @@ TYPE_TOTAL        = "total"
 TYPE_WITH_MODEL   = "with_model"
 TYPE_WITH_PICTURE = "with_picture"
 TYPE_OSM_TAGS     = "osm_tags"
+TYPE_DATES        = "dates"
 
 for rec in object_list:
     wikidata_id = rec[QUADDATA_WIKIDATA_ID]
@@ -56,10 +81,10 @@ for rec in object_list:
     style = building_styles.get(style, style)    
         
     if rus_type not in building_types_stats:
-        building_types_stats[rus_type] = {TYPE_TOTAL:0, TYPE_WITH_MODEL:0, TYPE_WITH_PICTURE:0, TYPE_OSM_TAGS:[]}
+        building_types_stats[rus_type] = {TYPE_TOTAL:0, TYPE_WITH_MODEL:0, TYPE_WITH_PICTURE:0, TYPE_OSM_TAGS:[], TYPE_DATES: []}
         
     if style not in building_styles_stats:
-        building_styles_stats[style] = {TYPE_TOTAL:0, TYPE_WITH_MODEL:0, TYPE_WITH_PICTURE:0, TYPE_OSM_TAGS:[]}    
+        building_styles_stats[style] = {TYPE_TOTAL:0, TYPE_WITH_MODEL:0, TYPE_WITH_PICTURE:0, TYPE_OSM_TAGS:[], TYPE_DATES: []}    
         
     building_types_stats[rus_type][TYPE_TOTAL] +=1 
     building_styles_stats[style][TYPE_TOTAL] +=1 
@@ -75,6 +100,11 @@ for rec in object_list:
     osm_tag = rec[QUADDATA_STYLE]
     if osm_tag not in  building_styles_stats[style][TYPE_OSM_TAGS]:
         building_styles_stats[style][TYPE_OSM_TAGS]+=[osm_tag]    
+        
+    start_date = parseStartDate(rec[QUADDATA_BUILD_DATE])
+    if start_date:
+        building_types_stats[rus_type][TYPE_DATES]+=[int(start_date)]                
+        building_styles_stats[style][TYPE_DATES]+=[int(start_date)]                
         
         
     if rec[QUADDATA_OSM3D] == 'True':
@@ -104,7 +134,13 @@ for rec in object_list:
         if int(rec[QUADDATA_HEIGHT])==0: 
             n_photo_wo_height += 1
             photo_wo_height.append(rec)    
-            
+      
+# calculate periods
+calculate_periods(building_types_stats)
+calculate_periods(building_styles_stats)
+   
+    
+
             
 saveDatFile(wiki_wo_wikidata, join(DB_FOLDER, 'wiki_wo_wikidata.dat'))            
 saveDatFile(wikidata_wo_year, join(DB_FOLDER, 'wikidata_wo_year.dat'))            
