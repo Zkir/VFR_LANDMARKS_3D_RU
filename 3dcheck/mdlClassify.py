@@ -1,5 +1,6 @@
 building_types_rus_names = {
     'CONSTRUCTION':               '_СТРОЙКА_',    
+    'FOLLY':                      'Архитектурный каприз', 
     # religious
     'CHURCH':                     'Церковь',
     'CHAPEL':                     'Часовня',

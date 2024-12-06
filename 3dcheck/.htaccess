@@ -1,6 +1,7 @@
 RewriteEngine on
 RewriteRule ^test$ test.py
 RewriteRule ^stats.html$ stats.py
+RewriteRule ^stats2.html$ stats2.py
 RewriteRule ^([A-Z0-9\-\+_]+).html$  region.py?param=$1
 RewriteRule ^([A-Z0-9\-\+_]+).errors.html$  region_errors.py?param=$1
 RewriteRule ^rus-top.html$ region.py?param=RUS_TOP
