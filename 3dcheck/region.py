@@ -78,7 +78,7 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     # ==========================================================================
     # sort by number of building parts
     # ==========================================================================
-    if strQuadrantName != "RUS_LATEST":
+    if strQuadrantName != "rus_latest":
         cells.sort(key=lambda row: int(row[24]), reverse=True)
         arrSummary = GetSummary(cells)
     else:
@@ -91,7 +91,7 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     #print( '<meta charset=\'utf-8\' />'+ '\n')
     print( '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'+ '\n')
 
-    print( '<title>Валидатор 3D:' + strQuadrantName + '</title>'+ '\n')
+    print( '<title>Валидатор 3D: ' + region_names.get(strQuadrantName,strQuadrantName) + '</title>'+ '\n')
     print( '<script src="/js/sorttable.js" type="Text/javascript"></script>'+ '\n')
     print( '<style>'+ '\n')
     print( 'table {border: 1px solid grey;}'+ '\n')
@@ -102,10 +102,10 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     print( '<body>'+ '\n')
     print( '<h1>Валидатор 3D: ' + region_names.get(strQuadrantName, strQuadrantName) + '</h1>'+ '\n')
         
-    if strQuadrantName == "RUS_TOP_WINDOWS":    
+    if strQuadrantName == "rus_top_windows":    
         print( '<p>На этой странице представлены здания, имеющие окна, заданные тегами <b><a href="https://wiki.openstreetmap.org/wiki/Key:window">window:*</a></b> .'+ '\n')
         
-    elif strQuadrantName == "RUS_LATEST":
+    elif strQuadrantName == "rus_latest":
         print( '<p>На этой странице представлены здания, отредактированные в последнее время.'+ '\n')
         print( 'Включены только здания, имеющие 3D модели.</p>'+ '\n')
         print( '<h2>Пульс проекта</h2>'+ '\n')
@@ -201,7 +201,9 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
             #print( '<td><a href="' + strOSMurl + '">' + strOsmID + '</a></td>'+ '\n')
             
             #Name/description
-            if (cells[i][23] == "True") or (int(cells[i][24])>0) or cells[28]:
+            wikidata_idx=cells[i][28]
+                
+            if (cells[i][23] == "True") or (int(cells[i][24])>0) or wikidata_idx:
                 #Better check here that the model exists!
                 print('<td width="350px"><a href="' + strModelUrl + '">' + strDescription + '</a></td>'+ '\n')
             else:
@@ -315,6 +317,9 @@ parsed = urlparse.urlparse(url)
 strParam=urlparse.parse_qs(parsed.query).get('param','')
 #strQuadrantName=url[1:-5]
 strQuadrantName=cgi.FieldStorage().getvalue('param')
+
+if not strQuadrantName:
+    strQuadrantName = "rus_top"
 
 #print(strQuadrantName)
 CreateRegionSummaryPage(strQuadrantName, "data/quadrants/"+strQuadrantName+".dat", False, False)

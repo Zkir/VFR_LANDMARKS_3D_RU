@@ -59,6 +59,7 @@ TYPE_WITH_MODEL   = "with_model"
 TYPE_WITH_PICTURE = "with_picture"
 TYPE_OSM_TAGS     = "osm_tags"
 TYPE_DATES        = "dates"
+building_styles_subfiles = {}
 
 for rec in object_list:
     wikidata_id = rec[QUADDATA_WIKIDATA_ID]
@@ -85,9 +86,11 @@ for rec in object_list:
         
     if style not in building_styles_stats:
         building_styles_stats[style] = {TYPE_TOTAL:0, TYPE_WITH_MODEL:0, TYPE_WITH_PICTURE:0, TYPE_OSM_TAGS:[], TYPE_DATES: []}    
+        building_styles_subfiles[style] = []
         
     building_types_stats[rus_type][TYPE_TOTAL] +=1 
     building_styles_stats[style][TYPE_TOTAL] +=1 
+    building_styles_subfiles[style] += [rec]
     
     osm_tag = rec[QUADDATA_BUILDING_TYPE]
     osm_tag = osm_tag.lower()
@@ -103,7 +106,9 @@ for rec in object_list:
         
     start_date = parseStartDate(rec[QUADDATA_BUILD_DATE])
     if start_date:
-        building_types_stats[rus_type][TYPE_DATES]+=[int(start_date)]                
+        building_types_stats[rus_type][TYPE_DATES]+=[int(start_date)]
+            
+        #if not rec[QUADDATA_STYLE].startswith("~"): # there are too few buildings, to use only explicit classification 
         building_styles_stats[style][TYPE_DATES]+=[int(start_date)]                
         
         
@@ -191,4 +196,21 @@ if False:
                     
             
             
-       
+ #Create subfile with styles
+ 
+for style, value in building_styles_stats.items():
+    if not style:
+        continue    
+    if value[TYPE_TOTAL]<TYPE_SIZE_LIMIT:
+        continue    
+        
+    filename = value["osm_tags"][0]
+    filename = filename.replace(" ", "_")
+    filename = filename.replace("~", "")
+    filename = filename + '.dat'
+    print(filename)
+
+
+    saveDatFile(building_styles_subfiles[style], join(DB_FOLDER, filename))  
+    
+    

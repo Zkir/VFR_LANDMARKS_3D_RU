@@ -242,6 +242,8 @@ def calculateBuildingType( osmtags, dblSize):
     tagTheatreGenre = osmtags.get('theatre:genre','')
     tagBuildingFlats= osmtags.get('building:flats','')
     tagTourism      = osmtags.get('tourism', '')
+    tagOffice       = osmtags.get('office', '')
+    
    
     if tagDenomination == 'orthodox' or tagDenomination == 'russian_orthodox' or tagDenomination == 'dissenters':
         tagDenomination = 'RUSSIAN ORTHODOX'
@@ -255,6 +257,10 @@ def calculateBuildingType( osmtags, dblSize):
             tagBuilding = 'defensive tower'
         if tagTowerType == 'watchtower':
             tagBuilding = 'defensive tower' #watchtower  is a type of fortification
+        if tagTowerType == 'fortification':
+            tagBuilding = 'defensive tower'    
+            
+            
             
     if tagBuilding == 'bell_tower' or tagManMade == 'campanile':
         tagBuilding = 'campanile'
@@ -274,7 +280,7 @@ def calculateBuildingType( osmtags, dblSize):
             
     # useless building types
     # let's consider them as synonyms for building=yes
-    if tagBuilding in ['public', 'civic',  'government', 'historic', 'abandoned', 'disused']:
+    if tagBuilding in ['public', 'civic', 'historic', 'abandoned', 'disused']:
         tagBuilding = 'yes'
             
     # for building=yes we are free to guess building type from other tags     
@@ -304,8 +310,8 @@ def calculateBuildingType( osmtags, dblSize):
         elif tagAmenity == 'research_institute':
             tagBuilding = 'office'                
             
-        elif tagManMade == 'lighthouse':
-            tagBuilding = 'lighthouse' 
+        elif tagManMade == ['lighthouse', 'observatory']:
+            tagBuilding = tagManMade
         
         elif tagManMade == 'beacon': #there is some difference between beacon and lighthouse, but for object with building=* we will ignore it. 
             tagBuilding = 'lighthouse'  
@@ -314,7 +320,7 @@ def calculateBuildingType( osmtags, dblSize):
             tagBuilding = 'monument'             
         
             
-        elif tagLeisure in ['stadium','sports_centre' 'ice_rink']:
+        elif tagLeisure in ['stadium', 'sports_centre', 'ice_rink']:
             tagBuilding = tagLeisure 
         
         # historic
@@ -333,10 +339,16 @@ def calculateBuildingType( osmtags, dblSize):
         # tourism=museum,  tourism=hotel        
         # unfortunately, we can induce hotel only. museums can be orgainzed in any kind of building
         elif tagTourism in ['hotel']: 
-            tagBuilding = tagTourism                    
+            tagBuilding = tagTourism  
+            
+        elif tagTourism in ['aquarium']: 
+            tagBuilding = 'public_aquarium'     
         
         elif tagBuildingFlats.isnumeric() and float(tagBuildingFlats)>20:
             tagBuilding = 'apartments'
+            
+        elif tagOffice:
+            tagBuilding = 'office'
         
     #temple is the same thing as church in christianity 
     if tagBuilding == 'temple':

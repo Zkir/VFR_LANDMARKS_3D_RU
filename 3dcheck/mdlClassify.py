@@ -84,6 +84,7 @@ building_types_rus_names = {
     'VILLA':                 'Особняк',
     'PALACE':                'Дворец',
     'APARTMENTS':            'Многоквартирный дом',
+    'REVENUE_HOUSE':         'Многоквартирный дом',  #from historic=revenue_house
     'PRESBYTERY':            'Частный жилой дом', # just a house where a priest lives, no special features/traits
         
     'BARRACKS':              'Казарма',
@@ -111,6 +112,7 @@ building_types_rus_names = {
     'GARAGE':                'Гараж',
     'OFFICE':                'Офисное здание',
     'COMMERCIAL':            'Офисное здание',
+    'GOVERNMENT':            'Офисное здание',
     'SERVICE':               'Техническая будка',
     'BATH':                  'Баня/купальня', 
     
@@ -242,8 +244,8 @@ achitecture_styles_rus_names={
     'neo-gothic':              'Неоготика',
     'gothic_revival':          'Неоготика',
     'neogothic_revival':       'Неоготика',
-    'russian_gothic':          'Псевдоготика',
-    'pseudo-gothic':           'Псевдоготика',
+    'russian_gothic':          'Неоготика',
+    'pseudo-gothic':           'Неоготика',
     'neo-romanesque':          'Неороманский стиль',  
     'romanesque_revival':      'Неороманский стиль',  
     'neo-baroque':             'Необарокко',
