@@ -37,6 +37,28 @@ def calculate_periods(building_types_stats):
         
         type_stat[TYPE_DATES]= (round(avg,1), round(std,1), min_year, max_year, max(min_year, round(avg-2*std)), min(max_year, round(avg+2*std)))
 
+def write_stat_json(filename, building_types_stats):
+    building_types_stats = dict(sorted(building_types_stats.items(), reverse=True, key=lambda item: item[1][TYPE_WITH_PICTURE]))
+    with open(join(DB_FOLDER, filename), 'w', encoding='utf-8') as f:
+        json.dump(building_types_stats, f, ensure_ascii=False, indent=2)
+
+def write_subfiles(building_styles_stats, building_styles_subfiles, subfolder, limit):
+    Path(join(DB_FOLDER, subfolder)).mkdir(parents=True, exist_ok=True)
+    for style, value in building_styles_stats.items():
+        if not style:
+            continue    
+        if value[TYPE_TOTAL]<limit:
+            continue    
+            
+        filename = value["osm_tags"][0]
+        filename = filename.replace(" ", "_")
+        filename = filename.replace("~", "")
+        filename = filename + '.dat'
+        filename = join(subfolder, filename)
+        filename = join(DB_FOLDER, filename)
+        saveDatFile(building_styles_subfiles[style], filename )  
+
+
 input_file_name = DB_FOLDER + "all-objects.dat"
 object_list = loadDatFile(input_file_name)
 wiki_wo_wikidata = []
@@ -54,12 +76,17 @@ unrecognized_building_types_stats = {}
 
 building_types_stats = {}
 building_styles_stats = {}
+building_architects_stats = {}
+
 TYPE_TOTAL        = "total"
 TYPE_WITH_MODEL   = "with_model"
 TYPE_WITH_PICTURE = "with_picture"
 TYPE_OSM_TAGS     = "osm_tags"
 TYPE_DATES        = "dates"
+
 building_styles_subfiles = {}
+building_architects_subfiles = {}
+
 
 for rec in object_list:
     wikidata_id = rec[QUADDATA_WIKIDATA_ID]
@@ -79,7 +106,9 @@ for rec in object_list:
         
     if ';' in style or ',' in style:
         style = 'eclectic'
-    style = building_styles.get(style, style)    
+    style = building_styles.get(style, style) 
+
+    architect = rec[QUADDATA_ARCHITECT]    
         
     if rus_type not in building_types_stats:
         building_types_stats[rus_type] = {TYPE_TOTAL:0, TYPE_WITH_MODEL:0, TYPE_WITH_PICTURE:0, TYPE_OSM_TAGS:[], TYPE_DATES: []}
@@ -88,9 +117,17 @@ for rec in object_list:
         building_styles_stats[style] = {TYPE_TOTAL:0, TYPE_WITH_MODEL:0, TYPE_WITH_PICTURE:0, TYPE_OSM_TAGS:[], TYPE_DATES: []}    
         building_styles_subfiles[style] = []
         
+    if architect not in building_architects_stats:
+        building_architects_stats[architect] = {TYPE_TOTAL:0, TYPE_WITH_MODEL:0, TYPE_WITH_PICTURE:0, TYPE_OSM_TAGS:[], TYPE_DATES: []}    
+        building_architects_subfiles[architect] = []    
+        
     building_types_stats[rus_type][TYPE_TOTAL] +=1 
     building_styles_stats[style][TYPE_TOTAL] +=1 
+    building_architects_stats[architect][TYPE_TOTAL] +=1 
+    
     building_styles_subfiles[style] += [rec]
+    building_architects_subfiles[architect] += [rec]
+    
     
     osm_tag = rec[QUADDATA_BUILDING_TYPE]
     osm_tag = osm_tag.lower()
@@ -102,7 +139,12 @@ for rec in object_list:
         
     osm_tag = rec[QUADDATA_STYLE]
     if osm_tag not in  building_styles_stats[style][TYPE_OSM_TAGS]:
-        building_styles_stats[style][TYPE_OSM_TAGS]+=[osm_tag]    
+        building_styles_stats[style][TYPE_OSM_TAGS]+=[osm_tag]   
+
+    osm_tag = rec[QUADDATA_ARCHITECT]
+    if osm_tag not in  building_architects_stats[architect][TYPE_OSM_TAGS]:
+        building_architects_stats[architect][TYPE_OSM_TAGS]+=[osm_tag]   
+        
         
     start_date = parseStartDate(rec[QUADDATA_BUILD_DATE])
     if start_date:
@@ -110,6 +152,7 @@ for rec in object_list:
             
         #if not rec[QUADDATA_STYLE].startswith("~"): # there are too few buildings, to use only explicit classification 
         building_styles_stats[style][TYPE_DATES]+=[int(start_date)]                
+        building_architects_stats[architect][TYPE_DATES]+=[int(start_date)]                
         
         
     if rec[QUADDATA_OSM3D] == 'True':
@@ -118,6 +161,10 @@ for rec in object_list:
     
     if wikidata_id and exists(file_path):        
         buildings_with_photos+=1
+        building_types_stats[rus_type][TYPE_WITH_PICTURE] +=1 
+        building_styles_stats[style][TYPE_WITH_PICTURE] +=1    
+        building_architects_stats[architect][TYPE_WITH_PICTURE] +=1 
+        
             
         if rec[QUADDATA_BUILDING_TYPE]:    
             if  not (rec[QUADDATA_BUILDING_TYPE] in building_classes or rus_type in building_classes):
@@ -126,13 +173,13 @@ for rec in object_list:
                     unrecognized_building_types_stats[rec[QUADDATA_BUILDING_TYPE]]=0
                 unrecognized_building_types_stats[rec[QUADDATA_BUILDING_TYPE]] +=1    
             
-            building_types_stats[rus_type][TYPE_WITH_PICTURE] +=1    
+               
         else:
             n_photo_wo_type += 1 
             photo_wo_type.append(rec)
         
         if rec[QUADDATA_STYLE]: 
-            building_styles_stats[style][TYPE_WITH_PICTURE] +=1    
+            pass
         else:
             n_photo_wo_style += 1
             
@@ -143,6 +190,7 @@ for rec in object_list:
 # calculate periods
 calculate_periods(building_types_stats)
 calculate_periods(building_styles_stats)
+calculate_periods(building_architects_stats)
    
     
 
@@ -152,14 +200,10 @@ saveDatFile(wikidata_wo_year, join(DB_FOLDER, 'wikidata_wo_year.dat'))
 saveDatFile(photo_wo_type,    join(DB_FOLDER, 'photo_wo_type.dat'))  
 saveDatFile(photo_wo_height,  join(DB_FOLDER, 'photo_wo_height.dat'))  
 
-building_types_stats = dict(sorted(building_types_stats.items(),reverse=True, key=lambda item: item[1][TYPE_WITH_PICTURE]))
-with open(join(DB_FOLDER, 'building_type_stats.json'), 'w', encoding='utf-8') as f:
-    json.dump(building_types_stats, f, ensure_ascii=False, indent=2)
-    
-building_styles_stats = dict(sorted(building_styles_stats.items(),reverse=True, key=lambda item: item[1][TYPE_WITH_PICTURE]))
-with open(join(DB_FOLDER, 'building_style_stats.json'), 'w', encoding='utf-8') as f:
-    json.dump(building_styles_stats, f, ensure_ascii=False, indent=2)    
 
+write_stat_json('building_type_stats.json', building_types_stats)
+write_stat_json('building_style_stats.json', building_styles_stats)
+write_stat_json('building_architects_stats.json', building_architects_stats)
 
 print('buildings with photos:', buildings_with_photos)
 print('  without type:', n_photo_wo_type)
@@ -196,21 +240,9 @@ if False:
                     
             
             
- #Create subfile with styles
- 
-for style, value in building_styles_stats.items():
-    if not style:
-        continue    
-    if value[TYPE_TOTAL]<TYPE_SIZE_LIMIT:
-        continue    
-        
-    filename = value["osm_tags"][0]
-    filename = filename.replace(" ", "_")
-    filename = filename.replace("~", "")
-    filename = filename + '.dat'
-    print(filename)
+# Create subfile with styles
 
+write_subfiles(building_styles_stats, building_styles_subfiles, "styles", TYPE_SIZE_LIMIT)
+write_subfiles(building_architects_stats, building_architects_subfiles, "architects", 2)
 
-    saveDatFile(building_styles_subfiles[style], join(DB_FOLDER, filename))  
-    
-    
+#print(building_architects_stats)
