@@ -286,9 +286,9 @@ def calculateBuildingType( osmtags, dblSize):
             
     # useless building types
     # let's consider them as synonyms for building=yes
-    if tagBuilding in ['public', 'civic', 'historic', 'abandoned', 'disused']:
+    if tagBuilding in ['public', 'civic', 'historic', 'abandoned', 'disused', 'transportation', 'public_building', 'embassy' ]:
         tagBuilding = 'yes'
-            
+    
     # for building=yes we are free to guess building type from other tags     
     if tagBuilding == 'yes':
         
@@ -337,14 +337,6 @@ def calculateBuildingType( osmtags, dblSize):
         elif tagHistoric != '':
             if tagHistoric not in ['yes', 'building', 'heritage', 'heritage_building', 'place_of_worship', 'technical_monument', 'archaeological_site', 'battlefield']:
                 tagBuilding=tagHistoric
-                if tagHistoric == 'tomb' and  tagTomb !='':
-                    tagBuilding = tagTomb
-                
-                if tagHistoric == 'castle' and  tagCastleType != '':
-                    if tagCastleType not in  [ 'defensive']:
-                        tagBuilding = tagCastleType 
-                    else:    
-                        tagBuilding = tagCastleType + ' ' + tagBuilding
                     
         # tourism=museum,  tourism=hotel        
         # unfortunately, we can induce hotel only. museums can be orgainzed in any kind of building
@@ -362,7 +354,16 @@ def calculateBuildingType( osmtags, dblSize):
             
         elif tagAeroway == 'terminal':
             tagBuilding = 'terminal'
-        
+    
+    if tagBuilding == 'tomb' and  tagTomb !='':
+        tagBuilding = tagTomb
+                
+    if tagBuilding == 'castle' and  tagCastleType != '':
+        if tagCastleType not in  [ 'defensive']:
+            tagBuilding = tagCastleType 
+        else:    
+            tagBuilding = tagCastleType + ' ' + tagBuilding
+    
     #temple is the same thing as church in christianity 
     if tagBuilding == 'temple':
         if tagReligion == 'christian':

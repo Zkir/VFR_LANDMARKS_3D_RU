@@ -21,6 +21,7 @@ building_types_rus_names = {
     'GEORGIAN_ORTHODOX CHAPEL':   'Православная часовня',	
     'GREEK_ORTHODOX CHURCH':      'Православная церковь',
     'GREEK_ORTHODOX CHAPEL':      'Православная часовня',
+    'UKRAINIAN_ORTHODOX_MP CHURCH':'Православная церковь',
 
     'RUSSIAN ORTHODOX WAYSIDE_SHRINE': 'Православная часовня', 	
     
@@ -95,8 +96,6 @@ building_types_rus_names = {
     'RESTAURANT':            'Ресторан',
     'HOTEL':                 'Гостиница',
     'INN':                   'Гостиница',
-    'TRAIN_STATION':         'Вокзал',
-    'RAILWAY_STATION':       'Вокзал',
     'THEATRE':               'Театр',
     'CINEMA':                'Кинотеатр',
     'CIRCUS':                'Цирк',
@@ -124,6 +123,12 @@ building_types_rus_names = {
     'COLLEGE':               'Школа',
     'UNIVERSITY':            'Университет',
     
+    # transpotation
+    'TRAIN_STATION':         'Вокзал',
+    'RAILWAY_STATION':       'Вокзал',
+    'TERMINAL':              'Аэровокзал',
+    'BUS_STATION':           'Автовокзал',
+    
     # industrial
     'INDUSTRIAL':            'Промышленное здание',
     'MANUFACTURE':           'Промышленное здание',
@@ -144,6 +149,9 @@ building_types_rus_names = {
     
     'TRIUMPHAL_ARCH':        'Триумфальная арка',
     'ARSENAL':               'Арсенал',
+    'RIDING_HALL':           'Манеж',
+    'PUBLIC_AQUARIUM':       'Океанариум',
+    'JAIL':                  'Тюрьма',
     
     # walls castles and defencive
     'DEFENSIVE TOWER': 'Крепостная башня',
@@ -171,6 +179,7 @@ building_types_rus_names = {
     'SHIP':            'Корабль на приколе',
     'AIRCRAFT':        'Корабль на приколе',
     'WRECK':           'Корабль на приколе',
+    'TRAMWAY':         'Корабль на приколе',
     
     #Rural Buildings
     
@@ -203,6 +212,9 @@ building_types_rus_names = {
     'PLANETARIUM':     'Планетарий', # from amenity=planetarium
     'LIGHTHOUSE':      'Маяк', # from man_made=lighthouse
     'LIBRARY':         'Библиотека', #from amenity=library
+    
+    'PEOPLES_HOUSE':   'Народный дом',
+    'OBSERVATORY':     'Обсерватория', 
     
 
 }

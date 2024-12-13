@@ -99,7 +99,13 @@ for rec in object_list:
         wikidata_wo_year.append(rec) 
 
     file_path = join(IMG_FOLDER, wikidata_id+'.png')
+      
+        
+    rec[QUADDATA_BUILDING_TYPE] = rec[QUADDATA_BUILDING_TYPE].replace('RUINED', '').strip()
+    
     rus_type = buildingTypeRus(rec[QUADDATA_BUILDING_TYPE])
+   
+    
     style = rec[QUADDATA_STYLE]
     if style.startswith("~"):
         style = style[1:]
@@ -156,23 +162,23 @@ for rec in object_list:
         
         
     if rec[QUADDATA_OSM3D] == 'True':
-        building_types_stats[rus_type][TYPE_WITH_MODEL] +=1 
-        building_styles_stats[style][TYPE_WITH_MODEL] +=1 
+        building_types_stats[rus_type][TYPE_WITH_MODEL] += 1 
+        building_styles_stats[style][TYPE_WITH_MODEL] += 1 
+        building_architects_stats[architect][TYPE_WITH_MODEL] += 1 
     
     if wikidata_id and exists(file_path):        
         buildings_with_photos+=1
-        building_types_stats[rus_type][TYPE_WITH_PICTURE] +=1 
-        building_styles_stats[style][TYPE_WITH_PICTURE] +=1    
-        building_architects_stats[architect][TYPE_WITH_PICTURE] +=1 
-        
+        building_types_stats[rus_type][TYPE_WITH_PICTURE] += 1 
+        building_styles_stats[style][TYPE_WITH_PICTURE] += 1    
+        building_architects_stats[architect][TYPE_WITH_PICTURE] += 1 
             
         if rec[QUADDATA_BUILDING_TYPE]:    
-            if  not (rec[QUADDATA_BUILDING_TYPE] in building_classes or rus_type in building_classes):
+            if not (rec[QUADDATA_BUILDING_TYPE] in building_classes or rus_type in building_classes):
                 n_photo_unrecognized_type+=1
                 if rec[QUADDATA_BUILDING_TYPE] not in unrecognized_building_types_stats:
                     unrecognized_building_types_stats[rec[QUADDATA_BUILDING_TYPE]]=0
                 unrecognized_building_types_stats[rec[QUADDATA_BUILDING_TYPE]] +=1    
-            
+                photo_wo_type.append(rec)
                
         else:
             n_photo_wo_type += 1 

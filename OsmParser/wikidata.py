@@ -175,7 +175,7 @@ wikidata_buildings={
                     'Q39364723': 'hospital', 
                     'Q952885':   'greenhouse',  #orangery 
                     
-                    'Q785952':   'public_bath',  #! do we have something like this in osm?  
+                    'Q785952':   'bath',  # corresponds to osm building=bath
                     
                     # we do not have any better currently
                     'Q1181413':  'theatre',  # palace of culture = large house of culture, major club-house
@@ -186,7 +186,7 @@ wikidata_buildings={
                     'Q15548045': 'almshouse',  #Богадельня
 
                     
-                    'Q1254933':  'astronomical observatory', 
+                    'Q1254933':  'observatory',  #astronomical observatory 
                     'Q7075':     'library',
                     'Q22806':    'library',  #national library   
                     'Q856584':   'library',  #library building
@@ -198,7 +198,7 @@ wikidata_buildings={
                     'Q184644':   'conservatory', 
                     'Q57659484': 'exhibition_hall', 
                     'Q199451':   'pagoda',  
-                    'Q383092':   'art academy',  
+                    'Q383092':   'art_academy',  
                     'Q13107184': 'retail',           # pharmacy 
                     'Q861951':   'police_station ',  #!!!!!
                     'Q55485':    'dead-end railway station',  #dead-end railway station
@@ -223,6 +223,8 @@ wikidata_buildings={
                     'Q907632':   'house',                 # Bremer Haus 
                     'Q16823155': 'castle',                # Schloss 
                     'Q1440300':  'observation tower',     # civilian structure used to view the surrounding landscape
+                    
+                    'Q1220959':  'government',            # building of public administration
 
                     }
 
