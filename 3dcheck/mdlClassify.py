@@ -86,6 +86,7 @@ building_types_rus_names = {
     'APARTMENTS':            'Многоквартирный дом',
     'REVENUE_HOUSE':         'Многоквартирный дом',  #from historic=revenue_house
     'PRESBYTERY':            'Частный жилой дом', # just a house where a priest lives, no special features/traits
+    'ALMSHOUSE':             'Приют, богадельня', 
         
     'BARRACKS':              'Казарма',
     'GUARDHOUSE':            'Караульная будка',
@@ -115,6 +116,7 @@ building_types_rus_names = {
     'GOVERNMENT':            'Офисное здание',
     'SERVICE':               'Техническая будка',
     'BATH':                  'Баня/купальня', 
+    'BANK':                  'Банк', 
     
     #educational 
     'KINDERGARTEN':          'Детский сад',
@@ -138,8 +140,10 @@ building_types_rus_names = {
     'GAZEBO':                'Беседка',
     'WATER_TOWER':           'Водонапорная башня',
     'WATER TOWER':           'Водонапорная башня',
+    'STOCK_EXCHANGE':        'Биржа',
     
     'TRIUMPHAL_ARCH':        'Триумфальная арка',
+    'ARSENAL':               'Арсенал',
     
     # walls castles and defencive
     'DEFENSIVE TOWER': 'Крепостная башня',

@@ -225,25 +225,25 @@ def guessBuildingStyle(strArchitecture, strDate):
 
 
 def calculateBuildingType( osmtags, dblSize):
-    CHURCH_MIN_SIZE = 10
-    tagBuilding =     osmtags.get('building','')
-    tagManMade =      osmtags.get('man_made','')
-    tagTowerType =    osmtags.get('tower:type','')
-    tagAmenity =      osmtags.get('amenity','')
-    tagReligion =     osmtags.get('religion','')
-    tagDenomination = osmtags.get('denomination','')
-    tagBarrier =      osmtags.get('barrier','')
-    tagRuins =        osmtags.get('ruins','')
-    tagHistoric =     osmtags.get('historic','')
-    tagLanduse =      osmtags.get('landuse','')
-    tagCastleType =   osmtags.get('castle_type','')
-    tagTomb =         osmtags.get('tomb','')
-    tagLeisure =      osmtags.get('leisure','')
-    tagTheatreGenre = osmtags.get('theatre:genre','')
-    tagBuildingFlats= osmtags.get('building:flats','')
-    tagTourism      = osmtags.get('tourism', '')
-    tagOffice       = osmtags.get('office', '')
-    
+    CHURCH_MIN_SIZE  = 10
+    tagBuilding      = osmtags.get('building','')
+    tagManMade       = osmtags.get('man_made','')
+    tagTowerType     = osmtags.get('tower:type','')
+    tagAmenity       = osmtags.get('amenity','')
+    tagReligion      = osmtags.get('religion','')
+    tagDenomination  = osmtags.get('denomination','')
+    tagBarrier       = osmtags.get('barrier','')
+    tagRuins         = osmtags.get('ruins','')
+    tagHistoric      = osmtags.get('historic','')
+    tagLanduse       = osmtags.get('landuse','')
+    tagCastleType    = osmtags.get('castle_type','')
+    tagTomb          = osmtags.get('tomb','')
+    tagLeisure       = osmtags.get('leisure','')
+    tagTheatreGenre  = osmtags.get('theatre:genre','')
+    tagBuildingFlats = osmtags.get('building:flats','')
+    tagTourism       = osmtags.get('tourism', '')
+    tagOffice        = osmtags.get('office', '')
+    tagAeroway       = osmtags.get('aeroway', '')
    
     if tagDenomination == 'orthodox' or tagDenomination == 'russian_orthodox' or tagDenomination == 'dissenters':
         tagDenomination = 'RUSSIAN ORTHODOX'
@@ -292,7 +292,7 @@ def calculateBuildingType( osmtags, dblSize):
             if tagReligion == 'muslim':
                 tagBuilding = 'mosque'
                 
-        elif tagAmenity in ['library', 'cinema', 'planetarium', 'restaurant', 'clinic', 'hospital', 'bus_station', 'university', 'school']:        
+        elif tagAmenity in ['library', 'cinema', 'planetarium', 'restaurant', 'clinic', 'hospital', 'bus_station', 'university', 'school', 'bank']:        
             tagBuilding = tagAmenity
             
         elif tagAmenity == 'pharmacy':   
@@ -308,7 +308,10 @@ def calculateBuildingType( osmtags, dblSize):
                 tagBuilding = 'circus' 
 
         elif tagAmenity == 'research_institute':
-            tagBuilding = 'office'                
+            tagBuilding = 'office'  
+            
+        elif tagAmenity == 'townhall':
+            tagBuilding = 'government'              
             
         elif tagManMade == ['lighthouse', 'observatory']:
             tagBuilding = tagManMade
@@ -349,6 +352,9 @@ def calculateBuildingType( osmtags, dblSize):
             
         elif tagOffice:
             tagBuilding = 'office'
+            
+        elif tagAeroway == 'terminal':
+            tagBuilding = 'terminal'
         
     #temple is the same thing as church in christianity 
     if tagBuilding == 'temple':
