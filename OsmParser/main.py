@@ -136,7 +136,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
                  str(osmObject.bbox.maxLon),   object_name,   osmObject.descr,  tagRefTemplesRu ,
                  strBuildingType,   str(Round(osmObject.size)) ,
                  str(Round(osmObject.dblHeight)),   osmObject.colour,   osmObject.material ,
-                 guessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate),
+                 guessBuildingStyle(osmObject.tagArchitecture, osmObject.tagStartDate, strQuadrantName[0:2]),
                  parseStartDateValue( osmObject.tagStartDate),   osmObject.tagWikipedia,
                  osmObject.tagAddrStreet,   osmObject.tagAddrHouseNumber,   osmObject.tagAddrCity,
                  osmObject.tagAddrDistrict,   osmObject.tagAddrRegion,
@@ -191,35 +191,41 @@ def parseLevelsValue(value):
     return float(value)
 
 
-def guessBuildingStyle(strArchitecture, strDate):
+def guessBuildingStyle(strArchitecture, strDate, country_code='', region_code=''):
     strResult = ""
+    
+    
     if strArchitecture != '':
         strResult = strArchitecture
     else:
-        if strDate != '':
-            strDate = parseStartDateValue(strDate)
-            if strDate < '1250':
-                strResult = '~pre-mongolian'
-            elif strDate < '1650':
-                strResult = '~old_russian'
-            elif strDate < '1690':
-                strResult = '~uzorochye'
-            elif strDate < '1800':
-                strResult = '~baroque'
-            elif strDate < '1875':
-                strResult = '~neoclassicism'
-            elif strDate <= '1917':
-                strResult = '~pseudo-russian'
-            elif strDate <= '1932':    
-                strResult ='~constructivism'
-            elif strDate <= '1936':        
-                strResult ='~postconstructivism'
-            elif strDate <= '1955':            
-                strResult ='~stalinist_neoclassicism'
-            elif strDate <= '1991':
-                strResult = '~modern'
+        if country_code == 'RU':
+            if strDate != '':
+                strDate = parseStartDateValue(strDate)
+                if strDate < '1250':
+                    strResult = '~pre-mongolian'
+                elif strDate < '1650':
+                    strResult = '~old_russian'
+                elif strDate < '1690':
+                    strResult = '~uzorochye'
+                elif strDate < '1800':
+                    strResult = '~baroque'
+                elif strDate < '1875':
+                    strResult = '~neoclassicism'
+                elif strDate <= '1917':
+                    strResult = '~pseudo-russian'
+                elif strDate <= '1932':    
+                    strResult ='~constructivism'
+                elif strDate <= '1936':        
+                    strResult ='~postconstructivism'
+                elif strDate <= '1955':            
+                    strResult ='~stalinist_neoclassicism'
+                elif strDate <= '1991':
+                    strResult = '~modern'
+                else:
+                    strResult = '~contemporary'
             else:
-                strResult = '~contemporary'
+                #we do not have default periods for other countries yet.
+                pass                 
     
     return strResult.lower()
 
@@ -285,6 +291,7 @@ def calculateBuildingType( osmtags, dblSize):
             
     # for building=yes we are free to guess building type from other tags     
     if tagBuilding == 'yes':
+        
         # religion          
         if tagAmenity == 'place_of_worship':
             if tagReligion == 'christian':
@@ -313,7 +320,7 @@ def calculateBuildingType( osmtags, dblSize):
         elif tagAmenity == 'townhall':
             tagBuilding = 'government'              
             
-        elif tagManMade == ['lighthouse', 'observatory']:
+        elif tagManMade in ['lighthouse', 'observatory']:
             tagBuilding = tagManMade
         
         elif tagManMade == 'beacon': #there is some difference between beacon and lighthouse, but for object with building=* we will ignore it. 
@@ -328,7 +335,7 @@ def calculateBuildingType( osmtags, dblSize):
         
         # historic
         elif tagHistoric != '':
-            if tagHistoric not in ['building', 'heritage', 'heritage_building', 'place_of_worship', 'technical_monument', 'archaeological_site', 'battlefield']:
+            if tagHistoric not in ['yes', 'building', 'heritage', 'heritage_building', 'place_of_worship', 'technical_monument', 'archaeological_site', 'battlefield']:
                 tagBuilding=tagHistoric
                 if tagHistoric == 'tomb' and  tagTomb !='':
                     tagBuilding = tagTomb
@@ -725,5 +732,6 @@ def main():
 
     processQuadrant(strQuadrantName)
 
+if __name__ == '__main__':
+    main()    
 
-main()
