@@ -264,8 +264,9 @@ def calculateBuildingType( osmtags, dblSize):
         if tagTowerType == 'watchtower':
             tagBuilding = 'defensive tower' #watchtower  is a type of fortification
         if tagTowerType == 'fortification':
-            tagBuilding = 'defensive tower'    
-            
+            tagBuilding = 'defensive tower'
+        if tagTowerType == 'water_tower':
+            tagBuilding = 'water tower'            
             
             
     if tagBuilding == 'bell_tower' or tagManMade == 'campanile':

@@ -164,6 +164,7 @@ building_types_rus_names = {
     'FORT':            'Крепость',
     'FORTIFICATION':   'Крепость',
     'FORTRESS':        'Крепость',
+    'CITADEL':         'Крепость',
     'BUNKER':          'Бункер, ДОТ',
     'GATEHOUSE':       'Надвратная башня', #Торхауз
     'CITY_GATE':       'Надвратная башня', #Торхауз
@@ -197,6 +198,7 @@ building_types_rus_names = {
     'STABLE':          'Конюшня',
     'WINDMILL':        'Мельница',
     'WATERMILL':       'Мельница',
+    'SILO':            'Элеватор',
     
     # tombs
     'MAUSOLEUM':       'Мавзолей',
@@ -222,7 +224,6 @@ building_types_rus_names = {
 useless_building_types={ 
     'PUBLIC',
     'CIVIC',
-    'GOVERNMENT',
     'RESIDENTIAL',
     'RELIGIOUS',
     'HISTORIC',
