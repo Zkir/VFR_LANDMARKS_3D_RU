@@ -28,6 +28,8 @@ building_types_rus_names = {
     'ARMENIAN_APOSTOLIC CHURCH':  'Армянская церковь',
     'ARMENIAN_APOSTOLIC CHAPEL':  'Армянская часовня',
     
+    'ASSYRIAN CHURCH':            'Ассирийская церковь',
+    
     'CATHOLIC CHURCH':            'Католический храм',
     'OLD_CATHOLIC CHURCH':        'Католический храм', #probably should rather be classified as 'protestant'.
     'ROMAN_CATHOLIC CHURCH':      'Католический храм',
@@ -152,6 +154,7 @@ building_types_rus_names = {
     'RIDING_HALL':           'Манеж',
     'PUBLIC_AQUARIUM':       'Океанариум',
     'JAIL':                  'Тюрьма',
+    'FILM_STUDIO':           'Съемочный павильон',
     
     # walls castles and defencive
     'DEFENSIVE TOWER': 'Крепостная башня',
@@ -209,7 +212,7 @@ building_types_rus_names = {
     'MONUMENT':        'Памятник',
     'WAR_GRAVE' :      'Памятник',
     
-    
+    # Additional types from supplementary tags(amenity, manmade etc)    
     'ICE_RINK':        'Каток', # from leisure=ice_rink + building=yes . Note, wikidata classifies ice sport palaces as rinks!
     'PLANETARIUM':     'Планетарий', # from amenity=planetarium
     'LIGHTHOUSE':      'Маяк', # from man_made=lighthouse
