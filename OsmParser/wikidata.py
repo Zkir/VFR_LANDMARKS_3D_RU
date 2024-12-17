@@ -197,6 +197,7 @@ wikidata_buildings={
                     'Q143912':   'triumphal_arch',  
                     'Q16917':    'hospital', 
                     'Q39364723': 'hospital', 
+                    'Q1774898':  'clinic',  
                     'Q952885':   'greenhouse',  #orangery 
                     
                     'Q785952':   'bath',  # corresponds to osm building=bath
@@ -278,6 +279,7 @@ wikidata_buildings={
                     'Q575759':  'memorial',               # war memorial 
                     'Q14092':   'sports_hall',            # building designed and equipped for athletics and fitness
                     'Q12323':   'dam',                    #
+                    'Q126807':  'kindergarten',  
                     
                     #'Q156362':  'winery',                 # winery  -- WTF???
                     #'Q1434544': 'commandry',              # is it a castle???
@@ -305,6 +307,7 @@ wikidata_non_buildings={
                     'Q1595639':  'museum',      # local museum
                     'Q17431399': 'museum',      # national museum
                     'Q3329412':  'museum',      # archaeological museum 
+                    'Q16735822': 'museum',      # history museum
                     
                     #strange non-building types
                     'Q634099':   'rural settlement in Russia',
@@ -385,6 +388,8 @@ wikidata_non_buildings={
                     'Q36794':    'door',  
                     'Q484170':   'commune of France ',    # commune of France 
                     'Q18706073': 'EPCI with own taxation',  #EPCI with own taxation
+                    'Q2001305':  'television channel ',  
+                    'Q1735655':  'Ministry of Emergency Situations',  
 
 }
 
