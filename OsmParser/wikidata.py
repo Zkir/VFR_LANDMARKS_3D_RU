@@ -6,12 +6,13 @@ import os
 import sys
 from mdlClassify import * 
 import argparse
-from PIL import Image
+from PIL import Image, ImageFile, UnidentifiedImageError
 from pathlib import Path
 from io import BytesIO
 from tqdm import tqdm
 
 Image.MAX_IMAGE_PIXELS = None
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 WIKIDATA_DIRECTORY = "d:/_VFR_LANDMARKS_3D_RU/work_folder/23_wikidata"
 IMAGE_DIRECTORY =    "d:/_VFR_LANDMARKS_3D_RU/work_folder/25_images"
@@ -548,9 +549,15 @@ def download_image(url, filename):
         raise Exception("Unable to download file. Status "+str(r.status_code))
     
     # open from memory    
-    img = Image.open(BytesIO(r.content))  
+    try:
+        img = Image.open(BytesIO(r.content))  
+    except UnidentifiedImageError as e:
+        print("\nError catched:")
+        print(e)
+        print(url, filename)
+        exit(1)
 
-    if img.mode == "I;16":    
+    if img.mode != "RGB":    
         img=img.convert("RGB")
     
     #resize
@@ -560,18 +567,18 @@ def download_image(url, filename):
         new_height= int(ratio*img.size[1])
         img = img.resize((new_width, new_height), Image.LANCZOS)
     except OSError as e:
+        print("\nError catched:")
         print(e)
         print(url, filename)
         return
         
     except ValueError as e:
+        print("\nError catched:")
         print(e)
         print(url, img.mode)
         exit(1)
         return    
-    
-    if img.mode == 'CMYK':
-        img = img.convert('RGB')
+
 
     #save to file
     
