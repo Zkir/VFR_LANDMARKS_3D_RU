@@ -6,6 +6,7 @@ from mdlMisc import *
 import os
 import cgi
 from  mdlDBMetadata import *
+from mdlClassify import buildingTypeRus
 IMG_FOLDER= "data/building_images"
 
 def CreateRegionPage(strQuadrantName, input_file_name):
