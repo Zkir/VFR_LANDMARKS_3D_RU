@@ -52,15 +52,31 @@ def CreateRegionPage(strQuadrantName, input_file_name):
                 rec[QUADDATA_MATERIAL] + " " +
                 rec[QUADDATA_STYLE] + " " +
                 rec[QUADDATA_BUILDING_TYPE] + " " +
-                rec[QUADDATA_BUILD_DATE] + " " + 
-                rec[QUADDATA_ARCHITECT]
-                ).strip()            
+                rec[QUADDATA_BUILD_DATE] 
+                
+                )
+        if rec[QUADDATA_ARCHITECT]:
+             building_tokens  += " -- " +  rec[QUADDATA_ARCHITECT]
+        building_tokens = building_tokens.strip().upper()                       
         
         while '  ' in building_tokens:
             # remove double spaces
             building_tokens = building_tokens.replace('  ', ' ')
             
-        html+='<h3>'+ str(i) +'. ' + wikidata_id + '</h3>'
+            
+         #name of wikipedia article. we need to remove object name
+        strWikipediaName=rec[17][3:]
+        
+        strObjectOSMName=rec[7]
+        if strWikipediaName != "":
+            strObjectName=strWikipediaName
+        else:     
+            strObjectName=strObjectOSMName
+            
+        if strObjectName == '':
+            strObjectName = '&lt;&lt;' + buildingTypeRus(rec[10]).upper() + '&gt;&gt;'      
+            
+        html+='<h3>'+ str(i) +'. ' + strObjectName + '</h3>'
         html+='<p>'
         html+='<a href="https://www.wikidata.org/w/index.php?title='+wikidata_id+'">'+wikidata_id+'</a>  ***  '
         if strWikipediaLink:
@@ -68,7 +84,7 @@ def CreateRegionPage(strQuadrantName, input_file_name):
 
         html+='</p>'+ '\n'
         html+='<p>'
-        html+='<img src="/'+file_path+'"></img>'+'</br>\n'
+        html+='<img src="/'+file_path+'" width="512px"></img>'+'</br>\n'
         html+= building_tokens + '<br />\n'
      
         s1 = f'size {rec[QUADDATA_SIZE]}, height {rec[QUADDATA_HEIGHT]} ' 

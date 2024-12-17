@@ -475,9 +475,11 @@ wikidata_achitecture_styles = {
                     'Q174419':   'second_empire',            # FR: Second Empire style-- ??neo-baroque??
                     'Q466887':   'belle_epoque',             # FR: Belle Époque
                     
+                    'Q384177':   'egyptian_revival',         # Egyptian Revival architecture
+                    
                     #'Q2600188':  '',  #Russian architecture = architectural styles within Russian sphere of influence ! Not a style! 
                     #'Q37068':    '',  #Romanticism
-                    #'Q384177':   '',  #Egyptian Revival architecture
+                    
                     #'Q2860299':  '',  #Armenian architecture 
                     #'Q2535546':  '',  #rationalism. I do not think it's a real architectural style
                     #'Q1349760':  'medieval',                # medieval architecture -- not really a style

@@ -365,6 +365,7 @@ achitecture_styles_rus_names={
     
     'timber_frame':            'Фахверк',
     'umgebinde':               'Верхнелужицкий дом', #сочетание сруба и фахтверка на каркасе
+    'egyptian_revival':        'Египтизирующий стиль', 
     
 
     
