@@ -53,6 +53,7 @@ def write_subfiles(building_styles_stats, building_styles_subfiles, subfolder, l
         filename = value["osm_tags"][0]
         filename = filename.replace(" ", "_")
         filename = filename.replace("~", "")
+        filename = filename.replace("?", "")
         filename = filename + '.dat'
         filename = join(subfolder, filename)
         filename = join(DB_FOLDER, filename)
@@ -86,6 +87,7 @@ TYPE_DATES        = "dates"
 
 building_styles_subfiles = {}
 building_architects_subfiles = {}
+building_types_subfiles = {}
 
 
 for rec in object_list:
@@ -118,7 +120,8 @@ for rec in object_list:
         
     if rus_type not in building_types_stats:
         building_types_stats[rus_type] = {TYPE_TOTAL:0, TYPE_WITH_MODEL:0, TYPE_WITH_PICTURE:0, TYPE_OSM_TAGS:[], TYPE_DATES: []}
-        
+        building_types_subfiles[rus_type] = []
+    
     if style not in building_styles_stats:
         building_styles_stats[style] = {TYPE_TOTAL:0, TYPE_WITH_MODEL:0, TYPE_WITH_PICTURE:0, TYPE_OSM_TAGS:[], TYPE_DATES: []}    
         building_styles_subfiles[style] = []
@@ -133,6 +136,7 @@ for rec in object_list:
     
     building_styles_subfiles[style] += [rec]
     building_architects_subfiles[architect] += [rec]
+    building_types_subfiles[rus_type] += [rec]
     
     
     osm_tag = rec[QUADDATA_BUILDING_TYPE]
@@ -250,5 +254,6 @@ if False:
 
 write_subfiles(building_styles_stats, building_styles_subfiles, "styles", TYPE_SIZE_LIMIT)
 write_subfiles(building_architects_stats, building_architects_subfiles, "architects", 2)
+write_subfiles(building_types_stats, building_types_subfiles, "building_types", 2)
 
 #print(building_architects_stats)

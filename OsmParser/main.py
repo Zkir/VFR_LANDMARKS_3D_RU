@@ -262,7 +262,7 @@ def calculateBuildingType( osmtags, dblSize):
         if tagTowerType == 'defensive':
             tagBuilding = 'defensive tower'
         if tagTowerType == 'watchtower':
-            tagBuilding = 'defensive tower' #watchtower  is a type of fortification
+            tagBuilding = 'watchtower' #watchtower  is a type of fortification
         if tagTowerType == 'fortification':
             tagBuilding = 'defensive tower'
         if tagTowerType == 'water_tower':
@@ -300,7 +300,7 @@ def calculateBuildingType( osmtags, dblSize):
             if tagReligion == 'muslim':
                 tagBuilding = 'mosque'
                 
-        elif tagAmenity in ['library', 'cinema', 'planetarium', 'restaurant', 'clinic', 'hospital', 'bus_station', 'university', 'school', 'bank']:        
+        elif tagAmenity in ['library', 'cinema', 'planetarium', 'restaurant', 'clinic', 'hospital', 'bus_station', 'university', 'school', 'bank', 'police', 'nursing_home']:        
             tagBuilding = tagAmenity
             
         elif tagAmenity == 'pharmacy':   
