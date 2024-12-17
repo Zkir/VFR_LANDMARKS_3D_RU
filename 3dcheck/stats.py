@@ -74,9 +74,16 @@ def createStatisticsPage(strInputFile):
     #<th>Цвет</th><th>Материал</th>
     n=0
     for key, value in cells.items():
-        if key and value["total"]>2:
+        if key and ( value["total"]>10  or  value["with_picture"]>1):
+            url = value["osm_tags"][0]
+            url = url.replace(" ", "_")
+            url = url.replace("~", "")
+            #url ="/styles/"+url +'.html'
+            url ="/types/"+url +'.html'
+            
             print('<tr>'+ '\n')
-            print('<td>'+key+'</td>'+ '\n')
+            #print('<td>'+key+'</td>'+ '\n')
+            print('<td> <a href="'+url+'">'+key+'</td>'+ '\n')
             #print(f'<td><a href="/stats/{key}.html" >{key}</a></td>'+ '\n')
             
             print('<td>' + str(value["total"]) + '</td>'+ '\n')

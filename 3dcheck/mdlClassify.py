@@ -25,47 +25,69 @@ building_types_rus_names = {
 
     'RUSSIAN ORTHODOX WAYSIDE_SHRINE': 'Православная часовня', 	
     
+    'ROMANIAN_ORTHODOX CHURCH':   'Православная церковь',
+    
     'ARMENIAN_APOSTOLIC CHURCH':  'Армянская церковь',
     'ARMENIAN_APOSTOLIC CHAPEL':  'Армянская часовня',
-    
     'ASSYRIAN CHURCH':            'Ассирийская церковь',
     
     'CATHOLIC CHURCH':            'Католический храм',
     'OLD_CATHOLIC CHURCH':        'Католический храм', #probably should rather be classified as 'protestant'.
+    'OLD_CATHOLIC CHAPEL':        'Католическая часовня',
     'ROMAN_CATHOLIC CHURCH':      'Католический храм',
     'CATHOLIC CHAPEL':            'Католическая часовня',
+    'CATHOLIC SHRINE':            'Католическая часовня',
     'ROMAN_CATHOLIC CHAPEL':      'Католическая часовня',
+    'ROMAN_CATHOLIC SHRINE':      'Католическая часовня',
     'CATHOLIC WAYSIDE_SHRINE':    'Католическая часовня',
     'ROMAN_CATHOLIC WAYSIDE_SHRINE':'Католическая часовня',
+    'CATHOLIC CAMPANILE':         'Католическая колокольня',
+    'ROMAN_CATHOLIC CAMPANILE':   'Католическая колокольня',
+    'GREEK_CATHOLIC CHURCH':      'Католический храм', # Восточнокатолическая церковь
+    'GREEK_CATHOLIC CHAPEL':      'Католическая часовня',
 
     'ANGLICAN CHURCH':            'Англиканская церковь',
     'LUTHERAN CHURCH':            'Протестантская церковь',
     'LUTHERAN CHAPEL':            'Протестантская часовня',
+    'LUTHERAN CAMPANILE':         'Протестантская колокольня',
     'PROTESTANT CHURCH':          'Протестантская церковь',
     'PROTESTANT CHAPEL':          'Протестантская часовня',
+    'PROTESTANT CAMPANILE':       'Протестантская колокольня',
     'BAPTIST CHURCH':             'Протестантская церковь',
     'BAPTIST CHAPEL':             'Протестантская часовня',
     'EVANGELICAL CHURCH':         'Протестантская церковь',
     'PENTECOSTAL CHURCH':         'Протестантская церковь',
     'SEVENTH_DAY_ADVENTIST CHURCH': 'Протестантская церковь',
+    'SEVENTH_DAY_ADVENTIST CHAPEL':'Протестантская часовня',
+    
     'PRESBYTERIAN CHURCH':        'Протестантская церковь',
     'NEW_APOSTOLIC CHURCH':       'Протестантская церковь',
     'ADVENTIST CHURCH':           'Протестантская церковь',
     'METHODIST CHURCH':           'Протестантская церковь',
+    'UNITED_METHODIST CHURCH':    'Протестантская церковь',
+    'METHODIST CHAPEL':           'Протестантская часовня',
     'EVANGELICAL CHAPEL':         'Протестантская часовня',
     'REFORMED CHURCH':            'Протестантская церковь',
+    'REFORMED CHAPEL':            'Протестантская часовня',
+    
     'CATHOLIC_APOSTOLIC CHURCH':  'Протестантская церковь', # despite it's name, it's a protestant denomination
+    'CATHOLIC_APOSTOLIC CHAPEL':  'Протестантская часовня',
     'CHRISTIAN_COMMUNITY CHURCH': 'Протестантская церковь',
     'MENNONITE CHURCH':           'Протестантская церковь',
+    'SIMULTANEOUS CHURCH':        'Многоконфессиональная церковь',
+    'WAYSIDE_CROSS':              'Придорожный крест',
     
     'MORMON CHURCH':              'Храм мормонов',
-    'JEHOVAHS_WITNESS CHURCH':    'Зал Царства',
+    'LATTER_DAY_SAINTS CHURCH':   'Храм мормонов',
+    'JEHOVAHS_WITNESS CHURCH':    'Зал Царства', 
     'KINGDOM_HALL':               'Зал Царства',
     
     'MOSQUE':                     'Мечеть',
     'SUNNI MOSQUE':               'Мечеть', # Пока сунниты и шииты для нас в плане архитектуры не отличаются.
     'SHIA MOSQUE':                'Мечеть',  # Кто знает, пусть подскажет.
     'AHMADIYYA MOSQUE':           'Мечеть',
+    'ALEVI MOSQUE':               'Мечеть',
+    
     'NONDENOMINATIONAL MOSQUE':   'Мечеть',
     'UNITED MOSQUE':              'Мечеть',
     
@@ -82,8 +104,11 @@ building_types_rus_names = {
     'DWELLING_HOUSE':        'Частный жилой дом', # considered obsolete
     'SEMIDETACHED_HOUSE':    'Частный жилой дом',
     'MANOR':                 'Особняк',
+    'MANOR_HOUSE':           'Особняк',
     'STATELY':               'Особняк',
     'MANSION':               'Особняк',
+    'CHATEAU':               'Особняк',
+    'CHÂTEAU':               'Особняк',
     'VILLA':                 'Особняк',
     'PALACE':                'Дворец',
     'APARTMENTS':            'Многоквартирный дом',
@@ -104,20 +129,25 @@ building_types_rus_names = {
     'HOSPITAL':              'Больница',
     'CLINIC':                'Больница',
     'RETAIL':                'Магазин',
+    'SUPERMARKET':           'Магазин',
+    'MALL':                  'Магазин',
+    'PHARMACY':              'Магазин',
     'MUSEUM':                'Музей',
     'STADIUM':               'Стадион',
     'GRANDSTAND':            'Стадион',          # Трибуна
     'SPORTS_CENTRE':         'Спортивный центр',
     'SPORTS_HALL':           'Спортивный центр', # What is the difference between sports hall and sports center is not quite clear
+    'GYMNASIUM':             'Спортивный центр', 
     'DORMITORY':             'Общежитие',
     'PARKING':               'Гараж',
     'GARAGE':                'Гараж',
     'OFFICE':                'Офисное здание',
     'COMMERCIAL':            'Офисное здание',
+    'BANK':                  'Офисное здание', 
     'GOVERNMENT':            'Офисное здание',
     'SERVICE':               'Техническая будка',
     'BATH':                  'Баня/купальня', 
-    'BANK':                  'Банк', 
+    
     
     #educational 
     'KINDERGARTEN':          'Детский сад',
@@ -129,12 +159,14 @@ building_types_rus_names = {
     'TRAIN_STATION':         'Вокзал',
     'RAILWAY_STATION':       'Вокзал',
     'TERMINAL':              'Аэровокзал',
+    'AIRPORT_TERMINAL':      'Аэровокзал',
     'BUS_STATION':           'Автовокзал',
     
     # industrial
     'INDUSTRIAL':            'Промышленное здание',
     'MANUFACTURE':           'Промышленное здание',
     'FACTORY':               'Промышленное здание',
+    'WORKS':                 'Промышленное здание',
     'WAREHOUSE':             'Склад',
     'DEPOT':                 'Депо',
     
@@ -148,16 +180,19 @@ building_types_rus_names = {
     'WATER_TOWER':           'Водонапорная башня',
     'WATER TOWER':           'Водонапорная башня',
     'STOCK_EXCHANGE':        'Биржа',
+    'POLICE':                'Полиция',
     
     'TRIUMPHAL_ARCH':        'Триумфальная арка',
     'ARSENAL':               'Арсенал',
     'RIDING_HALL':           'Манеж',
     'PUBLIC_AQUARIUM':       'Океанариум',
     'JAIL':                  'Тюрьма',
+    'PRISON':                'Тюрьма',
     'FILM_STUDIO':           'Съемочный павильон',
     
     # walls castles and defencive
     'DEFENSIVE TOWER': 'Крепостная башня',
+    'WATCHTOWER':      'Крепостная башня',
     'DEFENSIVE WALL':  'Крепостные стены',
     'HISTORIC WALL':   'Крепостные стены',
     'CITYWALLS':       'Крепостные стены',
@@ -181,8 +216,10 @@ building_types_rus_names = {
 
     'HANGAR':          'Ангар',
     'SHIP':            'Корабль на приколе',
-    'AIRCRAFT':        'Корабль на приколе',
+    'BOAT':            'Корабль на приколе',
     'WRECK':           'Корабль на приколе',
+    'AIRCRAFT':        'Корабль на приколе',
+    'AEROPLANE':       'Корабль на приколе',
     'TRAMWAY':         'Корабль на приколе',
     
     #Rural Buildings
@@ -204,13 +241,15 @@ building_types_rus_names = {
     'SILO':            'Элеватор',
     
     # tombs
-    'MAUSOLEUM':       'Мавзолей',
     'COLUMBARIUM':     'Колумбарий',
-    'VAULT':           'Склеп',
+    'MAUSOLEUM':       'Мавзолей',
+    'VAULT':           'Гробница',
     'TOMB':            'Гробница',
+    'CRYPT':           'Гробница',
     'MEMORIAL':        'Памятник',
     'MONUMENT':        'Памятник',
     'WAR_GRAVE' :      'Памятник',
+    'MORTUARY':        'Мортуарий',
     
     # Additional types from supplementary tags(amenity, manmade etc)    
     'ICE_RINK':        'Каток', # from leisure=ice_rink + building=yes . Note, wikidata classifies ice sport palaces as rinks!
@@ -220,6 +259,24 @@ building_types_rus_names = {
     
     'PEOPLES_HOUSE':   'Народный дом',
     'OBSERVATORY':     'Обсерватория', 
+    
+    'LAVOIR':          'Прачечная', #FR Это скорее полоскательная на реке.
+    'MONASTERY':       'Монастырь', #FR
+    'CONVENT':         'Монастырь', #FR
+    'ABBEY':           'Монастырь', #FR
+    'CLOISTER':        'Монастырь', #FR
+    'DOVECOTE':        'Голубятня', #FR
+    'PIGEONNIER':      'Голубятня', #FR
+    'NURSING_HOME':    'Дом престарелых', #FR:3372!!
+    'MARKETPLACE':     'Рынок',  
+    'SUBWAY_ENTRANCE': 'Вход в метро',  
+    'BOATHOUSE':       'Лодочный сарай, эллинг',
+    'HOUSEBOAT':       'Плавучий дом',
+    'DAM':             'Дамба, плотина',
+    'TOWNHALL':        'Ратуша',          # В Германии ратуша -- характерное здание с БАШНЕЙ посредине. Не надо обозначать ими обкомы.
+    'COURTHOUSE':      'Суд',
+    
+
     
 
 }
