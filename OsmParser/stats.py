@@ -1,14 +1,9 @@
-import mdlMisc
-
 import sys
-sys.path.append('../3dcheck/')
+import mdlZDBI
 from mdlClassify import * 
 
-
-
-
-cells=mdlMisc.loadDatFile("../work_folder/22_all_osm_objects_list/all-objects.dat") 
-building_types={}
+cells = mdlZDBI.loadDatFile("../work_folder/22_all_osm_objects_list/all-objects.dat") 
+building_types = {}
 arch_styles = {}
 
 for rec in cells:

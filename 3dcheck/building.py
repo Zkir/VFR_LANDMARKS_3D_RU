@@ -9,11 +9,12 @@ import os.path
 import json
 from mdlClassify import buildingTypeRus, achitectureStylesRus
 from misc2 import region_names
+import cgi
 
 #========================================================================
 #  Web Page for individual object, with 3d model
 #========================================================================
-def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp, validation_errors, urlPrevious, urlNext):
+def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp, validation_errors, urlPrevious, urlNext, urlTop):
     strHTMLPage = ""
     strOSMurl = ""
     strF4url = ""
@@ -152,7 +153,7 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp, validation_errors
     
     n_errors=int(obj_rec[26])
     if n_errors > 0:
-        print( '  <tr><td>Ошибки валидации:</td><td><a href="'+strOsmID+'.errors.html"> '+str(n_errors)+'</a></td></tr>'+ '\n')
+        print( '  <tr><td>Ошибки валидации:</td><td><a href="'+strOsmID+'/errors"> '+str(n_errors)+'</a></td></tr>'+ '\n')
     else:
         print( '  <tr><td>Ошибки валидации:</td><td> 0 </td></tr>'+ '\n')
     print( '  <tr><td colspan="2"><br/><b><center>*<a target="josm" href="' + strJOSMurl + '">Редактировать в JOSM</a>*</center></b></td></tr>'+ '\n')
@@ -193,10 +194,12 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp, validation_errors
     print( '  <div class=\'page-footer\'>'+ '\n')
     print( '  <div class=\'navigation\'>'+ '\n')
     print( '<hr />'+ '\n')
-    urlPrevious, urlNext
+    #urlPrevious, urlNext
+    #print( '<center>')
     print( '  <a href="'+urlPrevious+'"> << Предыдущее </a> -- \n')
-    print( '  <a href=\'/\'>Главная страница</a> --> <a href=\'/' + strQuadrantName + '.html\'>' + region_names.get(strQuadrantName, strQuadrantName) + '</a>'+ '\n')
+    print( '  <a href=\'/\'>Главная страница</a> --> <a href=\'' + urlTop + '\'>' + region_names.get(strQuadrantName, strQuadrantName) + '</a>'+ '\n')
     print( '  -- <a href="'+urlNext+'"> Следущее >> </a> \n')
+    #print( '</center>')
     print( '  </div>'+ '\n')
     #zero frame for josm links
     print( '<div style="display: none;"><iframe name="josm"></iframe></div>'+ '\n')
@@ -248,24 +251,39 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp, validation_errors
 sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
 print ("Content-Type: text/html; charset=utf-8 \n\n")
-print
+print ()
 
 
 url = os.environ.get("REQUEST_URI","") 
 parsed = urlparse.urlparse(url) 
 strParam=urlparse.parse_qs(parsed.query).get('param','')
-
 s=url.split("/")
 
-if len(s)>=2:
-    strQuadrantName=s[1].strip()
-    intObjectIndex=s[2][0:-5]
-    #print(intObjectIndex) 
-else:
-    strQuadrantName= "RUS_TOP" # "RU-MOW"
-    intObjectIndex= "R1645496" # "R3030568"
+#if len(s)>=2:
+#    strQuadrantName=s[3].strip()
+#    intObjectIndex=s[4]#[0:-5]
+#    #print(intObjectIndex) 
+#else:
+#    strQuadrantName= "RUS_TOP" # "RU-MOW"
+#    intObjectIndex= "R1645496" # "R3030568"
+    
+strQuadrantName=cgi.FieldStorage().getvalue('quadrant')    
+intObjectIndex=cgi.FieldStorage().getvalue('object')    
+
+QN={'building_top':         'RUS_TOP',
+    'building_top_windows': 'RUS_TOP_WINDOWS',
+    'recent_changes':       'RUS_LATEST',
+    'no_type':              'photo_wo_type' 
+    }
+strQuadrantName= QN.get(strQuadrantName,strQuadrantName)
+
 
 strInputFile = "data\\quadrants\\"+strQuadrantName+".dat"
+
+if not os.path.exists(strInputFile):
+    print(f'File {strInputFile} does not exist')
+    exit()
+
 cells = loadDatFile(strInputFile)
 page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(strInputFile)))
 page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)
@@ -299,15 +317,18 @@ else:
     
 #print(idx,len(cells))
 
+#urlTop = '/countries/' + strQuadrantName 
+urlTop = '.'
+
 if idx>0:      
-    urlPrevious =  UCase(Left(cells[idx-1][1],1)) + cells[idx-1][2] + '.html'  
+    urlPrevious = UCase(Left(cells[idx-1][1],1)) + cells[idx-1][2] + ''  
 else:
-    urlPrevious =  '/' + strQuadrantName + '.html' 
+    urlPrevious = urlTop
 
 
 if idx+1<len(cells):
-    urlNext =   UCase(Left(cells[idx+1][1],1)) + cells[idx+1][2] + '.html' #cells[idx+1]
+    urlNext =   UCase(Left(cells[idx+1][1],1)) + cells[idx+1][2] + '' #cells[idx+1]
 else:     
-    urlNext =  '/' + strQuadrantName + '.html'
+    urlNext =  urlTop
     
-CreateObjectPage(strQuadrantName, obj_rec, page_time_stamp, validation_errors, urlPrevious, urlNext)
+CreateObjectPage(strQuadrantName, obj_rec, page_time_stamp, validation_errors, urlPrevious, urlNext, urlTop)

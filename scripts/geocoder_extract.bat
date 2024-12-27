@@ -1,7 +1,8 @@
 @echo off
+SET COUNTRY=planet
 
 SET WORK_FOLDER=%1
-SET SOURCE_FILE=%2\russia-latest.o5m
+SET SOURCE_FILE=%2\%COUNTRY%-latest.o5m
 
 
 osmfilter %SOURCE_FILE% --keep="place=city or place=town or place=village or place=hamlet"  >%WORK_FOLDER%\geocoder_place.osm

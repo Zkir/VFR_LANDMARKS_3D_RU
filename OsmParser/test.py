@@ -2,7 +2,7 @@
 # here we will check our ideas.
 from mdlSite import *
 from mdlGeocoder import *
-from mdlDBMetadata import *
+from mdlZDBI import *
 
 MIN_DATE='1900.01.01 00:00:00'
 

@@ -5,9 +5,21 @@ import sys
 import codecs
 import time
 from mdlMisc import *
+import cgi
 
-def CreateIndexPage(strInputFile):
-
+def CreateIndexPage(strQuadrantName, strInputFile):
+    strQuadrantTitle=""
+    if strQuadrantName is None:
+        strQuadrantName=""
+    if strQuadrantName=="":
+        strQuadrantTitle="Мир"
+        url_base="/world/"
+        url_base2="/countries/"
+    else:
+        strQuadrantTitle=strQuadrantName
+        url_base="/countries/"+strQuadrantName+'/'
+        url_base2=""
+        
 
     cells = loadDatFile(strInputFile)
     
@@ -31,18 +43,15 @@ def CreateIndexPage(strInputFile):
     print( '  <p>Данный валидатор проверяет <b>наличие</b> 3d-моделей для церквей и некоторых других исторических зданий.</p>' + '\n')
     print( '     <p>Почему церкви? Потому что это наиболее заметные объекты и для их моделирования есть фотографии на temples.ru.</p>' + '\n')
     print( '  <!-- <p>Данные нарезаются по квадратным градусам (этот валидатор таким родился)</p> -->' + '\n')
-    print( '  <h2>Разделы</h2>' + '\n')
-    print( '  <p>1. <a href="/">Россия, по регионам</a>. </p>' + '\n')
-    #print( '  <p>2. Россия, по квадратам</a> </p>' + '\n')
-    print( '  <p>2. <a href="/rus_top.html">Топ зданий, Россия</a> </p>' + '\n')
-    print( '  <p>3. <a href="/rus_top_windows.html">Топ зданий c ОКНАМИ, Россия</a> </p>' + '\n')
-    print( '  <p>4. <a href="/rus_latest.html">Последние изменения, Россия</a> </p>' + '\n')
-    print( '  <p>5. <a href="/photo_wo_type.html">Здания без типа, Россия</a> </p>' + '\n')
-    print( '  <p>6. <a href="/stats.html">Статистика по типам зданий, Россия</a> </p>' + '\n')
-    print( '  <p>6. <a href="/stats2.html">Статистика по архитектурным стилям, Россия</a> </p>' + '\n')
-    
-    
-   
+    print( '  <h2>Разделы, '+strQuadrantTitle+'</h2>' + '\n')
+    #print( '  <p>1. <a href="/">Мир, по регионам</a>. </p>' + '\n')
+    #print( '  <p>2. Мир, по квадратам</a> </p>' + '\n')
+    print( '  <p>1. <a href="'+url_base+'building_top/">Топ зданий, '+strQuadrantTitle+'</a> </p>' + '\n')
+    print( '  <p>2. <a href="'+url_base+'building_top_windows/">Топ зданий c ОКНАМИ, '+strQuadrantTitle+'</a> </p>' + '\n')
+    print( '  <p>3. <a href="'+url_base+'recent_changes/">Последние изменения, '+strQuadrantTitle+'</a> </p>' + '\n')
+    print( '  <p>4. <a href="'+url_base+'no_type/">Здания без типа, '+strQuadrantTitle+'</a> </p>' + '\n')
+    print( '  <p>5. <a href="'+url_base+'building_types/">Статистика по типам зданий, '+strQuadrantTitle+'</a> </p>' + '\n')
+    print( '  <p>6. <a href="'+url_base+'building_styles/">Статистика по архитектурным стилям, '+strQuadrantTitle+'</a> </p>' + '\n')
 
     print( '  <h2>Список областей</h2>' + '\n')
     print( '  <table class="sortable">' + '\n')
@@ -50,11 +59,20 @@ def CreateIndexPage(strInputFile):
     
     for i in range(len(cells)):
         if cells[i][4]>'1900.01.01 00:00:00': 
-            intRate=0
+            if not cells[i][0].startswith(strQuadrantName): # select only regions of a country. for world QuadrantName is empty, so it worlds magically
+                continue
+            
+            if not strQuadrantName:
+                sub_reg_code=cells[i][0][0:2]
+            else:
+                sub_reg_code=cells[i][0]
+                
+            
+            intRate=0    
             if int(cells[i][2]) !=0:
                 intRate = Round(100.0*int(cells[i][3])/int(cells[i][2])) 
-            print( '    <tr><td>'+cells[i][0]+'</td><td><a href="'+cells[i][0]+'.html">'+ cells[i][1] +'</a> </td><td>'+cells[i][2]+'</td><td>' + cells[i][3]+ '</td>' + 
-                           '<td>' + str(intRate)+ '</td><td>' + cells[i][4]+ '</td> <td><a href="'+cells[i][0]+'.errors.html">' + cells[i][5]+ '</a></td> </tr>' + '\n')
+            print( '    <tr><td>'+sub_reg_code+'</td><td><a href="'+url_base2+sub_reg_code+'/">'+ cells[i][1] +'</a> </td><td>'+cells[i][2]+'</td><td>' + cells[i][3]+ '</td>' + 
+                           '<td>' + str(intRate)+ '</td><td>' + cells[i][4]+ '</td> <td><a href="'+url_base2+sub_reg_code+'/errors">' + cells[i][5]+ '</a></td> </tr>' + '\n')
 
     print( '  </table>' + '\n')
     print( '  <h2>Полезные ссылки</h2>' + '\n')
@@ -86,11 +104,13 @@ def CreateIndexPage(strInputFile):
     print( '</body>' + '\n')
     print( '</html>' + '\n')
 
+def main():
+    sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
+    strQuadrantName=cgi.FieldStorage().getvalue('param')
 
-sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
+    print ("Content-Type: text/html; charset=utf-8 \n\n")
+    print
 
-print ("Content-Type: text/html; charset=utf-8 \n\n")
-print
+    CreateIndexPage(strQuadrantName, "data/quadrants/Quadrants.dat")
 
-CreateIndexPage("data/quadrants/Quadrants.dat")
-
+main()

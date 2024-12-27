@@ -1,6 +1,5 @@
-
-from mdlDBMetadata import *
-from mdlMisc import *
+from mdlZDBI import *
+#from mdlMisc import *
 import time
 import sys
 import subprocess

@@ -5,8 +5,8 @@ all: fin ##ultimate target
 
 .PHONY: clean
 clean: 
-	IF EXIST "work_folder\05_geocoder" RMDIR "work_folder\05_geocoder" /S /Q	
-	IF EXIST "work_folder\07_building_data" RMDIR "work_folder\07_building_data" /S /Q	
+	IF EXIST "work_folder\15_geocoder" RMDIR "work_folder\15_geocoder" /S /Q	
+	IF EXIST "work_folder\05_global_extracts" RMDIR "work_folder\05_global_extracts" /S /Q	
 	IF EXIST "work_folder\10_osm_extracts" RMDIR "work_folder\10_osm_extracts" /S /Q	
 	IF EXIST "work_folder\20_osm_3dmodels" RMDIR "work_folder\20_osm_3dmodels" /S /Q
 	IF EXIST "work_folder\21_osm_objects_list" RMDIR "work_folder\21_osm_objects_list" /S /Q	
@@ -14,7 +14,7 @@ clean:
 	IF EXIST "work_folder\30_3dmodels" RMDIR "work_folder\30_3dmodels" /S /Q	
 
 .PHONY: planet-update
-planet-update: work_folder\00_planet.osm\russia-latest.osm.pbf work_folder\00_planet.osm\russia.poly  ## update source osm file	
+planet-update: work_folder\00_planet.osm\planet-latest work_folder\00_planet.osm\russia.poly  ## update source osm file	
 	echo "update osm file" 
 	scripts\planet_update.bat work_folder\00_planet.osm	
 	
@@ -33,39 +33,33 @@ work_folder\Quadrants.dat: | work_folder ## initialize quadrant summary file
 work_folder\00_planet.osm:  | work_folder ## make folder for source osm data
 	mkdir work_folder\00_planet.osm	
 
-work_folder\00_planet.osm\russia-latest.osm.pbf: | work_folder\00_planet.osm ##download source osm file
+# russia-latest.osm.pbf
+work_folder\00_planet.osm\planet-latest: | work_folder\00_planet.osm ##download source osm file
 	echo "download source osm file"
 	scripts\planet_download.bat $(@D)
+	touch $@
 
 work_folder\00_planet.osm\russia.poly: | work_folder\00_planet.osm ## prepare poly file 
 	copy poly\russia.poly work_folder\00_planet.osm
 	
 #update osm file 
-work_folder\00_planet.osm\russia-latest.o5m: work_folder\00_planet.osm\russia-latest.osm.pbf work_folder\00_planet.osm\russia.poly  ## update source osm file	
+work_folder\00_planet.osm\planet-latest-o5m: work_folder\00_planet.osm\planet-latest work_folder\00_planet.osm\russia.poly  ## update source osm file	
 	echo "update osm file" 
 	scripts\planet_update.bat $(@D)
-
-#****************************************************************************************************************************
-#* 05 Create geocoder files 
-#****************************************************************************************************************************
-work_folder\05_geocoder: | work_folder ## prepare geocoder folder 
-	mkdir work_folder\05_geocoder
-	
-work_folder\05_geocoder\geocoder.osm: work_folder\00_planet.osm\russia-latest.o5m | work_folder\05_geocoder ## create geocoder osm file
-	scripts\geocoder_extract.bat work_folder\05_geocoder work_folder\00_planet.osm
-
-work_folder\05_geocoder\geocoder.txt: work_folder\05_geocoder\geocoder.osm  ##create geocoder mp file. Actually geocoder txt should be created from geocode.osm, but the script was lost. 	
-	python OsmParser\geocoder_update.py
 	touch $@
 
 #****************************************************************************************************************************
-#* 07 Extract building data 
+#* 05 Extract "global" data: buildings and boundaries for geocoder
 #****************************************************************************************************************************	
-work_folder\07_building_data: | work_folder ## make folder for building data
-	mkdir work_folder\07_building_data	
+work_folder\05_global_extracts: | work_folder ## make folder for building data
+	mkdir work_folder\05_global_extracts	
 
-work_folder\07_building_data\objects-with-parts.osm: work_folder\00_planet.osm\russia-latest.o5m |  work_folder\07_building_data
+work_folder\05_global_extracts\objects-with-parts.osm: work_folder\00_planet.osm\planet-latest-o5m |  work_folder\05_global_extracts
 	scripts\buildings_extract.bat
+    
+work_folder\05_global_extracts\geocoder.osm: work_folder\00_planet.osm\planet-latest-o5m | work_folder\05_global_extracts ## create geocoder osm file
+	scripts\geocoder_extract.bat work_folder\05_global_extracts work_folder\00_planet.osm
+
 	
 #****************************************************************************************************************************
 #* 10 Make region/quadrant extracts
@@ -73,9 +67,19 @@ work_folder\07_building_data\objects-with-parts.osm: work_folder\00_planet.osm\r
 work_folder\10_osm_extracts: | work_folder ## make folder for extracted osm buildings 
 	mkdir work_folder\10_osm_extracts	
 
-work_folder\10_osm_extracts\extract_osm_data: work_folder\07_building_data\objects-with-parts.osm  | work_folder\Quadrants.dat work_folder\10_osm_extracts ## extract osm data per region
+work_folder\10_osm_extracts\extract_osm_data: work_folder\05_global_extracts\objects-with-parts.osm  | work_folder\Quadrants.dat work_folder\10_osm_extracts ## extract osm data per region
 	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do scripts\buildings_extract-per-region.bat %%i %%i.poly
 	touch $@		
+    
+#****************************************************************************************************************************
+#* 15 Create text geocoder files
+#****************************************************************************************************************************
+work_folder\15_geocoder: | work_folder ## prepare geocoder folder 
+	mkdir work_folder\15_geocoder
+
+work_folder\15_geocoder\geocoder.txt.milestone: work_folder\10_osm_extracts\extract_osm_data | work_folder\15_geocoder ##create geocoder txt 
+	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do python OsmParser\geocoder_update.py %%i
+	touch $@        
 
 #****************************************************************************************************************************
 #* 20 Extract individual osm-files for 3d objecs
@@ -92,7 +96,7 @@ work_folder\22_all_osm_objects_list : | work_folder
 work_folder\23_wikidata: | work_folder
 	mkdir work_folder\23_wikidata
 
-work_folder\20_osm_3dmodels\extract_building_models_osm: work_folder\10_osm_extracts\extract_osm_data work_folder\05_geocoder\geocoder.txt | work_folder\21_osm_objects_list work_folder\20_osm_3dmodels work_folder\23_wikidata ## extract osm buildings  into separate osm files
+work_folder\20_osm_3dmodels\extract_building_models_osm: work_folder\10_osm_extracts\extract_osm_data work_folder\15_geocoder\geocoder.txt.milestone | work_folder\21_osm_objects_list work_folder\20_osm_3dmodels work_folder\23_wikidata ## extract osm buildings  into separate osm files
 	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do python OsmParser\main.py %%i
 	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do python OsmParser\wikidata.py update-region -i work_folder\21_osm_objects_list\%%i.dat -r
 	touch $@

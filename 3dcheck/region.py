@@ -67,7 +67,10 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
 
     strTemplesUrl = ""
 
-
+    if not os.path.exists(strInputFile):
+        print(f'File {strInputFile} does not exist')
+        return
+        
     cells = loadDatFile(strInputFile)
     
     page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(strInputFile)))
@@ -118,28 +121,29 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
         print('<p>Существующие типы зданий, они же значения <b>building=*</b> можно посмотреть <a href="https://wiki.openstreetmap.org/wiki/RU:Key:building">тут</a>.</p>')
         
     else: 
-        print( '<h2>Cтатистика по квадрату</h2>'+ '\n')
-        print( '<table class="sortable">'+ '\n')
-        print( '<tr><th>Область</th><th>Район</th><th>Всего объектов</th> <th>С 3D моделью</th> <th>% </th></tr>'+ '\n')
-        
-        N=len(arrSummary)
-        for i in range(1, N):
-            if arrSummary[i].TotalObjects > 0:
-                dblPercentage = arrSummary[i].ObjectsWith3D / arrSummary[i].TotalObjects * 100
+        if False:
+            print( '<h2>Cтатистика по квадрату</h2>'+ '\n')
+            print( '<table class="sortable">'+ '\n')
+            print( '<tr><th>Область</th><th>Район</th><th>Всего объектов</th> <th>С 3D моделью</th> <th>% </th></tr>'+ '\n')
+            
+            N=len(arrSummary)
+            for i in range(1, N):
+                if arrSummary[i].TotalObjects > 0:
+                    dblPercentage = arrSummary[i].ObjectsWith3D / arrSummary[i].TotalObjects * 100
+                else:
+                    dblPercentage = 0
+                print( '<tr><td>' + IIf(arrSummary[i].RegionName != '', arrSummary[i].RegionName, '???') + '</td>'+ '\n')
+                print( '<td>' + arrSummary[i].DistrictName + '</td>'+ '\n')
+                print( '<td>' + str(arrSummary[i].TotalObjects) + '</td><td>' + str(arrSummary[i].ObjectsWith3D) + '</td><td> ' + str(Round(dblPercentage)) + ' </td></tr>'+ '\n')
+            if arrSummary[0].TotalObjects > 0:
+                dblPercentage = arrSummary[0].ObjectsWith3D / arrSummary[0].TotalObjects * 100
             else:
                 dblPercentage = 0
-            print( '<tr><td>' + IIf(arrSummary[i].RegionName != '', arrSummary[i].RegionName, '???') + '</td>'+ '\n')
-            print( '<td>' + arrSummary[i].DistrictName + '</td>'+ '\n')
-            print( '<td>' + str(arrSummary[i].TotalObjects) + '</td><td>' + str(arrSummary[i].ObjectsWith3D) + '</td><td> ' + str(Round(dblPercentage)) + ' </td></tr>'+ '\n')
-        if arrSummary[0].TotalObjects > 0:
-            dblPercentage = arrSummary[0].ObjectsWith3D / arrSummary[0].TotalObjects * 100
-        else:
-            dblPercentage = 0
-        print( '<tr><td><b>Всего в квадрате<b></td>'+ '\n')
-        print( '<td></td>'+ '\n')
-        print( '<td><b>' + str(arrSummary[0].TotalObjects) + '</b></td><td><b>' + str(arrSummary[0].ObjectsWith3D) + '<b></td>'+ '\n')
-        print( '<td><b>' + str(Round(dblPercentage)) + '</b></td></tr>'+ '\n')
-        print( '</table>'+ '\n')
+            print( '<tr><td><b>Всего в квадрате<b></td>'+ '\n')
+            print( '<td></td>'+ '\n')
+            print( '<td><b>' + str(arrSummary[0].TotalObjects) + '</b></td><td><b>' + str(arrSummary[0].ObjectsWith3D) + '<b></td>'+ '\n')
+            print( '<td><b>' + str(Round(dblPercentage)) + '</b></td></tr>'+ '\n')
+            print( '</table>'+ '\n')
     
     print( '<h2>Объекты</h2>'+ '\n')
     print( '<p><small>Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</small><p>'+ '\n')
@@ -153,6 +157,8 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     #<th>Цвет</th><th>Материал</th>
    
     for i in range(len(cells)):
+        if i>=2000:
+            break
     
         if ( cells[i][10] != 'DEFENSIVE WALL' )  and  ( cells[i][10] != 'CHURCH FENCE' )  and  ( cells[i][10] != 'HISTORIC WALL' ) : ## ??and  ( cells[i][10] != 'WATER TOWER' )??
         
@@ -195,8 +201,10 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
                 strDescription = '&lt;&lt;' + buildingTypeRus(cells[i][10]).upper() + '&gt;&gt;'
             #ID and link to osm site
             strOsmID = Left(UCase(cells[i][1] ), 1) + ':' + cells[i][2]
-            strModelUrl = strQuadrantName + '/' + Left(UCase(cells[i][1] ), 1) + cells[i][2]  + '.html'
-            strErrorsUrl = strQuadrantName + '/' + Left(UCase(cells[i][1] ), 1) + cells[i][2]  + '.errors.html'
+            #strModelUrl = strQuadrantName + '/' + Left(UCase(cells[i][1] ), 1) + cells[i][2] 
+            #strErrorsUrl = strQuadrantName + '/' + Left(UCase(cells[i][1] ), 1) + cells[i][2]  + '/errors'
+            strModelUrl =  "./"+ Left(UCase(cells[i][1] ), 1) + cells[i][2] 
+            strErrorsUrl = "./"+ Left(UCase(cells[i][1] ), 1) + cells[i][2]  + '/errors'
             
             #print( '<td><a href="' + strOSMurl + '">' + strOsmID + '</a></td>'+ '\n')
             
@@ -256,7 +264,7 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
             print('<td><a href="' + strJOSMurl + '" target = "josm" >' + 'J' + '</a></td>'+ '\n')
             print('</tr>'+ '\n')
     print( '</table>'+ '\n')
-    print(f'Всего {len(cells)} объектов в данном списке')
+    print(f'Выведено {i+1} объектов.  Всего {len(cells)} объектов в данном списке')
     print("""
         <h3>Примечания</h3>
         <ul>

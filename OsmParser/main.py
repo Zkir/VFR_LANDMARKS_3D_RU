@@ -6,6 +6,7 @@ import hashlib
 import rtree
 
 from mdlMisc import *
+from mdlZDBI import loadDatFile, saveDatFile
 from mdlOsmParser import readOsmXml
 from osmparser import encodeXmlString
 from mdlGeocoder import DoGeocodingForDatFile
@@ -77,7 +78,7 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
             continue
         
         if osmObject.tagBuilding == 'military' or  'military' in osmObject.osmtags:
-            print('military object skipped: '+osmObject.type[0] +  osmObject.id)   
+            #print('military object skipped: '+osmObject.type[0] +  osmObject.id)   
             continue
             
         SelectedObjects.append(osmObject)
@@ -129,6 +130,9 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
         else:     
             object_name = tagAddrHousename
             
+        strCountryCode = strQuadrantName[0:2] #it is expected that "quadrant" code is smth like RU-MOW   
+        strRegionCode  = strQuadrantName
+            
         j = j + 1
         building_dat.append([str(j),  osmObject.type,  osmObject.id,  str(osmObject.bbox.minLat),
                  str(osmObject.bbox.minLon) ,
@@ -146,7 +150,9 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
                  tagRefSoboryRu,
                  tagWikidata,
                  tagArchitect,
-                 str(hasWindows)
+                 str(hasWindows),
+                 strCountryCode,
+                 strRegionCode
                  ])
     
     saveDatFile(building_dat, strOutputFile)
@@ -716,8 +722,9 @@ def processQuadrant(strQuadrantName):
     t3=time.time()
     ###print ("Osm models converted to obj/x3d in " + str(t3-t2) +" seconds")
 
+    geocoder_source_txt  = "work_folder\\15_geocoder\\"+strQuadrantName+"\\geocoder.txt"
     
-    DoGeocodingForDatFile(strQuadrantObjectsListFileName)
+    DoGeocodingForDatFile(strQuadrantObjectsListFileName, geocoder_source_txt)
     #CreateRegionSummaryPage(strQuadrantName, strInputFile, True, True )
     #CreateIndexPage("d:\\_VFR_LANDMARKS_3D_RU\\work_folder\\Quadrants.dat")
     t4=time.time()

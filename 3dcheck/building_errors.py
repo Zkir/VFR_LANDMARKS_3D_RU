@@ -57,17 +57,17 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors)
           </style>
           """)
     print( '</head>'+ '\n')
-    print( '<body class=\'page\'>'+ '\n')
-    print( '  <div class=\'page-header\'>'+ '\n')
+    print( '<body class="page">'+ '\n')
+    print( '  <div class="page-header">'+ '\n')
     strPageTitle=strObjectName + ' (' + strOsmID + ') ' +strStars
     print( '    <h1 title="'+strPageTitle+'">' + strPageTitle + '</h1>'+ '\n')
     print( '  </div>'+ '\n')
-    print( '  <div class=\'page-content\'>'+ '\n')
+    print( '  <div class="page-content">'+ '\n')
 
     print( '  <h2>'+ '\n')
     print( 'Ошибки валидации'+ '\n')
     print( '  </h2>'+ '\n')
-    print( '  <div class=\'errors\'  >'+ '\n')
+    print( '  <div class="errors"  >'+ '\n')
     print( '  <table class="sortable">'+ '\n')
     
     print('<tr>')
@@ -102,12 +102,13 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors)
     
    
 
-    print( '  <div style=\'clear:both;\'></div>'+ '\n')
+    print( '  <div style="clear:both;"></div>'+ '\n')
     print( '  </div>'+ '\n')
-    print( '  <div class=\'page-footer\'>'+ '\n')
-    print( '  <div class=\'navigation\'>'+ '\n')
+    print( '  <div class="page-footer">'+ '\n')
+    print( '  <div class="navigation">'+ '\n')
     print( '<hr />'+ '\n')
-    print( '  <a href=\'/\'>Главная страница</a> --> <a href=\'/' + strQuadrantName + '.html\'>' + strQuadrantName + '</a> --> <a href="'+strOsmID+'.html">'+ strObjectName + '</a>\n')
+    print( '  <a href="/">Главная страница</a> --> <a href="/countries/' + strQuadrantName + '">' + strQuadrantName + '</a>' + 
+           ' --> <a href="/countries/' + strQuadrantName + '/' + strOsmID + '">'+ strObjectName + '</a>\n')
     print( '  </div>'+ '\n')
     #zero frame for josm links
     print( '<div style="display: none;"><iframe name="josm"></iframe></div>'+ '\n')
@@ -148,8 +149,8 @@ strParam=urlparse.parse_qs(parsed.query).get('param','')
 s=url.split("/")
 
 if len(s)>=2:
-    strQuadrantName=s[1].strip()
-    intObjectIndex=s[2][0:-12]
+    strQuadrantName=s[3].strip()
+    intObjectIndex=s[4]#[0:-12]
     #print(intObjectIndex) 
 else:
     strQuadrantName="RU-MOW"

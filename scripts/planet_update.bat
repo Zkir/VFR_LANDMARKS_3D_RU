@@ -1,17 +1,20 @@
 rem @echo off
 echo Updating planet osm
 SET WORK_FOLDER=%1
+SET COUNTRY=planet
 cd %WORK_FOLDER%
 
 
-osmupd "russia-latest.osm.pbf" "russia-latest-latest.osm.pbf" -B=russia.poly -v --keep-tempfiles
+osmupd "%COUNTRY%-latest.osm.pbf" "%COUNTRY%-latest-latest.osm.pbf"  -v 
+rem -B=%COUNTRY%.poly
 if errorlevel 1 goto error
 rem if update was successful, we can delete the old file and rename the new one as old one.
-del "russia-latest.osm.pbf"
-ren "russia-latest-latest.osm.pbf" "russia-latest.osm.pbf
+del "%COUNTRY%-latest.osm.pbf"
+ren "%COUNTRY%-latest-latest.osm.pbf" "%COUNTRY%-latest.osm.pbf
+
 echo osm.pbf updated
 
-osmconvert "russia-latest.osm.pbf" -o="russia-latest.o5m"
+osmconvert "%COUNTRY%-latest.osm.pbf" -o="%COUNTRY%-latest.o5m"
 if errorlevel 1 goto error
 
 goto end

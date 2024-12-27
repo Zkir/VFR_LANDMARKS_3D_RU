@@ -1,48 +1,68 @@
 ﻿import time
-from mdlMisc import *
-#from osmGeometry import *
+from mdlZDBI import loadDatFile, saveDatFile
 from mdlOsmParser import readOsmXml
 import rtree
 import geohash2
+from intervaltree import Interval, IntervalTree
 import os
+from tqdm import tqdm
 
-GEOCODER_SOURCE_OSM = "work_folder\\05_geocoder\\geocoder.osm"
-GEOCODER_SOURCE_TXT  = "work_folder\\05_geocoder\\geocoder.txt"
+I=0 # total number of regions returned by spatial index
+J=0 # total number of regions returned by spatial index matching target point (J/I reflects spatial index effectiveness)
+K=0 # total number of edge checks
+
 
 #===================================================================
 # Проверка принадлежности точки полигону методом испускания луча
 # Элементарная функция
 #===================================================================
-def checkPointInPolygon(lat,lon, boundaries):
+def checkPointInPolygon(lat,lon, boundaries, interval_index=None):
+    global K
     DELTA=1e-10
     intrsectCount = 0
-    for boundary in boundaries:
-        N = len(boundary)
-        if (boundary[0][0]!=boundary[N-1][0]) or (boundary[0][1]!=boundary[N-1][1]):
-           #print ("Not closed way")
-           raise Exception("Not closed way")
+    related_border_segments= []
+    if not interval_index:
+        # find related boundary segments
+        # we will need it for index
+        for boundary in boundaries:
+            N = len(boundary)
+            if (boundary[0][0]!=boundary[N-1][0]) or (boundary[0][1]!=boundary[N-1][1]):
+               #print ("Not closed way")
+               raise Exception("Not closed way")
 
-        for i in range(N-1):
-          #Найдем пересечения вертикального луча с данным ребром.
-          #lat0<lat<=lat0, lon>lonx
+            for i in range(N-1):
+                K+=1
+                lat0, lon0 = boundary[i]    #Начало отрезка
+                lat1, lon1 = boundary[i+1]  #Начало конец
+                if ((lon>=min(lon0,lon1) and (lon<=max(lon0,lon1)))):
+                    related_border_segments+=[((lat0, lon0),(lat1, lon1))]
+    else:
+        related_border_segments = interval_index[lon]    
+    
+    
+    for segment in related_border_segments:
+        if interval_index:
+            segment=segment.data
+          
+        #Найдем пересечения вертикального луча с данным ребром.
+        #lat0<lat<=lat0, lon>lonx
 
-          lat0, lon0 = boundary[i]    #Начало отрезка
-          lat1, lon1 = boundary[i+1]  #Начало конец
+        lat0, lon0 = segment[0]    #Начало отрезка
+        lat1, lon1 = segment[1]  #Начало конец
 
-          if (lon==lon0) or (lon==lon1):
-              #Попали на вершину, это П-Ц
-              #Нужно чуть чуть сдвинуть точку
-              lon=lon+DELTA
+        if (lon==lon0) or (lon==lon1):
+            # Попали на вершину, это П-Ц
+            # Нужно чуть-чуть сдвинуть точку
+            lon=lon+DELTA
 
-          if ((lon>=min(lon0,lon1) and (lon<=max(lon0,lon1)))):
-              #Найдем точку пересечения.
-              latX = lat0 + (lat1-lat0)/(lon1-lon0) * (lon-lon0)
-              if (latX>=lat):
-                  intrsectCount=intrsectCount+1
-
-          else:
-              #Отрезок идет нафик, пересечение с ним невозможно.
-              pass
+        if ((lon>=min(lon0,lon1) and (lon<=max(lon0,lon1)))):
+            #Найдем точку пересечения.
+            latX = lat0 + (lat1-lat0)/(lon1-lon0) * (lon-lon0)
+            if (latX>=lat):
+                intrsectCount=intrsectCount+1
+        else:
+            #Отрезок идет нафик, пересечение с ним невозможно.
+            pass
 
     #print(intrsectCount)
     return (intrsectCount % 2)==1
@@ -65,7 +85,8 @@ class GeoRegion:
         self.name=""
         self.ISO3166_2=""
         self.adminlevel=""
-        self.boundary=[]
+        self.boundary= []
+        self.border_index = None
         
     def checkPointBelongs(self, lat,lon):
         #Check BBOX
@@ -73,10 +94,30 @@ class GeoRegion:
             return False
         
         #Check OUTLINE(S)
-        if checkPointInPolygon(lat,lon, self.boundary):
+        if checkPointInPolygon(lat, lon, self.boundary, self.border_index):
             return True
         else:
             return False
+            
+    def createSegmentIndex(self):
+        self.border_index = IntervalTree()
+        for boundary in self.boundary:
+            N = len(boundary)
+            if (boundary[0][0]!=boundary[N-1][0]) or (boundary[0][1]!=boundary[N-1][1]):
+               #print ("Not closed way")
+               raise Exception("Not closed way")
+
+            for i in range(N-1):
+                lat0, lon0 = boundary[i]    #Начало отрезка
+                lat1, lon1 = boundary[i+1]  #Начало конец
+                segment = ((lat0, lon0),(lat1, lon1))
+                if lon0!=lon1:
+                    self.border_index[min(lon0,lon1):max(lon0,lon1)] = segment
+                else:
+                    # vetical boundaries cannot be intersected by vertical ray. 
+                    # so we can save a bit here                    
+                    pass
+                
 
 # just a dummy, no indexing 
 class SpatialIndexDummy: 
@@ -106,7 +147,7 @@ class SpatialIndexRtree:
         return ids
     
 # Geohash        
-class SpatialIndex: 
+class SpatialIndexGeohash: 
     def __init__(self):
         self.ix = self.IndexNode("")
         
@@ -181,7 +222,7 @@ class Geocoder:
         self.load_time = 0
         self.index_creation_time = 0        
         self.regions=[]   
-        self.spatial_index = SpatialIndex() #rtree.index.Index() 
+        self.spatial_index = SpatialIndexRtree() #rtree.index.Index() 
 
         
     def loadDataFromPoly(self):
@@ -377,7 +418,8 @@ class Geocoder:
                 pass
 
             if line == '[END]':
-                self.regions.append(region)
+                if region.adminlevel not in ["3"]: #["2","3","4"]:
+                    self.regions.append(region)
                 region = None
 
             line=fh.readline()
@@ -390,14 +432,20 @@ class Geocoder:
 
 
         fh.close()
-        
-        print(str(len(self.regions))+" regions loaded into geocoder")
         t1 = time.time()
+        self.load_time = round(t1 - t0, 3)
+        print(str(len(self.regions))+" regions loaded into geocoder, in " +str(self.load_time) +" seconds")
+        
         self.createSpatialIndex()
         t2 = time.time()
-        
-        self.load_time = round(t1 - t0, 3)
         self.index_creation_time = round(t2 - t1, 3)
+        print("Spatial index for regions created, in " +str(self.index_creation_time) +" seconds")
+        
+        for region in self.regions:
+            region.createSegmentIndex()
+        t3 = time.time()
+        self.segment_index_creation_time = round(t3-t2,3)
+        print("Spatial index for border segments created, in " +str(self.segment_index_creation_time) +" seconds")
         
 
     def saveDataToPolyFile(self, strOutputFile, strId):
@@ -449,6 +497,8 @@ class Geocoder:
 # ===================================================================================================================
 
     def getGeoCodes(self,lat,lon):
+        global I
+        global J
         geocodes={}
         
         # we will get regions matching coordinates from spatial index (rtree)
@@ -460,8 +510,10 @@ class Geocoder:
         
         #for region in self.regions:
         for i in ids :
+            I+=1
             region = self.regions[i]
             if region.checkPointBelongs(lat,lon):
+                J+=1
                 if region.adminlevel !='place':
                     geocodes['adminlevel_'+ str(region.adminlevel)]=region.name
                 else:
@@ -482,7 +534,7 @@ def get_geocode_by_priority(geocodes, priority_geocodes):
             break   
     return x        
 
-def DoGeocodingForDatFile(strInputFile):
+def DoGeocodingForDatFile(strInputFile, geocoder_txt_file):
     
     
     cells = loadDatFile(strInputFile)
@@ -491,28 +543,29 @@ def DoGeocodingForDatFile(strInputFile):
     district_geocodes = ["adminlevel_6"] # район
     region_geocodes = ["adminlevel_4"] # область
     
-    if True:
-        if  (len(cells) > 0):
-            print("Loading geocoder...")
-            t1 = time.time()
-            geocoder = Geocoder()
-            #geocoder.loadDataFromOsmFile(GEOCODER_SOURCE_OSM)
-            geocoder.loadDataFromTextFile(GEOCODER_SOURCE_TXT)
 
-            t2 = time.time()
-            print("Geocoder loaded in " + str(round(t2 - t1,3)) + " seconds")
+    if  (len(cells) > 0):
+        print("Loading geocoder...")
+        t1 = time.time()
+        geocoder = Geocoder()
+        geocoder.loadDataFromTextFile(geocoder_txt_file)
 
-            for i in range(len(cells)):
-                lat = (float(cells[i][3]) + float(cells[i][5])) / 2
-                lon = (float(cells[i][4]) + float(cells[i][6])) / 2
-                geocodes = geocoder.getGeoCodes(lat, lon)
-                cells[i][20] = get_geocode_by_priority(geocodes, city_geocodes)  # город
-                cells[i][21] = get_geocode_by_priority(geocodes, district_geocodes)  # район
-                cells[i][22] = get_geocode_by_priority(geocodes, region_geocodes)  # область
-                
-            t3 = time.time()
-            # we still need to save results, we will need them in future.
-            saveDatFile(cells, strInputFile)
-            print("objects geocoded in " + str(round(t3 - t2,3)) + " seconds")
-        else:
-            print("No objects, geocoding skipped")
+        t2 = time.time()
+        print("Geocoder loaded in " + str(round(t2 - t1,3)) + " seconds")
+        
+        working_loop=tqdm(range(len(cells)))
+        for i in working_loop :
+            lat = (float(cells[i][3]) + float(cells[i][5])) / 2
+            lon = (float(cells[i][4]) + float(cells[i][6])) / 2
+            geocodes = geocoder.getGeoCodes(lat, lon)
+            cells[i][20] = get_geocode_by_priority(geocodes, city_geocodes)  # город
+            cells[i][21] = get_geocode_by_priority(geocodes, district_geocodes)  # район
+            cells[i][22] = get_geocode_by_priority(geocodes, region_geocodes)  # область
+            working_loop.set_description(f"{round(K/(i+1))} edge check per object, {round(J/I, 3)} effectiveness")
+            
+        t3 = time.time()
+        # we still need to save results, we will need them in future.
+        saveDatFile(cells, strInputFile)
+        print("objects geocoded in " + str(round(t3 - t2,3)) + " seconds")
+    else:
+        print("No objects, geocoding skipped")

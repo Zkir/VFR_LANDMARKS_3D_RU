@@ -1,7 +1,6 @@
 import json
 import requests
-import mdlMisc
-from  mdlDBMetadata import * 
+from  mdlZDBI import * 
 import os
 import sys
 from mdlClassify import * 
@@ -18,6 +17,7 @@ WIKIDATA_DIRECTORY = "d:/_VFR_LANDMARKS_3D_RU/work_folder/23_wikidata"
 IMAGE_DIRECTORY =    "d:/_VFR_LANDMARKS_3D_RU/work_folder/25_images"
 
 LIMIT=150000
+DOWNLOADED_IMAGE_COUNT = 0
 
 wikidata_buildings={
                     'Q19860854': 'ruins',       # building or structure that has been demolished or destroyed
@@ -90,6 +90,7 @@ wikidata_buildings={
                     'Q1542966':  'school',      # secondary school in Germany
                     'Q9842':     'school',      # primary school 
                     'Q20860083': 'school',      # educational facility 
+                    'Q1663017':  'school',      # engineering college 
                     
                     'Q108325':   'chapel',
                     'Q1457501':  'chapel',                #cemetery chapel
@@ -217,6 +218,7 @@ wikidata_buildings={
                     'Q22806':    'library',             # national library   
                     'Q856584':   'library',             # library building
                     'Q2326815':  'library',             # municipal library 
+                    'Q671735':   'library',  # media library
                     'Q1112897':  'rostral_column',  
                     'Q623525':   'rotunda',             #???
                     'Q53060':    'gate', 
@@ -258,16 +260,16 @@ wikidata_buildings={
                     'Q2080521':  'marketplace',           # covered space used as a marketplace
                     
                     'Q948878':   'dovecote',              # FR:89
-                    'Q846451':   'caisson ',              # FR:88
+                    'Q846451':   'caisson',               # FR:88
                     
                     'Q1408475':  'fortified_house',       # fortified house
                     'Q1137809':  'courthouse',            # courthouse  !!!! amenity=courthouse!!!
                     'Q483453':   'fountain',              # fountain !!!! man_made???
                     
-                    'Q18674739': 'event_venue ',          # FR:51
+                    'Q18674739': 'event_venue',          # FR:51
                     
                     'Q1523545': 'manor',  #FR:49
-                    'Q1690211': 'lavoir ',  #FR:44
+                    'Q1690211': 'lavoir',  #FR:44
                     'Q91165':   'defensive tower',        # keep
                     'Q1502700': 'defensive tower',        # Genoese towers in Corsica
 
@@ -275,16 +277,50 @@ wikidata_buildings={
                     
                     ##'Q1424583': 'chapel',  # sepulchral chapel
 
-                    'Q815448':  'bell_tower',             # belfry  -- Вечевая башня
+                    'Q815448':  'campanile',             # belfry  -- Вечевая башня ??campanile??
                     'Q493694':  'tide_mill',              # tide mill
                     'Q575759':  'memorial',               # war memorial 
                     'Q14092':   'sports_hall',            # building designed and equipped for athletics and fitness
                     'Q12323':   'dam',                    #
                     'Q126807':  'kindergarten',  
                     
-                    #'Q156362':  'winery',                 # winery  -- WTF???
-                    #'Q1434544': 'commandry',              # is it a castle???
-                    #'Q2945655': '',  # centre hospitalier (France) 
+                    'Q156362':  'winery',                 # winery  -- WTF???
+                    'Q1434544': 'commandry',              # is it a castle???
+                    'Q2945655': 'hospital',               # centre hospitalier (France) 
+                    
+                    
+                    'Q1424583': 'chapel',  #sepulchral chapel
+                     'Q1763828': 'multi-purpose hall',  #multi-purpose hall
+                     'Q15974764':'university',  #French public form of higher level organization for universities and higher education institutions
+                     'Q1378975':'convention_center',  #convention center 
+
+                    'Q15823129':  'monastery',  #Carthusian monastery 
+                    'Q371752':    'wayside_cross',  #18
+                    'Q580499':    'oratory',  #
+                    'Q24398318':  'oratory',  
+                    'Q40357':     'prison',  
+                    'Q513550':    'skete',  #hermitage -- Скит 
+
+                    'Q136689':    'chalet',  #chalet 
+                    'Q2887690':   'bastide',  #type of Provençal manor
+                    'Q380342':    'manufactory',  #14
+                    'Q40558':     'smithy',  #14
+                    'Q474':       'aqueduct',  #14
+                    'Q2914427':   'guardhouse',  #13
+                    'Q19979289':  'birth_house',  #родной дом
+                    'Q656720':    'workshop',  #workshop ??shop??
+                    'Q184698':    'barn',  #tithe barn
+
+                    'Q12280':     'bridge',  #13
+                    'Q91752':     'compound',  #Compound (fortification)
+                    'Q5383482':   'palace',  #episcopal palace 
+                    'Q483242':    'laboratory',  #laboratory 
+                    'Q2511322':   'school',  #lycée part of the French education system
+                    'Q2190251':   'arts_center',  #11
+                    'Q1416685':   'rampart',  # земляной вал
+                    'Q1430154':   'cloister',  #крытый внутренний двор, примыкающий к комплексу зданий средневекового монастыря или церкви
+                    'Q1436181':   'maison de plaisance',  #maison de plaisance
+                    'Q5003624':   'memorial',  #11
 
 
                     }
@@ -313,7 +349,7 @@ wikidata_non_buildings={
                     #strange non-building types
                     'Q634099':   'rural settlement in Russia',
                     'Q486972':   'human settlement',
-                    'Q5084':     'hamlet ',
+                    'Q5084':     'hamlet',
                     'Q532':      'village',
                     'Q2319498':  'village',
                     'Q7930989':  'city or town',  #2
@@ -342,7 +378,7 @@ wikidata_non_buildings={
                     'Q35749':    'parliament',
                     'Q15284':    'municipality',
                     'Q192287':   'administrative territorial entity of Russia',
-                    'Q3982337':  'puppetry company ', #theatre organization that produces puppetry performances
+                    'Q3982337':  'puppetry company', #theatre organization that produces puppetry performances
                     'Q309398':   'ground-effect vehicle',
                     'Q644371':   'international airport',
                     'Q3917681':  'embassy', 
@@ -353,13 +389,13 @@ wikidata_non_buildings={
                     'Q31855':    'research institute',  
                     'Q875157':   'resort',  
                     'Q1076486':  'sports venue',  #!!!facility (building, structure, or place) dedicated to sports -- to general!
-                    'Q43229':    'organization ',  #to general!
+                    'Q43229':    'organization',  #to general!
                     'Q166118':   'archive', 
                     'Q6881511':  'enterprise',  
                     'Q1664720':  'institute',  #organizational body created for a certain purpose - to general!
                     'Q13226383': 'facility',  #place, equipment, or service to support a specific function -- too general
                     'Q2116450':  'manor estate',  #estate in land to which is incident the right to hold a manorial court -- ??
-                    'Q22698':    'park ',  
+                    'Q22698':    'park',  
                     'Q15056993': 'aircraft family',  #lolwut?
                     'Q176799':   'military unit', 
                     'Q98798598': 'tourist facility', # to general!
@@ -387,10 +423,11 @@ wikidata_non_buildings={
                     'Q521458':   'railway infrastructure manager',  #railway infrastructure manager
                     'Q39614':    'cemetery',  
                     'Q36794':    'door',  
-                    'Q484170':   'commune of France ',    # commune of France 
+                    'Q484170':   'commune of France',    # commune of France 
                     'Q18706073': 'EPCI with own taxation',  #EPCI with own taxation
-                    'Q2001305':  'television channel ',  
+                    'Q2001305':  'television channel',  
                     'Q1735655':  'Ministry of Emergency Situations',  
+                    'Q174782':   'square',  
 
 }
 
@@ -404,7 +441,7 @@ wikidata_achitecture_styles = {
                     'Q46805':    'romanesque',        # romanesque art 
                     'Q2864731':  'romanesque',        # Romanesque art of Provence 
                     'Q4692':     'renaissance',       # renaissance in general 
-                    'Q236122':   'renaissance ',      # renaissance as architecture
+                    'Q236122':   'renaissance',      # renaissance as architecture
                     'Q176483':   'gothic', 
                     'Q695863':   'gothic',            # Brick gothic
                     'Q46825':    'gothic',            # Gothic art
@@ -526,6 +563,7 @@ def get_from_wikimedia_api(url):
     return(response)
 
 def download_image(url, filename):
+    global DOWNLOADED_IMAGE_COUNT
     NEW_SIZE = 512
     # setup
     short_filename = Path(filename).stem
@@ -555,7 +593,7 @@ def download_image(url, filename):
         print("\nError catched:")
         print(e)
         print(url, filename)
-        exit(1)
+        return
 
     if img.mode != "RGB":    
         img=img.convert("RGB")
@@ -582,7 +620,8 @@ def download_image(url, filename):
 
     #save to file
     
-    img.save(full_save_path, "PNG")       
+    img.save(full_save_path, "PNG")
+    DOWNLOADED_IMAGE_COUNT += 1
     
     
        
@@ -630,7 +669,7 @@ def get_wikidata_organized(qid):
         if 'P18' in wikidata['claims'] and 'datavalue' in wikidata['claims']['P18'][0]['mainsnak']:     
             wd["image"] = wikidata['claims']['P18'][0]['mainsnak']['datavalue']['value']
             
-        if 'P856' in wikidata['claims']:
+        if 'P856' in wikidata['claims'] and 'datavalue' in wikidata['claims']['P856'][0]['mainsnak']:
             wd["website"] = wikidata['claims']['P856'][0]['mainsnak']['datavalue']['value']
         
         if 'P625' in wikidata['claims']:
@@ -665,7 +704,7 @@ def get_wikidata_organized(qid):
 # ============
 def update_region(input_file_name, output_file_name):
    
-    all_objects=mdlMisc.loadDatFile(input_file_name) 
+    all_objects=loadDatFile(input_file_name) 
     objects_with_wikidata = []
     
     for rec in all_objects:
@@ -710,7 +749,7 @@ def update_region(input_file_name, output_file_name):
                 break
            
 
-    mdlMisc.saveDatFile(all_objects, output_file_name)
+    saveDatFile(all_objects, output_file_name)
     print (f'{n} objects processed out of {len(objects_with_wikidata)}')
     
 def count(a_dict, value):  
@@ -719,7 +758,7 @@ def count(a_dict, value):
     a_dict[value] += 1     
  
 def print_stats(input_file_name):
-    cells=mdlMisc.loadDatFile(input_file_name) 
+    cells=loadDatFile(input_file_name) 
     
     n=0
     wikidata_buildings_known =  {}
@@ -774,7 +813,7 @@ def print_stats(input_file_name):
     
     
 def get_images(input_file_name):
-    all_objects = mdlMisc.loadDatFile(input_file_name) 
+    all_objects = loadDatFile(input_file_name) 
     objects_with_wikidata = []
     for rec in all_objects:
         if rec[QUADDATA_WIKIDATA_ID]!="" :
@@ -827,7 +866,7 @@ def get_images(input_file_name):
             #print()
             k+=1
             
-        working_loop.set_description(f"{n} buildings processed, {k} images_downloaded")
+        working_loop.set_description(f"{n} buildings processed, {DOWNLOADED_IMAGE_COUNT} images downloaded, {k-DOWNLOADED_IMAGE_COUNT} errors")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(

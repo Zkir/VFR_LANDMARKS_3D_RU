@@ -2,7 +2,7 @@
 # and most recent buildings 
 from mdlSite import *
 from mdlGeocoder import *
-from mdlDBMetadata import *
+from mdlZDBI import *
 from PIL import Image, ImageDraw
 import datetime
 
@@ -122,7 +122,7 @@ for rec1 in rsObjectList:
         n += 1      
 
 
-saveDatFile(rsOutput,DB_FOLDER+'RUS_TOP.dat')
+saveDatFile(rsOutput,DB_FOLDER+'TOP.dat')
 
 # Recent changes
 rsObjectList.sort(key=lambda row: str(row[QUADDATA_LAST_UPDATE_DATE]).strip(), reverse=True)
@@ -133,7 +133,7 @@ for rec1 in rsObjectList:
         rsOutput.append(rec1)
         n += 1
 
-saveDatFile(rsOutput,DB_FOLDER+'RUS_LATEST.dat')
+saveDatFile(rsOutput,DB_FOLDER+'LATEST.dat')
 
 
 #diagram for recent changes
@@ -149,7 +149,7 @@ for rec1 in rsObjectList:
         rsOutput.append(rec1)
         n += 1      
 
-saveDatFile(rsOutput, DB_FOLDER+'RUS_TOP_WINDOWS.dat')
+saveDatFile(rsOutput, DB_FOLDER+'TOP_WINDOWS.dat')
 
 
 

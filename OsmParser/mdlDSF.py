@@ -1,8 +1,8 @@
 from vbFunctions import *
-from mdlMisc import *
-from mdlDBMetadata import *
+from mdlZDBI import *
 import os.path
 from mdlOsmParser import readOsmXml
+from mdlMisc import getColorDistance, composeQuadrantName
 
 BUILD_PATH = 'd:\\_VFR_LANDMARKS_3D_RU'
 
@@ -476,7 +476,7 @@ def main(dsfLat, dsfLon):
     quadrant_dat_file_name = dsf_folder_name + '\\'+strQuadrantName+'.dat'
     osm_models_folder = BUILD_PATH + '\\work_folder\\30_3dmodels'
     
-    objOsmGeom, _ = readOsmXml("work_folder\\07_building_data\\objects-all.osm")
+    objOsmGeom, _ = readOsmXml("work_folder\\10_osm_extracts\\RU-FULL\\objects-all.osm")
 
     custom_models = loadDatFile(BUILD_PATH + "\\custom_models_list.txt", encoding="cp1251")
     custom_facades = loadDatFile(BUILD_PATH + "\\custom_facade_list.txt", encoding="cp1251")
