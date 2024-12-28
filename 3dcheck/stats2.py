@@ -165,4 +165,4 @@ parsed = urlparse.urlparse(url)
 #strQuadrantName=cgi.FieldStorage().getvalue('param')
 
 #print(strQuadrantName)
-createStatisticsPage("data/stats/"+"building_style_stats.json")
+createStatisticsPage("data/world/"+"building_style_stats.json")

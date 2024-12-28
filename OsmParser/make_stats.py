@@ -4,6 +4,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 import json
 import datetime
+from mdlMisc import getTimeStamp
 
 from mdlClassify import building_types_rus_names as building_classes
 from mdlClassify import achitecture_styles_rus_names as building_styles
@@ -383,6 +384,7 @@ def main():
 
     countries={}
     regions = {}
+    country_quadrants = {}
 
     for rec in object_list:
         country_code = rec[QUADDATA_COUNTRY_CODE]
@@ -398,6 +400,24 @@ def main():
         countries[country_code] += [rec]
         regions  [region_code] += [rec]
         
+        if country_code not in country_quadrants:
+            country_quadrants[country_code] ={}
+            
+        if region_code not in country_quadrants[country_code]:
+            country_quadrants[country_code][region_code] = ["","",0,0,"",0]
+            
+            country_quadrants[country_code][region_code][QUADLIST_QUADCODE] = region_code
+            country_quadrants[country_code][region_code][QUADLIST_DESCR] = rec[QUADDATA_ADDR_REGION] if rec[QUADDATA_ADDR_REGION] else "Неизвестная область"
+            country_quadrants[country_code][region_code][QUADLIST_LAST_UPDATE_DATE ] = getTimeStamp()
+            country_quadrants[country_code][region_code][QUADLIST_TOTAL_OBJECTS] = 0 
+            country_quadrants[country_code][region_code][QUADLIST_3D_OBJECTS] = 0
+            country_quadrants[country_code][region_code][QUADLIST_VALIDATION_ERRORS] = 0
+        
+        country_quadrants[country_code][region_code][QUADLIST_TOTAL_OBJECTS] += 1
+        country_quadrants[country_code][region_code][QUADLIST_3D_OBJECTS] += 1 if rec[QUADDATA_OSM3D] == "True" else 0
+        country_quadrants[country_code][region_code][QUADLIST_VALIDATION_ERRORS] += int(rec[QUADDATA_NUMBER_OF_ERRORS])
+            
+        
     for country_code, country in countries.items():
         folder_name= DB_FOLDER + "countries\\"+country_code+"\\"
         file_name = folder_name+country_code+".dat"
@@ -405,6 +425,11 @@ def main():
         saveDatFile(country,  file_name)
         calculate_region_statistics(file_name, folder_name )
         make_tops(file_name, folder_name)
+        
+        quadrant_file_name= folder_name+"Quadrants.dat"
+
+        saveDatFile(country_quadrants[country_code].values(),  quadrant_file_name)
+            
 
     for region_code, region in regions.items():
         folder_name=DB_FOLDER + "countries\\"+region_code[0:2]+"\\"

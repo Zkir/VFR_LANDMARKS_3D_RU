@@ -53,13 +53,13 @@ def CreateIndexPage(strQuadrantName, strInputFile):
     print( '  <p>5. <a href="'+url_base+'building_types/">Статистика по типам зданий, '+strQuadrantTitle+'</a> </p>' + '\n')
     print( '  <p>6. <a href="'+url_base+'building_styles/">Статистика по архитектурным стилям, '+strQuadrantTitle+'</a> </p>' + '\n')
 
-    print( '  <h2>Список областей</h2>' + '\n')
+    print( '  <h2>Список стран/областей</h2>' + '\n')
     print( '  <table class="sortable">' + '\n')
-    print( '    <tr><th>Квадрат</th><th>Описание</th><th>Всего объектов</th><th>С 3D моделью</th><th>Процент</th><th>Дата последнего обновления</th><th>Ошибки</th></tr>' + '\n')
+    print( '    <tr><th>Код</th><th>Название</th><th>Всего объектов</th><th>С 3D моделью</th><th>Процент</th><th>Дата последнего обновления</th><th>Ошибки</th></tr>' + '\n')
     
     for i in range(len(cells)):
         if cells[i][4]>'1900.01.01 00:00:00': 
-            if not cells[i][0].startswith(strQuadrantName): # select only regions of a country. for world QuadrantName is empty, so it worlds magically
+            if not cells[i][0].startswith(strQuadrantName): # select only regions of a country. for world QuadrantName is empty, so it works magically
                 continue
             
             if not strQuadrantName:
@@ -111,6 +111,6 @@ def main():
     print ("Content-Type: text/html; charset=utf-8 \n\n")
     print
 
-    CreateIndexPage(strQuadrantName, "data/quadrants/Quadrants.dat")
+    CreateIndexPage(strQuadrantName, "data/Quadrants.dat")
 
 main()

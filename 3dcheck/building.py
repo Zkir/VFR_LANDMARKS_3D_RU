@@ -166,10 +166,10 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp, validation_errors
         print( '      <div class=\'x3d-content\'>'+ '\n')
         print( '        <x3d id=\'x3dElem\' x=\'0px\' y=\'0px\' width=\'100%\' height=\'100%\'>'+ '\n')
         print( '          <scene>'+ '\n')
-        if strQuadrantName == "RUS_TOP_WINDOWS":
+        if strQuadrantName == "TOP_WINDOWS":
             print( "            <inline onload='fitCamera()' url='/data/models2/" + strOsmID + ".x3d'></inline>" + "\n")
         else:
-            print( "            <inline onload='fitCamera()' url='/models/" + strOsmID + ".x3d'></inline>" + "\n")
+            print( "            <inline onload='fitCamera()' url='/data/models/" + strOsmID + ".x3d'></inline>" + "\n")
         
         print( '          </scene>'+ '\n')
         print( '        </x3d>'+ '\n')
@@ -183,7 +183,7 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp, validation_errors
             print( '      <div class=\'no_model\'>'+ '\n')
             print( '           <img src=\'/nomodel.gif\' width=\'450px\' height=\'450px\' alt=\'3d Модель отсутствует\' ><img> '+ '\n')
             print( '      </div>'+ '\n')
-    if strQuadrantName == "RUS_TOP_WINDOWS":        
+    if strQuadrantName == "TOP_WINDOWS":        
         print( '       <button id="trigger-overlay" type="button">blosm</button>'+ '\n')
     else: 
         print( '       <button id="trigger-overlay" type="button">Osm2World</button>'+ '\n')
@@ -218,8 +218,8 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp, validation_errors
     print( '               <scene>'+ '\n')
     
     #print( "                   <inline onload='fitCamera2()' url='/data/models_gltf/" + strOsmID + ".gltf'></inline>" + "\n")
-    if strQuadrantName == "RUS_TOP_WINDOWS":
-        print( "                   <inline onload='fitCamera2()' url='/models/" + strOsmID + ".x3d'></inline>" + "\n")
+    if strQuadrantName == "TOP_WINDOWS":
+        print( "                   <inline onload='fitCamera2()' url='/data/models/" + strOsmID + ".x3d'></inline>" + "\n")
     else: 
         print( "                   <inline onload='fitCamera2()' url='/data/models2/" + strOsmID + ".x3d'></inline>" + "\n")
     print( '               </scene>'+ '\n')
@@ -264,21 +264,21 @@ s=url.split("/")
 #    intObjectIndex=s[4]#[0:-5]
 #    #print(intObjectIndex) 
 #else:
-#    strQuadrantName= "RUS_TOP" # "RU-MOW"
+#    strQuadrantName= "TOP" # "RU-MOW"
 #    intObjectIndex= "R1645496" # "R3030568"
     
 strQuadrantName=cgi.FieldStorage().getvalue('quadrant')    
 intObjectIndex=cgi.FieldStorage().getvalue('object')    
 
-QN={'building_top':         'RUS_TOP',
-    'building_top_windows': 'RUS_TOP_WINDOWS',
-    'recent_changes':       'RUS_LATEST',
+QN={'building_top':         'TOP',
+    'building_top_windows': 'TOP_WINDOWS',
+    'recent_changes':       'LATEST',
     'no_type':              'photo_wo_type' 
     }
-strQuadrantName= QN.get(strQuadrantName,strQuadrantName)
+strQuadrantName= QN.get(strQuadrantName, strQuadrantName)
 
 
-strInputFile = "data\\quadrants\\"+strQuadrantName+".dat"
+strInputFile = "data\\world\\"+strQuadrantName+".dat"
 
 if not os.path.exists(strInputFile):
     print(f'File {strInputFile} does not exist')
@@ -290,7 +290,7 @@ page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)
 
 
 # sort by number of building parts - we need it for proper navigation 
-if strQuadrantName != "RUS_LATEST":
+if strQuadrantName != "LATEST":
     cells.sort(key=lambda row: int(row[24]), reverse=True)
 else:
     pass

@@ -8,6 +8,7 @@ QUADLIST_DESCR = 1
 QUADLIST_TOTAL_OBJECTS = 2
 QUADLIST_3D_OBJECTS = 3
 QUADLIST_LAST_UPDATE_DATE = 4
+QUADLIST_VALIDATION_ERRORS = 5
 
 # ===========================================
 # Quadrant data
@@ -84,6 +85,6 @@ def saveDatFile(cells,strOutputFile):
         for field in row: 
             if txt!="":
                 txt = txt + "|"   
-            txt = txt + endcodeDatString(field)
+            txt = txt + endcodeDatString(str(field))
         filehandle.write(txt+'\n') 
     filehandle.close()   

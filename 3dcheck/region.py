@@ -105,15 +105,15 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     print( '<body>'+ '\n')
     print( '<h1>Валидатор 3D: ' + region_names.get(strQuadrantName, strQuadrantName) + '</h1>'+ '\n')
         
-    if strQuadrantName == "rus_top_windows":    
+    if strQuadrantName == "TOP_WINDOWS":    
         print( '<p>На этой странице представлены здания, имеющие окна, заданные тегами <b><a href="https://wiki.openstreetmap.org/wiki/Key:window">window:*</a></b> .'+ '\n')
         
-    elif strQuadrantName == "rus_latest":
+    elif strQuadrantName == "LATEST":
         print( '<p>На этой странице представлены здания, отредактированные в последнее время.'+ '\n')
         print( 'Включены только здания, имеющие 3D модели.</p>'+ '\n')
         print( '<h2>Пульс проекта</h2>'+ '\n')
         print('<p>Количество отредактированных зданий по дням</p>')
-        print('<p><img src="data/images/recent_activity.png"></img></p>')
+        print('<p><img src="/data/world/recent_activity.png"></img></p>')
         
     elif strQuadrantName == "photo_wo_type":
         print( '<h2>Здания без типа</h2>'+ '\n')
@@ -330,4 +330,4 @@ if not strQuadrantName:
     strQuadrantName = "rus_top"
 
 #print(strQuadrantName)
-CreateRegionSummaryPage(strQuadrantName, "data/quadrants/"+strQuadrantName+".dat", False, False)
+CreateRegionSummaryPage(strQuadrantName, "data/world/"+strQuadrantName+".dat", False, False)

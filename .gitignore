@@ -4,7 +4,6 @@
 ~$osm-parser.xlsm
 
 /3dcheck/index.html
-/3dcheck/models
 /3dcheck/data/*.dat
 /3dcheck/data/quadrants/*.dat
 /3dcheck/data/errors/*.dat
@@ -34,9 +33,12 @@ make.svg
 3dcheck/downloads/VFR_LANDMARKS_3D_RU.zip
 3dcheck/pipeline/
 
-/zOsm2GeoJSON/.idea/*.*
+zOsm2GeoJSON/.idea/*.*
 
 3dcheck/yandex_827fab152aaf2bda.html
 3dcheck/data/images/recent_activity.png
+3dcheck/data/models
 3dcheck/data/models2
 3dcheck/data/models_gltf
+3dcheck/data/countries
+3dcheck/data/world
