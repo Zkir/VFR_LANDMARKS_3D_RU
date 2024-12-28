@@ -387,6 +387,8 @@ def main():
     for rec in object_list:
         country_code = rec[QUADDATA_COUNTRY_CODE]
         region_code  = rec[QUADDATA_REGION_CODE]
+        if not region_code:
+            region_code  = country_code + "-___"
         if country_code not in countries:
             countries[country_code] = []
             

@@ -117,6 +117,8 @@ work_folder\25_images\extract_images: work_folder\22_all_osm_objects_list\all-ob
 	touch $@
 	
 work_folder\22_all_osm_objects_list\stats.milestone:  work_folder\25_images\extract_images
+	IF EXIST "work_folder\22_all_osm_objects_list\countries" RMDIR "work_folder\22_all_osm_objects_list\countries" /S /Q	
+	IF EXIST "work_folder\22_all_osm_objects_list\world" RMDIR "work_folder\22_all_osm_objects_list\world" /S /Q	
 	python osmparser\make_stats.py
 	touch $@
 
