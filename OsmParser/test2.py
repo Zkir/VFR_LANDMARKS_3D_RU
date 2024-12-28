@@ -20,11 +20,16 @@ def getGeoCodes2(self,lat,lon):
     print("regions found:", len(ids))
     
     #for region in self.regions:
+    
     for i in ids :
         region = self.regions[i]
         if region.checkPointBelongs(lat,lon):
-            
-                geocodes.append([str(region.adminlevel), region.name, region.id, float(region.size)])
+                ISO3166_2 = ""
+                if region.ISO3166_2:
+                    ISO3166_2 = region.ISO3166_2
+                
+                geocodes.append([str(region.adminlevel), region.name, region.id, float(region.size),ISO3166_2])
+                
     
     geocodes.sort(key=lambda rec:rec[3], reverse=True)    
     return geocodes
@@ -84,6 +89,18 @@ def main():
     lat , lon = (43.4240891,43.4756422)
     geocodes = getGeoCodes2(geocoder, lat, lon)
     print(geocodes)
+    
+    print()
+    lat , lon = (57.9951853, 56.239115)
+    geocodes = getGeoCodes2(geocoder, lat, lon)
+    print(geocodes)
+    
+    print()
+    lat , lon = (56.2613923, 38.2153058)
+    geocodes = getGeoCodes2(geocoder, lat, lon)
+    print(geocodes)
+    
+    
 
     print()
     t1 = time.time()

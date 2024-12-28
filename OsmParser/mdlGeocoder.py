@@ -418,7 +418,7 @@ class Geocoder:
                 pass
 
             if line == '[END]':
-                if region.adminlevel not in ["3"]: #["2","3","4"]:
+                if region.adminlevel not in ["3"]: #["2","3","4"]:  #for some reason ignore level 3
                     self.regions.append(region)
                 region = None
 
@@ -519,6 +519,11 @@ class Geocoder:
                 else:
                     geocodes[ str(region.adminlevel)]=region.name
                     
+                if region.ISO3166_2:
+                    geocodes["ISO3166-2"] = region.ISO3166_2    
+
+       
+                    
         return geocodes
     
 
@@ -532,7 +537,12 @@ def get_geocode_by_priority(geocodes, priority_geocodes):
         if geocode in  geocodes:
             x = geocodes[geocode]
             break   
-    return x        
+    return x    
+
+
+def get_iso3166_2(geocodes): 
+    return geocodes.get("ISO3166-2", "")
+    
 
 def DoGeocodingForDatFile(strInputFile, geocoder_txt_file):
     
@@ -561,6 +571,7 @@ def DoGeocodingForDatFile(strInputFile, geocoder_txt_file):
             cells[i][20] = get_geocode_by_priority(geocodes, city_geocodes)  # город
             cells[i][21] = get_geocode_by_priority(geocodes, district_geocodes)  # район
             cells[i][22] = get_geocode_by_priority(geocodes, region_geocodes)  # область
+            cells[i][32] = get_iso3166_2(geocodes) # код области, ISO3166-2
             working_loop.set_description(f"{round(K/(i+1))} edge check per object, {round(J/I, 3)} effectiveness")
             
         t3 = time.time()
