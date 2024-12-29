@@ -72,7 +72,12 @@ def CreateIndexPage(strQuadrantName, strInputFile):
             if int(cells[i][2]) !=0:
                 intRate = Round(100.0*int(cells[i][3])/int(cells[i][2])) 
             print( '    <tr><td>'+sub_reg_code+'</td><td><a href="'+url_base2+sub_reg_code+'/">'+ cells[i][1] +'</a> </td><td>'+cells[i][2]+'</td><td>' + cells[i][3]+ '</td>' + 
-                           '<td>' + str(intRate)+ '</td><td>' + cells[i][4]+ '</td> <td><a href="'+url_base2+sub_reg_code+'/errors">' + cells[i][5]+ '</a></td> </tr>' + '\n')
+                           '<td>' + str(intRate)+ '</td><td>' + cells[i][4]+ '</td>')
+            if strQuadrantName:
+                print(' <td><a href="'+url_base2+sub_reg_code+'/errors">' + cells[i][5]+ '</a></td>')
+            else:
+                print(' <td>' + cells[i][5]+ '</td>')
+            print(' </tr>' + '\n')
 
     print( '  </table>' + '\n')
     print( '  <h2>Полезные ссылки</h2>' + '\n')
@@ -110,7 +115,11 @@ def main():
 
     print ("Content-Type: text/html; charset=utf-8 \n\n")
     print
-
-    CreateIndexPage(strQuadrantName, "data/Quadrants.dat")
+    if strQuadrantName:
+        quadrant_file = "data/countries/"+strQuadrantName[0:2]+"/Quadrants.dat"  
+    else:
+        quadrant_file = "data/Quadrants.dat"  
+        
+    CreateIndexPage(strQuadrantName, quadrant_file)
 
 main()

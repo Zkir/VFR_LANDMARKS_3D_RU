@@ -103,7 +103,7 @@ def CreateRegionPage(strQuadrantName, cells, page_time_stamp):
             strJOSMurl = "http://localhost:8111/load_object?new_layer=true&objects="+ LCase(part_type)+part_id +"&relation_members=true"   #"&select=object"
             strIDurl = "https://www.openstreetmap.org/edit?editor=id&"+y[part_type]+"=" + part_id
             strF4url = 'http://demo.f4map.com/#lat=' + str(lat) + '&lon=' + str(lon) + '&zoom=19'
-            strModelUrl = strQuadrantName + '/' + Left(UCase(obj_rec[1] ), 1) + obj_rec[2]  + '.html'
+            strModelUrl =  Left(UCase(obj_rec[1] ), 1) + obj_rec[2]    # strQuadrantName + '/' + ... + '.html'
            
         
             print('<tr>')
@@ -169,12 +169,17 @@ parsed = urlparse.urlparse(url)
 strParam=urlparse.parse_qs(parsed.query).get('param','')
 #strQuadrantName=url[1:-5]
 strQuadrantName=cgi.FieldStorage().getvalue('param')
+strCountry=cgi.FieldStorage().getvalue('country')
+
 
 if strQuadrantName is None:
     strQuadrantName="RU-MOW"
 
-
-strInputFile = "data\\quadrants\\"+strQuadrantName+".dat"
+if strCountry:
+    strInputFile = "data\\countries\\"+strCountry+"\\"+strQuadrantName+".dat"
+else:
+    print("we do not have it world wide level currently")
+    
 cells = loadDatFile(strInputFile)
 page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(strInputFile)))
 page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)

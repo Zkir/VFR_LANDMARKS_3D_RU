@@ -60,7 +60,7 @@ def GetSummary(cells):
 #========================================================================
 
 
-def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages, blnGeocode):
+def CreateRegionSummaryPage(strQuadrantName, strInputFile, activity_img_url):
     strHTMLPage = ""
 
     i = 0
@@ -81,7 +81,7 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
     # ==========================================================================
     # sort by number of building parts
     # ==========================================================================
-    if strQuadrantName != "rus_latest":
+    if strQuadrantName != "LATEST":
         cells.sort(key=lambda row: int(row[24]), reverse=True)
         arrSummary = GetSummary(cells)
     else:
@@ -113,7 +113,7 @@ def CreateRegionSummaryPage(strQuadrantName, strInputFile, blnCreateObjectPages,
         print( 'Включены только здания, имеющие 3D модели.</p>'+ '\n')
         print( '<h2>Пульс проекта</h2>'+ '\n')
         print('<p>Количество отредактированных зданий по дням</p>')
-        print('<p><img src="/data/world/recent_activity.png"></img></p>')
+        print('<p><img src="'+activity_img_url+'"></img></p>')
         
     elif strQuadrantName == "photo_wo_type":
         print( '<h2>Здания без типа</h2>'+ '\n')
@@ -324,10 +324,19 @@ url = os.environ.get("REQUEST_URI","")
 parsed = urlparse.urlparse(url) 
 strParam=urlparse.parse_qs(parsed.query).get('param','')
 #strQuadrantName=url[1:-5]
-strQuadrantName=cgi.FieldStorage().getvalue('param')
+
+strCountry      = cgi.FieldStorage().getvalue('country')
+strQuadrantName = cgi.FieldStorage().getvalue('param')
 
 if not strQuadrantName:
-    strQuadrantName = "rus_top"
+    strQuadrantName = "TOP"
 
 #print(strQuadrantName)
-CreateRegionSummaryPage(strQuadrantName, "data/world/"+strQuadrantName+".dat", False, False)
+if strCountry:
+    file_name = "data/countries/"+strCountry+"/"+strQuadrantName+".dat"
+    activity_img_url="/data/countries/"+strCountry+"/recent_activity.png"
+else:
+    file_name = "data/world/"+strQuadrantName+".dat"
+    activity_img_url="/data/world/recent_activity.png"
+    
+CreateRegionSummaryPage(strQuadrantName, file_name, activity_img_url)

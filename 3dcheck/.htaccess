@@ -1,7 +1,6 @@
 RewriteEngine on
 RewriteRule ^test$ test.py
 
-RewriteRule ^types/([a-z0-9\-\+_]+).html$  region_images.py?param=$1
 
 RewriteRule ^world/building_top/$ region.py?param=TOP
 RewriteRule ^world/building_top_windows/$ region.py?param=TOP_WINDOWS
@@ -10,24 +9,30 @@ RewriteRule ^world/no_type/$ region.py?param=photo_wo_type
 RewriteRule ^world/building_types/$ stats.py
 RewriteRule ^world/building_styles/$ stats2.py
 
-RewriteRule ^world/([A-Za-z0-9\-\+_]+)/([RWN0-9]+)$  building.py?quadrant=$1&object=$2
+RewriteRule ^world/building_types/([a-z0-9\-\+_]+).html$  region_images.py?param=$1&type=building_types
+RewriteRule ^world/building_styles/([a-z0-9\-\+_]+).html$  region_images.py?param=$1&type=styles
+
+RewriteRule ^world/([A-Za-z0-9\-\+_]+)/([RWN0-9]+)$         building.py?quadrant=$1&object=$2
 RewriteRule ^world/([A-Za-z0-9\-\+_]+)/([RWN0-9]+)/errors$  building_errors.py?quadrant=$1&object=$2
 
 
 
-RewriteRule ^countries/([A-Z]{2})/$  index.py?param=$1
-RewriteRule ^countries/([A-Z]{2})/building_top/$ region.py?param=TOP
-RewriteRule ^countries/([A-Z]{2})/building_top_windows/$ region.py?param=TOP_WINDOWS
-RewriteRule ^countries/([A-Z]{2})/recent_changes/$ region.py?param=LATEST
-RewriteRule ^countries/([A-Z]{2})/no_type/$ region.py?param=photo_wo_type
-RewriteRule ^countries/([A-Z]{2})/building_types/$ stats.py
-RewriteRule ^countries/([A-Z]{2})/building_styles/$ stats2.py
+RewriteRule ^countries/([A-Z]{2})/$                      index.py?param=$1
+RewriteRule ^countries/([A-Z]{2})/building_top/$         region.py?param=TOP&country=$1
+RewriteRule ^countries/([A-Z]{2})/building_top_windows/$ region.py?param=TOP_WINDOWS&country=$1
+RewriteRule ^countries/([A-Z]{2})/recent_changes/$       region.py?param=LATEST&country=$1
+RewriteRule ^countries/([A-Z]{2})/no_type/$              region.py?param=photo_wo_type&country=$1
+RewriteRule ^countries/([A-Z]{2})/building_types/$       stats.py?country=$1
+RewriteRule ^countries/([A-Z]{2})/building_styles/$      stats2.py?&country=$1
 
-RewriteRule ^countries/[A-Z]{2}/([A-Z0-9\-\+_]+)/?$  region.py?param=$1
-RewriteRule ^countries/[A-Z]{2}/([A-Z0-9\-\+_]+)/errors/?$  region_errors.py?param=$1
+RewriteRule ^countries/([A-Z]{2})/([A-Z0-9\-\+_]+)/?$         region.py?country=$1&param=$2
+RewriteRule ^countries/([A-Z]{2})/([A-Z0-9\-\+_]+)/errors/?$  region_errors.py?country=$1&param=$2
 
-RewriteRule ^countries/[A-Z]{2}/([A-Za-z0-9\-\+_]+)/([RWN0-9]+)$  building.py?quadrant=$1&object=$2
-RewriteRule ^countries/[A-Z]{2}/([A-Za-z0-9\-\+_]+)/([RWN0-9]+)/errors$  building_errors.py?quadrant=$1&object=$2
+RewriteRule ^countries/([A-Z]{2})/building_types/([a-z0-9\-\+_]+).html$        region_images.py?country=$1&param=$2&type=building_types
+RewriteRule ^countries/([A-Z]{2})/building_styles/([a-z0-9\-\+_]+).html$       region_images.py?country=$1&param=$2&type=styles
+
+RewriteRule ^countries/([A-Z]{2})/([A-Za-z0-9\-\+_]+)/([RWN0-9]+)$         building.py?country=$1&quadrant=$2&object=$3
+RewriteRule ^countries/([A-Z]{2})/([A-Za-z0-9\-\+_]+)/([RWN0-9]+)/errors$  building_errors.py?country=$1&quadrant=$2&object=$3
 
 
 

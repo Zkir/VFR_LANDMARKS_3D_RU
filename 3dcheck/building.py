@@ -266,9 +266,9 @@ s=url.split("/")
 #else:
 #    strQuadrantName= "TOP" # "RU-MOW"
 #    intObjectIndex= "R1645496" # "R3030568"
-    
-strQuadrantName=cgi.FieldStorage().getvalue('quadrant')    
-intObjectIndex=cgi.FieldStorage().getvalue('object')    
+strCountry      = cgi.FieldStorage().getvalue('country')    
+strQuadrantName = cgi.FieldStorage().getvalue('quadrant')    
+intObjectIndex  = cgi.FieldStorage().getvalue('object')    
 
 QN={'building_top':         'TOP',
     'building_top_windows': 'TOP_WINDOWS',
@@ -277,8 +277,10 @@ QN={'building_top':         'TOP',
     }
 strQuadrantName= QN.get(strQuadrantName, strQuadrantName)
 
-
-strInputFile = "data\\world\\"+strQuadrantName+".dat"
+if strCountry:
+    strInputFile = "data\\countries\\"+strCountry+"\\"+strQuadrantName+".dat"
+else:    
+    strInputFile = "data\\world\\"+strQuadrantName+".dat"
 
 if not os.path.exists(strInputFile):
     print(f'File {strInputFile} does not exist')

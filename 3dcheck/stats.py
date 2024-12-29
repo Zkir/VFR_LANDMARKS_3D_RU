@@ -78,8 +78,8 @@ def createStatisticsPage(strInputFile):
             url = value["osm_tags"][0]
             url = url.replace(" ", "_")
             url = url.replace("~", "")
-            #url ="/styles/"+url +'.html'
-            url ="/types/"+url +'.html'
+            #url ="/types/"+url +'.html'
+            url =url +'.html'
             
             print('<tr>'+ '\n')
             #print('<td>'+key+'</td>'+ '\n')
@@ -156,9 +156,15 @@ print
 
 url = os.environ.get("REQUEST_URI","") 
 parsed = urlparse.urlparse(url) 
+strCountry = cgi.FieldStorage().getvalue('country')
+
 #strParam=urlparse.parse_qs(parsed.query).get('param','')
 #strQuadrantName=url[1:-5]
 #strQuadrantName=cgi.FieldStorage().getvalue('param')
 
-#print(strQuadrantName)
-createStatisticsPage("data/world/"+"building_type_stats.json")
+if not strCountry :
+    filename="data/world/"+"building_type_stats.json"
+else:    
+    filename="data/countries/"+strCountry+"/"+"building_type_stats.json"
+    
+createStatisticsPage(filename)

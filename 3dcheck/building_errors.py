@@ -107,8 +107,8 @@ def CreateObjectPage(strQuadrantName,obj_rec, page_time_stamp,validation_errors)
     print( '  <div class="page-footer">'+ '\n')
     print( '  <div class="navigation">'+ '\n')
     print( '<hr />'+ '\n')
-    print( '  <a href="/">Главная страница</a> --> <a href="/countries/' + strQuadrantName + '">' + strQuadrantName + '</a>' + 
-           ' --> <a href="/countries/' + strQuadrantName + '/' + strOsmID + '">'+ strObjectName + '</a>\n')
+    print( '  <a href="/">Главная страница</a> --> <a href="/countries/' + strQuadrantName[0:2] +"/"+strQuadrantName+ '/">' + strQuadrantName + '</a>' + 
+           ' --> <a href="/countries/'+ strQuadrantName[0:2] +"/" + strQuadrantName + '/' + strOsmID + '">'+ strObjectName + '</a>\n')
     print( '  </div>'+ '\n')
     #zero frame for josm links
     print( '<div style="display: none;"><iframe name="josm"></iframe></div>'+ '\n')
@@ -149,14 +149,18 @@ strParam=urlparse.parse_qs(parsed.query).get('param','')
 s=url.split("/")
 
 if len(s)>=2:
+    strCountry=s[2].strip()
     strQuadrantName=s[3].strip()
     intObjectIndex=s[4]#[0:-12]
+    #print(strCountry)
+    #print(strQuadrantName) 
     #print(intObjectIndex) 
 else:
+    strCountry="RU"
     strQuadrantName="RU-MOW"
     intObjectIndex="R3030568"
 
-strInputFile = "data\\quadrants\\"+strQuadrantName+".dat"
+strInputFile = "data\\countries\\"+strCountry+"\\"+strQuadrantName+".dat"
 cells = loadDatFile(strInputFile)
 page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(strInputFile)))
 page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)

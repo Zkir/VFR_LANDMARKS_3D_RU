@@ -110,12 +110,21 @@ def main():
     strParam=urlparse.parse_qs(parsed.query).get('param','')
     #strQuadrantName=url[1:-5]
     strQuadrantName=cgi.FieldStorage().getvalue('param')
-
-    if not strQuadrantName:
-        strQuadrantName = "cowshed"
-
+    strType=cgi.FieldStorage().getvalue('type')
+    strCountry=cgi.FieldStorage().getvalue('country')
+    
+    
+    if not strType:
+        print("Category of statistics is not specified")
+        exit(1)
+        
+    if strCountry:
+        filename="data/countries/"+strCountry+"/"+strType+"/"+strQuadrantName+".dat"
+    else:
+        filename="data/world/"+strType+"/"+strQuadrantName+".dat"
+        
     #print(strQuadrantName)
-    CreateRegionPage(strQuadrantName, "data/quadrants/"+strQuadrantName+".dat")
+    CreateRegionPage(strQuadrantName, filename)
     
     
 if __name__ == "__main__":
