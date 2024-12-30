@@ -96,12 +96,15 @@ work_folder\22_all_osm_objects_list : | work_folder
 work_folder\23_wikidata: | work_folder
 	mkdir work_folder\23_wikidata
 
-work_folder\20_osm_3dmodels\extract_building_models_osm: work_folder\10_osm_extracts\extract_osm_data work_folder\15_geocoder\geocoder.txt.milestone | work_folder\21_osm_objects_list work_folder\20_osm_3dmodels work_folder\23_wikidata ## extract osm buildings  into separate osm files
+work_folder\20_osm_3dmodels\building_models_osm.milestone: work_folder\10_osm_extracts\extract_osm_data work_folder\15_geocoder\geocoder.txt.milestone | work_folder\21_osm_objects_list work_folder\20_osm_3dmodels work_folder\23_wikidata ## extract osm buildings  into separate osm files
 	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do python OsmParser\main.py %%i
-	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do python OsmParser\wikidata.py update-region -i work_folder\21_osm_objects_list\%%i.dat -r
+	touch $@
+    
+work_folder\20_osm_3dmodels\regional_object_lists.milestone: work_folder\20_osm_3dmodels\building_models_osm.milestone   
+	for /F "eol=# tokens=1 delims=|" %%i in (work_folder\Quadrants.dat) do python OsmParser\wikidata.py update-region -i work_folder\21_osm_objects_list\%%i.dat -r    
 	touch $@
 	
-work_folder\22_all_osm_objects_list\all-objects.dat: work_folder\20_osm_3dmodels\extract_building_models_osm | work_folder\22_all_osm_objects_list ##join object lists from different quadrants
+work_folder\22_all_osm_objects_list\all-objects.dat: work_folder\20_osm_3dmodels\regional_object_lists.milestone | work_folder\22_all_osm_objects_list ##join object lists from different quadrants
 	python scripts\joindats.py $@ work_folder\21_osm_objects_list
 	osmparser\wikidata.py print-stats -i $@ >work_folder\22_all_osm_objects_list\wikidata-stats.txt
 
@@ -131,15 +134,11 @@ work_folder\30_3dmodels: | work_folder ## Prepare folder for 3d models (obj/x3d)
 work_folder\31_3dmodels2: | work_folder ## Prepare folder for 3d models (gltf)
 	mkdir work_folder\31_3dmodels2
 	
-work_folder\30_3dmodels\convert_osm_to_obj: work_folder\20_osm_3dmodels\extract_building_models_osm | work_folder\30_3dmodels 	##Convert 3d objects from osm files to blender and x-plane obj 
+work_folder\30_3dmodels\convert_osm_to_obj: work_folder\20_osm_3dmodels\building_models_osm.milestone | work_folder\30_3dmodels 	##Convert 3d objects from osm files to blender and x-plane obj 
 	for %%v in (work_folder\20_osm_3dmodels\*.osm) do scripts\osm2blend.bat "%%v" work_folder\30_3dmodels
 	touch $@		
-	
-work_folder\30_3dmodels\convert_obj_to_x3d: work_folder\30_3dmodels\convert_osm_to_obj              ##Convert x-plane obj files to x3d, to be used on website.  		
-	for %%v in (work_folder\30_3dmodels\*.obj) do scripts\obj2x3d.py "%%v"
-	touch $@		
 
-work_folder\31_3dmodels2\convert_osm_to_gltf: work_folder\20_osm_3dmodels\extract_building_models_osm | work_folder\31_3dmodels2 	##Experimental via osm2world 
+work_folder\31_3dmodels2\convert_osm_to_gltf: work_folder\20_osm_3dmodels\building_models_osm.milestone | work_folder\31_3dmodels2 	##Experimental via osm2world 
 	for %%v in (work_folder\20_osm_3dmodels\*.osm) do scripts\osm2gltf.bat "%%v" work_folder\31_3dmodels2
 	touch $@		
 #****************************************************************************************************************************
@@ -211,7 +210,7 @@ work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip: work_folder\copy_xpla
 work_folder\90_uploads: | work_folder ## prepare uploads folder 
 	mkdir work_folder\90_uploads
 	
-work_folder\90_uploads\upload_models_to_web: work_folder\30_3dmodels\convert_obj_to_x3d work_folder\31_3dmodels2\convert_osm_to_gltf work_folder\22_all_osm_objects_list\stats.milestone | work_folder\90_uploads 	##Upload 3d models and dat files to web (validator)  
+work_folder\90_uploads\upload_models_to_web: work_folder\30_3dmodels\convert_osm_to_obj work_folder\31_3dmodels2\convert_osm_to_gltf work_folder\22_all_osm_objects_list\stats.milestone | work_folder\90_uploads 	##Upload 3d models and dat files to web (validator)  
 	scripts\upload.bat
 	touch $@		
 

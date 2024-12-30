@@ -12,6 +12,9 @@ IF EXIST %2\%~n1.blend (
     xcopy /Y /Q %1.md5 %2
 	touch %2\%~nx1.md5
 )	
+
+scripts\obj2x3d.py "d:\_VFR_LANDMARKS_3D_RU\%2\%~n1.obj"
+
 GOTO :end
 :do_nothing
 rem echo lazy work: original file %~nx1 has not changed
