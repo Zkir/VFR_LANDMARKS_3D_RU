@@ -3,15 +3,14 @@
 
 ~$osm-parser.xlsm
 
-/3dcheck/index.html
+
 /3dcheck/models
-/3dcheck/data/*.dat
-/3dcheck/data/quadrants/*.dat
-/3dcheck/data/errors/*.dat
-/3dcheck/data/stats/*.json
-/3dcheck/data/building_images
+/3dcheck/data/*
+!/3dcheck/data/readme.md
+
 /3dcheck/landcovers
 /3dcheck/blogposts
+/3dcheck/downloads/VFR_LANDMARKS_3D_RU.zip
 
 /osmupdate_temp
 /work_folder
@@ -31,12 +30,9 @@
 report.json
 geocoder.txt
 make.svg
-3dcheck/downloads/VFR_LANDMARKS_3D_RU.zip
-3dcheck/pipeline/
+
 
 /zOsm2GeoJSON/.idea/*.*
 
 3dcheck/yandex_827fab152aaf2bda.html
-3dcheck/data/images/recent_activity.png
-3dcheck/data/models2
-3dcheck/data/models_gltf
+
