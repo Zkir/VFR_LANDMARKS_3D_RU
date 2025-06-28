@@ -1,0 +1,214 @@
+/* Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 25px;
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.stat-card i {
+    font-size: 2.8rem;
+    margin-bottom: 20px;
+    color: var(--primary);
+}
+
+.stat-card .number {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--secondary);
+    margin: 10px 0;
+}
+
+.stat-card .label {
+    color: var(--gray);
+    font-size: 1.05rem;
+    margin-bottom: 15px;
+}
+
+.progress-bar {
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    margin: 20px 0 15px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--success));
+    border-radius: 4px;
+}
+
+/* Мобильный вид статистики - FIXED */
+.mobile-stats {
+    display: none;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.mobile-stats-block {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.mobile-stats-block:last-child {
+    border-bottom: none;
+}
+
+.mobile-stats-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.mobile-stats-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.mobile-stats-label i {
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+.mobile-stats-value {
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+.mobile-stats-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mobile-stats-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.mobile-stats-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--success));
+}
+
+.mobile-stats-progress-text {
+    font-size: 0.85rem;
+    color: var(--gray);
+    min-width: 50px;
+    text-align: right;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .stat-card {
+        padding: 18px 15px;
+    }
+    
+    .stat-card i {
+        font-size: 2.4rem;
+        margin-bottom: 6px;
+    }
+    
+    .stat-card .number {
+        font-size: 2rem;
+    }
+    
+    .stat-card .label {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .stats-grid {
+        gap: 15px;
+    }
+    
+    .stat-card {
+        padding: 16px 12px;
+        min-height: 200px;
+    }
+    
+    .stat-card i {
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+    }
+    
+    .stat-card .number {
+        font-size: 1.8rem;
+    }
+    
+    .stat-card .label {
+        font-size: 0.9rem;
+        margin-bottom: 0px;
+    }
+    
+    .progress-bar {
+        margin: 12px 0 8px;
+    }
+}    
+
+@media (max-width: 768px) {
+    .stats-grid {
+        gap: 10px;
+    }
+    
+    /*
+    .stat-card {
+        min-height: auto;
+    } 
+    */
+    
+    .stat-card i {
+        font-size: 1.3rem;
+        margin-bottom: 0px;
+    }
+    
+    .stat-card .number {
+        font-size: 1.2rem;
+    }
+    
+    .stat-card .label {
+        min-height: 3em;
+        font-size: 0.9rem;
+        margin-bottom: 0px; 
+    }  
+}
+
+@media (max-width: 576px) {
+    .stats-grid {
+        display: none;
+    }
+    
+    .mobile-stats {
+        display: block;
+    }
+
+}
