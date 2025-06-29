@@ -1,10 +1,15 @@
 ﻿#!c:\Program Files\Python312\python.exe
 import urllib.parse as urlparse
 import os
+import os.path
 import sys
 import codecs
 import time
+import math
+from datetime import datetime
+
 from mdlMisc import *
+
 
 general_page_template = \
 """<!DOCTYPE html>
@@ -126,11 +131,14 @@ general_page_template = \
 
 def index_page(strInputFile):
 
-
-    cells = loadDatFile(strInputFile)
-    
-    page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(strInputFile)))
-    page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)
+   
+    if os.path.isfile(strInputFile):
+        cells = loadDatFile(strInputFile)
+        page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(strInputFile)))
+        page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)
+    else:
+        cells = []    
+        page_time_stamp = "1900-01-01"
   
     page = ""
     # header 
@@ -173,10 +181,26 @@ def index_page(strInputFile):
         
     updated_objects    =  "?"
     updated_objects_3d =  "?"
-    erroneous_objects  =  "?"   
+    erroneous_objects  =  "?"
     
-    #data_state = "Данные протухли"
-    data_state = "Данные актуальны"
+    time_delta =  (datetime.now().date() - datetime.strptime(last_update_date, "%Y.%m.%d").date()).days   
+    if time_delta>365:
+        time_delta=365
+        
+    if time_delta<0:
+        time_delta=0        
+    
+    actuality_percentage = 100-math.log(time_delta+1)*(16.94159104)
+    
+    if actuality_percentage > 75: 
+        data_state = "Данные актуальны" # <3 days
+    elif actuality_percentage > 50: 
+        data_state = "Ожидается обновление" #  <18 days    
+    elif actuality_percentage > 25:  
+        data_state = "Данные устарели" #   < 82 days
+    else:
+        data_state = "Данные протухли" #   >=82 days
+    
     
     page += \
     f""" <!-- Карточки статистики для больших экранов -->
@@ -216,7 +240,7 @@ def index_page(strInputFile):
                 <div class="number">{last_update_date}</div>
                 <div class="label">последнее обновление</div>
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: 100%"></div>
+                    <div class="progress-fill" style="width: {actuality_percentage}%"></div>
                 </div>
                 <div class="label">{data_state}</div>
             </div>
@@ -282,7 +306,7 @@ def index_page(strInputFile):
                 </div>
                 <div class="mobile-stats-progress">
                     <div class="mobile-stats-progress-bar">
-                        <div class="mobile-stats-progress-fill" style="width: 100%"></div>
+                        <div class="mobile-stats-progress-fill" style="width: {actuality_percentage}%"></div>
                     </div>
                     <div class="mobile-stats-progress-text">{data_state}</div>
                 </div>
