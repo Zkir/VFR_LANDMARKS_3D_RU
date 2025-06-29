@@ -86,10 +86,13 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
     spatial_index = createSpatialIndex(objOsmGeomParts)
     
     building_dat = []
+    number_of_buildings_updated_30_days = 0
+    number_of_3d_buildings_updated_30_days = 0 
+    number_of_3d_buildings_with_errors = 0 
     for osmObject in SelectedObjects:
         heightbyparts = 0
         numberofparts = 0
-        touched_date = ""
+        touched_date = "1900-01-01"
         numberofvalidationerrors = 0
         
         blnFence = (osmObject.tagBarrier == 'fence') or (osmObject.tagBarrier == 'wall')
@@ -148,6 +151,19 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
                  tagArchitect,
                  str(hasWindows)
                  ])
+        # stats 
+        #print(touched_date[:10])
+        days_since_touch= (datetime.now().date() - datetime.strptime(touched_date[:10], "%Y-%m-%d").date()).days
+        
+        if days_since_touch <30:
+            if osmObject.blnHasBuildingParts:
+                number_of_3d_buildings_updated_30_days +=1          
+            else:    
+                number_of_buildings_updated_30_days += 1
+                
+        if osmObject.blnHasBuildingParts and (numberofvalidationerrors>0):        
+            number_of_3d_buildings_with_errors += 1        
+
     
     saveDatFile(building_dat, strOutputFile)
 
@@ -156,13 +172,21 @@ def processBuildings(objOsmGeom, Objects, strQuadrantName, strOutputFile, OSM_3D
 
     # filter by quadrant name
     for i in range(len(totals)):
+        # verify that all necessary fields are present
+        totals[i] += ["0"] * (9 - len(totals[i]))
        
         if totals[i][0] == strQuadrantName:
+
             totals[i][2] = str(j)
             totals[i][3] = str(intModelsCreated)
             totals[i][4] = getTimeStamp()
             totals[i][5] = str(intValidationErrorsTotal)
-            break
+            
+            totals[i][6] = str(number_of_buildings_updated_30_days)
+            totals[i][7] = str(number_of_3d_buildings_updated_30_days)
+            totals[i][8] = str(number_of_3d_buildings_with_errors)
+            
+            #break
 
     saveDatFile(totals, BUILD_PATH + '\\work_folder\\Quadrants.dat')
     print(str(j) + ' objects detected, ' + str(intModelsCreated) + ' 3d models created')

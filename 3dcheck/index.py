@@ -151,9 +151,9 @@ def index_page(strInputFile):
     
     total_objects      =  0
     objects_3d         =  0
-    updated_objects    =  -1
-    updated_objects_3d =  -1
-    erroneous_objects  =  -1
+    updated_objects    =  0
+    updated_objects_3d =  0
+    erroneous_objects  =  0
     last_update_date   = "1900.01.01"
     
     for cell in cells:
@@ -161,6 +161,10 @@ def index_page(strInputFile):
         objects_3d += int(cell[3])
         if cell[4]>last_update_date:
             last_update_date=cell[4][:10]
+            
+        updated_objects += int(cell[6])
+        updated_objects_3d += int(cell[7])
+        erroneous_objects += int(cell[8])
         
     
     if total_objects!=0:
@@ -177,11 +181,7 @@ def index_page(strInputFile):
         correct_objects_perc = int((objects_3d-erroneous_objects)/objects_3d*100)
     else:    
         correct_objects_perc = 0
-        
-        
-    updated_objects    =  "?"
-    updated_objects_3d =  "?"
-    erroneous_objects  =  "?"
+
     
     time_delta =  (datetime.now().date() - datetime.strptime(last_update_date, "%Y.%m.%d").date()).days   
     if time_delta>365:
