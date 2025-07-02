@@ -30,6 +30,7 @@ def composeAddressLine(rec):
     for address_element in (rec[20].strip(), strDistrict.strip(), rec[22].replace('область', 'обл.').strip()):
         address_element_alias = address_element.replace('Челябинский го', 'Челябинск').strip()
         address_element_alias = (' '+address_element_alias+ ' ').replace(' го ', '').strip()
+        address_element_alias = (' '+address_element_alias+ ' ').replace(' мо ', '').strip()
         if address_element and (address_element not in address and address_element_alias not in address ):
             address.append(address_element)
     
