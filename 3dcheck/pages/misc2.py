@@ -19,3 +19,20 @@ def get_region_name(quadrant_code):
         strQuadrantTitle = region_names.get(quadrant_code.lower(), quadrant_code)
     
     return strQuadrantTitle
+    
+def composeAddressLine(rec):
+    strDistrict = rec[21]
+    strDistrict = strDistrict.replace('район', 'р-н')
+    strDistrict = strDistrict.replace('городской округ', 'го')
+    strDistrict = strDistrict.replace('муниципальный округ', 'мо')
+    
+    address = []
+    for address_element in (rec[20].strip(), strDistrict.strip(), rec[22].replace('область', 'обл.').strip()):
+        address_element_alias = address_element.replace('Челябинский го', 'Челябинск').strip()
+        address_element_alias = (' '+address_element_alias+ ' ').replace(' го ', '').strip()
+        if address_element and (address_element not in address and address_element_alias not in address ):
+            address.append(address_element)
+    
+    address = ", ".join(address)
+            
+    return address

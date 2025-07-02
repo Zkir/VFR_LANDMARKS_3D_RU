@@ -8,7 +8,7 @@ from .mdlMisc import *
 import cgi
 import time
 from .mdlClassify import buildingTypeRus, achitectureStylesRus
-from .misc2 import get_region_name
+from .misc2 import get_region_name, composeAddressLine
 from .templates import general_page_template
 
 class TSummaryRec:
@@ -221,17 +221,8 @@ def page_region(quadrant_code):
             wikidata_idx=cells[i][28]
             
             #Address: city-district-region
-            strDistrict = cells[i][21]
-            strDistrict = strDistrict.replace('район', 'р-н')
-            strDistrict = strDistrict.replace('городской округ', 'го')
-            address = []
-            for address_element in (cells[i][20].strip(), strDistrict.strip(), cells[i][22].replace('область', 'обл.').strip()):
-                address_element_alias = address_element.replace('Челябинский го', 'Челябинск').strip()
-                address_element_alias = (' '+address_element_alias+ ' ').replace(' го ', '').strip()
-                if address_element and (address_element not in address and address_element_alias not in address ):
-                    address.append(address_element)
-            
-            address = ", ".join(address)
+      
+            address = composeAddressLine(cells[i])
             
             
                 

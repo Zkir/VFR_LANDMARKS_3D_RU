@@ -12,6 +12,7 @@ from .mdlClassify import buildingTypeRus
 from .mdlClassify import achitectureStylesRus
 
 from .templates import general_page_template
+from .misc2 import composeAddressLine
 
 IMG_FOLDER= "data/building_images"
 
@@ -96,7 +97,7 @@ def page_region_images(strQuadrantName):
         .building-card-title {
             font-size: 1.2rem;
             color: var(--secondary);
-            margin-bottom: 12px;
+        
             display: flex;
             align-items: center;
             gap: 15px;
@@ -104,6 +105,11 @@ def page_region_images(strQuadrantName):
 
         .building-card-title i {
             color: var(--primary);
+        }
+        .building-card-address{
+            display: block;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
         }
 
         .building-meta {
@@ -332,6 +338,10 @@ def page_region_images(strQuadrantName):
         
         page += f'<div class="building-card-content">'
         page += f'  <h3 class="building-card-title"><i class="fas fa-landmark"></i> {strObjectName}</h3>'
+        page += f'  <div class="building-card-address">'
+        page += f'      {composeAddressLine(rec)}'
+        page += f'  </div>'
+        
         page += f'  <div class="building-meta">'
         if int(rec[QUADDATA_SIZE])>0:
             page += f'    <div class="meta-item">'
