@@ -272,7 +272,7 @@ page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)
 
 
 # sort by number of building parts - we need it for proper navigation 
-if strQuadrantName != "RUS_LATEST":
+if strQuadrantName != "rus_latest":
     cells.sort(key=lambda row: int(row[24]), reverse=True)
 else:
     pass

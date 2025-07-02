@@ -1,4 +1,4 @@
-from vbFunctions import *
+from .vbFunctions import *
 from datetime import datetime
 
 
