@@ -83,23 +83,28 @@ def main():
         
     
     elif path[0] == 'photo_wo_type':
-        content = page_region('photo_wo_type')      
+        if len(path)==1:
+            content = page_region_images('photo_wo_type', sort=params.get('sort', [None])[0], has_3d=params.get('has_3d', [None])[0])      
+        elif len(path)==2:
+            content = page_building(path[0], path[1]) 
+        else:
+            content = not_found_page(path)
+            status = 404    
         
     # Статистики
     elif path[0] == 'stats': 
         # types
         if len(path)==2 and path[1]=='types':
             content=page_stats_types()
-        elif len(path)==3 and (path[1]=='types'):                
-            content=page_region_images(path[2])
-         
-        
-        # styles
-        
+            
         elif (len(path)==2) and (path[1]=='styles'):
-            content=page_stats_style()  
-        elif len(path)==3 and (path[1]=='styles'):    
-            content = page_region(path[2])             
+            content=page_stats_style()      
+            
+        elif len(path)==3 and (path[1] in ('types', 'styles')):                
+            content=page_region_images(path[2], sort=params.get('sort', [None])[0], has_3d=params.get('has_3d', [None])[0])
+
+        # styles
+                
         elif len(path)==4 and (path[1]=='styles'):    
             content = page_building(path[2], path[3])      
         else:    

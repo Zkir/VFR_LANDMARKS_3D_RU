@@ -586,19 +586,35 @@
         
         <!-- Секция фильтров -->
         <div class="filters-section">
+          <form id="filters-form" method="GET">
             <div class="filters-header">
                 <h2 class="filters-title"><i class="fas fa-filter"></i> Фильтры</h2>
             </div>
             <div class="filters-grid">
+                <!--
                 <div class="filter-group">
                     <label class="filter-label"><i class="fas fa-search"></i> Поиск по названию</label>
-                    <input type="text" placeholder="Введите название вокзала">
+                    <input type="text" placeholder="Введите название здания">
+                </div>
+                -->
+                  <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-calendar"></i> Год постройки</label>
+                    <select name="year" onchange="this.form.submit()">
+                        <option value="" selected >Все годы</option>
+                        <option value="16century">XVI век и ранее</option>
+                        <option value="17century">XVII век</option>
+                        <option value="18century">XVIII век</option>
+                        <option value="19century">XIX век</option>
+                        <option value="early20">Начало XX века</option>
+                        <option value="soviet">Советский период</option>
+                        <option value="contemporary">Современность</option>
+                    </select>
                 </div>
                 
                 <div class="filter-group">
                     <label class="filter-label"><i class="fas fa-archway"></i> Архитектурный стиль</label>
-                    <select>
-                        <option value="">Все стили</option>
+                    <select name="style" onchange="this.form.submit()">
+                        <option value="" selected >Все стили</option>
                         <option value="pseudo-russian">Псевдорусский стиль</option>
                         <option value="neoclassicism">Неоклассицизм</option>
                         <option value="stalinist">Сталинский ампир</option>
@@ -607,26 +623,46 @@
                 </div>
                 
                 <div class="filter-group">
-                    <label class="filter-label"><i class="fas fa-calendar"></i> Год постройки</label>
-                    <select>
-                        <option value="">Все годы</option>
-                        <option value="19century">XIX век</option>
-                        <option value="early20">Начало XX века</option>
-                        <option value="soviet">Советский период</option>
-                        <option value="modern">Современность</option>
+                    <label class="filter-label"><i class="fas fa-building"></i> Тип здания</label>
+                    <select name="type" onchange="this.form.submit()">
+                        <option value="" selected >Все типы</option>
+                        
+                        <option value="russian_orthodox_church">Православная церковь</option>
+                        <option value="apartments">Многоквартирный дом</option>
+                        <option value="commercial">Офисное здание</option>
+                        <option value="manor">Особняк</td>
+
+                    </select>
+                </div>
+                
+              
+                <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-cubes"></i> Наличие 3D</label>
+                    <select name="has_3d" onchange="this.form.submit()">
+                        <option value="" selected >Все здания</option>
+                        
+                        <option value="with_3d">C 3D моделью</option>
+                        <option value="without_3d">Без 3D модели</option>
+                        
+
                     </select>
                 </div>
                 
                 <div class="filter-group">
                     <label class="filter-label"><i class="fas fa-sort-amount-down"></i> Сортировка</label>
-                    <select>
-                        <option value="default">По умолчанию</option>
-                        <option value="name">По названию (А-Я)</option>
-                        <option value="year">По году постройки</option>
-                        <option value="size">По размеру здания</option>
+                    <select name="sort" onchange="this.form.submit()">
+                        <option value="default" selected>По умолчанию</option>
+                        <option value="name"      >По названию (А-Я)</option>
+                        <option value="year"      >По году постройки, сначала новые</option>
+                        <option value="year-r"    >По году постройки, сначала старые</option>
+                        <option value="size"      >По размеру здания, cначала маленькие</option>
+                        <option value="size-r"    >По размеру здания, cначала большие</option>
+                        <option value="height"    >По высоте здания, сначала низкие</option>
+                        <option value="height-r"  >По высоте здания, сначала высокие</option>
                     </select>
                 </div>
             </div>
+          </form>  
         </div>
         
         <!-- Сетка с карточками вокзалов -->

@@ -16,10 +16,155 @@ from .misc2 import composeAddressLine
 
 IMG_FOLDER= "data/building_images"
 
-def page_region_images(strQuadrantName):
+def INT(x):
+    try:
+        r=int(x)
+    except:
+        r=0
+    return r    
+    
+ 
+def FLOAT(x):
+    try:
+        r=float(x)
+    except:
+        r=0
+    return r 
+
+sorts = {"default"   : ("По умолчанию", None, None),
+             "name"      : ("По названию (А-Я)", QUADDATA_NAME, False, str),
+             "year"      : ("По году постройки, сначала новые",  QUADDATA_BUILD_DATE, True, INT),
+             "year-r"    : ("По году постройки, сначала старые", QUADDATA_BUILD_DATE, False, INT),
+             "size"      : ("По размеру здания, cначала маленькие", QUADDATA_SIZE, False, FLOAT),
+             "size-r"    : ("По размеру здания, cначала большие", QUADDATA_SIZE, True, FLOAT),
+             "height"    : ("По высоте здания, сначала низкие",  QUADDATA_HEIGHT, False, FLOAT),
+             "height-r"  : ("По высоте здания, сначала высокие", QUADDATA_HEIGHT, True, FLOAT)}
+             
+
+has_3ds ={ "all":        "Все здания",
+           "with_3d":    "C 3D моделью",
+           "without_3d": "Без 3D модели" }            
+
+
+def print_filters(year, style, btype, has_3d, sort ):
+    
+    
+    
+    page = \
+    """
+        <!-- Секция фильтров -->
+        <div class="filters-section">
+          <form id="filters-form" method="GET">
+            <div class="filters-header">
+                <h2 class="filters-title"><i class="fas fa-filter"></i> Фильтры</h2>
+            </div>
+            <div class="filters-grid">
+                <!--
+                <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-search"></i> Поиск по названию</label>
+                    <input type="text" placeholder="Введите название здания">
+                </div>
+                -->
+                  <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-calendar"></i> Год постройки</label>
+                    <select name="year" onchange="this.form.submit()">
+                        <option value="all" selected >Все годы</option>
+                        <option value="16century">XVI век и ранее</option>
+                        <option value="17century">XVII век</option>
+                        <option value="18century">XVIII век</option>
+                        <option value="19century">XIX век</option>
+                        <option value="early20">Начало XX века</option>
+                        <option value="soviet">Советский период</option>
+                        <option value="contemporary">Современность</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-archway"></i> Архитектурный стиль</label>
+                    <select name="style" onchange="this.form.submit()">
+                        <option value="all" selected >Все стили</option>
+                        <option value="pseudo-russian">Псевдорусский стиль</option>
+                        <option value="neoclassicism">Неоклассицизм</option>
+                        <option value="stalinist">Сталинский ампир</option>
+                        <option value="modern">Современный</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-building"></i> Тип здания</label>
+                    <select name="type" onchange="this.form.submit()">
+                        <option value="all" selected >Все типы</option>
+                        
+                        <option value="russian_orthodox_church">Православная церковь</option>
+                        <option value="apartments">Многоквартирный дом</option>
+                        <option value="commercial">Офисное здание</option>
+                        <option value="manor">Особняк</td>
+
+                    </select>
+                </div>
+                
+              
+                <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-cubes"></i> Наличие 3D</label>
+                    <select name="has_3d" onchange="this.form.submit()">"""
+    
+    for option_name, option_title in has_3ds.items(): 
+        if option_name == has_3d:
+            selected="selected"
+        else:
+            selected=""
+        page +=         f'<option value="{option_name}" {selected}>{option_title}</option>'                      
+                        
+    page += """ 
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-sort-amount-down"></i> Сортировка</label>
+                    <select name="sort" onchange="this.form.submit()">"""
+    for option_name, option_title in sorts.items():  
+        if option_name == sort:
+            selected="selected"
+        else:
+            selected=""
+        page +=         f'<option value="{option_name}" {selected}>{option_title[0]}</option>'       
+    page +=         """ 
+                       
+                    </select>
+                </div>
+            </div>
+          </form>  
+        </div>
+    """
+    return page
+    
+def filter_and_sort(object_list, year, style, btype, has_3d, sort):
+    
+    # filtering
+    ol_filtered = []
+    for rec in object_list:
+        if has_3d == "without_3d" and rec[QUADDATA_OSM3D] == "True":
+            continue
+            
+        if has_3d == "with_3d" and rec[QUADDATA_OSM3D] == "False":
+            continue    
+            
+        ol_filtered += [rec]
+    
+    # sorting
+    if sort=="default" or sort is None:
+        ol_sorted = ol_filtered
+    else:
+       
+        conversion_func=sorts[sort][3]
+        ol_sorted = sorted(ol_filtered, key=lambda rec: conversion_func(rec[sorts[sort][1]]), reverse=sorts[sort][2])
+    return ol_sorted    
+
+def page_region_images(strQuadrantName, year="all", style="all", btype="all", has_3d="all", sort="default" ):
     input_file_name = "data/quadrants/"+strQuadrantName+".dat"
       
     object_list = loadDatFile(input_file_name)
+    object_list =filter_and_sort(object_list, year, style, btype, has_3d, sort)
         
 
     page = ''
@@ -29,6 +174,77 @@ def page_region_images(strQuadrantName):
     
     page += """
     <style>
+    
+     /* Фильтры */
+     
+     /* Фильтры */
+        .filters-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .filters-title {
+            font-size: 1.4rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filters-title i {
+            color: var(--primary);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-label i {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        select, input {
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            background: white;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(58, 110, 165, 0.2);
+        }
+    
      /* Стили для карточек зданий */
         .buildings-grid {
             display: grid;
@@ -71,21 +287,7 @@ def page_region_images(strQuadrantName):
             transform: scale(1.05);
         }
 
-        .building-number {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(58, 110, 165, 0.9);
-            color: white;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
+       
 
         .building-card-content {
             padding: 25px;
@@ -114,7 +316,8 @@ def page_region_images(strQuadrantName):
 
         .building-meta {
             display: flex;
-            gap: 15px;
+            row-gap: 6px;
+            column-gap: 15px;
             margin-bottom: 15px;
             flex-wrap: wrap;
         }
@@ -170,7 +373,17 @@ def page_region_images(strQuadrantName):
         }
 
         .josm-link {
-            display: inline-flex;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light-gray);
+            color: var(--primary);
+            transition: var(--transition);
+            text-decoration: none;
+            /*display: inline-flex;
             align-items: center;
             gap: 8px;
             padding: 10px 20px;
@@ -180,7 +393,7 @@ def page_region_images(strQuadrantName):
             border-radius: 30px;
             font-weight: 500;
             transition: var(--transition);
-            font-size: 0.95rem;
+            font-size: 0.95rem; */
         }
 
         .josm-link:hover {
@@ -198,20 +411,32 @@ def page_region_images(strQuadrantName):
             text-align: center;
         }
         
-         /* Обновленные стили для индикатора 3D */
+         /* стили для индикатора 3D */
         .model-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(58, 110, 165, 0.9);
+            color: white;
+            width: fit-content;
+            height: 36px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 5px 10px;
-            border-radius: 30px;
+            justify-content: center;
             font-weight: 700;
-            width: fit-content;
+            font-size: 1.1rem;
+            text-decoration:none;
+            padding: 5px 10px;
+            gap: 5px;
+            align-items: center;
+            
             transition: all 0.3s ease;
             box-shadow: 0 3px 10px rgba(0,0,0,0.15);
             border: 2px solid transparent;
-            text-decoration:none;
-        }
+        } 
+         
+        
 
         .model-available {
             background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
@@ -257,6 +482,48 @@ def page_region_images(strQuadrantName):
         
         </style>
     """
+    quadrant_title = strQuadrantName
+    page_title = ""
+    page_subtitle = ""
+    
+    if strQuadrantName=='photo_wo_type':
+        page_title = "Здания без типа"    
+        page_subtitle = 'На этой странице собраны здания, для которых не задан тип. Вы очень поможете проекту, если установите значение тега <b>building=*</b>. '
+        page_subtitle += 'Существующие типы зданий, они же значения <b>building=*</b>, можно посмотреть <a href="https://wiki.openstreetmap.org/wiki/RU:Key:building">тут</a>.</p>'
+        
+    elif strQuadrantName=='temple' :
+        page_title = "Культовое сооружение неизвестного типа"    
+        page_subtitle = 'Тег  building=temple без дополнительных тегов не является полезным. Необходимо дополнить его (если это возможно) указанием религии (religion=*) и конфессии (denomination=*).'
+        
+    elif strQuadrantName=='tower':  
+        page_title = "Здания по типу: Башня"    
+        page_subtitle = 'Тег building=tower без дополнительных тегов не означает конкретного типа здания, и не является особо полезным или интересным. '        
+        page_subtitle += 'Требуется уточнение тегом <a href="https://wiki.openstreetmap.org/wiki/RU:Key:tower:type">tower:type=*</a>. '        
+
+    elif strQuadrantName=='castle' :        
+        page_title = "Здания по типу: Castle"    
+        page_subtitle = 'Тег building=castle без дополнительных тегов не означает конкретного типа здания, и даже не может быть переведен на русский язык. '
+        page_subtitle += 'Это может быть любое большое здание, включая (оборонительный) замок, дворец, особняк, шато и т. д. '
+        page_subtitle += 'Необходимо уточнение тегом <a href="https://wiki.openstreetmap.org/wiki/RU:Key:castle_type">castle_type=*</a> или другими.'
+        
+    elif  buildingTypeRus(quadrant_title).lower() != quadrant_title.lower():
+        quadrant_title_rus = buildingTypeRus(quadrant_title).lower()
+        page_title = 'Здания по типу: ' + quadrant_title_rus 
+        
+    elif achitectureStylesRus(quadrant_title)!=quadrant_title:
+        quadrant_title_rus=achitectureStylesRus(quadrant_title)
+        page_title = 'Здания по стилю: ' + quadrant_title_rus  
+    else:    
+        page_title = 'Архитектурный каталог: ' + quadrant_title_rus  
+    
+    
+    page += f'<div class="page-header">'
+    page += f'    <h1>{page_title}</h1>'
+    if page_subtitle:
+        page += f'    <p>{page_subtitle}</p>'
+    page += f'</div>'
+    
+    page += print_filters(year, style, btype, has_3d, sort)
     
     
     page += '<div class="buildings-grid">\n'
@@ -284,9 +551,13 @@ def page_region_images(strQuadrantName):
             continue 
             
         n = n + 1
-        i = i + 1
-        if i >100:
-            break
+        
+        if i >=100:
+            continue
+              
+            
+        i = i + 1    
+            
 
         if rec[17].strip():
             strWikipediaLink = 'http://ru.wikipedia.org/wiki/' + rec[17]
@@ -332,20 +603,27 @@ def page_region_images(strQuadrantName):
         page += f'<div class="building-card">\n'      
         page += f'  <div class="building-image">'
         page += f'    <img src="/{file_path}" alt="{strObjectName})">'
-        page += f'  <div class="building-number">{i}</div>'
-        page += f'</div>'
         
+        if rec[QUADDATA_OSM3D]=="True":
+            page += f'  <a href="/regions/{strQuadrantName}/{osm_id}#model"  class="model-indicator model-available">'
+            page += f'    <i class="fas fa-check"></i>'
+            page += f'    <span class="model-text">3D</span>'
+            page += f'  </a>'
         
-        page += f'<div class="building-card-content">'
-        page += f'  <h3 class="building-card-title"><i class="fas fa-landmark"></i> {strObjectName}</h3>'
-        page += f'  <div class="building-card-address">'
-        page += f'      {composeAddressLine(rec)}'
         page += f'  </div>'
         
-        page += f'  <div class="building-meta">'
+        
+        page += f'  <div class="building-card-content">'
+        page += f'    <h3 class="building-card-title"><i class="fas fa-landmark"></i> {strObjectName}</h3>'
+        page += f'    <div class="building-card-address">'
+        page += f'      {composeAddressLine(rec)}'
+        page += f'    </div>'
+        
+        page += f'    <div class="building-meta">'
+
         if int(rec[QUADDATA_SIZE])>0:
             page += f'    <div class="meta-item">'
-            page += f'      <i class="fas fa-ruler-combined"></i> размер: {int(rec[QUADDATA_SIZE])**2} м&sup2;'
+            page += f'      <i class="fas fa-ruler-horizontal"></i> размер: {int(rec[QUADDATA_SIZE])**2} м&sup2;'
             page += f'    </div>'
         if int(rec[QUADDATA_HEIGHT])>0:
             page += f'    <div class="meta-item">'
@@ -355,22 +633,26 @@ def page_region_images(strQuadrantName):
             page += f'    <div class="meta-item">'
             page += f'      <i class="fas fa-calendar"></i> {rec[QUADDATA_BUILD_DATE] } г.'
             page += f'    </div>'
-        
+        if rec[QUADDATA_BUILDING_TYPE]:
+            page += f'    <div class="meta-item">'
+            page += f'      <i class="fas fa-building"></i> {buildingTypeRus(rec[QUADDATA_BUILDING_TYPE])}'
+            page += f'    </div>'        
         if rec[QUADDATA_STYLE]:    
             page += f'    <div class="meta-item">'
             page += f'      <i class="fas fa-archway"></i> {achitectureStylesRus(rec[QUADDATA_STYLE])}'
             page += f'    </div>'
         page += f'  </div>'
         
-        #page += f'<p class="building-description">\n'
-        ##page += f'Архитектор: Лыгин Константин Константинович. Один из старейших вокзалов на Транссибирской магистрали, образец псевдорусского стиля в архитектуре.\n'
-        #page += f'{building_tokens}'
-        #descr = rec[QUADDATA_DESCR]
+        building_decription = ""
+        #building_decription = """ Иркутская синагога — двухэтажное историческое здание на улице Карла Либкнехта. Построенная в конце XIX века по проекту архитектора В.А. Кудельского с Т-образным планом, она стала первой действующей синагогой России. Имея богатую историю, включая восстановление после пожара 1879 года и периоды закрытия, здание символично выдержало разрушительные воздействия и сохранило свою важность как памятник культуры конца XIX века. """
+        building_decription = rec[QUADDATA_DESCR]
         #if rec[QUADDATA_ARCHITECT]:
-        #    descr += f' (Арх. {rec[QUADDATA_ARCHITECT]})'
-        #page += f'{descr}'
+        #    building_decription += f' (Арх. {rec[QUADDATA_ARCHITECT]})'
         
-        #page += f'</p>\n'
+        if building_decription:
+            page += f'<p class="building-description">\n'
+            page += f'  {building_decription}\n'
+            page += f'</p>\n'
         
         page += f'  <div class="building-links">\n'
         page += f'    <div class="wiki-links">\n'
@@ -382,42 +664,34 @@ def page_region_images(strQuadrantName):
             page += f'        <i class="fab fa-wikipedia-w"></i>\n'
             page += f'      </a>\n'
             
-        page += f'    <a href="{strJOSMurl}" target="josm" class="josm-link " title="Редактировать в JOSM">\n'
-        page += f'       <img src="/img/josm_editor_logo.png" alt="JOSM" class="editor-icon"></img>'
-        page += f'    </a>\n'
+        
             
         page += f'    </div>\n'
         
-        if rec[QUADDATA_OSM3D]=="True":
-            page += f'  <a href="/regions/{strQuadrantName}/{osm_id}#model"  class="model-indicator model-available">'
-            page += f'    <i class="fas fa-check"></i>'
-            page += f'    <span class="model-text">3D</span>'
-            page += f'  </a>'
+        page += f'    <a href="{strJOSMurl}" target="josm" class="josm-link " title="Редактировать в JOSM">\n'
+        page += f'       <img src="/img/josm_editor_logo.png" alt="JOSM" class="editor-icon"></img>'
+        page += f'    </a>\n'
         
         page += f'  </div>\n'
-        
-        
-        
-       
-        
-        
-        
 
 
         page += f'</div>'        
-        
-        
-       
 
         
         page+='</div>\n'
+       
+
         
         
     page += '</div>'     
+    
+    page += f'<div class="building-footer">'
+    page += f'  Выведено {i} объектов из {n}'
+    page += f'</div>'
         
         
     page = general_page_template.replace('<%page_contents% />', page)
-    page = page.replace('<%page_title% />', strQuadrantName  + ' | Валидатор 3D: церкви и другие здания')
+    page = page.replace('<%page_title% />', page_title  + ' | Валидатор 3D: церкви и другие здания')
         
     return page  
 

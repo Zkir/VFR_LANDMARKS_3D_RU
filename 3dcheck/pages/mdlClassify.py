@@ -145,6 +145,7 @@ building_types_rus_names = {
     'COMMERCIAL':            'Офисное здание',
     'BANK':                  'Офисное здание', 
     'GOVERNMENT':            'Офисное здание',
+    'ADMINISTRATIVE':        'Офисное здание',
     'SERVICE':               'Техническая будка',
     'BATH':                  'Баня/купальня', 
     
@@ -189,6 +190,7 @@ building_types_rus_names = {
     'JAIL':                  'Тюрьма',
     'PRISON':                'Тюрьма',
     'FILM_STUDIO':           'Съемочный павильон',
+    'EXHIBITION_HALL':       'Выставочный павильон',
     
     # walls castles and defencive
     'DEFENSIVE TOWER': 'Крепостная башня',
@@ -294,7 +296,10 @@ def buildingTypeRus(s):
     s = s.upper()
     if s.startswith('RUINED '):
         s=s[6:].strip()
-    return building_types_rus_names.get(s,s)
+    r = building_types_rus_names.get(s,"")
+    if not r:
+        r = building_types_rus_names.get(s.replace('_', ' '),s)
+    return r
 
     
 #https://wiki.openstreetmap.org/wiki/RU:Key:building:architecture    

@@ -69,8 +69,6 @@ class T3DObject:
                 self.key_tags = self.key_tags + ' building=' + self.tagBuilding
             if tag_key == 'building:architecture':
                 self.tagArchitecture = tag_value
-            if tag_key == 'start_date':
-                self.tagStartDate = tag_value
             if tag_key == 'man_made':
                 self.tagManMade = tag_value
                 self.key_tags = self.key_tags + ' man_made=' + self.tagManMade
@@ -109,6 +107,14 @@ class T3DObject:
                     self.colour = getColourName(tag_value)
             if tag_key == 'ruins':
                 self.tagRuins = tag_value        
+        
+        # process start_date separately
+        tag_value = self.osmtags.get('building:start_date', '')
+        if not tag_value:
+            tag_value = self.osmtags.get('start_date', '')
+        
+        self.tagStartDate = tag_value
+                
 
     
     
