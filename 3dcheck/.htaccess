@@ -1,15 +1,18 @@
 RewriteEngine on
-RewriteRule ^test$ test.py
-RewriteRule ^stats.html$ stats.py
-RewriteRule ^stats2.html$ stats2.py
-RewriteRule ^([A-Z0-9\-\+_]+).html$  region.py?param=$1
-RewriteRule ^([A-Z0-9\-\+_]+).errors.html$  region_errors.py?param=$1
-RewriteRule ^([a-z0-9\-\+_]+).html$  region.py?param=$1
-RewriteRule ^types/([a-z0-9\-\+_]+).html$  region_images.py?param=$1
-RewriteRule ^rus-top.html$ region.py?param=RUS_TOP
-RewriteRule ^rus-top-windows.html$ region.py?param=RUS_TOP_WINDOWS
-RewriteRule ^rus-latest.html$ region.py?param=RUS_LATEST
-RewriteRule ^photo_wo_type.html$ region.py?param=photo_wo_type
-RewriteRule ^([A-Za-z0-9\-\+_]+)/([RWN0-9]+).html$  building.py?quadrant=$1&object=$2
-RewriteRule ^([A-Za-z0-9\-\+_]+)/([RWN0-9]+).errors.html$  building_errors.py?quadrant=$1&object=$2
+
+
+# Исключения для статических файлов и реальных директорий
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Перенаправление всех запросов на index.py
+RewriteRule ^(.*)$ index.py?url=/$1 [L,QSA]
+
+
+#RewriteRule ^test$ test.py
+
+#RewriteRule ^([A-Z0-9\-\+_]+).errors.html$  region_errors.py?param=$1
+#RewriteRule ^types/([a-z0-9\-\+_]+).html$  region_images.py?param=$1
+#RewriteRule ^([A-Za-z0-9\-\+_]+)/([RWN0-9]+).html$  building.py?quadrant=$1&object=$2
+#RewriteRule ^([A-Za-z0-9\-\+_]+)/([RWN0-9]+).errors.html$  building_errors.py?quadrant=$1&object=$2
 

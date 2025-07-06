@@ -68,6 +68,7 @@ wikidata_buildings={
                     'Q1698619':  'theatre',     # theatre intended primarily to show plays
                     'Q41253':    'cinema',      # movie theater 
                     'Q56195017': 'circus',
+                    'Q16889960': 'circus',      # circus building
                     'Q38723':    'university',
                     'Q3918':     'university',
                     'Q180958':   'university',  # faculty 
@@ -179,6 +180,8 @@ wikidata_buildings={
                     'Q63099748': 'hotel',   # hotel as building
                     'Q256020':   'hotel',   # inn
                     'Q5526694':  'hotel',   # gasthaus 
+                    
+                    'Q24699794': 'museum',  # museum building - relevant!
                     
 
                     'Q375336':   'film_studio',
@@ -481,6 +484,7 @@ wikidata_achitecture_styles = {
                     'Q466887':   'belle_epoque',             # FR: Belle Époque
                     
                     'Q384177':   'egyptian_revival',         # Egyptian Revival architecture
+                    'Q97382697': 'caprom',                   # post-soviet postmodernism
                     
                     #'Q2600188':  '',  #Russian architecture = architectural styles within Russian sphere of influence ! Not a style! 
                     #'Q37068':    '',  #Romanticism

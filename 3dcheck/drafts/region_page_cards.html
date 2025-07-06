@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вокзалы России | Валидатор 3D</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Основные стили из main.css и main_stats.css */
+        :root {
+            --primary: #3a6ea5;
+            --primary-dark: #2a4e75;
+            --secondary: #2c3e50;
+            --accent: #e67e22;
+            --light: #f5f7fa;
+            --dark: #34495e;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --gray: #7f8c8d;
+            --light-gray: #ecf0f1;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f0f4f8;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: var(--box-shadow);
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-icon i {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .logo-text h1 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+        }
+
+        .logo-text span {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            font-weight: 400;
+            color: #e0e7ff;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        nav {
+            display: flex;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav a:hover, nav a.active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .github-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .github-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        main {
+            padding: 40px 0 60px;
+        }
+
+        .page-header {
+            margin-top: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-header h1 {
+            font-size: 2.3rem;
+            color: var(--secondary);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .page-header h1:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            font-size: 1.15rem;
+            margin-top: 10px;
+            line-height: 1.7;
+        }
+
+        /* Стили для карточек вокзалов */
+        .stations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .station-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .station-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .station-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .station-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .station-card:hover .station-image img {
+            transform: scale(1.05);
+        }
+
+        .station-number {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(58, 110, 165, 0.9);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .station-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .station-title {
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .station-title i {
+            color: var(--primary);
+        }
+
+        .station-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .meta-item i {
+            color: var(--primary);
+        }
+
+        .station-description {
+            margin-bottom: 20px;
+            color: var(--dark);
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .station-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .wiki-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .wiki-links a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light-gray);
+            color: var(--primary);
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .wiki-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .josm-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .josm-link:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(58, 110, 165, 0.3);
+        }
+
+        .station-footer {
+            background: var(--light-gray);
+            padding: 15px 25px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-align: center;
+        }
+
+        /* Фильтры */
+        .filters-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .filters-title {
+            font-size: 1.4rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filters-title i {
+            color: var(--primary);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-label i {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        select, input {
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            background: white;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(58, 110, 165, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 60px 0 30px;
+            position: relative;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 14px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.05rem;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .footer-links i {
+            width: 24px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            .stations-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .station-links {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .josm-link {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-train"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Валидатор 3D</h1>
+                        <span>Исторические вокзалы России</span>
+                    </div>
+                </a>
+                
+                <div class="header-actions">
+                    <nav>
+                        <ul>
+                            <li><a href="#" class="active"><i class="fas fa-home"></i> Главная</a></li>
+                            <li><a href="#"><i class="fas fa-chart-bar"></i> Статистика</a></li>
+                            <li><a href="#"><i class="fas fa-map-marked-alt"></i> Регионы</a></li>
+                            <li><a href="#"><i class="fas fa-info-circle"></i> О проекте</a></li>
+                        </ul>
+                    </nav>
+                    
+                    <a href="https://github.com/Zkir/VFR_LANDMARKS_3D_RU" class="github-btn" target="_blank">
+                        <i class="fab fa-github"></i>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header> 
+    
+    <main class="container">
+        <div class="page-header">
+            <h1>Исторические вокзалы России</h1>
+            <p>Коллекция архитектурных памятников железнодорожной инфраструктуры с 3D моделями в OpenStreetMap. На этой странице представлены 100 вокзалов из 148 объектов по всей России.</p>
+        </div>
+        
+        <!-- Секция фильтров -->
+        <div class="filters-section">
+          <form id="filters-form" method="GET">
+            <div class="filters-header">
+                <h2 class="filters-title"><i class="fas fa-filter"></i> Фильтры</h2>
+            </div>
+            <div class="filters-grid">
+                <!--
+                <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-search"></i> Поиск по названию</label>
+                    <input type="text" placeholder="Введите название здания">
+                </div>
+                -->
+                  <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-calendar"></i> Год постройки</label>
+                    <select name="year" onchange="this.form.submit()">
+                        <option value="" selected >Все годы</option>
+                        <option value="16century">XVI век и ранее</option>
+                        <option value="17century">XVII век</option>
+                        <option value="18century">XVIII век</option>
+                        <option value="19century">XIX век</option>
+                        <option value="early20">Начало XX века</option>
+                        <option value="soviet">Советский период</option>
+                        <option value="contemporary">Современность</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-archway"></i> Архитектурный стиль</label>
+                    <select name="style" onchange="this.form.submit()">
+                        <option value="" selected >Все стили</option>
+                        <option value="pseudo-russian">Псевдорусский стиль</option>
+                        <option value="neoclassicism">Неоклассицизм</option>
+                        <option value="stalinist">Сталинский ампир</option>
+                        <option value="modern">Современный</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-building"></i> Тип здания</label>
+                    <select name="type" onchange="this.form.submit()">
+                        <option value="" selected >Все типы</option>
+                        
+                        <option value="russian_orthodox_church">Православная церковь</option>
+                        <option value="apartments">Многоквартирный дом</option>
+                        <option value="commercial">Офисное здание</option>
+                        <option value="manor">Особняк</td>
+
+                    </select>
+                </div>
+                
+              
+                <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-cubes"></i> Наличие 3D</label>
+                    <select name="has_3d" onchange="this.form.submit()">
+                        <option value="" selected >Все здания</option>
+                        
+                        <option value="with_3d">C 3D моделью</option>
+                        <option value="without_3d">Без 3D модели</option>
+                        
+
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-sort-amount-down"></i> Сортировка</label>
+                    <select name="sort" onchange="this.form.submit()">
+                        <option value="default" selected>По умолчанию</option>
+                        <option value="name"      >По названию (А-Я)</option>
+                        <option value="year"      >По году постройки, сначала новые</option>
+                        <option value="year-r"    >По году постройки, сначала старые</option>
+                        <option value="size"      >По размеру здания, cначала маленькие</option>
+                        <option value="size-r"    >По размеру здания, cначала большие</option>
+                        <option value="height"    >По высоте здания, сначала низкие</option>
+                        <option value="height-r"  >По высоте здания, сначала высокие</option>
+                    </select>
+                </div>
+            </div>
+          </form>  
+        </div>
+        
+        <!-- Сетка с карточками вокзалов -->
+        <div class="stations-grid">
+            <!-- Пример карточки вокзала -->
+            <div class="station-card">
+                <div class="station-image">
+                    <img src="../data/building_images/Q106942606.png" alt="Старый вокзал (Барнаул)">
+                    <div class="station-number">1</div>
+                </div>
+                <div class="station-content">
+                    <h3 class="station-title"><i class="fas fa-landmark"></i> Старый вокзал (Барнаул)</h3>
+                    
+                    <div class="station-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i> 1914 г.
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-ruler-combined"></i> Размер: 30 м
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-archway"></i> Псевдорусский стиль
+                        </div>
+                    </div>
+                    
+                    <p class="station-description">
+                        Архитектор: Лыгин Константин Константинович. Один из старейших вокзалов на Транссибирской магистрали, образец псевдорусского стиля в архитектуре.
+                    </p>
+                    
+                    <div class="station-links">
+                        <div class="wiki-links">
+                            <a href="https://www.wikidata.org/w/index.php?title=Q126366743" title="Викиданные">
+                                <i class="fas fa-database"></i>
+                            </a>
+                            <a href="http://ru.wikipedia.org/wiki/ru:%D0%A1%D1%82%D0%B0%D1%80%D1%8B%D0%B9%20%D0%B2%D0%BE%D0%BA%D0%B7%D0%B0%D0%BB%20(%D0%91%D0%B0%D1%80%D0%BD%D0%B0%D1%83%D0%BB)" title="Википедия">
+                                <i class="fab fa-wikipedia-w"></i>
+                            </a>
+                        </div>
+                        <a href="http://localhost:8111/load_and_zoom?left=83.7563664&amp;right=83.7569135&amp;top=53.3506749&amp;bottom=53.3501522" class="josm-link">
+                            <i class="fas fa-edit"></i> Редактировать в JOSM
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Еще одна карточка -->
+            <div class="station-card">
+                <div class="station-image">
+                    <img src="../data/building_images/Q1367269.png" alt="Сочи (станция)">
+                    <div class="station-number">15</div>
+                </div>
+                <div class="station-content">
+                    <h3 class="station-title"><i class="fas fa-landmark"></i> Сочи (станция)</h3>
+                    
+                    <div class="station-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i> 1952 г.
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-ruler-combined"></i> Размер: 76×55 м
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-archway"></i> Сталинский неоклассицизм
+                        </div>
+                    </div>
+                    
+                    <p class="station-description">
+                        Архитектор: Алексей Душкин. Вокзал в Сочи - один из красивейших на Черноморском побережье, образец сталинского ампира с элементами классицизма.
+                    </p>
+                    
+                    <div class="station-links">
+                        <div class="wiki-links">
+                            <a href="https://www.wikidata.org/w/index.php?title=Q3180156" title="Викиданные">
+                                <i class="fas fa-database"></i>
+                            </a>
+                            <a href="http://ru.wikipedia.org/wiki/ru:%D0%A1%D0%BE%D1%87%D0%B8%20(%D1%81%D1%82%D0%B0%D0%BD%D1%86%D0%B8%D1%8F)" title="Википедия">
+                                <i class="fab fa-wikipedia-w"></i>
+                            </a>
+                        </div>
+                        <a href="http://localhost:8111/load_and_zoom?left=39.7278408&amp;right=39.7287506&amp;top=43.5921718&amp;bottom=43.5907825" class="josm-link">
+                            <i class="fas fa-edit"></i> Редактировать в JOSM
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Третья карточка -->
+            <div class="station-card">
+                <div class="station-image">
+                    <img src="../data/building_images/Q1432585.png" alt="Казанский вокзал">
+                    <div class="station-number">49</div>
+                </div>
+                <div class="station-content">
+                    <h3 class="station-title"><i class="fas fa-landmark"></i> Казанский вокзал</h3>
+                    
+                    <div class="station-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i> 1940 г.
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-ruler-combined"></i> Размер: 215×75 м
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-archway"></i> Псевдорусский стиль
+                        </div>
+                    </div>
+                    
+                    <p class="station-description">
+                        Архитектор: Алексей Щусев. Один из самых красивых вокзалов Москвы, сочетающий элементы древнерусского зодчества и модерна. Башня вокзала напоминает башню Сююмбике в Казанском кремле.
+                    </p>
+                    
+                    <div class="station-links">
+                        <div class="wiki-links">
+                            <a href="https://www.wikidata.org/w/index.php?title=Q1432585" title="Викиданные">
+                                <i class="fas fa-database"></i>
+                            </a>
+                            <a href="http://ru.wikipedia.org/wiki/ru:%D0%9A%D0%B0%D0%B7%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%D0%B9%20%D0%B2%D0%BE%D0%BA%D0%B7%D0%B0%D0%BB" title="Википедия">
+                                <i class="fab fa-wikipedia-w"></i>
+                            </a>
+                        </div>
+                        <a href="http://localhost:8111/load_and_zoom?left=37.6543082&amp;right=37.6585214&amp;top=55.7747824&amp;bottom=55.7723312" class="josm-link">
+                            <i class="fas fa-edit"></i> Редактировать в JOSM
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Четвертая карточка -->
+            <div class="station-card">
+                <div class="station-image">
+                    <img src="../data/building_images/Q4069138.png" alt="Финляндский вокзал">
+                    <div class="station-number">86</div>
+                </div>
+                <div class="station-content">
+                    <h3 class="station-title"><i class="fas fa-landmark"></i> Финляндский вокзал</h3>
+                    
+                    <div class="station-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i> 1870 г.
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-ruler-combined"></i> Размер: 88×30 м
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-archway"></i> Неоклассицизм
+                        </div>
+                    </div>
+                    
+                    <p class="station-description">
+                        Архитектор: Пётр Купинский. Исторический вокзал Санкт-Петербурга, известный как место, где Ленин произнёс свою знаменитую речь после возвращения из эмиграции в 1917 году.
+                    </p>
+                    
+                    <div class="station-links">
+                        <div class="wiki-links">
+                            <a href="https://www.wikidata.org/w/index.php?title=Q548259" title="Викиданные">
+                                <i class="fas fa-database"></i>
+                            </a>
+                            <a href="http://ru.wikipedia.org/wiki/ru:%D0%A4%D0%B8%D0%BD%D0%BB%D1%8F%D0%BD%D0%B4%D1%81%D0%BA%D0%B8%D0%B9%20%D0%B2%D0%BE%D0%BA%D0%B7%D0%B0%D0%BB" title="Википедия">
+                                <i class="fab fa-wikipedia-w"></i>
+                            </a>
+                        </div>
+                        <a href="http://localhost:8111/load_and_zoom?left=30.3555006&amp;right=30.357545&amp;top=59.9572854&amp;bottom=59.9553728" class="josm-link">
+                            <i class="fas fa-edit"></i> Редактировать в JOSM
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Пятая карточка -->
+            <div class="station-card">
+                <div class="station-image">
+                    <img src="../data/building_images/Q2602986.png" alt="Ленинградский вокзал">
+                    <div class="station-number">56</div>
+                </div>
+                <div class="station-content">
+                    <h3 class="station-title"><i class="fas fa-landmark"></i> Ленинградский вокзал</h3>
+                    
+                    <div class="station-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i> 1847 г.
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-ruler-combined"></i> Размер: 90×25 м
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-archway"></i> Неоклассицизм
+                        </div>
+                    </div>
+                    
+                    <p class="station-description">
+                        Архитекторы: Константин Тон, Рудольф Желязевич. Самый старый вокзал Москвы, построенный для первой в России железной дороги, соединяющей Москву и Санкт-Петербург.
+                    </p>
+                    
+                    <div class="station-links">
+                        <div class="wiki-links">
+                            <a href="https://www.wikidata.org/w/index.php?title=Q1344454" title="Викиданные">
+                                <i class="fas fa-database"></i>
+                            </a>
+                            <a href="http://ru.wikipedia.org/wiki/ru:%D0%9B%D0%B5%D0%BD%D0%B8%D0%BD%D0%B3%D1%80%D0%B0%D0%B4%D1%81%D0%BA%D0%B8%D0%B9%20%D0%B2%D0%BE%D0%BA%D0%B7%D0%B0%D0%BB" title="Википедия">
+                                <i class="fab fa-wikipedia-w"></i>
+                            </a>
+                        </div>
+                        <a href="http://localhost:8111/load_and_zoom?left=37.6541984&amp;right=37.6558388&amp;top=55.7776527&amp;bottom=55.775861" class="josm-link">
+                            <i class="fas fa-edit"></i> Редактировать в JOSM
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Шестая карточка -->
+            <div class="station-card">
+                <div class="station-image">
+                    <img src="../data/building_images/Q109516195.png" alt="Киевский вокзал">
+                    <div class="station-number">57</div>
+                </div>
+                <div class="station-content">
+                    <h3 class="station-title"><i class="fas fa-landmark"></i> Киевский вокзал</h3>
+                    
+                    <div class="station-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i> 1916 г.
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-ruler-combined"></i> Размер: 119×20 м
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-archway"></i> Неоклассицизм
+                        </div>
+                    </div>
+                    
+                    <p class="station-description">
+                        Архитектор: Владимир Шухов. Знаменит своей уникальной дебаркадерной конструкцией и часовой башней высотой 51 метр. Образец сочетания неоклассицизма и инженерных инноваций начала XX века.
+                    </p>
+                    
+                    <div class="station-links">
+                        <div class="wiki-links">
+                            <a href="https://www.wikidata.org/w/index.php?title=Q666886" title="Викиданные">
+                                <i class="fas fa-database"></i>
+                            </a>
+                            <a href="http://ru.wikipedia.org/wiki/ru:%D0%9A%D0%B8%D0%B5%D0%B2%D1%81%D0%BA%D0%B8%D0%B9%20%D0%B2%D0%BE%D0%BA%D0%B7%D0%B0%D0%BB" title="Википедия">
+                                <i class="fab fa-wikipedia-w"></i>
+                            </a>
+                        </div>
+                        <a href="http://localhost:8111/load_and_zoom?left=37.5629332&amp;right=37.5680127&amp;top=55.7437417&amp;bottom=55.7424926" class="josm-link">
+                            <i class="fas fa-edit"></i> Редактировать в JOSM
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="station-footer">
+            Выведено 100 объектов из 148
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Полезные ссылки</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="https://community.openstreetmap.org/t/3dcheck-zkir-ru/117934/19">
+                                <i class="fas fa-comments"></i> Задать вопросы
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wiki.openstreetmap.org/wiki/Simple_3D_buildings">
+                                <i class="fas fa-book"></i> Спецификация Simple Buildings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wiki.openstreetmap.org/wiki/User:Zkir">
+                                <i class="fas fa-tags"></i> Теги для церквей
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Ресурсы</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="https://wiki.openstreetmap.org/wiki/RU:Key:building#%D0%97%D0%B4%D0%B0%D0%BD%D0%B8%D1%8F">
+                                <i class="fas fa-building"></i> Классификация зданий
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wiki.openstreetmap.org/wiki/RU:Key:building:architecture">
+                                <i class="fas fa-archway"></i> Архитектурные стили
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://demo.f4map.com/#lat=56.3099201&amp;lon=38.1301151&amp;zoom=18&amp;camera.theta=58.228&amp;camera.phi=-41.93">
+                                <i class="fas fa-globe"></i> 3D карта (F4map)
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>О проекте</h3>
+                    <p style="color: rgba(255,255,255,0.7); margin-bottom: 20px; line-height: 1.7;">
+                        Валидатор 3D моделей помогает отслеживать наличие 3D моделей для церквей и исторических зданий по всей России. Проект создан для поддержки сообщества OpenStreetMap.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>Валидатор 3D моделей. © Zkir 2025,  Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

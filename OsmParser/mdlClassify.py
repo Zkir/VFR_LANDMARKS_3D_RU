@@ -1,1 +1,1 @@
-../3dcheck/mdlClassify.py
+../3dcheck/pages/mdlClassify.py
