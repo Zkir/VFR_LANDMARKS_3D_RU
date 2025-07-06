@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Храм священномученика митрополита Петра Крутицкого ★★ - Валидатор 3D</title>
+    
+	<script src='/x3dom/x3dom.js'></script>
+	<link rel='stylesheet' href='/x3dom/x3dom.css' />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sorttable/1.0.2/sorttable.min.js"></script>
+    <style>
+        :root {
+            --primary: #3a6ea5;
+            --primary-dark: #2a4e75;
+            --secondary: #2c3e50;
+            --accent: #e67e22;
+            --light: #f5f7fa;
+            --dark: #34495e;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --gray: #7f8c8d;
+            --light-gray: #ecf0f1;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #2a4d69, #4b86b4);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: var(--box-shadow);
+            z-index: 100;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            background: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo-icon i {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+        
+        .logo-text h1 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+        }
+        
+        .logo-text span {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            font-weight: 400;
+            color: #e0e7ff;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        nav a:hover, nav a.active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .github-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .github-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        /* Footer Styles */
+        footer {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 60px 0 30px;
+            position: relative;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 14px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.05rem;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .footer-links i {
+            width: 24px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+        }
+        
+        /* Стили для страницы здания */
+        .building-container {
+            max-width: 1400px;
+            margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            min-height: calc(100vh - 250px);
+        }
+        
+        .page-header {
+            background: linear-gradient(to right, #2c3e50, #4a6491);
+            color: white;
+            padding: 25px 40px;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .page-header h1 {
+            font-size: 2.4rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .page-content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            min-height: 600px;
+        }
+        
+        .descr {
+            flex: 1;
+            /*min-width: 300px;*/
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            align-self: flex-start;
+        }
+        
+        .descr table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .descr table tr:nth-child(even) {
+            background-color: #e9ecef;
+        }
+        
+        .descr table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .descr table td:first-child {
+            font-weight: 600;
+            width: 40%;
+        }
+        
+        .error-link {
+            color: var(--danger);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .error-link:hover {
+            text-decoration: underline;
+            color: #c0392b;
+        }
+        
+        .scene-container {
+            flex: 2;
+            /*min-width: 500px;*/
+            margin: 10px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .scene-header {
+            background: #2c3e50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .scene {
+            flex-grow: 1;
+            background: #1a2530;
+            border-radius: 0 0 10px 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            min-height: 500px;
+            position: relative;
+        }
+        
+        .x3d-content {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .controls button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .controls button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .validation-section {
+            flex: 100%;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 15px 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .validation-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .validation-section h2 i {
+            color: var(--danger);
+        }
+        
+        /* Стили для таблицы ошибок */
+        .errors-table-container {
+            overflow-x: auto;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--light-gray);
+            margin-top: 20px;
+        }
+        
+        .errors-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+           /* min-width: 800px; */
+        }
+        
+        .errors-table th {
+            background: var(--primary);
+            color: white;
+            text-align: left;
+            padding: 16px 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+        
+        .errors-table th:hover {
+            background: var(--primary-dark);
+        }
+        
+        .errors-table th:first-child {
+            border-top-left-radius: var(--border-radius);
+        }
+        
+        .errors-table th:last-child {
+            border-top-right-radius: var(--border-radius);
+        }
+        
+        .errors-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--light-gray);
+            font-size: 0.95rem;
+        }
+        
+        .errors-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .errors-table tr:nth-child(even) {
+            background-color: var(--light-gray);
+        }
+        
+        .errors-table tr:hover {
+            background-color: rgba(58, 110, 165, 0.05);
+        }
+        
+        .errors-table a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .errors-table a:hover {
+            text-decoration: underline;
+            color: var(--primary-dark);
+        }
+        
+        .editor-link {
+            background: transparent;
+            color: var(--primary);
+            padding: 5px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            min-width: 40px;
+            height: 30px;
+        }
+        
+        .editor-link:hover {
+            background: rgba(58, 110, 165, 0.1);
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+        
+        .editor-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            display: block;
+        }
+        
+        .error-text {
+            color: var(--danger);
+            font-weight: 500;
+        }
+        
+        .fixed-navigation {
+            /*position: fixed;*/
+			position:center;
+            bottom: 20px;
+            /*left: 50%;*/
+            /*transform: translateX(-50%);*/
+            display: flex; 
+            justify-content: center;
+            gap: 15px;
+            background: rgba(44, 62, 80, 0.95);
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            width: 100%;
+            /*max-width: 1000px;*/
+            backdrop-filter: blur(5px);
+            border: 2px solid #3498db;
+        }
+        
+        .fixed-navigation a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .fixed-navigation a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #5dade2;
+            transform: translateY(-2px);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 200px;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #3498db;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            justify-content: center;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+        
+        @media (max-width: 900px) {
+            .page-content {
+                flex-direction: column;
+            }
+            
+            .scene {
+                min-height: 400px;
+            }
+            
+            .fixed-navigation {
+                flex-wrap: wrap;
+                border-radius: 15px;
+                padding: 10px;
+                gap: 8px;
+            }
+            
+            .fixed-navigation a {
+                font-size: 0.9rem;
+                padding: 6px 12px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .scene-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .controls {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .errors-table th, .errors-table td {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .stat-item {
+                min-width: 150px;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+            }
+            
+            .editor-icon {
+                width: 20px;
+                height: 20px;
+            }
+        }
+        
+        /* Responsive для хедера */
+        @media (max-width: 992px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .logo-text h1 {
+                font-size: 1.5rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+            }
+            
+            .github-btn span {
+                display: none;
+            }
+            
+            .github-btn {
+                padding: 8px 15px;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Хедер с главной страницы -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-church"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Валидатор 3D</h1>
+                        <span>Церкви и исторические здания</span>
+                    </div>
+                </a>
+                
+                <div class="header-actions">
+                    <nav>
+                        <ul>
+                            <li><a href="#" class="active"><i class="fas fa-home"></i> Главная</a></li>
+                            <li><a href="#"><i class="fas fa-chart-bar"></i> Статистика</a></li>
+                            <li><a href="#"><i class="fas fa-map-marked-alt"></i> Регионы</a></li>
+                            <li><a href="#"><i class="fas fa-info-circle"></i> О проекте</a></li>
+                        </ul>
+                    </nav>
+                    
+                    <a href="https://github.com/3d-validator" class="github-btn" target="_blank">
+                        <i class="fab fa-github"></i>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Контент страницы здания -->
+    <div class="building-container">
+        <div class="page-header">
+			<a name="model"></a>
+            <h1>Храм священномученика митрополита Петра Крутицкого ★★</h1>
+        </div>
+        
+        <div class="page-content">
+            <div class="descr">
+                <table>
+                    <tr><td>Тип здания:</td><td>Православная часовня</td></tr>
+                    <tr><td>Год постройки:</td><td>2016</td></tr>
+                    <tr><td>Стиль:</td><td>Современный</td></tr>
+                    <tr><td>Размер, м:</td><td>9</td></tr>
+                    <tr><td>Высота, м:</td><td>14</td></tr>
+                    <tr><td>Материал:</td><td>Кирпич, дерево</td></tr>
+                    <tr><td>Адрес:</td><td>ул. Свято-Петровская, 15</td></tr>
+                    <tr><td>Город:</td><td>Челябинск</td></tr>
+                    <tr><td>Район:</td><td>Челябинский городской округ</td></tr>
+                    <tr><td>Область:</td><td>Челябинская область</td></tr>
+                    <tr><td>Координаты:</td><td>55.2898528, 61.5113362</td></tr>
+                    <tr><td>Osm Id:</td><td><a href="#">W564401918</a></td></tr>
+                    <tr><td>Число частей:</td><td>665 ★★</td></tr>
+                    <tr><td>Дата редактирования:</td><td>2024-09-17</td></tr>
+                    <tr><td>Ошибки валидации:</td><td>
+                        <a href="#validation-errors" class="error-link">
+                            <i class="fas fa-exclamation-triangle"></i> 6 ошибок
+                        </a>
+                    </td></tr>
+                </table>
+            </div>
+            
+            <div class="scene-container">
+                <div class="scene-header">
+                    <h3>3D-модель здания</h3>
+                    <div class="controls">
+                        <button onclick="fitCamera()">Обзор модели</button>
+                        <button id="trigger-overlay" type="button">Osm2World</button>
+                        <button onclick="toggleFullscreen()">Полный экран</button>
+                    </div>
+                </div>
+                <div class="scene">
+                    <div class="x3d-content">
+                        <x3d  id="x3dElem" x="0px" y="0px" width="100%" height="100%">
+                            <scene>
+								<inline onload='fitCamera()' url='/models/R5428216.x3d'></inline>
+							</scene>
+                        </x3d>
+                    </div>
+                </div>
+            </div>
+			
+			<!-- Фиксированная навигационная панель -->
+			<div class="fixed-navigation">
+				<a href="#model">&lt;&lt; Предыдущее здание</a>
+				<a href="#">Главная страница</a>
+				<a href="#">Топ зданий России</a>
+				<a href="#model">Следующее здание &gt;&gt;</a>
+			</div>
+            
+            <!-- Секция с ошибками валидации -->
+            <div class="validation-section" id="validation-errors">
+                <h2><i class="fas fa-exclamation-circle"></i> Ошибки валидации модели</h2>
+                
+                <div class="errors-table-container">
+                    <table class="errors-table sortable">
+                        <thead>
+                            <tr>
+                                <th>ID Объекта</th>
+                                <th>Ошибка</th>
+                                <th>JOSM</th>
+                                <th>ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="https://www.openstreetmap.org/relation/6134990">R:6134990</a></td>
+                                <td class="error-text">Ни высота, ни этажность не заданы</td>
+                                <td>
+                                    <a href="http://localhost:8111/load_object?new_layer=true&objects=r6134990&relation_members=true" target="josm" class="editor-link">
+                                        <img src="https://josm.openstreetmap.de/logo.png" alt="JOSM" class="editor-icon">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="https://www.openstreetmap.org/edit?editor=id&relation=6134990" target="josm" class="editor-link">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/OpenStreetMap-Editor_iD_Logo.svg" alt="iD" class="editor-icon">
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.openstreetmap.org/relation/6134990">R:6134990</a></td>
+                                <td class="error-text">Тег building:height устарел, используйте просто height</td>
+                                <td>
+                                    <a href="http://localhost:8111/load_object?new_layer=true&objects=r6134990&relation_members=true" target="josm" class="editor-link">
+                                        <img src="https://josm.openstreetmap.de/logo.png" alt="JOSM" class="editor-icon">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="https://www.openstreetmap.org/edit?editor=id&relation=6134990" target="josm" class="editor-link">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/OpenStreetMap-Editor_iD_Logo.svg" alt="iD" class="editor-icon">
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.openstreetmap.org/relation/6134991">R:6134991</a></td>
+                                <td class="error-text">Ни высота, ни этажность не заданы</td>
+                                <td>
+                                    <a href="http://localhost:8111/load_object?new_layer=true&objects=r6134991&relation_members=true" target="josm" class="editor-link">
+                                        <img src="https://josm.openstreetmap.de/logo.png" alt="JOSM" class="editor-icon">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="https://www.openstreetmap.org/edit?editor=id&relation=6134991" target="josm" class="editor-link">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/OpenStreetMap-Editor_iD_Logo.svg" alt="iD" class="editor-icon">
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.openstreetmap.org/relation/6134991">R:6134991</a></td>
+                                <td class="error-text">Тег building:height устарел, используйте просто height</td>
+                                <td>
+                                    <a href="http://localhost:8111/load_object?new_layer=true&objects=r6134991&relation_members=true" target="josm" class="editor-link">
+                                        <img src="https://josm.openstreetmap.de/logo.png" alt="JOSM" class="editor-icon">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="https://www.openstreetmap.org/edit?editor=id&relation=6134991" target="josm" class="editor-link">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/OpenStreetMap-Editor_iD_Logo.svg" alt="iD" class="editor-icon">
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.openstreetmap.org/relation/6134992">R:6134992</a></td>
+                                <td class="error-text">Ни высота, ни этажность не заданы</td>
+                                <td>
+                                    <a href="http://localhost:8111/load_object?new_layer=true&objects=r6134992&relation_members=true" target="josm" class="editor-link">
+                                        <img src="https://josm.openstreetmap.de/logo.png" alt="JOSM" class="editor-icon">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="https://www.openstreetmap.org/edit?editor=id&relation=6134992" target="josm" class="editor-link">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/OpenStreetMap-Editor_iD_Logo.svg" alt="iD" class="editor-icon">
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.openstreetmap.org/relation/6134992">R:6134992</a></td>
+                                <td class="error-text">Тег building:height устарел, используйте просто height</td>
+                                <td>
+                                    <a href="http://localhost:8111/load_object?new_layer=true&objects=r6134992&relation_members=true" target="josm" class="editor-link">
+                                        <img src="https://josm.openstreetmap.de/logo.png" alt="JOSM" class="editor-icon">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="https://www.openstreetmap.org/edit?editor=id&relation=6134992" target="josm" class="editor-link">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/OpenStreetMap-Editor_iD_Logo.svg" alt="iD" class="editor-icon">
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value">665</div>
+                        <div class="stat-label">Всего частей</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">6</div>
+                        <div class="stat-label">Критические ошибки</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Предупреждения</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">★★</div>
+                        <div class="stat-label">Качество модели</div>
+                    </div>
+                </div>
+            </div>
+			
+        </div>
+		    
+		
+    </div>
+
+    
+    <!-- Футер с главной страницы -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Полезные ссылки</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="https://community.openstreetmap.org/t/3dcheck-zkir-ru/117934/19">
+                                <i class="fas fa-comments"></i> Задать вопросы
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wiki.openstreetmap.org/wiki/Simple_3D_buildings">
+                                <i class="fas fa-book"></i> Спецификация Simple Buildings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wiki.openstreetmap.org/wiki/User:Zkir">
+                                <i class="fas fa-tags"></i> Теги для церквей
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Ресурсы</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="https://wiki.openstreetmap.org/wiki/RU:Key:building#%D0%97%D0%B4%D0%B0%D0%BD%D0%B8%D1%8F">
+                                <i class="fas fa-building"></i> Классификация зданий
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wiki.openstreetmap.org/wiki/RU:Key:building:architecture">
+                                <i class="fas fa-archway"></i> Архитектурные стили
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://demo.f4map.com/#lat=56.3099201&amp;lon=38.1301151&amp;zoom=18&amp;camera.theta=58.228&amp;camera.phi=-41.93">
+                                <i class="fas fa-globe"></i> 3D карта (F4map)
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>О проекте</h3>
+                    <p style="color: rgba(255,255,255,0.7); margin-bottom: 20px; line-height: 1.7;">
+                        Валидатор 3D моделей помогает отслеживать наличие 3D моделей для церквей и исторических зданий по всей России. Проект создан для поддержки сообщества OpenStreetMap.
+                    </p>
+                    <div class="region-footer">
+                        <a href="#" class="btn"><i class="fas fa-envelope"></i> Связаться с нами</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>Дата формирования страницы: 2025-01-29 05:39:28</p>
+                <p>&copy; 2025 Валидатор 3D моделей. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function fitCamera() {
+            var x3dElem = document.getElementById('x3dElem');
+			x3dElem.runtime.showAll('posX');
+        }
+        
+        document.getElementById('trigger-overlay').addEventListener('click', function() {
+            alert("Режим Osm2World активирован. В реальной системе здесь отображался бы дополнительный вид модели.");
+        });
+        
+        function toggleFullscreen() {
+            const scene = document.querySelector('.scene');
+            if (!document.fullscreenElement) {
+                if (scene.requestFullscreen) {
+                    scene.requestFullscreen();
+                } else if (scene.mozRequestFullScreen) { /* Firefox */
+                    scene.mozRequestFullScreen();
+                } else if (scene.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                    scene.webkitRequestFullscreen();
+                } else if (scene.msRequestFullscreen) { /* IE/Edge */
+                    scene.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+        
+        // Обновление размеров 3D-сцены при изменении окна
+        window.addEventListener('resize', function() {
+            const x3dElements = document.querySelectorAll('x3d');
+            x3dElements.forEach(el => {
+                el.runtime.invalidateViewport();
+            });
+        });
+        
+        // Инициализация сцены
+        window.addEventListener('load', function() {
+            const x3dElements = document.querySelectorAll('x3d');
+            x3dElements.forEach(el => {
+                el.runtime.showAll();
+            });
+        });
+    </script>
+</body>
+</html>

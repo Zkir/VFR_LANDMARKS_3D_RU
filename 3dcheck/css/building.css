@@ -1,70 +1,377 @@
-   html, body {
-       height: 100%;
-       padding:0;
-       margin:0;
-   }
-   .page{
-      /* border: solid 3px green; */
+/* Стили для страницы здания */
+.building-container {
+	max-width: 1400px;
+	margin: 20px auto;
+	background-color: rgba(255, 255, 255, 0.95);
+	border-radius: 15px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	overflow: hidden;
 
-       
-       height: 100%;
-       width: 100%;
-       position: absolute;
-       left:0;
-       top:0; 
-       
-       display: flex;
-       flex-direction: column;
+}
 
-   }
-   div.page-header {
-       /* border: solid 1px black; 
-       height:65px;  */
+.building-page-header {
+	background: linear-gradient(to right, #2c3e50, #4a6491);
+	color: white;
+	padding: 5px 5px;
+	border-bottom: 3px solid #3498db;
+}
 
-       padding-left:10px;
-       margin:0px;
-   }
+.building-page-header h1 {
+	font-size: 2.4rem;
+	text-align: center;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+	letter-spacing: 1px;
+}
 
-   div.page-content {
-       /*border:dotted 2px blue; */
-       flex-grow: 1;
-   }
-   div.descr {
-       /*border: solid 1px black;*/
-       float: right;
-       width: 350px;
-   }
-   div.scene {
-     /*  background: #e3e8cc;
-         border:dotted 2px blue;  */
-       position:absolute; 
-       top:85px;
-       bottom:90px;
-       left:0px;
-       right:350px; 
+.page-content {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 20px;
+	min-height: 600px;
+}
 
-   }
-   div.x3d-content {
-       /*border:dotted 2px red;*/
-       position:relative; 
-       top:0px;
-       left:0px;
-       width:100%;
-       height:100% 
-   } 
+.descr {
+	flex: 1;
+	/*min-width: 300px;*/
+	background: #f8f9fa;
+	border-radius: 10px;
+	padding: 20px;
+	margin: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	align-self: flex-start;
+	min-height: calc(100vh - 200px);
+}
 
-   div.page-footer {
-     /*  border: solid 1px black;  */
-       padding-left:10px;
+.descr table {
+	width: 100%;
+	border-collapse: collapse;
+	min-width: unset;
+}
 
-   }
-   h1 {
-       white-space: nowrap;
-       overflow: hidden;
-       text-overflow: ellipsis;
-   }
-   button#trigger-overlay{
-       position: absolute;
-       bottom:0px;
-       right: 0px;
-   }
+.descr table tr:nth-child(even) {
+	background-color: #e9ecef;
+}
+
+.descr table td {
+	font-size: 14px;
+	padding: 4px 10px;
+	border-bottom: 1px solid #dee2e6;
+}
+
+.descr table td:first-child {
+	font-weight: 600;
+	width: 40%;
+}
+
+.error-link {
+	color: var(--danger);
+	font-weight: 600;
+	text-decoration: none;
+	transition: var(--transition);
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.error-link:hover {
+	text-decoration: underline;
+	color: #c0392b;
+}
+
+.scene-container {
+	flex: 2;
+	/*min-width: 500px;*/
+	margin: 10px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+    min-height: calc(100vh - 200px);
+}
+
+.scene-header {
+	background: #2c3e50;
+	color: white;
+	padding: 12px 20px;
+	border-radius: 10px 10px 0 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.scene {
+	flex-grow: 1;
+	background: #1a2530;
+	border-radius: 0;
+	overflow: hidden;
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+	min-height: 500px;
+	position: relative;
+}
+
+.x3d-content {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.scene img{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	height: calc(100hv-300px);
+}
+
+.photo-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1a2530;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-content img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+
+/* Добавим стили для футера сцены */
+.scene-footer {
+    background: #2c3e50; /* Тот же цвет, что и у заголовка */
+    color: white;
+    padding: 12px 20px;
+    border-radius: 0 0 10px 10px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Стили для кнопок в футере */
+.scene-footer button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.scene-footer button:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.scene-footer button.active {
+    background: #2c3e50;
+    color: white;
+    cursor: default;
+    transform: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.scene-footer button.active:hover {
+    background: #2c3e50;
+    transform: none;
+}
+
+
+.controls {
+	display: flex;
+	gap: 10px;
+}
+
+.controls button {
+	background: #3498db;
+	color: white;
+	border: none;
+	padding: 8px 15px;
+	border-radius: 5px;
+	cursor: pointer;
+	font-weight: 600;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	transition: all 0.3s ease;
+}
+
+.controls button:hover {
+	background: #2980b9;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.validation-section {
+	flex: 100%;
+	background: #f8f9fa;
+	border-radius: 10px;
+	padding: 25px;
+	margin: 15px 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.validation-section h2 {
+	color: #2c3e50;
+	margin-bottom: 20px;
+	padding-bottom: 10px;
+	border-bottom: 2px solid #3498db;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.validation-section h2 i {
+	color: var(--danger);
+}
+
+/* Стили для таблицы ошибок */
+.errors-table-container {
+	overflow-x: hidden;
+	overflow-y:hidden
+	border-radius: var(--border-radius);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	border: 1px solid var(--light-gray);
+	margin-top: 20px;
+}
+
+.errors-table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+   /* min-width: 800px; */
+}
+
+.errors-table th {
+	background: var(--primary);
+	color: white;
+	text-align: left;
+	padding: 16px 20px;
+	font-weight: 600;
+	font-size: 0.95rem;
+	cursor: pointer;
+}
+
+.errors-table th:hover {
+	background: var(--primary-dark);
+}
+
+.errors-table th:first-child {
+	border-top-left-radius: var(--border-radius);
+}
+
+.errors-table th:last-child {
+	border-top-right-radius: var(--border-radius);
+}
+
+.errors-table td {
+	padding: 14px 20px;
+	border-bottom: 1px solid var(--light-gray);
+	font-size: 0.95rem;
+}
+
+.errors-table tr:last-child td {
+	border-bottom: none;
+}
+
+.errors-table tr:nth-child(even) {
+	background-color: var(--light-gray);
+}
+
+.errors-table tr:hover {
+	background-color: rgba(58, 110, 165, 0.05);
+}
+
+.errors-table a {
+	color: var(--primary);
+	text-decoration: none;
+	transition: var(--transition);
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.errors-table a:hover {
+	text-decoration: underline;
+	color: var(--primary-dark);
+}
+
+
+.error-text {
+	color: var(--danger);
+	font-weight: 500;
+}
+
+.fixed-navigation {
+	/*position: fixed;*/
+	position:center;
+	bottom: 20px;
+	/*left: 50%;*/
+	/*transform: translateX(-50%);*/
+	display: flex; 
+	justify-content: center;
+	gap: 15px;
+	background: rgba(44, 62, 80, 0.95);
+	padding: 15px 25px;
+	border-radius: 50px;
+	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+	z-index: 1000;
+	width: 100%;
+	/*max-width: 1000px;*/
+	backdrop-filter: blur(5px);
+	border: 2px solid #3498db;
+}
+
+.fixed-navigation a {
+	color: #3498db;
+	text-decoration: none;
+	font-weight: 600;
+	padding: 8px 15px;
+	border-radius: 30px;
+	background: rgba(255, 255, 255, 0.1);
+	transition: all 0.3s ease;
+	white-space: nowrap;
+}
+
+.fixed-navigation a:hover {
+	background: rgba(255, 255, 255, 0.2);
+	color: #5dade2;
+	transform: translateY(-2px);
+}
+
+.stats {
+	display: flex;
+	justify-content: center;
+	gap: 30px;
+	margin-top: 15px;
+	flex-wrap: wrap;
+	flex: 100%;
+}
+
+.stat-item {
+	background: rgba(255, 255, 255, 0.1);
+	padding: 15px;
+	border-radius: 10px;
+	min-width: 200px;
+}
+
+.stat-value {
+	font-size: 2.5rem;
+	font-weight: bold;
+	color: #3498db;
+	margin: 10px 0;
+}
+
+.stat-label {
+	font-size: 1rem;
+	opacity: 0.8;
+}
