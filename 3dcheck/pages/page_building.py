@@ -184,11 +184,10 @@ def page_building1(strQuadrantName, obj_rec, page_time_stamp, validation_errors,
 			
     page += (f"""<!-- Фиксированная навигационная панель -->
 			<div class="fixed-navigation">
-				<a href="{urlPrevious}#model">&lt;&lt; Предыдущее здание</a>
-				<!-- <a href="/">Главная страница</a> -->
-				<a href="{"/regions/"+strQuadrantName}">{get_region_name(strQuadrantName)}</a> 
-                <!-- <a href=".">{get_region_name(strQuadrantName)}</a> -->
-				<a href="{urlNext}#model">Следующее здание &gt;&gt;</a>
+				<a href="{urlPrevious}#model"><i class="fas fa-chevron-left"></i><i class="fas fa-chevron-left"></i> <span class="nav-button-label">Предыдущее здание</span></a>
+				<!-- <a href="/">Главная страница </a> -->
+				<a href="{"/regions/"+strQuadrantName}"><span class="nav-button-label">{get_region_name(strQuadrantName)}</span> <i class="fas fa-level-up-alt"></i></a> 
+				<a href="{urlNext}#model"><span class="nav-button-label">Следующее здание</span> <i class="fas fa-chevron-right"></i><i class="fas fa-chevron-right"></i></a>
 			</div>""")
             
             

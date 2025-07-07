@@ -136,17 +136,20 @@ def page_region(quadrant_code):
                 dblPercentage = arrSummary[i].ObjectsWith3D / arrSummary[i].TotalObjects * 100
             else:
                 dblPercentage = 0
-            page += ( '<tr><td>' + IIf(arrSummary[i].RegionName != '', arrSummary[i].RegionName, '???') + '</td>'+ '\n')
-            page += ( '<td>' + arrSummary[i].DistrictName + '</td>'+ '\n')
-            page += ( '<td>' + str(arrSummary[i].TotalObjects) + '</td><td>' + str(arrSummary[i].ObjectsWith3D) + '</td><td> ' + str(Round(dblPercentage)) + ' </td></tr>'+ '\n')
+            page += ( '<tr><td data-label="Область">' + IIf(arrSummary[i].RegionName != '', arrSummary[i].RegionName, '???') + '</td>'+ '\n')
+            page += ( '<td data-label="Район">' + arrSummary[i].DistrictName + '</td>'+ '\n')
+            page += ( '<td data-label="Всего зданий">' + str(arrSummary[i].TotalObjects) + '</td>')
+            page += ( '<td data-label="Есть 3D">' + str(arrSummary[i].ObjectsWith3D) + '</td>')
+            page += ( '<td data-label="Процент 3D"> ' + str(Round(dblPercentage)) + ' </td></tr>'+ '\n')
         if arrSummary[0].TotalObjects > 0:
             dblPercentage = arrSummary[0].ObjectsWith3D / arrSummary[0].TotalObjects * 100
         else:
             dblPercentage = 0
         page += ( '<tr><td><b>Всего в квадрате<b></td>'+ '\n')
         page += ( '<td></td>'+ '\n')
-        page += ( '<td><b>' + str(arrSummary[0].TotalObjects) + '</b></td><td><b>' + str(arrSummary[0].ObjectsWith3D) + '<b></td>'+ '\n')
-        page += ( '<td><b>' + str(Round(dblPercentage)) + '</b></td></tr>'+ '\n')
+        page += ( '<td data-label="Зданий"><b>' + str(arrSummary[0].TotalObjects) + '</b></td>'+ '\n')
+        page += ( '<td data-label="Есть 3D"><b>' + str(arrSummary[0].ObjectsWith3D) + '<b></td>'+ '\n')
+        page += ( '<td data-label="Процент 3D"><b>' + str(Round(dblPercentage)) + '</b></td></tr>'+ '\n')
         page += ( '</table>'+ '\n')
         page += ( '</div>\n')
     
@@ -224,16 +227,15 @@ def page_region(quadrant_code):
       
             address = composeAddressLine(cells[i])
             
-            
                 
             if (cells[i][23] == "True") or (int(cells[i][24])>0) or wikidata_idx:
                 #Better check here that the model exists!
-                page += ('<td><a href="' + strModelUrl + '">' + strDescription + '</a><br /><small>'+address+'</small></td>'+ '\n')
+                page += ('<td data-label="Название"><a href="' + strModelUrl + '">' + strDescription + '</a><br /><small>'+address+'</small></td>'+ '\n')
             else:
-                page += ('<td>' + strDescription + '<br /><small>'+address+'</small></td>'+ '\n')
+                page += ('<td data-label="Название">' + strDescription + '<br /><small>'+address+'</small></td>'+ '\n')
 
             #year of construction
-            page += ( '<td>' + cells[i][16] + '</td>'+ '\n')
+            page += ( '<td data-label="Год постройки">' + cells[i][16] + '</td>'+ '\n')
             
             ###Z#temples.ru ref
             ###Zif strTemplesUrl != '':
@@ -242,17 +244,17 @@ def page_region(quadrant_code):
             ###Z    page += ( '<td></td>'+ '\n')
             
             #Size
-            page += ( '<td>' + IIf(cells[i][11] != 0, cells[i][11], '???') + '</td>'+ '\n')
+            page += ( '<td data-label="Размер, м">' + IIf(cells[i][11] != 0, cells[i][11], '???') + '</td>'+ '\n')
             #height
-            page += ( '<td>' + IIf(cells[i][12] != "0", cells[i][12], '?') + '</td>'+ '\n')
+            page += ( '<td data-label="Высота, м">' + IIf(cells[i][12] != "0", cells[i][12], '?') + '</td>'+ '\n')
             
             #Color and Materials
             ###page += ( '<td>' + cells[i][13] + '</td><td>' + cells[i][14] + '</td>\n')
             #тип здания
-            page += ('<td>' + buildingTypeRus(cells[i][10].upper()) + '</td>' + '\n') 
+            page += ('<td data-label="Тип здания">' + buildingTypeRus(cells[i][10].upper()) + '</td>' + '\n') 
             
             #Style 
-            page += ('<td>' + achitectureStylesRus(cells[i][15]) + '</td>' + '\n') 
+            page += ('<td data-label="Стиль">' + achitectureStylesRus(cells[i][15]) + '</td>' + '\n') 
             #Address: city-district-region
             #page += ( '<td>' + cells[i][20] + '</td>'+ '\n')
             #strDistrict = cells[i][21]
@@ -260,24 +262,25 @@ def page_region(quadrant_code):
             #strDistrict = strDistrict.replace('городской округ', 'го')
             #page += ('<td>' + strDistrict + '</td>'+ '\n')
             #page += ('<td>' + cells[i][22].replace('область', 'обл.') + '</td>'+ '\n')
+         
             
             osm3d='Да' if cells[i][23]  == 'True' else 'Нет'
-            page += ('<td><a href="' + strF4url + '">' + osm3d + '</a></td>'+ '\n')
-            page += ('<td>' + cells[i][24] + '</td>' )
+            page += ('<td data-label="OSM 3D" ><a href="' + strF4url + '">' + osm3d + '</a></td>'+ '\n')
+            page += ('<td data-label="Число частей">' + cells[i][24] + '</td>' )
             if len(cells[i])>25:
-                page += ('<td>' + cells[i][25][0:10] + '</td>' )
+                page += ('<td data-label="Послед. редактир.">' + cells[i][25][0:10] + '</td>' )
             else:
                 page += ('<td>' + "" + '</td>' )
                 
             if len(cells[i])>26:
                 if cells[i][26] != "0":
-                    page += ('<td align="center"> <a href="'+strErrorsUrl+'">' + cells[i][26] + '</a></td>' )
+                    page += ('<td data-label="Ошибки" align="center"> <a href="'+strErrorsUrl+'">' + cells[i][26] + '</a></td>' )
                 else:
-                    page += ('<td align="center">' + cells[i][26] + '</td>' )
+                    page += ('<td data-label="Ошибки" align="center">' + cells[i][26] + '</td>' )
             else:
-                page += ('<td> align="center"' + "??" + '</td>' )
+                page += ('<td data-label="Ошибки"> align="center"' + "??" + '</td>' )
                 
-            page += ('<td align="center"><a href="' + strJOSMurl + '" target = "josm" >' + '<img src="/img/josm_editor_logo.png" height="20em"></img>' + '</a></td>'+ '\n')
+            page += ('<td data-label="Josm" align="center"><a href="' + strJOSMurl + '" target = "josm" >' + '<img src="/img/josm_editor_logo.png" height="20em"></img>' + '</a></td>'+ '\n')
             page += ('</tr>'+ '\n')
     page += ( '</table>'+ '\n')
     page += (f'Всего {len(cells)} объектов в данном списке')
