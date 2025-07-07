@@ -251,15 +251,20 @@ def page_index():
     
     page += ( '  </div >')
     page += ( '  <table class="sortable">' + '\n')
-    page += ( '    <tr><th>Квадрат</th><th>Описание</th><th>Всего объектов</th><th>С 3D моделью</th><th>Процент</th><th>Дата последнего обновления</th><th>Ошибки</th></tr>' + '\n')
+    page += ( '    <tr><th>Код</th><th>Регион</th><th>Всего объектов</th><th>С 3D моделью</th><th>Процент</th><th>Дата последнего обновления</th><th>Ошибки</th></tr>' + '\n')
     
     for i in range(len(cells)):
         if cells[i][4]>'1900.01.01 00:00:00': 
             intRate=0
             if int(cells[i][2]) !=0:
                 intRate = Round(100.0*int(cells[i][3])/int(cells[i][2])) 
-            page += ( '    <tr><td>'+cells[i][0]+'</td><td><a href="/regions/'+cells[i][0]+'">'+ cells[i][1] +'</a> </td><td>'+cells[i][2]+'</td><td>' + cells[i][3]+ '</td>' + 
-                           '<td>' + str(intRate)+ '</td><td>' + cells[i][4]+ '</td> <td><a href="/regions/'+cells[i][0]+'/errors">' + cells[i][5]+ '</a></td> </tr>' + '\n')
+            page += ( '    <tr><td data-label="Код">'+cells[i][0]+'</td>'+
+                              f'<td data-label="Регион"><a href="/regions/'+cells[i][0]+'">'+ cells[i][1] +'</a> </td>'+
+                              f'<td data-label="Всего объектов">' + cells[i][2] + '</td>'+
+                              f'<td data-label="С 3D моделью">' + cells[i][3] + '</td>' + 
+                              f'<td data-label="Процент">' + str(intRate) + '</td>'+
+                              f'<td data-label="Обновление">' + cells[i][4]+ '</td>'+
+                              f'<td data-label="Ошибки"><a href="/regions/'+cells[i][0]+'/errors">' + cells[i][5]+ '</a></td> </tr>' + '\n')
 
     page += ( '  </table>' + '\n')
     page += ( '</div >')

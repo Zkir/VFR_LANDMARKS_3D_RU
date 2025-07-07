@@ -94,6 +94,11 @@ footer = """ <footer>
                                 <i class="fas fa-comments"></i> Задать вопросы
                             </a>
                         </li>
+                        <li>
+                            <a href="https://github.com/Zkir/VFR_LANDMARKS_3D_RU">
+                                <i class="fab fa-github"></i> Сообщить о багах
+                            </a>
+                        </li>
                     </ul>    
                     
                 </div>
@@ -130,8 +135,7 @@ footer = """ <footer>
 
 # general page
 general_page_template = \
-"""<!DOCTYPE html>
-<html lang="ru">
+"""<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -165,9 +169,7 @@ general_page_template = \
 # building page
 #for some reason it has a bit different structure and styles
 building_page_template = \
-"""
-<!DOCTYPE html>
-<html lang="ru">
+"""<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -327,8 +329,7 @@ building_page_template = \
 
 
 region_cards_page_template = \
-"""<!DOCTYPE html>
-<html lang="ru">
+"""<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

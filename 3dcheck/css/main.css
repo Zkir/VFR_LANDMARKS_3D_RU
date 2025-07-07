@@ -503,7 +503,7 @@ tr:hover {
 footer {
     background: linear-gradient(135deg, var(--secondary) 0%, var(--primary-dark) 100%);
     color: white;
-    padding: 60px 0 30px;
+    padding: 30px 0 20px;
     position: relative;
 }
 
@@ -587,6 +587,9 @@ footer {
         border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
     */
+    table {
+        min-width: unset;
+    }    
     
     thead {
         top: 130px;
@@ -594,9 +597,30 @@ footer {
 }
 
 @media (max-width: 768px) {
-    .page-header h1 {
-        font-size: 2rem;
+    
+    .header-content{
+        padding:10px;
     }
+    .logo-text h1{
+        font-size: 1.5rem;
+    }
+    .logo-text span{
+        font-size: 0.8rem;
+    }
+        
+    .container {
+        margin:0;
+        padding:0 5px;
+    }
+    
+    
+    .page-header h1 {
+        
+    }
+    
+    .page-header p {
+        font-size: 1.5rem;
+    }    
     
     .section-title {
         font-size: 1.4rem;
@@ -619,6 +643,68 @@ footer {
     .region-header{
         min-height: unset;
     }
+    
+    footer {
+        padding: 10px 0 10px;
+    }
+    
+    .footer-content {
+        margin:0;
+        padding:0 10px;
+        gap: 20px;
+    }
+    
+    
+    /*responsive table*/
+    table, thead, th, td, tr { 
+        display: block; 
+    }
+    
+    thead{ 
+        display: none; 
+    }
+    tbody { 
+        display:flex;
+        flex-direction: column;
+        gap:15px;    
+    }
+    tr { 
+        display: flex; 
+        flex-direction: column;
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 5px;
+        box-shadow: var(--box-shadow);
+        border: 1px solid rgba(0, 0, 0, 0.03);
+    }
+
+    td:first-child {
+        padding-left: 5px;
+        text-align: left;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--primary);
+    }    
+    td:first-child:before {
+        display:none;
+    } 
+    td:last-child{
+        border-bottom: none;
+    }
+    
+    
+    td:before{
+        float: left;
+        content: attr(data-label); 
+        font-color: rgba(60, 60, 60, 1);
+        font-weight: 300;
+        font-size:  0.9em;
+    }
+    
+    td{
+        text-align: right;
+    }
+    
 }
 
 @media (max-width: 576px) {
@@ -633,6 +719,23 @@ footer {
     .github-btn {
         padding: 8px 15px;
     }
-  
+    .section{
+        padding:16px 20px;
+    } 
+    
+    .regions-grid {
+        
+        gap: 10px;
+    }
+    .region-header h3{
+        font-size: 1rem;
+    }    
+
+    .region-body{
+        display:none;
+    }    
+    
+    
+    
 
 }

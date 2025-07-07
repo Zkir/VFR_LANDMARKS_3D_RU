@@ -154,7 +154,7 @@ def page_building1(strQuadrantName, obj_rec, page_time_stamp, validation_errors,
                             </x3d>
                   """)
     else:
-        page += (f"""<img src="/img/nomodel.gif"  alt="3d модель отсутствует"><img> """)
+        page += (f"""<img src="/img/nomodel.gif"  alt="3d модель отсутствует">""")
         
     page += (f"""        
                     </div>
@@ -164,10 +164,10 @@ def page_building1(strQuadrantName, obj_rec, page_time_stamp, validation_errors,
         page += (f"""                  
                             <img src="/data/building_images/{strWikidata}.png" 
                                  alt="{strObjectName}" 
-                                 style="width: 100%; height: 100%; object-fit: cover;"> </img>
+                                 style="width: 100%; height: 100%; object-fit: cover;">
                   """) 
     else:
-        page += (f"""<img src="/img/nomodel.gif"  alt="Фотография здания отсутствует"><img> """)
+        page += (f"""<img src="/img/nomodel.gif"  alt="Фотография здания отсутствует">""")
     page += (f"""                            
                     </div>
                 </div>
@@ -242,8 +242,8 @@ def page_building1(strQuadrantName, obj_rec, page_time_stamp, validation_errors,
             page += ('<tr>')
             page += ('<td><a href="'+strOSMurl+'">'+error['part_id']+'<a></td>')
             page += ('<td class="error-text">'+error['error']+'</td>')
-            page += ('<td><a href="'+strJOSMurl+'" target="josm" class="editor-link">'+'<img src="/img/josm_editor_logo.png" alt="JOSM" class="editor-icon"></img>'+'<a></td>')
-            page += ('<td><a href="'+strIDurl+'" target="_blank" class="editor-link">'+'<img src="/img/id_editor_logo.svg" alt="iD" class="editor-icon"></img>'+'<a></td>') #target="josm"
+            page += ('<td><a href="'+strJOSMurl+'" target="josm" class="editor-link">'+'<img src="/img/josm_editor_logo.png" alt="JOSM" class="editor-icon">'+'<a></td>')
+            page += ('<td><a href="'+strIDurl+'" target="_blank" class="editor-link">'+'<img src="/img/id_editor_logo.svg" alt="iD" class="editor-icon">'+'<a></td>') #target="josm"
             
             page += ('</tr>')                        
         
