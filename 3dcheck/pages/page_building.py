@@ -239,10 +239,10 @@ def page_building1(strQuadrantName, obj_rec, page_time_stamp, validation_errors,
            
         
             page += ('<tr>')
-            page += ('<td><a href="'+strOSMurl+'">'+error['part_id']+'<a></td>')
+            page += ('<td><a href="'+strOSMurl+'">'+error['part_id']+'</a></td>')
             page += ('<td class="error-text">'+error['error']+'</td>')
-            page += ('<td><a href="'+strJOSMurl+'" target="josm" class="editor-link">'+'<img src="/img/josm_editor_logo.png" alt="JOSM" class="editor-icon">'+'<a></td>')
-            page += ('<td><a href="'+strIDurl+'" target="_blank" class="editor-link">'+'<img src="/img/id_editor_logo.svg" alt="iD" class="editor-icon">'+'<a></td>') #target="josm"
+            page += ('<td><a href="'+strJOSMurl+'" target="josm" class="editor-link">'+'<img src="/img/josm_editor_logo.png" alt="JOSM" class="editor-icon">'+'</a></td>')
+            page += ('<td><a href="'+strIDurl+'" target="_blank" class="editor-link">'+'<img src="/img/id_editor_logo.svg" alt="iD" class="editor-icon">'+'</a></td>') #target="josm"
             
             page += ('</tr>')                        
         
