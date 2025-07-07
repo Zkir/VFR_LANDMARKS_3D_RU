@@ -5,7 +5,7 @@ IF EXIST %lockfile% goto error_already_running
 touch %lockfile%
 rem ========== main part ===================================
 
-del work_folder\00_planet.osm\russia-latest.osm.pbf
+del /S /Q work_folder\00_planet.osm\*.*
 
 make planet-update > work_folder\log.txt 2>&1
 if errorlevel 1 goto error
