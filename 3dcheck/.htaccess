@@ -1,18 +1,30 @@
 RewriteEngine on
 
+#Старые адреса с html на конце -- перенаправляются на новые.
+RewriteRule ^([A-Z0-9\-\+_]+)\.errors\.html$                /regions/$1/errors [R=301,L,QSA]
+RewriteRule ^types/([a-z0-9\-\+_]+)\.html$                  /stats/types/$1   [R=301,L,QSA]
+RewriteRule ^([A-Za-z0-9\-\+_]+)/([RWN0-9]+)\.html$         /regions/$1/$2 [R=301,L,QSA] 
+RewriteRule ^([A-Za-z0-9\-\+_]+)/([RWN0-9]+)\.errors\.html$ /regions/$1/$2#validation-errors [R=301,L,QSA]
+
+RewriteRule RUS_LATEST.html /rus-latest [R=301,L,QSA]
+RewriteRule RUS_TOP_WINDOWS.html /rus-top-windows [R=301,L,QSA]
+RewriteRule photo_wo_type.html /photo_wo_type [R=301,L,QSA]
+RewriteRule stats2.html /stats/styles [R=301,L,QSA]
 
 # Исключения для статических файлов и реальных директорий
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
+
 # Перенаправление всех запросов на index.py
 RewriteRule ^(.*)$ index.py?url=/$1 [L,QSA]
 
-
-#RewriteRule ^test$ test.py
 
 #RewriteRule ^([A-Z0-9\-\+_]+).errors.html$  region_errors.py?param=$1
 #RewriteRule ^types/([a-z0-9\-\+_]+).html$  region_images.py?param=$1
 #RewriteRule ^([A-Za-z0-9\-\+_]+)/([RWN0-9]+).html$  building.py?quadrant=$1&object=$2
 #RewriteRule ^([A-Za-z0-9\-\+_]+)/([RWN0-9]+).errors.html$  building_errors.py?quadrant=$1&object=$2
+
+
+
 
