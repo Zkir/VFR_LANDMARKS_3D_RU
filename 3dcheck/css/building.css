@@ -381,6 +381,9 @@
 }
 
 @media (max-width: 768px) {
+    .building-page-header h1 {
+        font-size: 1.3rem;
+    }
     .fixed-navigation{
         gap: 35px;
     }

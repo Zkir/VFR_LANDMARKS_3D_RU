@@ -213,7 +213,7 @@ def page_building1(strQuadrantName, obj_rec, page_time_stamp, validation_errors,
                         <h2><i class="fas fa-exclamation-circle"></i> <a name="validation-errors">Ошибки валидации модели</a></h2> """)
     
         page += ("""<div class="errors-table-container">
-                    <table class="errors-table sortable">
+                    <table class="errors-table sortable responsive-table">
                         <thead>
                             <tr>
                                 <th>ID Объекта</th>

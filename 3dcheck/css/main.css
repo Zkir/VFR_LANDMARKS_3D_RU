@@ -422,6 +422,7 @@ tr:hover {
 .search-container {
     position: relative;
     max-width: 300px;
+    display: none; /*search not implemented yet*/
 }
 
 .search-container input {
@@ -656,19 +657,27 @@ footer {
     
     
     /*responsive table*/
-    table, thead, th, td, tr { 
+    .responsive-table{
+        
+    }
+    
+    table.responsive-table{
+        display: block; 
+    }    
+    
+    .responsive-table td, .responsive-table tr { 
         display: block; 
     }
     
-    thead{ 
+    .responsive-table thead{ 
         display: none; 
     }
-    tbody { 
+    .responsive-table tbody { 
         display:flex;
         flex-direction: column;
         gap:15px;    
     }
-    tr { 
+    .responsive-table tr { 
         display: flex; 
         flex-direction: column;
         background: white;
@@ -678,22 +687,23 @@ footer {
         border: 1px solid rgba(0, 0, 0, 0.03);
     }
 
-    td:first-child {
+    .responsive-table td:first-child {
         padding-left: 5px;
         text-align: left;
         font-size: 1.2rem;
         font-weight: 600;
         color: var(--primary);
     }    
-    td:first-child:before {
+    
+    .responsive-table td:first-child:before {
         display:none;
     } 
-    td:last-child{
+    
+    .responsive-table td:last-child{
         border-bottom: none;
     }
-    
-    
-    td:before{
+
+    .responsive-table td:before{
         float: left;
         content: attr(data-label); 
         font-color: rgba(60, 60, 60, 1);
@@ -701,7 +711,7 @@ footer {
         font-size:  0.9em;
     }
     
-    td{
+    .responsive-table td{
         text-align: right;
     }
     
@@ -719,6 +729,20 @@ footer {
     .github-btn {
         padding: 8px 15px;
     }
+    .page-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .page-header p {
+        color: var(--gray);
+        font-size: 1rem;
+        margin-top: 10px;
+        line-height: 1.5;
+        text-align: left;
+        padding-left: 10px;
+        padding-left: 10px;
+    }
+    
     .section{
         padding:16px 20px;
     } 

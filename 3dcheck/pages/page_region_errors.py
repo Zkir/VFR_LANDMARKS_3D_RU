@@ -40,7 +40,7 @@ def page_region_errors(quadrant_code):
     page += ( '</div>\n')
     
     
-    page += ( '  <table class="sortable">'+ '\n')
+    page += ( '  <table class="sortable responsive-table">'+ '\n')
     
     page += ('<tr>')
     page += ('<th>Название</td>')

@@ -20,11 +20,14 @@ def get_region_name(quadrant_code):
     
     return strQuadrantTitle
     
-def composeAddressLine(rec):
-    strDistrict = rec[21]
+def shortenDistrictName(strDistrict):
     strDistrict = strDistrict.replace('район', 'р-н')
     strDistrict = strDistrict.replace('городской округ', 'го')
     strDistrict = strDistrict.replace('муниципальный округ', 'мо')
+    return strDistrict
+    
+def composeAddressLine(rec):
+    strDistrict = shortenDistrictName(rec[21])
     
     address = []
     for address_element in (rec[20].strip(), strDistrict.strip(), rec[22].replace('область', 'обл.').strip()):

@@ -8,7 +8,7 @@ from .mdlMisc import *
 import cgi
 import time
 from .mdlClassify import buildingTypeRus, achitectureStylesRus
-from .misc2 import get_region_name, composeAddressLine
+from .misc2 import get_region_name, composeAddressLine, shortenDistrictName
 from .templates import general_page_template
 
 class TSummaryRec:
@@ -127,8 +127,8 @@ def page_region(quadrant_code):
         page += ( '  <div class="section-header">\n')
         page += ( '     <h2> <i class="fas fa-chart-bar"></i></i> Cтатистика по региону</h2>'+ '\n')
         page += ( '  </div>')
-        page += ( '<table class="sortable">'+ '\n')
-        page += ( '<tr><th>Область</th><th>Район</th><th>Всего зданий</th> <th>С 3D моделью</th> <th>% </th></tr>'+ '\n')
+        page += ( '<table class="sortable responsive-table">'+ '\n')
+        page += ( '<tr><th>Район</th><th>Область</th><th>Всего зданий</th> <th>С 3D моделью</th> <th>% </th></tr>'+ '\n')
         
         N=len(arrSummary)
         for i in range(1, N):
@@ -136,8 +136,9 @@ def page_region(quadrant_code):
                 dblPercentage = arrSummary[i].ObjectsWith3D / arrSummary[i].TotalObjects * 100
             else:
                 dblPercentage = 0
-            page += ( '<tr><td data-label="Область">' + IIf(arrSummary[i].RegionName != '', arrSummary[i].RegionName, '???') + '</td>'+ '\n')
-            page += ( '<td data-label="Район">' + arrSummary[i].DistrictName + '</td>'+ '\n')
+            page += ( '<tr>')
+            page += ( '<td data-label="Район">' + shortenDistrictName(arrSummary[i].DistrictName) + '</td>'+ '\n')
+            page += ( '<td data-label="Область">' + IIf(arrSummary[i].RegionName != '', arrSummary[i].RegionName, '???') + '</td>'+ '\n')
             page += ( '<td data-label="Всего зданий">' + str(arrSummary[i].TotalObjects) + '</td>')
             page += ( '<td data-label="Есть 3D">' + str(arrSummary[i].ObjectsWith3D) + '</td>')
             page += ( '<td data-label="Процент 3D"> ' + str(Round(dblPercentage)) + ' </td></tr>'+ '\n')
@@ -163,7 +164,7 @@ def page_region(quadrant_code):
     
     page += ( '<h2></h2>'+ '\n')
     page += ( '<p><small>Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</small><p>'+ '\n')
-    page += ( '<table class="sortable">'+ '\n')
+    page += ( '<table class="sortable responsive-table">'+ '\n')
     #<th>OSM ID</th>
     page += ( '<tr><th>Название</th><th>Год постройки</th><th>Размер, м</th><th>Высота, м</th>'
            + '<th>Тип здания</th><th>Стиль</th><th>OSM 3D </th><th>Число частей</th><th>Послед. редактир.</th><th>Ошибки</th><th>Josm</th></tr>'+ '\n') # <th>Город</th> <th>Район</th> <th>Область</th>

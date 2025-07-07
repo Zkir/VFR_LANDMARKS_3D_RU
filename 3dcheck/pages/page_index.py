@@ -250,7 +250,8 @@ def page_index():
     page += ( '     </div>')
     
     page += ( '  </div >')
-    page += ( '  <table class="sortable">' + '\n')
+    page += ( '<p><small>Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</small><p>'+ '\n')
+    page += ( '  <table class="sortable responsive-table">' + '\n')
     page += ( '    <tr><th>Код</th><th>Регион</th><th>Всего объектов</th><th>С 3D моделью</th><th>Процент</th><th>Дата последнего обновления</th><th>Ошибки</th></tr>' + '\n')
     
     for i in range(len(cells)):
