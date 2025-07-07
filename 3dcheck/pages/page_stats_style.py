@@ -39,10 +39,10 @@ def page_stats_style():
         <b>Стиль</b> определяется из тега <b><a href="https://wiki.openstreetmap.org/wiki/RU:Key:building:architecture">building:architecture</b></a>, практически без всякой черной магии. Знак тильды ~ перед стилем означает, что он определен автоматически на основании года постройки. Кажется, что простейший алгоритм на основе линейной периодизации дает неплохие результаты. Тем не менее,  <b>building:architecture</b> всегда можно добавить вручную.
         </p>
         """  )   
-    page += ( '<p><small>Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</small><p>'+ '\n')
-    page += ( '<table class="sortable">'+ '\n')
+    page += ( '<p class="sort-table-hint">Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</p>'+ '\n')
+    page += ( '<table class="sortable responsive-table">'+ '\n')
     #<th>OSM ID</th>
-    page += ( '<tr><th>Стиль</th><th>Периодизация</th><th>Всего зданий</th><th>Зданий с 3D моделью</th><th>Зданий с фотографией</th>'
+    page += ( '<tr><th>Стиль</th><th>Перио<wbr>ди<wbr>зация</th><th>Всего зданий</th><th>Зданий с 3D моделью</th><th>Зданий с фото<wbr>графией</th>'
            + '<th>ОСМ-теги</th></tr>'+ '\n')
     
     # Hidden columns
@@ -59,19 +59,19 @@ def page_stats_style():
             
             page += ('<tr>'+ '\n')
             #page += ('<td>'+key+'</td>'+ '\n')
-            page += ('<td> <a href="'+url+'">'+key+'</td>'+ '\n')
+            page += ('<td class=""> <a href="'+url+'">'+key+'</td>'+ '\n')
             
             
             if value["dates"][4] != 0:
-                page += ('<td>' + str(value["dates"][4]) +'-' +str(value["dates"][5]) + '</td>'+ '\n')
+                page += ('<td data-label="Периодизация">' + str(value["dates"][4]) +'-' +str(value["dates"][5]) + '</td>'+ '\n')
             else:
-                page += ('<td></td>'+ '\n')
+                page += ('<td data-label="Периодизация"></td>'+ '\n')
             #page += (f'<td><a href="/stats/{key}.html" >{key}</a></td>'+ '\n')
             
-            page += ('<td>' + str(value["total"]) + '</td>'+ '\n')
-            page += ('<td>' + str(value["with_model"]) + '</td>'+ '\n')
-            page += ('<td>' + str(value["with_picture"]) + '</td>'+ '\n')
-            page += ('<td>' + ", ".join(value["osm_tags"]) + '</td>'+ '\n')
+            page += ('<td data-label="Всего зданий">' + str(value["total"]) + '</td>'+ '\n')
+            page += ('<td data-label="С 3D моделью">' + str(value["with_model"]) + '</td>'+ '\n')
+            page += ('<td data-label="C фотографией">' + str(value["with_picture"]) + '</td>'+ '\n')
+            page += ('<td data-label="OSM-теги">' + ", ".join(value["osm_tags"]) + '</td>'+ '\n')
             
             page += ('</tr>'+ '\n')        
             n += 1

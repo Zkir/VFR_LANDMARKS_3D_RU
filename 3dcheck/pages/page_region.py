@@ -163,7 +163,7 @@ def page_region(quadrant_code):
     
     
     page += ( '<h2></h2>'+ '\n')
-    page += ( '<p><small>Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</small><p>'+ '\n')
+    page += ( '<p class="sort-table-hint">Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</p>'+ '\n')
     page += ( '<table class="sortable responsive-table">'+ '\n')
     #<th>OSM ID</th>
     page += ( '<tr><th>Название</th><th>Год постройки</th><th>Размер, м</th><th>Высота, м</th>'

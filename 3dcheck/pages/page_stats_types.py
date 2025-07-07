@@ -51,8 +51,8 @@ def page_stats_types():
     page += ( '  <div class="section-header">\n')
     page += ( '    <h2>Типы зданий</h2>'+ '\n')
     page += ( '  </div>' )
-    page += ( '  <p><small>Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</small><p>'+ '\n')
-    page += ( '<table class="sortable">'+ '\n')
+    page += ( '  <p class="sort-table-hint">Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</p>'+ '\n')
+    page += ( '  <table class="sortable responsive-table">'+ '\n')
     #<th>OSM ID</th>
     page += ( '<tr><th>Тип здания</th><th>Всего зданий</th><th>Зданий с 3D моделью</th><th>Зданий с фотографией</th>'
            + '<th>ОСМ-теги</th></tr>'+ '\n')
@@ -71,13 +71,13 @@ def page_stats_types():
             
             page += ('<tr>'+ '\n')
             #page += ('<td>'+key+'</td>'+ '\n')
-            page += ('<td> <a href="'+url+'">'+key+'</td>'+ '\n')
-            #page += (f'<td><a href="/stats/{key}.html" >{key}</a></td>'+ '\n')
+            page += ('<td data-label="Тип здания"> <a href="'+url+'">'+key+'</td>'+ '\n')
+            #page += (f'<td ><a href="/stats/{key}.html" >{key}</a></td>'+ '\n')
             
-            page += ('<td>' + str(value["total"]) + '</td>'+ '\n')
-            page += ('<td>' + str(value["with_model"]) + '</td>'+ '\n')
-            page += ('<td>' + str(value["with_picture"]) + '</td>'+ '\n')
-            page += ('<td>' + ", ".join(value["osm_tags"]) + '</td>'+ '\n')
+            page += ('<td data-label="Всего зданий">' + str(value["total"]) + '</td>'+ '\n')
+            page += ('<td data-label="Здания с 3D">' + str(value["with_model"]) + '</td>'+ '\n')
+            page += ('<td data-label="Здания с фотографией">' + str(value["with_picture"]) + '</td>'+ '\n')
+            page += ('<td data-label="OSM-теги">' + ", ".join(value["osm_tags"]) + '</td>'+ '\n')
             page += ('</tr>'+ '\n')        
             n += 1
               

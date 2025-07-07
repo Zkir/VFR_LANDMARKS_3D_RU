@@ -332,6 +332,12 @@ main {
     border: 1px solid var(--light-gray);
 }
 
+.sort-table-hint {
+    font-size:   0.9em;
+    font-weight: 300;
+    padding: 3px;
+}
+
 table {
     width: 100%;
     border-collapse: separate;
@@ -713,6 +719,10 @@ footer {
     
     .responsive-table td{
         text-align: right;
+    }
+    
+    .sort-table-hint{
+        display: none; /*hint is hidden, since table headers are not displayed either*/
     }
     
 }
