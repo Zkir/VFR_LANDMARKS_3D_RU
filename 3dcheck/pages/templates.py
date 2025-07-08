@@ -317,7 +317,9 @@ building_page_template = \
                     '<%blosm_model_url% />',
                     '<%o2w_model_url% />'
                 ];
-                myInput.setAttribute('url', urls[index]);
+                if ( myInput != null ){
+                    myInput.setAttribute('url', urls[index]);
+                }    
             }
             
         }
