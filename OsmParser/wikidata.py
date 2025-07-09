@@ -833,13 +833,45 @@ def get_images(input_file_name):
             
         working_loop.set_description(f"{n} buildings processed, {k} images_downloaded")
 
+def update_quadrant_stats(input_file_name):
+    
+    stats = {}
+    source_path = "d:/_VFR_LANDMARKS_3D_RU/work_folder/21_osm_objects_list"
+    with os.scandir(source_path) as entries:
+        for entry in entries:
+            if entry.is_file() and entry.name.endswith(".dat"):
+                quadrant_name = entry.name.replace(".dat", "")
+                if quadrant_name not in stats:
+                    stats[quadrant_name] = {'total': 0, 'photos': 0}
+                
+                records = mdlMisc.loadDatFile(os.path.join(source_path, entry.name))
+                for rec in records:
+                    stats[quadrant_name]['total'] += 1
+                    if rec[QUADDATA_WIKIDATA_ID] and os.path.exists(os.path.join(IMAGE_DIRECTORY , rec[QUADDATA_WIKIDATA_ID]+".png")):
+                        stats[quadrant_name]['photos'] += 1
+
+    # miracle: update totals file
+    totals = mdlMisc.loadDatFile(input_file_name)
+
+    # filter by quadrant name
+    for i in range(len(totals)):
+        # verify that all necessary fields are present
+        totals[i] += ["0"] * (10 - len(totals[i]))
+        quadrant_name = totals[i][0]
+        if quadrant_name in stats:
+            totals[i][2] = str(stats[quadrant_name]['total']) # Update total objects from regional file
+            totals[i][9] = str(stats[quadrant_name]['photos'])
+            
+    mdlMisc.saveDatFile(totals, input_file_name)
+    print("Quadrant stats updated")
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         prog='wikidata',
         description='this script is a part of 3DCHECK/VFR_LANDMARKS_3D_RU pipeline',
         epilog='Created by zkir (c) 2024')
         
-    parser.add_argument('command', choices=['update-region', 'get-images', 'print-stats'],  help='update-region updates region from wikidata, \n get-images gets images from wikimedia commons' )
+    parser.add_argument('command', choices=['update-region', 'get-images', 'print-stats', 'update-quad-stats'],  help='update-region updates region from wikidata, \n get-images gets images from wikimedia commons' )
     parser.add_argument('-i', '--input', required=True, type=str, help='input file, should be dat-csv file' )
     parser.add_argument('-r', '--rewrite', required=False, action='store_true', help='rewrite the input file with updated data' )
     parser.add_argument('-o', '--output', required=False, type=str, help='output osm-xml with created parts' )
@@ -865,7 +897,9 @@ if __name__ == '__main__':
     elif command == 'get-images':
         get_images(input_file_name)
     elif command == 'print-stats':
-        print_stats(input_file_name)    
+        print_stats(input_file_name)
+    elif command == 'update-quad-stats':
+        update_quadrant_stats(input_file_name)
     else:
         print("unknown command " + command )
     

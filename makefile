@@ -112,6 +112,7 @@ work_folder\25_images: | work_folder
 		
 work_folder\25_images\extract_images: work_folder\22_all_osm_objects_list\all-objects.dat | work_folder\25_images
 	python OsmParser\wikidata.py get-images -i work_folder\22_all_osm_objects_list\all-objects.dat
+	python OsmParser\wikidata.py update-quad-stats -i work_folder\Quadrants.dat
 	touch $@
 	
 work_folder\22_all_osm_objects_list\photo_wo_type.dat:  work_folder\25_images\extract_images

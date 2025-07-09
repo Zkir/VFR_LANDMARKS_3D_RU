@@ -62,6 +62,13 @@ def main():
         elif len(path)==3:   
             if path[2]=='errors':
                 content = page_region_errors(path[1])
+            elif path[2]=='photos':
+                content = page_region_images(path[1],
+                                         sort=params.get('sort', [None])[0],
+                                         has_3d=params.get('has_3d', [None])[0],
+                                         year=params.get('year', [None])[0],
+                                         btype = params.get('type', [None])[0],
+                                         style = params.get('style', [None])[0])
             else:    
                 content = page_building(path[1], path[2])   
 

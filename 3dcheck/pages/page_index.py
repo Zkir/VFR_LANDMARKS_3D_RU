@@ -260,20 +260,27 @@ def page_index():
     page += ( '     </div>')
     
     page += ( '  </div >')
+
     page += ( '  <p class="sort-table-hint">Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</p>'+ '\n')
     page += ( '  <table class="sortable responsive-table">' + '\n')
-    page += ( '    <tr><th>Код</th><th>Регион</th><th>Всего объектов</th><th>С 3D моделью</th><th>Процент</th><th>Дата последнего обновления</th><th>Ошибки</th></tr>' + '\n')
+    page += ( '    <tr><th>Код</th><th>Регион</th><th>Всего объектов</th><th>С 3D моделью</th><th>Процент</th><th>С фото</th><th>Дата последнего обновления</th><th>Ошибки</th></tr>' + '\n')
     
     for i in range(len(cells)):
         if cells[i][4]>'1900.01.01 00:00:00': 
             intRate=0
             if int(cells[i][2]) !=0:
-                intRate = Round(100.0*int(cells[i][3])/int(cells[i][2])) 
+                intRate = Round(100.0*int(cells[i][3])/int(cells[i][2]))
+            
+            photo_count = "0"
+            if len(cells[i]) > 9:
+                photo_count = cells[i][9]
+
             page += ( '    <tr><td data-label="Код">'+cells[i][0]+'</td>'+
                               f'<td data-label="Регион"><a href="/regions/'+cells[i][0]+'">'+ cells[i][1] +'</a> </td>'+
                               f'<td data-label="Всего объектов">' + cells[i][2] + '</td>'+
                               f'<td data-label="С 3D моделью">' + cells[i][3] + '</td>' + 
                               f'<td data-label="Процент">' + str(intRate) + '</td>'+
+                              f'<td data-label="С фото"><a href="/regions/{cells[i][0]}/photos">{photo_count}</a></td>' +
                               f'<td data-label="Обновление">' + cells[i][4]+ '</td>'+
                               f'<td data-label="Ошибки"><a href="/regions/'+cells[i][0]+'/errors">' + cells[i][5]+ '</a></td> </tr>' + '\n')
 

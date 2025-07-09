@@ -13,7 +13,7 @@ from .mdlClassify import buildingTypeRus
 from .mdlClassify import achitectureStylesRus
 
 from .templates import region_cards_page_template
-from .misc2 import composeAddressLine
+from .misc2 import composeAddressLine, get_region_name
 
 IMG_FOLDER= "data/building_images"
 
@@ -293,7 +293,8 @@ def page_region_images(strQuadrantName, year="all", style="all", btype="all", ha
         quadrant_title_rus=achitectureStylesRus(quadrant_title)
         page_title = 'Здания по стилю: ' + quadrant_title_rus  
     else:    
-        page_title = 'Архитектурный каталог: ' + quadrant_title_rus  
+        quadrant_title_rus=quadrant_title
+        page_title = 'Архитектурный каталог: ' + get_region_name(quadrant_title_rus)  
     
     
     page += f'<div class="page-header">'
