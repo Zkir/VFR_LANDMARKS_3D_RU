@@ -123,7 +123,41 @@ def page_region(quadrant_code):
 
         
     if quadrant_code not in ("RUS_LATEST", "RUS_TOP", "RUS_TOP_WINDOWS", "photo_wo_type" ): 
+        
+        region_sections = [
+                            ("#region-stats", "Cтатистика по региону",
+                                "Статистика по региону в разрезе административного деления"),
+                            ("#building-list", "Список зданий", 
+                                "Список зданий в регионе с детальной информацией"),
+                            (f"/regions/{quadrant_code}/errors", "Ошибки валидации",
+                                "Список ошибок в 3D-геометрии или тегах, по всем зданиям региона"),
+                            (f"/regions/{quadrant_code}/photos", "Фотографии",
+                                "Галерея зданий с фотографиями"),
+                         ]
+    
+    
         page += ( '<div class="section">\n')
+        page += ( '  <div class="section-header">\n')
+        page += ( '     <h2 class="section-title"><i class="fas fa-th-large"></i> Разделы региона</h2>' + '\n')
+        page += ( '  </div > \n')
+    
+    
+        page += ( '  <div class="regions-grid"> \n')
+        for section in region_sections: 
+            page += ( '    <a href="'+section[0]+'" class="region-card">'+'\n')
+            page += ( '      <div class="region-header">'+'\n')
+            page += ( '        <h3>'+section[1]+'</h3>'+'\n')
+            page += ( '      </div>'+'\n')
+            page += ( '      <div class="region-body">'+'\n')
+            page += ( '        <p>'+ section[2] +'</p>'+'\n')
+            page += ( '      </div>'+'\n')
+            page += ( '    </a>'+'\n')
+    
+        page += ( '  </div> \n')
+
+        page += ( '</div >')
+
+        page += ( '<div class="section" id="region-stats">\n')
         page += ( '  <div class="section-header">\n')
         page += ( '     <h2> <i class="fas fa-chart-bar"></i></i> Cтатистика по региону</h2>'+ '\n')
         page += ( '  </div>')
@@ -162,7 +196,7 @@ def page_region(quadrant_code):
     
     # Здания
     
-    page += ( '<div class="section">\n')
+    page += ( '<div class="section" id="building-list">\n')
     page += ( '  <div class="section-header">\n')
     page += ( '     <h2 class="section-title"><i class="fas fa-th-large"></i> Cписок зданий </h2>' + '\n')
     page += ( '  </div > \n')
