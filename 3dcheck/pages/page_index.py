@@ -5,6 +5,7 @@ import codecs
 import time
 import math
 from datetime import datetime
+import json
 
 from .mdlMisc import *
 
@@ -204,36 +205,47 @@ def page_index():
             </div>
         </div>
     """
-    
-    #Разделы валидатора
-    section_counts = {
-        "/#russia-regions":  len(cells), #total_objects 
-        "/rus-latest": updated_objects_3d,
-        # Для остальных разделов данные не могут быть получены напрямую из Quadrants.dat
-        # или не являются прямым количеством зданий/элементов.
-        # Если вам нужны эти данные, потребуется дополнительная логика или другой источник.
-        "/rus-top": None,
-        "/rus-top-windows": None,
-        "/photo_wo_type": None,
-        "/stats/types": None,
-        "/stats/styles": None,
-    }
+   
 
+    def get_json_file_total_count(file_path):
+        
+        if os.path.isfile(file_path):
+            with open(file_path, encoding="utf-8") as f:
+                data = json.load(f)
+                
+                return len(data)
+        return 0
+
+    #Разделы валидатора
     validator_sections = [
                             ("/#russia-regions",                      "Россия, по регионам", 
-                                "Полный список всех регионов России с детальной статистикой по наличию 3D моделей для церквей и исторических зданий"),
+                                "Полный список всех регионов России с детальной статистикой по наличию 3D моделей для церквей и исторических зданий",
+                                len(cells), #total_objects 
+                                ),
                             ("/rus-top",          "Топ зданий, Россия",
-                                "Самые проработанные модели зданий, из всех регионов. Витрина OSM 3D."),
+                                "Самые проработанные модели зданий, из всех регионов. Витрина OSM 3D.",
+                                len(loadDatFile("data/quadrants/RUS_TOP.dat")),
+                                ),
                             ("/rus-top-windows",  "Топ зданий c ОКНАМИ",
-                                'Здания, на которых рендерятся окна, заданные тегами <b>window:*</b>. Более совершенное 3D уже где-то рядом.'),
+                                'Здания, на которых рендерятся окна, заданные тегами <b>window:*</b>. Более совершенное 3D уже где-то рядом.',
+                                len(loadDatFile("data/quadrants/RUS_TOP_WINDOWS.dat")),
+                                ),
                             ("/rus-latest",       "Последние изменения",
-                                "Пульс проекта: здания, отредактированные в последнее время. Включены только здания, имеющие 3D модели."),
+                                "Пульс проекта: здания, отредактированные в последнее время. Включены только здания, имеющие 3D модели.",
+                                updated_objects_3d,
+                                ),
                             ("/photo_wo_type",    "Здания без типа",
-                                "Здания, для которых не задан тип. Вы очень поможете проекту, если установите на них значение тега <b>building</b>"),
+                                "Здания, для которых не задан тип. Вы очень поможете проекту, если установите на них значение тега <b>building</b>",
+                                len(loadDatFile("data/quadrants/photo_wo_type.dat")),
+                                ),
                             ("/stats/types",            "Типы зданий", 
-                                "Предполагается, что у каждого здания есть <i>тип</i> (<b>building=*</b>), который указывает на его первоначальное предназначение, отражающееся в архитектуре" ),
+                                "Предполагается, что у каждого здания есть <i>тип</i> (<b>building=*</b>), который указывает на его первоначальное предназначение, отражающееся в архитектуре" ,
+                                get_json_file_total_count("data/stats/building_type_stats.json"),
+                                ),
                             ("/stats/styles",           "Архитектурные стили",
-                                "Распределение объектов по архитектурным стилям (<b>building:architecture</b>) и периодам строительства (<b>start_date</b>)." ),
+                                "Распределение объектов по архитектурным стилям (<b>building:architecture</b>) и периодам строительства (<b>start_date</b>)." ,
+                                get_json_file_total_count("data/stats/building_style_stats.json"),
+                                ),
                          ]
     
     
@@ -248,9 +260,7 @@ def page_index():
         page += ( '    <a href="'+section[0]+'" class="region-card">'+'\n')
         page += ( '      <div class="region-header">'+'\n')
         page += ( '        <h3>'+section[1]+'</h3>\n')
-        if section_counts.get(section[0]) is not None:
-            page += ( '        <span class="region-count">'+str(section_counts.get(section[0]))+'</span>\n')
-        
+        page += ( '        <span class="region-count">'+str(section[3])+'</span>\n')
         page += ( '      </div>'+'\n')
         page += ( '      <div class="region-body">'+'\n')
         page += ( '        <p>'+ section[2] +'</p>'+'\n')
