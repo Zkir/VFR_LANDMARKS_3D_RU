@@ -257,6 +257,7 @@ main {
     min-height: 100px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .region-header h3 {
@@ -265,6 +266,22 @@ main {
     font-weight: 600;
     line-height: 1.4;
 }
+
+.region-count {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: 10px;
+}
+
 
 .region-body {
     padding: 25px;

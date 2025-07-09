@@ -19,6 +19,7 @@ class TSummaryRec:
         self.RegionName = ""
         self.TotalObjects = 0  
         self.ObjectsWith3D = 0
+        self.ObjectsWithPhoto = 0
 
 
 def GetSummary(cells):
@@ -28,6 +29,7 @@ def GetSummary(cells):
     total.RegionName= "Всего в квадрате"
     total.TotalObjects = 0
     total.ObjectsWith3d= 0
+    total.ObjectsWithPhoto = 0
 
     for i in range(len(cells)):
         #find existing record
@@ -43,6 +45,7 @@ def GetSummary(cells):
             sumrec.RegionName= cells[i][22]
             sumrec.TotalObjects = 0
             sumrec.ObjectsWith3d = 0
+            sumrec.ObjectsWithPhoto = 0
             summary.append (sumrec) 
           
         sumrec.TotalObjects=sumrec.TotalObjects+1
@@ -51,6 +54,10 @@ def GetSummary(cells):
         if cells[i][23] == "True": 
             sumrec.ObjectsWith3D=sumrec.ObjectsWith3D+1
             total.ObjectsWith3D=total.ObjectsWith3D+1
+        
+        if cells[i][28] :
+            sumrec.ObjectsWithPhoto=sumrec.ObjectsWithPhoto+1
+            total.ObjectsWithPhoto=total.ObjectsWithPhoto+1
 
     # sort alphabetically
     summary.sort(key=lambda row: row.RegionName, reverse=False)
@@ -124,15 +131,41 @@ def page_region(quadrant_code):
         
     if quadrant_code not in ("RUS_LATEST", "RUS_TOP", "RUS_TOP_WINDOWS", "photo_wo_type" ): 
         
+        # Calculate stats for cards
+        total_buildings = len(cells)
+        buildings_with_3d = sum(1 for cell in cells if len(cell) > 23 and cell[23] == "True")
+        
+        erroneous_buildings = 0
+        for cell in cells:
+            if len(cell) > 26:
+                try:
+                    if int(cell[26]) > 0:
+                        erroneous_buildings += 1
+                except (ValueError, TypeError):
+                    pass # Ignore if not a valid number
+
+
+        photo_count = sum(1 for cell in cells if len(cell) > 28 and cell[28] )
+
+        if buildings_with_3d > 0:
+            correct_3d_percentage = int(((buildings_with_3d - erroneous_buildings) / buildings_with_3d) * 100)
+        else:
+            correct_3d_percentage = 100
+            
+        if total_buildings > 0:
+            photo_percentage = int((photo_count / total_buildings) * 100)
+        else:
+            photo_percentage = 0
+
         region_sections = [
-                            ("#region-stats", "Cтатистика по региону",
-                                "Статистика по региону в разрезе административного деления"),
+                            ("#region-stats", "Административное деление",
+                                "Статистика по региону в разрезе административного деления", len(arrSummary)-1, -1, ""),
                             ("#building-list", "Список зданий", 
-                                "Список зданий в регионе с детальной информацией"),
+                                "Список зданий в регионе с детальной информацией", total_buildings, -1, ""),
                             (f"/regions/{quadrant_code}/errors", "Ошибки валидации",
-                                "Список ошибок в 3D-геометрии или тегах, по всем зданиям региона"),
+                                "Список ошибок в 3D-геометрии или тегах, по всем зданиям региона", erroneous_buildings, -1, f"{correct_3d_percentage}% корректных"),
                             (f"/regions/{quadrant_code}/photos", "Фотографии",
-                                "Галерея зданий с фотографиями"),
+                                "Галерея зданий с фотографиями", photo_count, -1, f"{photo_percentage}% с фото"),
                          ]
     
     
@@ -147,9 +180,17 @@ def page_region(quadrant_code):
             page += ( '    <a href="'+section[0]+'" class="region-card">'+'\n')
             page += ( '      <div class="region-header">'+'\n')
             page += ( '        <h3>'+section[1]+'</h3>'+'\n')
+            if section[3] > 0:
+                page += ( '        <span class="region-count">'+str(section[3])+'</span>'+'\n')
             page += ( '      </div>'+'\n')
             page += ( '      <div class="region-body">'+'\n')
+            if section[4] != -1:
+                page += ( '        <div class="progress-bar">'+'\n')
+                page += ( '          <div class="progress-fill" style="width: '+str(section[4])+'%"></div>'+'\n')
+                page += ( '        </div>'+'\n')
+                page += ( '        <div class="label" style="text-align: center;">'+section[5]+'</div>'+'\n')
             page += ( '        <p>'+ section[2] +'</p>'+'\n')
+            
             page += ( '      </div>'+'\n')
             page += ( '    </a>'+'\n')
     
@@ -163,7 +204,7 @@ def page_region(quadrant_code):
         page += ( '  </div>')
         page += ( '<table class="sortable responsive-table">'+ '\n')
         page += ( '<thead> \n' )
-        page += ( '  <tr><th>Район</th><th>Область</th><th>Всего зданий</th> <th>С 3D моделью</th> <th>% </th></tr>'+ '\n')
+        page += ( '  <tr><th>Район</th><th>Область</th><th>Всего зданий</th> <th>С 3D моделью</th> <th>% 3D</th> <th>С фотографией</th> <th>% фото</th></tr>'+ '\n')
         page += ( '</thead> \n' )
         page += ( '<tbody> \n' )
         
@@ -178,18 +219,29 @@ def page_region(quadrant_code):
             page += ( '<td data-label="Область">' + IIf(arrSummary[i].RegionName != '', arrSummary[i].RegionName, '???') + '</td>'+ '\n')
             page += ( '<td data-label="Всего зданий">' + str(arrSummary[i].TotalObjects) + '</td>')
             page += ( '<td data-label="Есть 3D">' + str(arrSummary[i].ObjectsWith3D) + '</td>')
-            page += ( '<td data-label="Процент 3D"> ' + str(Round(dblPercentage)) + ' </td></tr>'+ '\n')
+            page += ( '<td data-label="Процент 3D"> ' + str(Round(dblPercentage)) + ' </td>')
+            
+            if arrSummary[i].TotalObjects > 0:
+                dblPercentagePhoto = arrSummary[i].ObjectsWithPhoto / arrSummary[i].TotalObjects * 100
+            else:
+                dblPercentagePhoto = 0
+            page += ( '<td data-label="С фотографией">' + str(arrSummary[i].ObjectsWithPhoto) + '</td>')
+            page += ( '<td data-label="Процент фото"> ' + str(Round(dblPercentagePhoto)) + ' </td></tr>'+ '\n')
         page += ( '</tbody> \n' )    
         page += ( '<tfoot> \n' )
         if arrSummary[0].TotalObjects > 0:
             dblPercentage = arrSummary[0].ObjectsWith3D / arrSummary[0].TotalObjects * 100
+            dblPercentagePhoto = arrSummary[0].ObjectsWithPhoto / arrSummary[0].TotalObjects * 100
         else:
             dblPercentage = 0
+            dblPercentagePhoto = 0
         page += ( '<tr><td><b>Всего в квадрате<b></td>'+ '\n')
         page += ( '<td></td>'+ '\n')
         page += ( '<td data-label="Зданий"><b>' + str(arrSummary[0].TotalObjects) + '</b></td>'+ '\n')
         page += ( '<td data-label="Есть 3D"><b>' + str(arrSummary[0].ObjectsWith3D) + '<b></td>'+ '\n')
-        page += ( '<td data-label="Процент 3D"><b>' + str(Round(dblPercentage)) + '</b></td></tr>'+ '\n')
+        page += ( '<td data-label="Процент 3D"><b>' + str(Round(dblPercentage)) + '</b></td>')
+        page += ( '<td data-label="С фотографией"><b>' + str(arrSummary[0].ObjectsWithPhoto) + '</b></td>')
+        page += ( '<td data-label="Процент фото"><b>' + str(Round(dblPercentagePhoto)) + '</b></td></tr>'+ '\n')
         page += ( '<tfoot> \n' )
         page += ( '</table>'+ '\n')
         page += ( '</div>\n')

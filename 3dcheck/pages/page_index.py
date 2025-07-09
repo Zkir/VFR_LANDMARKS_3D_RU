@@ -206,6 +206,19 @@ def page_index():
     """
     
     #Разделы валидатора
+    section_counts = {
+        "/#russia-regions":  len(cells), #total_objects 
+        "/rus-latest": updated_objects_3d,
+        # Для остальных разделов данные не могут быть получены напрямую из Quadrants.dat
+        # или не являются прямым количеством зданий/элементов.
+        # Если вам нужны эти данные, потребуется дополнительная логика или другой источник.
+        "/rus-top": None,
+        "/rus-top-windows": None,
+        "/photo_wo_type": None,
+        "/stats/types": None,
+        "/stats/styles": None,
+    }
+
     validator_sections = [
                             ("/#russia-regions",                      "Россия, по регионам", 
                                 "Полный список всех регионов России с детальной статистикой по наличию 3D моделей для церквей и исторических зданий"),
@@ -217,9 +230,9 @@ def page_index():
                                 "Пульс проекта: здания, отредактированные в последнее время. Включены только здания, имеющие 3D модели."),
                             ("/photo_wo_type",    "Здания без типа",
                                 "Здания, для которых не задан тип. Вы очень поможете проекту, если установите на них значение тега <b>building</b>"),
-                            ("/stats/types",            "Статистика по типам зданий", 
+                            ("/stats/types",            "Типы зданий", 
                                 "Предполагается, что у каждого здания есть <i>тип</i> (<b>building=*</b>), который указывает на его первоначальное предназначение, отражающееся в архитектуре" ),
-                            ("/stats/styles",           "Статистика по архитектурным стилям",
+                            ("/stats/styles",           "Архитектурные стили",
                                 "Распределение объектов по архитектурным стилям (<b>building:architecture</b>) и периодам строительства (<b>start_date</b>)." ),
                          ]
     
@@ -234,7 +247,10 @@ def page_index():
     for section in validator_sections: 
         page += ( '    <a href="'+section[0]+'" class="region-card">'+'\n')
         page += ( '      <div class="region-header">'+'\n')
-        page += ( '        <h3>'+section[1]+'</h3>'+'\n')
+        page += ( '        <h3>'+section[1]+'</h3>\n')
+        if section_counts.get(section[0]) is not None:
+            page += ( '        <span class="region-count">'+str(section_counts.get(section[0]))+'</span>\n')
+        
         page += ( '      </div>'+'\n')
         page += ( '      <div class="region-body">'+'\n')
         page += ( '        <p>'+ section[2] +'</p>'+'\n')
