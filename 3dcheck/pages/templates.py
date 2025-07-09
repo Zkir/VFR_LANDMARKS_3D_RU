@@ -90,7 +90,7 @@ footer = """ <footer>
                     <h3>Контакты</h3>
                     <ul class="footer-links">
                         <li>
-                            <a href="https://community.openstreetmap.org/t/3dcheck-zkir-ru/117934/19">
+                            <a href="https://community.openstreetmap.org/t/3dcheck-zkir-ru/117934">
                                 <i class="fas fa-comments"></i> Задать вопросы
                             </a>
                         </li>
