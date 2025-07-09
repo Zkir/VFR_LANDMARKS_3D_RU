@@ -678,11 +678,15 @@ footer {
     .responsive-table thead{ 
         display: none; 
     }
-    .responsive-table tbody { 
+    .responsive-table tbody, tfoot { 
         display:flex;
         flex-direction: column;
         gap:15px;    
     }
+    .responsive-table tfoot { 
+        margin-top:15px;
+    }
+    
     .responsive-table tr { 
         display: flex; 
         flex-direction: column;

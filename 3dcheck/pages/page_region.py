@@ -128,7 +128,10 @@ def page_region(quadrant_code):
         page += ( '     <h2> <i class="fas fa-chart-bar"></i></i> Cтатистика по региону</h2>'+ '\n')
         page += ( '  </div>')
         page += ( '<table class="sortable responsive-table">'+ '\n')
-        page += ( '<tr><th>Район</th><th>Область</th><th>Всего зданий</th> <th>С 3D моделью</th> <th>% </th></tr>'+ '\n')
+        page += ( '<thead> \n' )
+        page += ( '  <tr><th>Район</th><th>Область</th><th>Всего зданий</th> <th>С 3D моделью</th> <th>% </th></tr>'+ '\n')
+        page += ( '</thead> \n' )
+        page += ( '<tbody> \n' )
         
         N=len(arrSummary)
         for i in range(1, N):
@@ -142,6 +145,8 @@ def page_region(quadrant_code):
             page += ( '<td data-label="Всего зданий">' + str(arrSummary[i].TotalObjects) + '</td>')
             page += ( '<td data-label="Есть 3D">' + str(arrSummary[i].ObjectsWith3D) + '</td>')
             page += ( '<td data-label="Процент 3D"> ' + str(Round(dblPercentage)) + ' </td></tr>'+ '\n')
+        page += ( '</tbody> \n' )    
+        page += ( '<tfoot> \n' )
         if arrSummary[0].TotalObjects > 0:
             dblPercentage = arrSummary[0].ObjectsWith3D / arrSummary[0].TotalObjects * 100
         else:
@@ -151,6 +156,7 @@ def page_region(quadrant_code):
         page += ( '<td data-label="Зданий"><b>' + str(arrSummary[0].TotalObjects) + '</b></td>'+ '\n')
         page += ( '<td data-label="Есть 3D"><b>' + str(arrSummary[0].ObjectsWith3D) + '<b></td>'+ '\n')
         page += ( '<td data-label="Процент 3D"><b>' + str(Round(dblPercentage)) + '</b></td></tr>'+ '\n')
+        page += ( '<tfoot> \n' )
         page += ( '</table>'+ '\n')
         page += ( '</div>\n')
     

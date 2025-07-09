@@ -81,6 +81,16 @@ def page_index():
         data_state = "Данные устарели" #   < 82 days
     else:
         data_state = "Данные протухли" #   >=82 days
+        
+    if time_delta == 0:
+        last_update_label="Сегодня"
+    elif time_delta == 1:
+        last_update_label="Вчера"
+    elif time_delta == 2:
+        last_update_label="Позавчера" 
+    else:
+        last_update_label = last_update_date
+        
     
     
     page += \
@@ -118,7 +128,7 @@ def page_index():
             
             <div class="stat-card">
                 <i class="fas fa-history"></i>
-                <div class="number">{last_update_date}</div>
+                <div class="number">{last_update_label}</div>
                 <div class="label">последнее обновление</div>
                 <div class="progress-bar">
                     <div class="progress-fill" style="width: {actuality_percentage}%"></div>
@@ -183,7 +193,7 @@ def page_index():
                         <i class="fas fa-history"></i>
                         <span>Последнее обновление</span>
                     </div>
-                    <div class="mobile-stats-value">{last_update_date}</div>
+                    <div class="mobile-stats-value">{last_update_label}</div>
                 </div>
                 <div class="mobile-stats-progress">
                     <div class="mobile-stats-progress-bar">

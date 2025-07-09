@@ -5,6 +5,7 @@
 
 import sys
 import os
+import os.path
 
 from .mdlMisc import *
 from .mdlDBMetadata import *
@@ -423,7 +424,13 @@ def page_region_images(strQuadrantName, year="all", style="all", btype="all", ha
         
         building_decription = ""
         #building_decription = """ Иркутская синагога — двухэтажное историческое здание на улице Карла Либкнехта. Построенная в конце XIX века по проекту архитектора В.А. Кудельского с Т-образным планом, она стала первой действующей синагогой России. Имея богатую историю, включая восстановление после пожара 1879 года и периоды закрытия, здание символично выдержало разрушительные воздействия и сохранило свою важность как памятник культуры конца XIX века. """
-        building_decription = rec[QUADDATA_DESCR]
+        annotation_file_name = f"data/annotations/{osm_id}.txt"
+        if os.path.isfile(annotation_file_name): 
+            with open(annotation_file_name, "r", encoding="utf-8") as f:
+                building_decription = f.read()
+        else:
+            building_decription = rec[QUADDATA_DESCR]            
+        
         #if rec[QUADDATA_ARCHITECT]:
         #    building_decription += f' (Арх. {rec[QUADDATA_ARCHITECT]})'
         
