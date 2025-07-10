@@ -8,8 +8,9 @@ from datetime import datetime
 import json
 
 from .mdlMisc import *
-
 from .templates import general_page_template
+from .page_stats_style import get_limited_styles_data
+from .page_stats_types import get_limited_types_data
 
 def page_index():
     strInputFile  = "data/quadrants/Quadrants.dat"
@@ -240,11 +241,11 @@ def page_index():
                                 ),
                             ("/stats/types",            "Типы зданий", 
                                 "Предполагается, что у каждого здания есть <i>тип</i> (<b>building=*</b>), который указывает на его первоначальное предназначение, отражающееся в архитектуре" ,
-                                get_json_file_total_count("data/stats/building_type_stats.json"),
+                                len(get_limited_types_data()),
                                 ),
                             ("/stats/styles",           "Архитектурные стили",
                                 "Распределение объектов по архитектурным стилям (<b>building:architecture</b>) и периодам строительства (<b>start_date</b>)." ,
-                                get_json_file_total_count("data/stats/building_style_stats.json"),
+                                len(get_limited_styles_data()),
                                 ),
                          ]
     

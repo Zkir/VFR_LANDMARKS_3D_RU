@@ -8,20 +8,28 @@ import time
 from .mdlClassify import buildingTypeRus, achitectureStylesRus
 from .templates import general_page_template
 
+TYPES_JSON_FILE =  "data/stats/"+"building_type_stats.json"
+
+def get_limited_types_data():
+    """ Only building types worth displaying, existing in noticible numbers"""
+    cells1 = {}
+    with open(TYPES_JSON_FILE, encoding="utf-8") as f:
+        cells = json.load(f)
+        
+    for key, value in cells.items():    
+        if key and ( value["total"]>10  or  value["with_picture"]>1):    
+            cells1[key]=value
+    
+    return cells1
+
 def page_stats_types():
-    strInputFile =  "data/stats/"+"building_type_stats.json"
+    
     page = ""
+    cells = get_limited_types_data()
 
     i = 0
-
-    strTemplesUrl = ""
-
-
     
-    with open(strInputFile, encoding="utf-8") as f:
-        cells = json.load(f)
-    
-    page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(strInputFile)))
+    page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(TYPES_JSON_FILE)))
     page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)
 
     page += ( '<div class="page-header">')
@@ -62,39 +70,24 @@ def page_stats_types():
     #<th>Цвет</th><th>Материал</th>
     n=0
     for key, value in cells.items():
-        if key and ( value["total"]>10  or  value["with_picture"]>1):
-            url = value["osm_tags"][0]
-            url = url.replace(" ", "_")
-            url = url.replace("~", "")
-            #url ="/styles/"+url +'.html'
-            url ="/stats/types/"+url 
-            
-            page += ('<tr>'+ '\n')
-            #page += ('<td>'+key+'</td>'+ '\n')
-            page += ('<td data-label="Тип здания"> <a href="'+url+'">'+key+'</td>'+ '\n')
-            #page += (f'<td ><a href="/stats/{key}.html" >{key}</a></td>'+ '\n')
-            
-            page += ('<td data-label="Всего зданий">' + str(value["total"]) + '</td>'+ '\n')
-            page += ('<td data-label="Здания с 3D">' + str(value["with_model"]) + '</td>'+ '\n')
-            page += ('<td data-label="Здания с фотографией">' + str(value["with_picture"]) + '</td>'+ '\n')
-            page += ('<td data-label="OSM-теги">' + ", ".join(value["osm_tags"]) + '</td>'+ '\n')
-            page += ('</tr>'+ '\n')        
-            n += 1
-              
-        #    if cells[i][23]=="True":
-        #        if (number_of_errors==0): 
-        #            #there is model, and no validation errors.  Green:OK 
-        #            page += ( '<tr style="background: #DDFFCC" > '+ '\n')
-        #        else:
-        #            #there are some validation errors, but model was created. Yellow: warning  
-        #            page += ( '<tr style="background: #FFFFAA" > '+ '\n')
-        #    else:
-        #        if (cells[i][23] == "False") and (int(cells[i][24])>0) :
-        ##            #there are some building parts, but model was not created. It's Red:Error. Probably there are some validation messages.
-        #            page += ( '<tr style="background: #FFBBBB" > '+ '\n')
-        #        else:
-        #            #there are no building parts and a model is not created. Sad, but it's not an error
-        #            page += ( '<tr>'+ '\n')
+    
+        url = value["osm_tags"][0]
+        url = url.replace(" ", "_")
+        url = url.replace("~", "")
+        #url ="/styles/"+url +'.html'
+        url ="/stats/types/"+url 
+        
+        page += ('<tr>'+ '\n')
+        #page += ('<td>'+key+'</td>'+ '\n')
+        page += ('<td data-label="Тип здания"> <a href="'+url+'">'+key+'</td>'+ '\n')
+        #page += (f'<td ><a href="/stats/{key}.html" >{key}</a></td>'+ '\n')
+        
+        page += ('<td data-label="Всего зданий">' + str(value["total"]) + '</td>'+ '\n')
+        page += ('<td data-label="Здания с 3D">' + str(value["with_model"]) + '</td>'+ '\n')
+        page += ('<td data-label="Здания с фотографией">' + str(value["with_picture"]) + '</td>'+ '\n')
+        page += ('<td data-label="OSM-теги">' + ", ".join(value["osm_tags"]) + '</td>'+ '\n')
+        page += ('</tr>'+ '\n')        
+        n += 1
         
 
     page += ( '</table>'+ '\n')

@@ -7,24 +7,40 @@ from .mdlClassify import buildingTypeRus, achitectureStylesRus
 from .templates import general_page_template
 
 #========================================================================
-#  Web Page for stats summary
+#  Web Page for STYLES summary
 #========================================================================
+STYLES_JSON_FILE = "data/stats/"+"building_style_stats.json"
+
+def get_limited_styles_data():
+    """we get limited list of styles, worth displaying"""
+    
+    
+    with open(STYLES_JSON_FILE, encoding="utf-8") as f:
+        cells = json.load(f)
+    
+    cells1 = {}
+    
+    for key, value in cells.items():
+        if key and value["total"]>=5:
+            cells1[key]=value
+        
+    return cells1    
 
 def page_stats_style():
-    strInputFile = "data/stats/"+"building_style_stats.json"
+    
     page = ""
     
     i = 0
-    with open(strInputFile, encoding="utf-8") as f:
-        cells = json.load(f)
     
-    page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(strInputFile)))
+    cells = get_limited_styles_data()    
+        
+    
+    page_time_stamp =  time.strptime(time.ctime(os.path.getmtime(STYLES_JSON_FILE)))
     page_time_stamp =  time.strftime("%Y-%m-%d %H:%M:%S", page_time_stamp)
 
 
     page += ( '<div class="page-header">')  
     page += ( '  <h1>' + 'Статистика по архитектурным стилям' + '</h1>'+ '\n')
-        
     
     page += ( '  <p>На этой странице представлена статистика по архитектурным стилям зданий. \n')
     page += ( '  <!--Статистика рассчитывается не для всех зданий вообще, а только для включенных в валидатор. --> </p>\n')
@@ -50,47 +66,32 @@ def page_stats_style():
     #<th>Цвет</th><th>Материал</th>
     n=0
     for key, value in cells.items():
-        if key and value["total"]>=5:
-            url = value["osm_tags"][0]
-            url = url.replace(" ", "_")
-            url = url.replace("~", "")
-            url ="/stats/styles/"+url 
-            #url ="/"+url +'.html'
-            
-            page += ('<tr>'+ '\n')
-            #page += ('<td>'+key+'</td>'+ '\n')
-            page += ('<td class=""> <a href="'+url+'">'+key+'</td>'+ '\n')
-            
-            
-            if value["dates"][4] != 0:
-                page += ('<td data-label="Периодизация">' + str(value["dates"][4]) +'-' +str(value["dates"][5]) + '</td>'+ '\n')
-            else:
-                page += ('<td data-label="Периодизация"></td>'+ '\n')
-            #page += (f'<td><a href="/stats/{key}.html" >{key}</a></td>'+ '\n')
-            
-            page += ('<td data-label="Всего зданий">' + str(value["total"]) + '</td>'+ '\n')
-            page += ('<td data-label="С 3D моделью">' + str(value["with_model"]) + '</td>'+ '\n')
-            page += ('<td data-label="C фотографией">' + str(value["with_picture"]) + '</td>'+ '\n')
-            page += ('<td data-label="OSM-теги">' + ", ".join(value["osm_tags"]) + '</td>'+ '\n')
-            
-            page += ('</tr>'+ '\n')        
-            n += 1
-              
-        #    if cells[i][23]=="True":
-        #        if (number_of_errors==0): 
-        #            #there is model, and no validation errors.  Green:OK 
-        #            page += ( '<tr style="background: #DDFFCC" > '+ '\n')
-        #        else:
-        #            #there are some validation errors, but model was created. Yellow: warning  
-        #            page += ( '<tr style="background: #FFFFAA" > '+ '\n')
-        #    else:
-        #        if (cells[i][23] == "False") and (int(cells[i][24])>0) :
-        ##            #there are some building parts, but model was not created. It's Red:Error. Probably there are some validation messages.
-        #            page += ( '<tr style="background: #FFBBBB" > '+ '\n')
-        #        else:
-        #            #there are no building parts and a model is not created. Sad, but it's not an error
-        #            page += ( '<tr>'+ '\n')
+
+        url = value["osm_tags"][0]
+        url = url.replace(" ", "_")
+        url = url.replace("~", "")
+        url ="/stats/styles/"+url 
+        #url ="/"+url +'.html'
         
+        page += ('<tr>'+ '\n')
+        #page += ('<td>'+key+'</td>'+ '\n')
+        page += ('<td class=""> <a href="'+url+'">'+key+'</td>'+ '\n')
+        
+        
+        if value["dates"][4] != 0:
+            page += ('<td data-label="Периодизация">' + str(value["dates"][4]) +'-' +str(value["dates"][5]) + '</td>'+ '\n')
+        else:
+            page += ('<td data-label="Периодизация"></td>'+ '\n')
+        #page += (f'<td><a href="/stats/{key}.html" >{key}</a></td>'+ '\n')
+        
+        page += ('<td data-label="Всего зданий">' + str(value["total"]) + '</td>'+ '\n')
+        page += ('<td data-label="С 3D моделью">' + str(value["with_model"]) + '</td>'+ '\n')
+        page += ('<td data-label="C фотографией">' + str(value["with_picture"]) + '</td>'+ '\n')
+        page += ('<td data-label="OSM-теги">' + ", ".join(value["osm_tags"]) + '</td>'+ '\n')
+        
+        page += ('</tr>'+ '\n')        
+        n += 1
+    
 
     page += ( '</table>'+ '\n')
     page += (f'Всего {n} объектов в данном списке')
