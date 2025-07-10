@@ -71,7 +71,9 @@ def get_wiki_article_from_cache(object_id, article_title):
                     f.write(article)
         except Exception as e:
             print(f'\n unexpected error while fetching article "{article_title}" for object {object_id}')     
+            # pylint: disable=E1101
             print(e.message, e.args)
+            # pylint: enable=E1101
             exit(1)
     else:
         with open(fname, "r", encoding="utf-8") as f:
@@ -129,8 +131,9 @@ def get_annotation(article, object_name, address):
                                       },
                                     ],
                            options=options)
-
+    # pylint: disable=E1101
     annotation = response.message.content
+    # pylint: enable=E1101
     annotation = annotation.split("</think>")[-1].strip()    
     
     #print(annotation)

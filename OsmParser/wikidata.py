@@ -1,3 +1,4 @@
+
 import json
 import requests
 import mdlMisc
@@ -569,7 +570,9 @@ def download_image(url, filename):
         ratio = NEW_SIZE / min(img.size[0], img.size[1])
         new_width = int(ratio*img.size[0]) 
         new_height= int(ratio*img.size[1])
+        # pylint: disable=E1101
         img = img.resize((new_width, new_height), Image.LANCZOS)
+        # pylint: enable=E1101
     except OSError as e:
         print("\nError catched:")
         print(e)

@@ -255,6 +255,7 @@ def WriteDSF(Sheet1, strFolderName, dsfLat, dsfLon, objOsmGeom):
                 # Polygon?
                 fh1.write('# ' + obj_osmid + '\n')
                 select_variable_0 = obj_building_type
+                blnClosed = False
                 if (select_variable_0 == 'DEFENSIVE WALL'):
                     if obj_height == 0:
                         obj_height = 7
