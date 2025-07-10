@@ -2,7 +2,7 @@
 # VB6 runtime library
 #just not to invent the wheel
 #=======================================================================================================================
-from math import cos
+import math
 from os import remove
 from re import match
 
@@ -33,11 +33,11 @@ def Sqr(x):
 
 
 def Cos(x):
-    return cos(x)
+    return math.cos(x)
 
 
 def Sin(x):
-    return sin(x)
+    return math.sin(x)
 
 
 def Abs(x):

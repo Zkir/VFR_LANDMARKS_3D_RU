@@ -95,7 +95,7 @@ def page_region(quadrant_code):
         arrSummary = GetSummary(cells)
     else:
         # Latest should be sorted by date (already?)
-        pass  
+        arrSummary =  None # hopefully this summary is not used for certain "pseudo" regions 
 
     page += ('<div class="page-header">')
     page += ('  <h1>' + strQuadrantTitle + '</h1>'+ '\n')
