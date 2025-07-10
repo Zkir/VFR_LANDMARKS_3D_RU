@@ -193,6 +193,9 @@ class Roof:
             verts[i] = bm.verts.new(r.getVert(verts[i]))
         
         if wallIndices:
+            wallIndices.append(self.polygon.indices[::-1]) # This line (obviously wrong) was added by AI. 
+                                                           # Goal is to create bottom face(s). Strangely, it works for 60% of models 
+                                                           # for other 40% it crashes :)
             self.renderWalls()
         
         if roofIndices:
