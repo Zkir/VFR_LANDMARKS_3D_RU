@@ -194,6 +194,11 @@ select:focus, input:focus {
     transform: translateY(-3px);
 }
 
+.editor-links {
+    display: flex;
+    gap: 10px;
+}
+
 .josm-link {
     width: 36px;
     height: 36px;

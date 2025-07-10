@@ -379,6 +379,9 @@ def page_region_images(strQuadrantName, year="all", style="all", btype="all", ha
             strObjectName = '&lt;&lt;' + buildingTypeRus(rec[10]).upper() + '&gt;&gt;'      
             
         strJOSMurl = "http://localhost:8111/load_and_zoom?left="+ rec[4] + "&right="+ rec[6] + "&top="+ rec[5] +"&bottom="+ rec[3] #"&select=object"    
+        
+        
+        strIDurl =   "https://www.openstreetmap.org/edit?editor=id&"+rec[1]+"=" + rec[2]
             
         page += f'<div class="building-card">\n'      
         page += f'  <div class="building-image">'
@@ -449,14 +452,18 @@ def page_region_images(strQuadrantName, year="all", style="all", btype="all", ha
             page += f'      <a href="{strWikipediaLink}" title="Википедия" target="_blank">\n'
             page += f'        <i class="fab fa-wikipedia-w"></i>\n'
             page += f'      </a>\n'
-            
-        
-            
+
         page += f'    </div>\n'
         
-        page += f'    <a href="{strJOSMurl}" target="josm" class="josm-link " title="Редактировать в JOSM">\n'
-        page += f'       <img src="/img/josm_editor_logo.png" alt="JOSM" class="editor-icon"></img>'
-        page += f'    </a>\n'
+        page += f'    <div class="editor-links">\n'
+        page += f'      <a href="{strIDurl}" target="_blank" class="josm-link " title="Редактировать в iD">\n'
+        page += f'         <img src="/img/id_editor_logo.svg" alt="iD" class="editor-icon"></img>'
+        page += f'      </a>\n'
+        
+        page += f'      <a href="{strJOSMurl}" target="josm" class="josm-link " title="Редактировать в JOSM">\n'
+        page += f'         <img src="/img/josm_editor_logo.png" alt="JOSM" class="editor-icon"></img>'
+        page += f'      </a>\n'
+        page += f'    </div>\n'
         
         page += f'  </div>\n'
 
