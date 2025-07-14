@@ -41,6 +41,7 @@ class RoofFlat(Roof):
         polygon.extrude(self.z2, self.wallIndices)
         # fill the extruded part
         self.roofIndices.append( tuple(range(n, n+polygon.n)) )
+        Roof.makeBottom(self)
         return True
 
 

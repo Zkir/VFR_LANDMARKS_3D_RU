@@ -202,6 +202,8 @@ class RoofConicProfile(Roof):
         #self.verts = verts
         self.roofIndices = roofFaces
         self.wallIndices = wallFaces
+        
+        super().makeBottom()
 
         return True
 

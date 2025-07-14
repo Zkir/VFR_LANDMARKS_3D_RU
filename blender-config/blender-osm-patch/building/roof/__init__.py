@@ -80,11 +80,13 @@ class Roof:
         self.verts = []
         self.roofIndices = []
         self.wallIndices = []
+        self.bottomIndices = []
     
     def init(self, element, data, osm, app):
         self.verts.clear()
         self.roofIndices.clear()
         self.wallIndices.clear()
+        self.bottomIndices.clear()
         
         self.valid = True
         
@@ -164,6 +166,10 @@ class Roof:
                 h = parseNumber(tags["roof:levels"])
             h = self.defaultHeight if h is None else h * app.levelHeight
         return h
+        
+    def makeBottom(self):
+        #for some reason, blosm does not always sticks to convention, that original polygon is a bottom. 
+        self.bottomIndices = [tuple(self.polygon.indices)] 
 
     def getRoofMinHeight(self, element, app):
         # getting the number of levels
@@ -194,11 +200,14 @@ class Roof:
             verts[i] = bm.verts.new(r.getVert(verts[i]))
         
         if wallIndices:
-            self.renderBottom()
             self.renderWalls()
         
         if roofIndices:
             self.renderRoof()
+            
+        if wallIndices or roofIndices:
+            # if there is some geometry, bottom should be present.            
+            self.renderBottom()
             
     def renderBottom(self):
         r = self.r
@@ -206,11 +215,12 @@ class Roof:
         verts = self.verts
         materialIndex = r.getWallMaterialIndex(self.element) # same material as for walls. It does not really matter. 
         
+        if not self.bottomIndices:
+            #print("There is no bottom defined for part roof:shape=" +self.element.tags['roof:shape'])
+            raise Exception("There is no bottom defined for part roof:shape=" +self.element.tags['roof:shape'])
+            return 
+            
         # create BMesh faces for the building bottom
-        
-        self.bottomIndices = [tuple(self.polygon.indices)]
-        
-        #print('bottom indices', len(self.bottomIndices) )
         for f in (bm.faces.new(verts[i] for i in reversed(indices)) for indices in self.bottomIndices):
             f.material_index = materialIndex
             # since it's bottom, normal should look down.
@@ -238,13 +248,11 @@ class Roof:
         verts = self.verts
         materialIndex = r.getRoofMaterialIndex(self.element)
         # create BMesh faces for the building roof
-        try:
-            for f in (bm.faces.new(verts[i] for i in indices) for indices in self.roofIndices):
-                f.material_index = materialIndex
-        except Exception as e:
-            print(e)
-            print("self.bottomIndices", self.bottomIndices)
-            print("self.roofIndices", self.roofIndices)
+        
+        for f in (bm.faces.new(verts[i] for i in indices) for indices in self.roofIndices):
+            f.material_index = materialIndex
+        
+        #print("self.roofIndices", self.roofIndices)
     
     def processDirection(self):
         polygon = self.polygon

@@ -633,6 +633,9 @@ class RoofProfile(Roof):
             slotR.trackUp(roofIndices)
             slotL.trackDown(roofIndices)
             self.onRoofForSlotCompleted(i)
+            
+        super().makeBottom()    
+            
         return True
     
     def _make(self):
