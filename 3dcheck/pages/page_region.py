@@ -258,8 +258,8 @@ def page_region(quadrant_code):
     page += ( '<p class="sort-table-hint">Между прочим, таблица сортируется. Достаточно кликнуть на заголовок столбца.</p>'+ '\n')
     page += ( '<table class="sortable responsive-table">'+ '\n')
     #<th>OSM ID</th>
-    page += ( '<tr><th>Название</th><th>Год постройки</th><th>Размер, м</th><th>Высота, м</th>'
-           + '<th>Тип здания</th><th>Стиль</th><th>OSM 3D </th><th>Число частей</th><th>Послед. редактир.</th><th>Ошибки</th><th>Josm</th></tr>'+ '\n') # <th>Город</th> <th>Район</th> <th>Область</th>
+    page += ( '<tr><th>Название</th><th>OSM 3D</th><th>Год постройки</th><th>Размер, м</th><th>Высота, м</th>'
+           + '<th>Тип здания</th><th>Стиль</th><th>Число частей</th><th>Послед. редактир.</th><th>Ошибки</th><th>Josm</th></tr>'+ '\n') # <th>Город</th> <th>Район</th> <th>Область</th> <th>OSM 3D </th>
     
     # Hidden columns
     #<th>Temples.ru</th>       
@@ -308,6 +308,7 @@ def page_region(quadrant_code):
                 strDescription = '&lt;&lt;' + buildingTypeRus(cells[i][10]).upper() + '&gt;&gt;'
             #ID and link to osm site
             strOsmID = Left(UCase(cells[i][1] ), 1) + ':' + cells[i][2]
+            strOsmID2 = Left(UCase(cells[i][1] ), 1) + cells[i][2]
             strModelUrl = quadrant_code + '/' + Left(UCase(cells[i][1] ), 1) + cells[i][2]  + '#model'
             strErrorsUrl = quadrant_code + '/' + Left(UCase(cells[i][1] ), 1) + cells[i][2]  + '#validation-errors'
             
@@ -326,6 +327,11 @@ def page_region(quadrant_code):
                 page += ('<td data-label="Название"><a href="' + strModelUrl + '">' + strDescription + '</a><br /><small>'+address+'</small></td>'+ '\n')
             else:
                 page += ('<td data-label="Название">' + strDescription + '<br /><small>'+address+'</small></td>'+ '\n')
+                
+            if (cells[i][23] == "True"):
+                page += ('<td data-label="OSM 3D"><img src="/models/'+strOsmID2+'_render.png" height="40px"></img></td>')
+            else:
+                page += ('<td></td>')    
 
             #year of construction
             page += ( '<td data-label="Год постройки">' + cells[i][16] + '</td>'+ '\n')
@@ -358,7 +364,7 @@ def page_region(quadrant_code):
          
             
             osm3d='Да' if cells[i][23]  == 'True' else 'Нет'
-            page += ('<td data-label="OSM 3D" ><a href="' + strF4url + '">' + osm3d + '</a></td>'+ '\n')
+            #page += ('<td data-label="OSM 3D" ><a href="' + strF4url + '">' + osm3d + '</a></td>'+ '\n')
             page += ('<td data-label="Число частей">' + cells[i][24] + '</td>' )
             if len(cells[i])>25:
                 page += ('<td data-label="Послед. редактир.">' + cells[i][25][0:10] + '</td>' )

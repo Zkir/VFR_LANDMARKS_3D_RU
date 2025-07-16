@@ -12,6 +12,12 @@ IF EXIST %2\%~n1.blend (
     xcopy /Y /Q %1.md5 %2
 	touch %2\%~nx1.md5
 )	
+
+IF EXIST %2\%~n1.blend (
+	%BLENDER_EXE% --background %2\%~n1.blend --python d:\_VFR_LANDMARKS_3D_RU\scripts\render_building.py
+)
+
+
 GOTO :end
 :do_nothing
 rem echo lazy work: original file %~nx1 has not changed
