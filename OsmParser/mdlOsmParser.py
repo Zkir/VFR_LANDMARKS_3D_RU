@@ -109,9 +109,13 @@ class T3DObject:
                 self.tagRuins = tag_value        
         
         # process start_date separately
-        tag_value = self.osmtags.get('building:start_date', '')
-        if not tag_value:
-            tag_value = self.osmtags.get('start_date', '')
+        start_date_tags = ('building:start_date', 'building:year_built', 'start_date')
+        tag_value = ''
+        for start_date_tag in start_date_tags:
+            tag_value = self.osmtags.get(start_date_tag, '')
+            if tag_value:
+                break
+        
         
         self.tagStartDate = tag_value
                 

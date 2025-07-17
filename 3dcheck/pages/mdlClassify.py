@@ -367,6 +367,7 @@ achitecture_styles_rus_names={
     
     'islamic':                 'Исламская архитектура',
     'ottoman':                 'Османский стиль', 
+    'moorish_revival':         'Неомавританский стиль',
     
     'brick style':             'Кирпичный стиль',
     'brick_style':             'Кирпичный стиль',
