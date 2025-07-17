@@ -527,6 +527,13 @@ def get_wikidata(qid):
 
 def get_from_wikimedia_api(url):
     r = requests.get(url)
+    
+    if r.status_code != 200:
+        err_str = f'Error {r.status_code} from wikimedia API for url {url} '
+        print(err_str)
+        #print(r.content.decode('utf-8'))
+        raise Exception(err_str)    
+    
     response=json.loads(r.content.decode('utf-8'))
     return(response)
 
@@ -705,8 +712,9 @@ def update_region(input_file_name, output_file_name):
                 #original building type is empty and wd building type is among osm-matched building types 
                 rec[QUADDATA_BUILDING_TYPE] = wd_building_type.upper()
                 
-            if not rec[QUADDATA_STYLE]:
-                rec[QUADDATA_STYLE] = wb_architecture
+            if not rec[QUADDATA_STYLE] or rec[QUADDATA_STYLE].startswith('~'):
+                if wb_architecture:
+                    rec[QUADDATA_STYLE] = wb_architecture
                 
             if not rec[QUADDATA_ARCHITECT]:
                 rec[QUADDATA_ARCHITECT] = wikidata["architect_ru"]
@@ -791,48 +799,52 @@ def get_images(input_file_name):
     n=0
     k=0
     for rec in working_loop:
-        if os.path.exists(os.path.join(IMAGE_DIRECTORY , rec[QUADDATA_WIKIDATA_ID]+".png")):
-            #if file exists already, no need to redownload it. 
-            continue
-        n+=1
-        building_text_description =  ( 
-                rec[QUADDATA_COLOUR] + " " +
-                rec[QUADDATA_MATERIAL] + " " +
-                rec[QUADDATA_BUILDING_TYPE] + " " +
-                rec[QUADDATA_STYLE] + " " +
-                rec[QUADDATA_BUILD_DATE] + " " + 
-                rec[QUADDATA_ARCHITECT]
-                ).strip()
-        
-        wikidata = get_wikidata_organized(rec[QUADDATA_WIKIDATA_ID])             
-        if building_text_description != '' and 'image' in wikidata:
-            #building_text_description += " " + wikidata["label"] + " " +wikidata["description"]
-            #building_text_description += " " +wikidata["label"]
-            #building_text_description = building_text_description.strip()
-            
-            api_url ="https://commons.wikimedia.org/w/api.php?action=query&format=json" +"&prop=imageinfo&iiprop=url&titles=File:" + wikidata['image']
-            #print(rec[QUADDATA_OBJ_TYPE][0]+rec[QUADDATA_OBJ_ID], rec[QUADDATA_WIKIDATA_ID] )
-            #print('  ' + building_text_description)
-            #print('  ' + wikidata['image'])
-            ##print('  ' +'https://commons.wikimedia.org/wiki/File:'+wikidata['image'])
-            ##print('  ' + api_url)
-            
-            # we need to obtain actual download url via api, because it is hidden.           
-            image_metadata = get_from_wikimedia_api(api_url)
-            for _, yyy in image_metadata["query"]["pages"].items():
-                break # we just need one image, and expect only one
-            if "imageinfo" in yyy:
-                image_download_url = yyy["imageinfo"][0]["url"] 
-            else:
-                #print('ERROR: wikimedia site did not provided url for the image '+ api_url)
+        try:
+            if os.path.exists(os.path.join(IMAGE_DIRECTORY , rec[QUADDATA_WIKIDATA_ID]+".png")):
+                #if file exists already, no need to redownload it. 
                 continue
-            #print('  '+str(image_download_url))
-            _, extension = os.path.splitext(wikidata['image'])
-            download_image(image_download_url, rec[QUADDATA_WIKIDATA_ID] + extension)
+            n+=1
+            building_text_description =  ( 
+                    rec[QUADDATA_COLOUR] + " " +
+                    rec[QUADDATA_MATERIAL] + " " +
+                    rec[QUADDATA_BUILDING_TYPE] + " " +
+                    rec[QUADDATA_STYLE] + " " +
+                    rec[QUADDATA_BUILD_DATE] + " " + 
+                    rec[QUADDATA_ARCHITECT]
+                    ).strip()
             
-            #save_description(building_text_description, rec[QUADDATA_WIKIDATA_ID]+'.txt')
-            #print()
-            k+=1
+            wikidata = get_wikidata_organized(rec[QUADDATA_WIKIDATA_ID])             
+            if building_text_description != '' and 'image' in wikidata:
+                #building_text_description += " " + wikidata["label"] + " " +wikidata["description"]
+                #building_text_description += " " +wikidata["label"]
+                #building_text_description = building_text_description.strip()
+                
+                api_url ="https://commons.wikimedia.org/w/api.php?action=query&format=json" +"&prop=imageinfo&iiprop=url&titles=File:" + wikidata['image']
+                #print(rec[QUADDATA_OBJ_TYPE][0]+rec[QUADDATA_OBJ_ID], rec[QUADDATA_WIKIDATA_ID] )
+                #print('  ' + building_text_description)
+                #print('  ' + wikidata['image'])
+                ##print('  ' +'https://commons.wikimedia.org/wiki/File:'+wikidata['image'])
+                ##print('  ' + api_url)
+                
+                # we need to obtain actual download url via api, because it is hidden.           
+                image_metadata = get_from_wikimedia_api(api_url)
+                for _, yyy in image_metadata["query"]["pages"].items():
+                    break # we just need one image, and expect only one
+                if "imageinfo" in yyy:
+                    image_download_url = yyy["imageinfo"][0]["url"] 
+                else:
+                    #print('ERROR: wikimedia site did not provided url for the image '+ api_url)
+                    continue
+                #print('  '+str(image_download_url))
+                _, extension = os.path.splitext(wikidata['image'])
+                download_image(image_download_url, rec[QUADDATA_WIKIDATA_ID] + extension)
+                
+                #save_description(building_text_description, rec[QUADDATA_WIKIDATA_ID]+'.txt')
+                #print()
+                k+=1
+                
+        except Exception as e:
+            print(e)    
             
         working_loop.set_description(f"{n} buildings processed, {k} images_downloaded")
 
