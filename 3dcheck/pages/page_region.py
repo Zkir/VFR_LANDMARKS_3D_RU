@@ -166,6 +166,8 @@ def page_region(quadrant_code):
                                 "Список ошибок в 3D-геометрии или тегах, по всем зданиям региона", erroneous_buildings, -1, f"{correct_3d_percentage}% корректных"),
                             (f"/regions/{quadrant_code}/photos", "Фотографии",
                                 "Галерея зданий с фотографиями", photo_count, -1, f"{photo_percentage}% с фото"),
+                            (f"/regions/{quadrant_code}/map", "Карта", 
+                                "3D-здания на карте", buildings_with_3d, -1, ""),    
                          ]
     
     
