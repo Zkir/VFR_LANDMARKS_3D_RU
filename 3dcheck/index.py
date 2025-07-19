@@ -8,7 +8,7 @@ import sys
 import codecs
 from urllib.parse import parse_qs, urlparse
 
-from pages import page_index, page_region, page_stats_types, page_stats_style, page_building, page_region_errors, page_region_images
+from pages import page_index, page_region, page_stats_types, page_stats_style, page_building, page_region_errors, page_region_images, page_region_map
 
 def page_some():
     """Простая страница"""
@@ -69,6 +69,9 @@ def main():
                                          year=params.get('year', [None])[0],
                                          btype = params.get('type', [None])[0],
                                          style = params.get('style', [None])[0])
+
+            elif path[2] == 'map':
+                content = page_region_map(path[1])    
             else:    
                 content = page_building(path[1], path[2])   
 
