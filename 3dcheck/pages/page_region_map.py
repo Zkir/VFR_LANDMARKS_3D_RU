@@ -1,5 +1,6 @@
 from .mdlMisc import *
 from .mdlClassify import buildingTypeRus
+from .misc2 import get_region_name
 
 map_page_template = \
 """
@@ -8,7 +9,7 @@ map_page_template = \
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карта OSM с кластеризацией | MapLibre</title>
+    <title> <%region_name% /> | Карта кластеризацией </title>
     
     <!-- Подключение MapLibre -->
     <script src="https://unpkg.com/maplibre-gl@3.0.0/dist/maplibre-gl.js"></script>
@@ -484,6 +485,8 @@ def page_region_map(quadrant_code):
     page=map_page_template
     page= page.replace("<%markers% />", markers_string )
     page= page.replace("<%quadrant_code% />", quadrant_code )
+    page= page.replace("<%region_name% />",  get_region_name(quadrant_code) )
+    
     
     page= page.replace("<%center_lon% />", str(center_lon) )
     page= page.replace("<%center_lat% />", str(center_lat) )
