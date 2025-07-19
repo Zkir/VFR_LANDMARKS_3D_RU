@@ -516,6 +516,12 @@ def get_wikidata(qid):
     else:
         url = "https://www.wikidata.org/w/api.php?action=wbgetentities&ids="+qid+"&format=json" 
         r = requests.get(url)
+        if r.status_code != 200:
+            err_str = f'Error {r.status_code} from wikimedia API for url {url} '
+            print(err_str)
+            return None
+            #raise Exception(err_str)
+            
         wikidata=json.loads(r.content.decode('utf-8'))
         
         with open(wdfilename, 'w', encoding='utf-8') as f:
