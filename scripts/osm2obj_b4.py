@@ -421,6 +421,56 @@ def update_materials(obj):
             #material.node_tree.nodes["Principled BSDF"].inputs[14].default_value = old_specular_color
             
 
+def configure_world_lighting():
+    scene = bpy.context.scene
+    world = scene.world
+    
+    # Создаем новый world если отсутствует
+    if world is None:
+        world = bpy.data.worlds.new("RenderWorld")
+        scene.world = world
+    
+    # Включаем ноды и настраиваем освещение
+    world.use_nodes = True
+    nodes = world.node_tree.nodes
+    links = world.node_tree.links
+    
+    # Очищаем существующие ноды
+    nodes.clear()
+    
+    # Создаем ноды для освещения
+    bg_node = nodes.new(type='ShaderNodeBackground')
+    env_node = nodes.new(type='ShaderNodeTexEnvironment')
+    output_node = nodes.new(type='ShaderNodeOutputWorld')
+    mix_node = nodes.new(type='ShaderNodeMixShader')
+    ao_node = nodes.new(type='ShaderNodeAmbientOcclusion')
+    
+    # Позиционируем ноды
+    bg_node.location = (400, 0)
+    env_node.location = (-300, 0)
+    output_node.location = (800, 0)
+    mix_node.location = (600, 0)
+    ao_node.location = (200, 0)
+    
+    # Создаем стандартную HDRI текстуру
+    env_node.image = bpy.data.images.new("DefaultHDRI", 1024, 1024)
+    env_node.image.generated_type = 'COLOR_GRID'
+    
+    # Настраиваем Ambient Occlusion
+    ao_node.samples = 32  # Качество AO
+    ao_node.inside = True  # Учитывать внутренние поверхности
+    
+    # Соединяем ноды
+    links.new(env_node.outputs['Color'], bg_node.inputs['Color'])
+    links.new(bg_node.outputs['Background'], mix_node.inputs[1])
+    links.new(ao_node.outputs['Color'], mix_node.inputs[2])
+    links.new(mix_node.outputs['Shader'], output_node.inputs['Surface'])
+    
+    # Настраиваем интенсивность
+    bg_node.inputs['Strength'].default_value = 3  # Ярче базовый свет
+    mix_node.inputs['Fac'].default_value = 0.5     # Баланс между основным светом и AO
+
+
 
 def bakeTexture(obj, img):
     """ Создаем или находим нод изображения в существующих материалах
@@ -463,8 +513,10 @@ def bakeTexture(obj, img):
 
     # Настраиваем параметры запекания
     bpy.context.scene.render.engine = 'CYCLES'
-    bpy.context.scene.render.bake.use_pass_direct = False
-    bpy.context.scene.render.bake.use_pass_indirect = False
+    bpy.context.scene.cycles.bake_type = 'DIFFUSE'
+    bpy.context.scene.render.bake.use_pass_color = True
+    bpy.context.scene.render.bake.use_pass_direct = True
+    bpy.context.scene.render.bake.use_pass_indirect = True
     bpy.context.scene.render.bake.margin = 2
     bpy.context.scene.render.bake.use_selected_to_active = False
     bpy.context.scene.render.bake.target = 'IMAGE_TEXTURES'
@@ -582,6 +634,7 @@ def main():
     
     # bake texture
     print("baking texture")
+    configure_world_lighting()
     bakeTexture(building, img)
     
     print("exporting to x-plane")
