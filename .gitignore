@@ -4,11 +4,10 @@
 ~$osm-parser.xlsm
 
 /3dcheck/index.html
-/3dcheck/data/*.dat
-/3dcheck/data/quadrants/*.dat
-/3dcheck/data/errors/*.dat
-/3dcheck/data/stats/*.json
-/3dcheck/data/building_images
+/3dcheck/data
+/3dcheck/models
+/3dcheck/models2
+
 /3dcheck/landcovers
 /3dcheck/blogposts
 
@@ -42,3 +41,5 @@ zOsm2GeoJSON/.idea/*.*
 3dcheck/data/models_gltf
 3dcheck/data/countries
 3dcheck/data/world
+
+_tests/
