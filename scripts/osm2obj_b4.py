@@ -513,6 +513,7 @@ def bakeTexture(obj, img):
 
     # Настраиваем параметры запекания
     bpy.context.scene.render.engine = 'CYCLES'
+    bpy.context.scene.cycles.device = 'GPU'
     bpy.context.scene.cycles.bake_type = 'DIFFUSE'
     bpy.context.scene.render.bake.use_pass_color = True
     bpy.context.scene.render.bake.use_pass_direct = True
