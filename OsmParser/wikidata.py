@@ -793,7 +793,7 @@ def print_stats(input_file_name):
     unmatched_building_types_with_osm = {}
     
     for rec in cells:
-        if rec[QUADDATA_WIKIDATA_ID] !="":
+        if rec[QUADDATA_WIKIDATA_ID] !="" and is_qid_valid(rec[QUADDATA_WIKIDATA_ID]):
             n += 1
             # calculate some usage statistics             
             wikidata = get_wikidata_organized(rec[QUADDATA_WIKIDATA_ID]) 
