@@ -9,6 +9,8 @@ from PIL import Image, ImageFile, UnidentifiedImageError
 from pathlib import Path
 from io import BytesIO
 from tqdm import tqdm
+import time
+import re
 
 Image.MAX_IMAGE_PIXELS = None
 ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -539,26 +541,42 @@ def print_sorted_dict(a_dict, limit=0):
             print("'"+key+"':'',  #"+ str(value)) 
 
 def get_wikidata(qid):
-    wikidata =None
-    wdfilename=WIKIDATA_DIRECTORY + "/" + qid + '.json'
+    
+    if qid[0] != 'Q':
+        print("\nstrange quid:", qid)
+        return None
+    
+    wikidata = None
+    wdfilename = WIKIDATA_DIRECTORY + "/" + qid + '.json'
     
     if os.path.exists(wdfilename):
         with open(wdfilename,'r', encoding='utf-8') as f:
             wikidata = json.load(f)
     else:
         url = "https://www.wikidata.org/w/api.php?action=wbgetentities&ids="+qid+"&format=json" 
-        r = requests.get(url)
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'  }
+        time.sleep(1.0)
+        r = requests.get(url,headers=headers)
+        if not r.ok:
+            print("\n\n qid=", qid)
+            print("\n\n r=", r.status_code)
+            print("\n\n r.content=", r.content)
+            exit(1)
+        
+        
         wikidata=json.loads(r.content.decode('utf-8'))
         
         with open(wdfilename, 'w', encoding='utf-8') as f:
             json.dump(wikidata, f, ensure_ascii=False, indent=4)
+            
     if 'entities' in wikidata:
         return wikidata['entities'][qid]
     else:
         return None         
 
 def get_from_wikimedia_api(url):
-    r = requests.get(url)
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+    r = requests.get(url, headers=headers)
     response=json.loads(r.content.decode('utf-8'))
     return(response)
 
@@ -642,8 +660,9 @@ def get_wikidata_organized(qid):
     wd["architect_ru"] = ''
     wd["architecture"] = ''
     wd["wikipedia"] = "" 
-
+    
     wikidata = get_wikidata(qid)
+    
     if not wikidata:
         #this means that error was returned by wikidata API
         return wd
@@ -683,11 +702,12 @@ def get_wikidata_organized(qid):
             architect_id = wikidata['claims']['P84'][0]['mainsnak']['datavalue']['value']["id"]    
             architect_data = get_wikidata(architect_id)
             
-            if 'en' in architect_data['labels']:
-                wd["architect"] = architect_data['labels']['en']['value']
-            
-            if 'ru' in architect_data['labels']:
-                wd["architect_ru"] = architect_data['labels']['ru']['value']    
+            if 'labels' in architect_data:
+                if 'en' in architect_data['labels']:
+                    wd["architect"] = architect_data['labels']['en']['value']
+                
+                if 'ru' in architect_data['labels']:
+                    wd["architect_ru"] = architect_data['labels']['ru']['value']    
         
         if 'P149' in wikidata['claims'] and 'datavalue' in wikidata['claims']['P149'][0]['mainsnak']:
             wd["architecture"] = wikidata['claims']['P149'][0]['mainsnak']['datavalue']['value']["id"]            
@@ -698,6 +718,9 @@ def get_wikidata_organized(qid):
     
     return wd
 
+#check that wikidata id is correct. 
+def is_qid_valid(s):
+    return bool(re.fullmatch(r'[Q0-9]+', s))
 
 # ============
 # main block 
@@ -709,7 +732,10 @@ def update_region(input_file_name, output_file_name):
     
     for rec in all_objects:
         if rec[QUADDATA_WIKIDATA_ID] != "" :
-            objects_with_wikidata.append(rec)
+            if is_qid_valid(rec[QUADDATA_WIKIDATA_ID]):
+                objects_with_wikidata.append(rec)
+            else:
+                print(rec[QUADDATA_OBJ_TYPE][0] + rec[QUADDATA_OBJ_ID] + " strange qid:" + rec[QUADDATA_WIKIDATA_ID])                
     n = 0
     for rec in tqdm(objects_with_wikidata):
                  
@@ -816,7 +842,7 @@ def get_images(input_file_name):
     all_objects = loadDatFile(input_file_name) 
     objects_with_wikidata = []
     for rec in all_objects:
-        if rec[QUADDATA_WIKIDATA_ID]!="" :
+        if rec[QUADDATA_WIKIDATA_ID]!="" and is_qid_valid(rec[QUADDATA_WIKIDATA_ID]):
             objects_with_wikidata.append (rec)
     
     working_loop = tqdm(objects_with_wikidata)
@@ -904,6 +930,4 @@ if __name__ == '__main__':
     else:
         print("unknown command " + command )
     
-
-
 

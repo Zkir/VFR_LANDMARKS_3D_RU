@@ -15,8 +15,9 @@ aria2c https://download.geofabrik.de/%REGION%%COUNTRY%-latest.osm.pbf
 
 goto end 
 :planet
-rm -f planet-*.osm.pbf 
-aria2c https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf.torrent --seed-time=0
+rem rm -f planet-*.osm.pbf 
+del /Q /F planet-*.osm.pbf 
+aria2c https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf.torrent --seed-time=0  --out=planet-latest.osm.pbf.torrent
 ren planet-*.osm.pbf planet-latest.osm.pbf
 
 :end

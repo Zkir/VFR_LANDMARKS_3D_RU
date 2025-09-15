@@ -61,6 +61,8 @@ def write_subfiles(building_styles_stats, building_styles_subfiles, db_folder, s
         filename = filename.replace(" ", "_")
         filename = filename.replace("~", "")
         filename = filename.replace("?", "")
+        filename = filename.replace("/", "_")
+        filename = filename.replace("\\", "_")
         filename = filename + '.dat'
         filename = join(subfolder, filename)
         filename = join(db_folder, filename)
