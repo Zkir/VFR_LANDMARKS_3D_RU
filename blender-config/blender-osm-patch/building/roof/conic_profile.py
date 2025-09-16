@@ -104,10 +104,13 @@ class RoofConicProfile(Roof):
             self.roof_profile=pyramidal_profile(2)
 
         elif strRoofType=="dome":
-            self.roof_profile=dome_profile (7)
+            self.roof_profile=dome_profile(7)
 
         elif strRoofType=="half-dome":
-            self.roof_profile=dome_profile (7)
+            self.roof_profile=dome_profile(7)
+            
+        elif strRoofType=="apse_gabled":        
+            self.roof_profile=pyramidal_profile(2)    
 
         elif strRoofType=="onion":  
             self.roof_profile=onion_profile
@@ -148,7 +151,7 @@ class RoofConicProfile(Roof):
         z1 = self.roofMinHeight  # roof cornice
         z2 = self.z2 # top of the roof.
 
-        if self.roofType=="half-dome":
+        if self.roofType in ("half-dome", "apse_gabled"):
             # for half-dome we need another algorithm.
             center = self.getHalfDomeCenter()
         else: 

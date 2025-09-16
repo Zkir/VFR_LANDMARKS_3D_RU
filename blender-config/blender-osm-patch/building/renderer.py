@@ -96,6 +96,7 @@ class BuildingRenderer(Renderer3d):
             'hipped': RoofHipped(),
             'dome': RoofConicProfile("dome"),
             'half-dome': RoofConicProfile("half-dome"),
+            'apse_gabled': RoofConicProfile("apse_gabled"),
             'onion': RoofConicProfile("onion"),
             'zakomar': RoofZakomar("zakomar"),
             'cross_gabled': RoofZakomar("cross_gabled"),
