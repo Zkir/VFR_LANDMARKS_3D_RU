@@ -17,10 +17,12 @@ roof:material=*
 roof_shapes = [ "flat",	"gabled", "gabled_height_moved", "skillion",  
                 "hipped", "half-hipped", "side_hipped", "side_half-hipped",
                 "hipped-and-gabled", "mansard", "gambrel",
-                "pyramidal", "crosspitched", "sawtooth", "butterfly",
+                "pyramidal", "sawtooth", "butterfly",
                 "cone", "dome", "onion", "round",
                 "saltbox", #not in the original Simple3D, but supported by F4 and blender-osm
-                "half-dome", "zakomar" # additions by zkir to blender-osm
+                "half-dome", "zakomar", # additions by zkir to blender-osm
+                "crosspitched", "cross_gabled",
+                "apse_gabled",
                 ]
                 
 roof_orientations = ["along", "across"]
@@ -33,7 +35,8 @@ roof_directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW",
 
 meter_value_tags = ["height", "min_height","roof:height"]
 float_value_tags = ["roof:angle" ]
-integer_value_tags = [ "building:levels" , "building:min_level", "roof:levels"]
+#In practice fractional values of  *:levels are quite usefull, and processed correctly by most renderers
+integer_value_tags = [] #[ "building:levels" , "building:min_level", "roof:levels"]
 
 
 def checkInt(s):
