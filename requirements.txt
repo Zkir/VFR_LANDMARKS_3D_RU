@@ -3,7 +3,7 @@ geopandas
 matplotlib
 ollama
 pandas
-pillow==10.4.0
+pillow==12.2.0
 requests
 rtree==1.3.0
 tqdm
