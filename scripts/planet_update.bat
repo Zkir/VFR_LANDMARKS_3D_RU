@@ -4,7 +4,7 @@ SET WORK_FOLDER=%1
 cd %WORK_FOLDER%
 
 
-osmupd "russia-latest.osm.pbf" "russia-latest-latest.osm.pbf" -B=russia.poly -v --keep-tempfiles
+osmupd "russia-latest.osm.pbf" "russia-latest-latest.osm.pbf" -B=russia.poly -v --keep-tempfiles --base-url=https://planet.maps.mail.ru/replication/
 if errorlevel 1 goto error
 rem if update was successful, we can delete the old file and rename the new one as old one.
 del "russia-latest.osm.pbf"

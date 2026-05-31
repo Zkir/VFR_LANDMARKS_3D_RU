@@ -108,7 +108,7 @@ work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf.txt:  work_folder\40_osm_ext
 
 work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf: work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf.txt 
 	dsftool --text2dsf $< $@
-	xcopy /Q /Y $@ "d:\SteamLibrary\steamapps\common\X-Plane 11\Custom Scenery\zzz_zkir_global_scenery0\Earth nav data\+50+030"
+	xcopy /Q /Y $@ "d:\SteamLibrary\steamapps\common\X-Plane 12\Custom Scenery\zzz_zkir_global_scenery0\Earth nav data\+50+030"
 
 
 fin: work_folder\40_osm_extracts_1x1\+56+038\+56+038.dsf

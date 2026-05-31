@@ -5,17 +5,18 @@ fc %1.md5 %2\%~nx1.md5 >nul
 if %ERRORLEVEL%==0 GOTO :do_nothing
 
 SET BLENDER_EXE="c:\Program Files\Blender Foundation\Blender\blender.exe"
-%BLENDER_EXE% --background --python d:\_VFR_LANDMARKS_3D_RU\scripts\osm2obj.py -- %1 %2
+rem %BLENDER_EXE% --background --python d:\_VFR_LANDMARKS_3D_RU\scripts\osm2obj.py -- %1 %2
+java -jar urbaneye3d-cli.jar %1 %2\%~n1.obj -f xplane
 
 rem if blender file is create successfully, let's copy hash file, for future runs
-IF EXIST %2\%~n1.blend (
+IF EXIST %2\%~n1.obj (
     xcopy /Y /Q %1.md5 %2
 	touch %2\%~nx1.md5
 )	
 
-IF EXIST %2\%~n1.blend (
-	%BLENDER_EXE% --background %2\%~n1.blend --python d:\_VFR_LANDMARKS_3D_RU\scripts\render_building.py
-)
+rem IF EXIST %2\%~n1.blend (
+rem	%BLENDER_EXE% --background %2\%~n1.blend --python d:\_VFR_LANDMARKS_3D_RU\scripts\render_building.py
+rem )
 
 
 GOTO :end
