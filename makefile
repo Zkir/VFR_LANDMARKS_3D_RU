@@ -179,7 +179,11 @@ work_folder\init_xplane_release_folder: work_folder\clean_xplane_release_folder 
 	mkdir "$(xplane_buildpath)\Earth nav data\+50+030"
 	touch $@
 	
-work_folder\copy_xplane_files: work_folder\50_DSF\+56+038.dsf work_folder\30_3dmodels\convert_osm_to_obj  work_folder\init_xplane_release_folder ## collect all the files, both generated and pre-produced into x-plane scenery folder 
+work_folder\convert_custom_models: | work_folder ## Convert custom blend models to obj
+	for %%v in (Custom_models\*.blend) do scripts\blend2obj.bat "%%v"
+	touch $@
+
+work_folder\copy_xplane_files: work_folder\50_DSF\+56+038.dsf work_folder\30_3dmodels\convert_osm_to_obj work_folder\convert_custom_models work_folder\init_xplane_release_folder ## collect all the files, both generated and pre-produced into x-plane scenery folder 
 	xcopy /Y /Q readme.txt $(xplane_buildpath)
 	xcopy /Y /Q "Custom_models\*.obj" $(xplane_buildpath)\Objects
 	xcopy /Y /Q "Custom_models\*.png" $(xplane_buildpath)\Objects
@@ -197,7 +201,11 @@ work_folder\copy_xplane_files: work_folder\50_DSF\+56+038.dsf work_folder\30_3dm
 work_folder\81_xplane_release_zip: ## prepare folder for zipped x-plane scenery package 
 	mkdir work_folder\81_xplane_release_zip
 
-work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip: work_folder\copy_xplane_files  | work_folder\81_xplane_release_zip ## zip x-plane scenery 
+work_folder\validate_dsf: work_folder\copy_xplane_files
+	python scripts\validate_dsf.py work_folder\50_DSF\+56+038.dsf.txt $(xplane_buildpath)
+	touch $@
+
+work_folder\81_xplane_release_zip\VFR_LANDMARKS_3D_RU.zip: work_folder\validate_dsf  | work_folder\81_xplane_release_zip ## zip x-plane scenery 
 	7z a $@ work_folder\80_xplane_Release
 
 
