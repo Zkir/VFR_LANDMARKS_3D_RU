@@ -11,6 +11,7 @@ from PIL import Image, ImageFile, UnidentifiedImageError
 from pathlib import Path
 from io import BytesIO
 from tqdm import tqdm
+USER_AGENT = "VFR_LANDMARKS_3D_RU Data pipeline/1.0 (https://github.com/Zkir/VFR_LANDMARKS_3D_RU; zkir@zkir.ru)"
 
 Image.MAX_IMAGE_PIXELS = None
 ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -515,7 +516,9 @@ def get_wikidata(qid):
             wikidata = json.load(f)
     else:
         url = "https://www.wikidata.org/w/api.php?action=wbgetentities&ids="+qid+"&format=json" 
-        r = requests.get(url)
+        headers = {"User-Agent": USER_AGENT}
+
+        r = requests.get(url, headers = headers)
         if r.status_code != 200:
             err_str = f'Error {r.status_code} from wikimedia API for url {url} '
             print(err_str)
@@ -532,7 +535,8 @@ def get_wikidata(qid):
         return None         
 
 def get_from_wikimedia_api(url):
-    r = requests.get(url)
+    headers = {"User-Agent": USER_AGENT}
+    r = requests.get(url, headers = headers)
     
     if r.status_code != 200:
         err_str = f'Error {r.status_code} from wikimedia API for url {url} '
@@ -561,7 +565,7 @@ def download_image(url, filename):
         return
     
     # download    
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+    headers = {"User-Agent": USER_AGENT}
     r = requests.get(url, headers=headers )
     if not r.ok:
         raise Exception("Unable to download file. Status "+str(r.status_code))
